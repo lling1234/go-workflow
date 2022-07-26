@@ -15,7 +15,7 @@ import (
 	"github.com/go-workflow/go-workflow/workflow-engine/service"
 )
 
-// 配置
+// 配置111
 var conf = *config.Config
 
 func crossOrigin(h http.HandlerFunc) http.HandlerFunc {
