@@ -47,7 +47,7 @@ func SaveProcdefByToken(writer http.ResponseWriter, request *http.Request) {
 // 保存流程定义
 func SaveProcdef(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != "POST" {
-		util.ResponseErr(writer, "只支持Post方法！！Only support Post ")
+		writer.WriteHeader(http.StatusOK)
 		return
 	}
 	var procdef = service.Procdef{}
