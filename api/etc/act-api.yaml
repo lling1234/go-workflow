@@ -1,0 +1,8 @@
+Name: act-api
+Host: 0.0.0.0
+Port: 8888
+ActRpc:
+  Etcd:
+    Hosts:
+      - qkbyte.orginone.cn:6005
+    Key: act.rpc

@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package ms;
+
+option go_package = "./ms";
+
+message ProcDefReq {
+  int64 userId = 1;
+  string userName = 2;
+  string name = 3;
+  string code = 4;
+  string yewuFormId = 5;
+  string yewuName = 6;
+  int32 remainHours = 7;
+  int64 targetId = 8;
+  string resource = 9;
+}
+
+message ProcDefReply {
+  int64 id = 1;
+  string name = 2;
+  string code = 3;
+  int32 version = 4;
+  string resource = 5;
+  int64 createUserId = 6;
+  string createUserName = 7;
+  string createTime = 8;
+  int64 targetId = 9;
+  string yewuFormId = 10;
+  string yewuName = 11;
+  int32 remainHours = 12;
+  int32 isDel = 13;
+  int32 isActive = 14;
+}
+
+
+message ProcInstReq {
+  int64 userId = 1;
+  string userName = 2;
+  string title = 3;
+  string dataId = 4;
+  string yewuFormId = 5;
+  int64 targetId = 6;
+}
+
+message ProcInstReply {
+  int64 id = 1;
+  int64 procDefId = 2;
+  string title = 3;
+  string code = 4;
+  int64 targetId = 5;
+  string nodeId = 6;
+  int64 taskId = 7;
+  string startTime = 8;
+  string endTime = 9;
+  int64 startUserId = 10;
+  string startUserName = 11;
+  int32 isFinished = 12;
+  int32 state = 13;
+  int64 dataId = 14;
+  int32 isDel = 15;
+  string create_time = 16;
+  string updateTime = 17;
+  int32 remainHours = 18;
+}
+//message ProcInstIdReply {
+//  int64 id = 1;
+//}
+
+message ExecutionReq {
+  int64 procInstId = 1;
+  int64 procDefId = 2;
+  string nodeInfos = 3;
+  string startTime = 4;
+}
+
+message ExecutionReply {
+  int64 id = 1;
+  int64 procInstId = 2;
+  int64 procDefId = 3;
+  string nodeInfos = 4;
+  int64 isActive = 5;
+  string startTime = 6;
+}
+
+message TaskReq {
+  string nodeId = 1;
+  int64 procInstId = 2;
+  int64 dataId = 3;
+}
+
+message TaskReply {
+  int64 id = 1;
+  string nodeId = 2;
+  int32 level = 3;
+  int32 step = 4;
+  int64 procInstId = 5;
+  string createTime = 6;
+  int64 claimTime = 7;
+  string memberCount = 8;
+  string unCompleteNum = 9;
+  int64 agreeNum = 10;
+  string isFinished = 11;
+  int64 actType = 12;
+  int32 isDel = 13;
+}
+
+
+message IdentityLinkReq {
+  int64 userId = 1;
+  string userName = 2;
+  int64 procInstId = 3;
+  int64 targetId = 4;
+  string comment = 5;
+  int64 taskId = 6;
+  int64 result = 7;
+}
+
+message IdentityLinkReply {
+  int64 id = 1;
+  int64 userId = 2;
+  string userName = 3;
+  int32 step = 4;
+  int64 procInstId = 5;
+  string targetId = 6;
+  int64 comment = 7;
+  string taskId = 8;
+  string result = 9;
+  int64 createTime = 10;
+  string isDel = 11;
+  int32 isDeal = 12;
+}
+//message FindLastTask{
+//  int64 procInstId = 1;
+//}
+//message FindProInstByDataId {
+//  int64 dataId = 1;
+//}
+
+service act {
+  rpc saveProcDef(ProcDefReq) returns(ProcDefReply);
+  rpc saveProcInst(ProcInstReq) returns(ProcInstReply);
+  rpc saveExecution(ExecutionReq) returns(ExecutionReply);
+  rpc saveTask(TaskReq) returns(TaskReply);
+  rpc saveIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
+//  rpc findLastTask(FindLastTask) returns(TaskReply);
+//  rpc findProInstByDataId(FindProInstByDataId) returns(ProcInstIdReply);
+}

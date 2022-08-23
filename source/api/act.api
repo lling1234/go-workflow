@@ -1,0 +1,92 @@
+syntax = "v1"
+
+type (
+	SaveProcProdef {
+		Name        string `json:"name"`
+		Code        string `json:"code"`
+		YewuFormId  string `json:"yewuFormId"`
+		YewuName    string `json:"yewuName"`
+		RemainHours int32  `json:"remainHours"`
+		Resource    string `json:"resource"`
+	}
+	StartProcess {
+		Title      string `json:"name"`
+		YewuFormId string `json:"yewuFormId"`
+		DataId     int64  `json:"dataId"`
+	}
+
+	CompeleteTask {
+		DataId  int64  `json:"dataId"`
+		Result  int    `json:"result"`
+		Comment string `json:"comment"`
+	}
+	Withdraw {
+		DataId int64 `json:"dataId"`
+	}
+
+	FindByTargetId {
+		TargetId int64 `json:"targetId"`
+	}
+	FindMyStartProcess {
+		UserId   int64  `json:"userId"`
+		UserName string `json:"userName"`
+	}
+	FindMyApproveProcess {
+		UserId   int64  `json:"userId"`
+		UserName string `json:"userName"`
+	}
+)
+
+type (
+	CommonResponse {
+		Code    int32       `json:"code"`
+		Data    interface{} `json:"data"`
+		Msg     string      `json:"msg"`
+		Success bool        `json:"success"`
+	}
+	Nil {
+	}
+)
+service act-api {
+	@server(
+		group: act
+		handler: addProcDef
+	)
+	post /procdef/add (SaveProcProdef) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: startProcess
+	)
+	post /process/start (StartProcess) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: compeleteTask
+	)
+	post /task/compelete (CompeleteTask) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: withdraw
+	)
+	post /task/withdraw (Withdraw) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findByTargetId
+	)
+	post /process/findbytargetid (FindByTargetId) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findMyStartProcess
+	)
+	post /process/findmystartprocess (FindMyStartProcess) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findMyApproveProcess
+	)
+	post /process/findmyapproveprocess (FindMyApproveProcess) returns (CommonResponse)
+}
