@@ -40,9 +40,9 @@ type Configuration struct {
 // Config 数据库配置
 var Config = &Configuration{}
 
-func init() {
-	LoadConfig()
-}
+// func init() {
+// 	LoadConfig()
+// }
 
 // LoadConfig LoadConfig
 func LoadConfig() {

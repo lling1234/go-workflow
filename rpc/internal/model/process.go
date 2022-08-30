@@ -82,12 +82,14 @@ type Propss struct {
 	FormPerms    []FormPerms   `json:"formPerms"`
 	AssignedUser []interface{} `json:"assignedUser"`
 }
+
 // 6个字段
 type Children struct {
-	ID       string    `json:"id"`
-	Name     string    `json:"name"`
-	Type     string    `json:"type"`
-	Props    Props     `json:"props"`
-	Children *Children `json:"children"`
-	ParentID string    `json:"parentId"`
+	ID       string        `json:"id"`
+	Name     string        `json:"name"`
+	Type     string        `json:"type"`
+	Props    Props         `json:"props"`
+	Children *Children     `json:"children"`
+	ParentID string        `json:"parentId"`
+	Branchs  []interface{} `json:"branchs"`
 }

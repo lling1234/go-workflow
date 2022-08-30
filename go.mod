@@ -15,6 +15,7 @@ require (
 	github.com/jinzhu/gorm v1.9.16
 	github.com/mitchellh/hashstructure v1.1.0
 	github.com/mumushuiding/util v0.0.0-20220111075258-3f1897a1475a
+	github.com/robfig/cron v1.2.0
 	github.com/zeromicro/go-zero v1.4.0
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
 	google.golang.org/grpc v1.48.0
