@@ -5,12 +5,12 @@ import (
 	"act/common/models"
 )
 
-type ActStore struct {
+type CommonStore struct {
 	*common.DbStore
 }
 
-func NewActrStore(c models.DbStoreConfig) *ActStore {
-	return &ActStore{
+func NewCommonStore(c models.DbStoreConfig) *CommonStore {
+	return &CommonStore{
 		DbStore: common.NewDbStore(c),
 	}
 }

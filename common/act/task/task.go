@@ -38,8 +38,10 @@ const (
 	FieldDataID = "data_id"
 	// FieldIsDel holds the string denoting the is_del field in the database.
 	FieldIsDel = "is_del"
+	// FieldUpdateTime holds the string denoting the update_time field in the database.
+	FieldUpdateTime = "update_time"
 	// Table holds the table name of the task in the database.
-	Table = "tasks"
+	Table = "act_task"
 )
 
 // Columns holds all SQL columns for task fields.
@@ -58,6 +60,7 @@ var Columns = []string{
 	FieldActType,
 	FieldDataID,
 	FieldIsDel,
+	FieldUpdateTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -81,6 +84,8 @@ var (
 	DefaultIsFinished int8
 	// DefaultIsDel holds the default value on creation for the "is_del" field.
 	DefaultIsDel int
+	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
+	DefaultUpdateTime time.Time
 )
 
 // ActType defines the type for the "act_type" enum field.

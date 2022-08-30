@@ -41,12 +41,12 @@ const (
 	FieldIsDel = "is_del"
 	// FieldCreateTime holds the string denoting the create_time field in the database.
 	FieldCreateTime = "create_time"
-	// FieldUpdateTime holds the string denoting the update_time field in the database.
-	FieldUpdateTime = "update_time"
 	// FieldRemainHours holds the string denoting the remain_hours field in the database.
 	FieldRemainHours = "remain_hours"
+	// FieldUpdateTime holds the string denoting the update_time field in the database.
+	FieldUpdateTime = "update_time"
 	// Table holds the table name of the procinst in the database.
-	Table = "proc_insts"
+	Table = "act_proc_inst"
 )
 
 // Columns holds all SQL columns for procinst fields.
@@ -67,8 +67,8 @@ var Columns = []string{
 	FieldDataID,
 	FieldIsDel,
 	FieldCreateTime,
-	FieldUpdateTime,
 	FieldRemainHours,
+	FieldUpdateTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

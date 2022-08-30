@@ -5,6 +5,7 @@ package act
 import (
 	"act/common/act/procinst"
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -22,14 +23,6 @@ type ProcInstCreate struct {
 // SetProcDefID sets the "proc_def_id" field.
 func (pic *ProcInstCreate) SetProcDefID(i int64) *ProcInstCreate {
 	pic.mutation.SetProcDefID(i)
-	return pic
-}
-
-// SetNillableProcDefID sets the "proc_def_id" field if the given value is not nil.
-func (pic *ProcInstCreate) SetNillableProcDefID(i *int64) *ProcInstCreate {
-	if i != nil {
-		pic.SetProcDefID(*i)
-	}
 	return pic
 }
 
@@ -229,6 +222,20 @@ func (pic *ProcInstCreate) SetNillableCreateTime(t *time.Time) *ProcInstCreate {
 	return pic
 }
 
+// SetRemainHours sets the "remain_hours" field.
+func (pic *ProcInstCreate) SetRemainHours(i int) *ProcInstCreate {
+	pic.mutation.SetRemainHours(i)
+	return pic
+}
+
+// SetNillableRemainHours sets the "remain_hours" field if the given value is not nil.
+func (pic *ProcInstCreate) SetNillableRemainHours(i *int) *ProcInstCreate {
+	if i != nil {
+		pic.SetRemainHours(*i)
+	}
+	return pic
+}
+
 // SetUpdateTime sets the "update_time" field.
 func (pic *ProcInstCreate) SetUpdateTime(t time.Time) *ProcInstCreate {
 	pic.mutation.SetUpdateTime(t)
@@ -239,20 +246,6 @@ func (pic *ProcInstCreate) SetUpdateTime(t time.Time) *ProcInstCreate {
 func (pic *ProcInstCreate) SetNillableUpdateTime(t *time.Time) *ProcInstCreate {
 	if t != nil {
 		pic.SetUpdateTime(*t)
-	}
-	return pic
-}
-
-// SetRemainHours sets the "remain_hours" field.
-func (pic *ProcInstCreate) SetRemainHours(i int64) *ProcInstCreate {
-	pic.mutation.SetRemainHours(i)
-	return pic
-}
-
-// SetNillableRemainHours sets the "remain_hours" field if the given value is not nil.
-func (pic *ProcInstCreate) SetNillableRemainHours(i *int64) *ProcInstCreate {
-	if i != nil {
-		pic.SetRemainHours(*i)
 	}
 	return pic
 }
@@ -358,6 +351,9 @@ func (pic *ProcInstCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (pic *ProcInstCreate) check() error {
+	if _, ok := pic.mutation.ProcDefID(); !ok {
+		return &ValidationError{Name: "proc_def_id", err: errors.New(`act: missing required field "ProcInst.proc_def_id"`)}
+	}
 	if v, ok := pic.mutation.Title(); ok {
 		if err := procinst.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`act: validator failed for field "ProcInst.title": %w`, err)}
@@ -525,6 +521,14 @@ func (pic *ProcInstCreate) createSpec() (*ProcInst, *sqlgraph.CreateSpec) {
 		})
 		_node.CreateTime = value
 	}
+	if value, ok := pic.mutation.RemainHours(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: procinst.FieldRemainHours,
+		})
+		_node.RemainHours = value
+	}
 	if value, ok := pic.mutation.UpdateTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -532,14 +536,6 @@ func (pic *ProcInstCreate) createSpec() (*ProcInst, *sqlgraph.CreateSpec) {
 			Column: procinst.FieldUpdateTime,
 		})
 		_node.UpdateTime = value
-	}
-	if value, ok := pic.mutation.RemainHours(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: procinst.FieldRemainHours,
-		})
-		_node.RemainHours = value
 	}
 	return _node, _spec
 }

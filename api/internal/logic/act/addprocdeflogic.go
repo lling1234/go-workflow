@@ -1,12 +1,11 @@
 package act
 
 import (
-	"context"
-	"log"
-
 	"act/api/internal/svc"
 	"act/api/internal/types"
-	"act/rpc/act"
+	"act/rpc/types/act"
+	"context"
+	"encoding/json"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,24 +25,28 @@ func NewAddProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPro
 }
 
 func (l *AddProcDefLogic) AddProcDef(req *types.SaveProcProdef) (resp *types.CommonResponse, err error) {
-	// todo: add your logic here and delete this line
-	log.Println("AddProcDef-----api 11111")
-	resps, err := l.svcCtx.ActRpc.SaveProcDef(l.ctx, &act.ProcDefReq{
+	if len(req.FormId) == 0 {
+		return types.GetErrorCommonResponse("业务表单数据未获取到！")
+	}
+	if req.Resource == nil || len(req.Resource.Name) == 0 {
+		return types.GetErrorCommonResponse("节点数据未获取到！")
+	}
+	resource, err := json.Marshal(req.Resource)
+	if err != nil {
+		return types.GetErrorCommonResponse(err.Error())
+	}
+	reply, err := l.svcCtx.Rpc.SaveProcDef(l.ctx, &act.ProcDefReq{
+		UserId:      101,
+		UserName:    "赵本山",
 		Name:        req.Name,
 		Code:        req.Code,
-		YewuFormId:  req.YewuFormId,
-		YewuName:    req.YewuName,
+		FormId:      req.FormId,
+		FormName:    req.FormName,
+		Resource:    string(resource),
 		RemainHours: req.RemainHours,
-		Resource:    req.Resource,
 	})
 	if err != nil {
-		return nil, err
+		return types.GetErrorCommonResponse(err.Error())
 	}
-	log.Println("resps",resps)
-	return &types.CommonResponse{
-		Code: 200,
-		Data: resps,
-		Msg: "ok",
-		Success: true,
-	},nil
+	return types.GetCommonResponse(err, reply)
 }

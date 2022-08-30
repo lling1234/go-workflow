@@ -157,6 +157,13 @@ func IsDeal(v int8) predicate.IdentityLink {
 	})
 }
 
+// UpdateTime applies equality check predicate on the "update_time" field. It's identical to UpdateTimeEQ.
+func UpdateTime(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdateTime), v))
+	})
+}
+
 // UserIDEQ applies the EQ predicate on the "user_id" field.
 func UserIDEQ(v int64) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
@@ -490,20 +497,6 @@ func ProcInstIDLTE(v int64) predicate.IdentityLink {
 	})
 }
 
-// ProcInstIDIsNil applies the IsNil predicate on the "proc_inst_id" field.
-func ProcInstIDIsNil() predicate.IdentityLink {
-	return predicate.IdentityLink(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldProcInstID)))
-	})
-}
-
-// ProcInstIDNotNil applies the NotNil predicate on the "proc_inst_id" field.
-func ProcInstIDNotNil() predicate.IdentityLink {
-	return predicate.IdentityLink(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldProcInstID)))
-	})
-}
-
 // TargetIDEQ applies the EQ predicate on the "target_id" field.
 func TargetIDEQ(v int64) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
@@ -756,20 +749,6 @@ func TaskIDLT(v int64) predicate.IdentityLink {
 func TaskIDLTE(v int64) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldTaskID), v))
-	})
-}
-
-// TaskIDIsNil applies the IsNil predicate on the "task_id" field.
-func TaskIDIsNil() predicate.IdentityLink {
-	return predicate.IdentityLink(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldTaskID)))
-	})
-}
-
-// TaskIDNotNil applies the NotNil predicate on the "task_id" field.
-func TaskIDNotNil() predicate.IdentityLink {
-	return predicate.IdentityLink(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldTaskID)))
 	})
 }
 
@@ -1082,6 +1061,84 @@ func IsDealIsNil() predicate.IdentityLink {
 func IsDealNotNil() predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldIsDeal)))
+	})
+}
+
+// UpdateTimeEQ applies the EQ predicate on the "update_time" field.
+func UpdateTimeEQ(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeNEQ applies the NEQ predicate on the "update_time" field.
+func UpdateTimeNEQ(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeIn applies the In predicate on the "update_time" field.
+func UpdateTimeIn(vs ...time.Time) predicate.IdentityLink {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldUpdateTime), v...))
+	})
+}
+
+// UpdateTimeNotIn applies the NotIn predicate on the "update_time" field.
+func UpdateTimeNotIn(vs ...time.Time) predicate.IdentityLink {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldUpdateTime), v...))
+	})
+}
+
+// UpdateTimeGT applies the GT predicate on the "update_time" field.
+func UpdateTimeGT(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeGTE applies the GTE predicate on the "update_time" field.
+func UpdateTimeGTE(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeLT applies the LT predicate on the "update_time" field.
+func UpdateTimeLT(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeLTE applies the LTE predicate on the "update_time" field.
+func UpdateTimeLTE(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeIsNil applies the IsNil predicate on the "update_time" field.
+func UpdateTimeIsNil() predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldUpdateTime)))
+	})
+}
+
+// UpdateTimeNotNil applies the NotNil predicate on the "update_time" field.
+func UpdateTimeNotNil() predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldUpdateTime)))
 	})
 }
 

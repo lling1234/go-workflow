@@ -209,43 +209,43 @@ func (pdu *ProcDefUpdate) ClearTargetID() *ProcDefUpdate {
 	return pdu
 }
 
-// SetYewuFormID sets the "yewu_form_id" field.
-func (pdu *ProcDefUpdate) SetYewuFormID(s string) *ProcDefUpdate {
-	pdu.mutation.SetYewuFormID(s)
+// SetFormID sets the "form_id" field.
+func (pdu *ProcDefUpdate) SetFormID(s string) *ProcDefUpdate {
+	pdu.mutation.SetFormID(s)
 	return pdu
 }
 
-// SetNillableYewuFormID sets the "yewu_form_id" field if the given value is not nil.
-func (pdu *ProcDefUpdate) SetNillableYewuFormID(s *string) *ProcDefUpdate {
+// SetNillableFormID sets the "form_id" field if the given value is not nil.
+func (pdu *ProcDefUpdate) SetNillableFormID(s *string) *ProcDefUpdate {
 	if s != nil {
-		pdu.SetYewuFormID(*s)
+		pdu.SetFormID(*s)
 	}
 	return pdu
 }
 
-// ClearYewuFormID clears the value of the "yewu_form_id" field.
-func (pdu *ProcDefUpdate) ClearYewuFormID() *ProcDefUpdate {
-	pdu.mutation.ClearYewuFormID()
+// ClearFormID clears the value of the "form_id" field.
+func (pdu *ProcDefUpdate) ClearFormID() *ProcDefUpdate {
+	pdu.mutation.ClearFormID()
 	return pdu
 }
 
-// SetYewuName sets the "yewu_name" field.
-func (pdu *ProcDefUpdate) SetYewuName(s string) *ProcDefUpdate {
-	pdu.mutation.SetYewuName(s)
+// SetFormName sets the "form_name" field.
+func (pdu *ProcDefUpdate) SetFormName(s string) *ProcDefUpdate {
+	pdu.mutation.SetFormName(s)
 	return pdu
 }
 
-// SetNillableYewuName sets the "yewu_name" field if the given value is not nil.
-func (pdu *ProcDefUpdate) SetNillableYewuName(s *string) *ProcDefUpdate {
+// SetNillableFormName sets the "form_name" field if the given value is not nil.
+func (pdu *ProcDefUpdate) SetNillableFormName(s *string) *ProcDefUpdate {
 	if s != nil {
-		pdu.SetYewuName(*s)
+		pdu.SetFormName(*s)
 	}
 	return pdu
 }
 
-// ClearYewuName clears the value of the "yewu_name" field.
-func (pdu *ProcDefUpdate) ClearYewuName() *ProcDefUpdate {
-	pdu.mutation.ClearYewuName()
+// ClearFormName clears the value of the "form_name" field.
+func (pdu *ProcDefUpdate) ClearFormName() *ProcDefUpdate {
+	pdu.mutation.ClearFormName()
 	return pdu
 }
 
@@ -327,6 +327,26 @@ func (pdu *ProcDefUpdate) AddIsActive(i int8) *ProcDefUpdate {
 // ClearIsActive clears the value of the "is_active" field.
 func (pdu *ProcDefUpdate) ClearIsActive() *ProcDefUpdate {
 	pdu.mutation.ClearIsActive()
+	return pdu
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (pdu *ProcDefUpdate) SetUpdateTime(t time.Time) *ProcDefUpdate {
+	pdu.mutation.SetUpdateTime(t)
+	return pdu
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (pdu *ProcDefUpdate) SetNillableUpdateTime(t *time.Time) *ProcDefUpdate {
+	if t != nil {
+		pdu.SetUpdateTime(*t)
+	}
+	return pdu
+}
+
+// ClearUpdateTime clears the value of the "update_time" field.
+func (pdu *ProcDefUpdate) ClearUpdateTime() *ProcDefUpdate {
+	pdu.mutation.ClearUpdateTime()
 	return pdu
 }
 
@@ -417,14 +437,14 @@ func (pdu *ProcDefUpdate) check() error {
 			return &ValidationError{Name: "create_user_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.create_user_name": %w`, err)}
 		}
 	}
-	if v, ok := pdu.mutation.YewuFormID(); ok {
-		if err := procdef.YewuFormIDValidator(v); err != nil {
-			return &ValidationError{Name: "yewu_form_id", err: fmt.Errorf(`act: validator failed for field "ProcDef.yewu_form_id": %w`, err)}
+	if v, ok := pdu.mutation.FormID(); ok {
+		if err := procdef.FormIDValidator(v); err != nil {
+			return &ValidationError{Name: "form_id", err: fmt.Errorf(`act: validator failed for field "ProcDef.form_id": %w`, err)}
 		}
 	}
-	if v, ok := pdu.mutation.YewuName(); ok {
-		if err := procdef.YewuNameValidator(v); err != nil {
-			return &ValidationError{Name: "yewu_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.yewu_name": %w`, err)}
+	if v, ok := pdu.mutation.FormName(); ok {
+		if err := procdef.FormNameValidator(v); err != nil {
+			return &ValidationError{Name: "form_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.form_name": %w`, err)}
 		}
 	}
 	return nil
@@ -573,30 +593,30 @@ func (pdu *ProcDefUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: procdef.FieldTargetID,
 		})
 	}
-	if value, ok := pdu.mutation.YewuFormID(); ok {
+	if value, ok := pdu.mutation.FormID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: procdef.FieldYewuFormID,
+			Column: procdef.FieldFormID,
 		})
 	}
-	if pdu.mutation.YewuFormIDCleared() {
+	if pdu.mutation.FormIDCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
-			Column: procdef.FieldYewuFormID,
+			Column: procdef.FieldFormID,
 		})
 	}
-	if value, ok := pdu.mutation.YewuName(); ok {
+	if value, ok := pdu.mutation.FormName(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: procdef.FieldYewuName,
+			Column: procdef.FieldFormName,
 		})
 	}
-	if pdu.mutation.YewuNameCleared() {
+	if pdu.mutation.FormNameCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
-			Column: procdef.FieldYewuName,
+			Column: procdef.FieldFormName,
 		})
 	}
 	if value, ok := pdu.mutation.RemainHours(); ok {
@@ -657,6 +677,19 @@ func (pdu *ProcDefUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt8,
 			Column: procdef.FieldIsActive,
+		})
+	}
+	if value, ok := pdu.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: procdef.FieldUpdateTime,
+		})
+	}
+	if pdu.mutation.UpdateTimeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: procdef.FieldUpdateTime,
 		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pdu.driver, _spec); err != nil {
@@ -859,43 +892,43 @@ func (pduo *ProcDefUpdateOne) ClearTargetID() *ProcDefUpdateOne {
 	return pduo
 }
 
-// SetYewuFormID sets the "yewu_form_id" field.
-func (pduo *ProcDefUpdateOne) SetYewuFormID(s string) *ProcDefUpdateOne {
-	pduo.mutation.SetYewuFormID(s)
+// SetFormID sets the "form_id" field.
+func (pduo *ProcDefUpdateOne) SetFormID(s string) *ProcDefUpdateOne {
+	pduo.mutation.SetFormID(s)
 	return pduo
 }
 
-// SetNillableYewuFormID sets the "yewu_form_id" field if the given value is not nil.
-func (pduo *ProcDefUpdateOne) SetNillableYewuFormID(s *string) *ProcDefUpdateOne {
+// SetNillableFormID sets the "form_id" field if the given value is not nil.
+func (pduo *ProcDefUpdateOne) SetNillableFormID(s *string) *ProcDefUpdateOne {
 	if s != nil {
-		pduo.SetYewuFormID(*s)
+		pduo.SetFormID(*s)
 	}
 	return pduo
 }
 
-// ClearYewuFormID clears the value of the "yewu_form_id" field.
-func (pduo *ProcDefUpdateOne) ClearYewuFormID() *ProcDefUpdateOne {
-	pduo.mutation.ClearYewuFormID()
+// ClearFormID clears the value of the "form_id" field.
+func (pduo *ProcDefUpdateOne) ClearFormID() *ProcDefUpdateOne {
+	pduo.mutation.ClearFormID()
 	return pduo
 }
 
-// SetYewuName sets the "yewu_name" field.
-func (pduo *ProcDefUpdateOne) SetYewuName(s string) *ProcDefUpdateOne {
-	pduo.mutation.SetYewuName(s)
+// SetFormName sets the "form_name" field.
+func (pduo *ProcDefUpdateOne) SetFormName(s string) *ProcDefUpdateOne {
+	pduo.mutation.SetFormName(s)
 	return pduo
 }
 
-// SetNillableYewuName sets the "yewu_name" field if the given value is not nil.
-func (pduo *ProcDefUpdateOne) SetNillableYewuName(s *string) *ProcDefUpdateOne {
+// SetNillableFormName sets the "form_name" field if the given value is not nil.
+func (pduo *ProcDefUpdateOne) SetNillableFormName(s *string) *ProcDefUpdateOne {
 	if s != nil {
-		pduo.SetYewuName(*s)
+		pduo.SetFormName(*s)
 	}
 	return pduo
 }
 
-// ClearYewuName clears the value of the "yewu_name" field.
-func (pduo *ProcDefUpdateOne) ClearYewuName() *ProcDefUpdateOne {
-	pduo.mutation.ClearYewuName()
+// ClearFormName clears the value of the "form_name" field.
+func (pduo *ProcDefUpdateOne) ClearFormName() *ProcDefUpdateOne {
+	pduo.mutation.ClearFormName()
 	return pduo
 }
 
@@ -977,6 +1010,26 @@ func (pduo *ProcDefUpdateOne) AddIsActive(i int8) *ProcDefUpdateOne {
 // ClearIsActive clears the value of the "is_active" field.
 func (pduo *ProcDefUpdateOne) ClearIsActive() *ProcDefUpdateOne {
 	pduo.mutation.ClearIsActive()
+	return pduo
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (pduo *ProcDefUpdateOne) SetUpdateTime(t time.Time) *ProcDefUpdateOne {
+	pduo.mutation.SetUpdateTime(t)
+	return pduo
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (pduo *ProcDefUpdateOne) SetNillableUpdateTime(t *time.Time) *ProcDefUpdateOne {
+	if t != nil {
+		pduo.SetUpdateTime(*t)
+	}
+	return pduo
+}
+
+// ClearUpdateTime clears the value of the "update_time" field.
+func (pduo *ProcDefUpdateOne) ClearUpdateTime() *ProcDefUpdateOne {
+	pduo.mutation.ClearUpdateTime()
 	return pduo
 }
 
@@ -1080,14 +1133,14 @@ func (pduo *ProcDefUpdateOne) check() error {
 			return &ValidationError{Name: "create_user_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.create_user_name": %w`, err)}
 		}
 	}
-	if v, ok := pduo.mutation.YewuFormID(); ok {
-		if err := procdef.YewuFormIDValidator(v); err != nil {
-			return &ValidationError{Name: "yewu_form_id", err: fmt.Errorf(`act: validator failed for field "ProcDef.yewu_form_id": %w`, err)}
+	if v, ok := pduo.mutation.FormID(); ok {
+		if err := procdef.FormIDValidator(v); err != nil {
+			return &ValidationError{Name: "form_id", err: fmt.Errorf(`act: validator failed for field "ProcDef.form_id": %w`, err)}
 		}
 	}
-	if v, ok := pduo.mutation.YewuName(); ok {
-		if err := procdef.YewuNameValidator(v); err != nil {
-			return &ValidationError{Name: "yewu_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.yewu_name": %w`, err)}
+	if v, ok := pduo.mutation.FormName(); ok {
+		if err := procdef.FormNameValidator(v); err != nil {
+			return &ValidationError{Name: "form_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.form_name": %w`, err)}
 		}
 	}
 	return nil
@@ -1253,30 +1306,30 @@ func (pduo *ProcDefUpdateOne) sqlSave(ctx context.Context) (_node *ProcDef, err 
 			Column: procdef.FieldTargetID,
 		})
 	}
-	if value, ok := pduo.mutation.YewuFormID(); ok {
+	if value, ok := pduo.mutation.FormID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: procdef.FieldYewuFormID,
+			Column: procdef.FieldFormID,
 		})
 	}
-	if pduo.mutation.YewuFormIDCleared() {
+	if pduo.mutation.FormIDCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
-			Column: procdef.FieldYewuFormID,
+			Column: procdef.FieldFormID,
 		})
 	}
-	if value, ok := pduo.mutation.YewuName(); ok {
+	if value, ok := pduo.mutation.FormName(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: procdef.FieldYewuName,
+			Column: procdef.FieldFormName,
 		})
 	}
-	if pduo.mutation.YewuNameCleared() {
+	if pduo.mutation.FormNameCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
-			Column: procdef.FieldYewuName,
+			Column: procdef.FieldFormName,
 		})
 	}
 	if value, ok := pduo.mutation.RemainHours(); ok {
@@ -1337,6 +1390,19 @@ func (pduo *ProcDefUpdateOne) sqlSave(ctx context.Context) (_node *ProcDef, err 
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt8,
 			Column: procdef.FieldIsActive,
+		})
+	}
+	if value, ok := pduo.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: procdef.FieldUpdateTime,
+		})
+	}
+	if pduo.mutation.UpdateTimeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: procdef.FieldUpdateTime,
 		})
 	}
 	_node = &ProcDef{config: pduo.config}

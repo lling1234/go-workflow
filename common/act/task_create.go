@@ -5,6 +5,7 @@ package act
 import (
 	"act/common/act/task"
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -64,14 +65,6 @@ func (tc *TaskCreate) SetNillableStep(i *int) *TaskCreate {
 // SetProcInstID sets the "proc_inst_id" field.
 func (tc *TaskCreate) SetProcInstID(i int64) *TaskCreate {
 	tc.mutation.SetProcInstID(i)
-	return tc
-}
-
-// SetNillableProcInstID sets the "proc_inst_id" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableProcInstID(i *int64) *TaskCreate {
-	if i != nil {
-		tc.SetProcInstID(*i)
-	}
 	return tc
 }
 
@@ -201,6 +194,20 @@ func (tc *TaskCreate) SetNillableIsDel(i *int) *TaskCreate {
 	return tc
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (tc *TaskCreate) SetUpdateTime(t time.Time) *TaskCreate {
+	tc.mutation.SetUpdateTime(t)
+	return tc
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableUpdateTime(t *time.Time) *TaskCreate {
+	if t != nil {
+		tc.SetUpdateTime(*t)
+	}
+	return tc
+}
+
 // Mutation returns the TaskMutation object of the builder.
 func (tc *TaskCreate) Mutation() *TaskMutation {
 	return tc.mutation
@@ -298,6 +305,10 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultIsDel
 		tc.mutation.SetIsDel(v)
 	}
+	if _, ok := tc.mutation.UpdateTime(); !ok {
+		v := task.DefaultUpdateTime
+		tc.mutation.SetUpdateTime(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -306,6 +317,9 @@ func (tc *TaskCreate) check() error {
 		if err := task.NodeIDValidator(v); err != nil {
 			return &ValidationError{Name: "node_id", err: fmt.Errorf(`act: validator failed for field "Task.node_id": %w`, err)}
 		}
+	}
+	if _, ok := tc.mutation.ProcInstID(); !ok {
+		return &ValidationError{Name: "proc_inst_id", err: errors.New(`act: missing required field "Task.proc_inst_id"`)}
 	}
 	if v, ok := tc.mutation.ActType(); ok {
 		if err := task.ActTypeValidator(v); err != nil {
@@ -442,6 +456,14 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			Column: task.FieldIsDel,
 		})
 		_node.IsDel = value
+	}
+	if value, ok := tc.mutation.UpdateTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: task.FieldUpdateTime,
+		})
+		_node.UpdateTime = value
 	}
 	return _node, _spec
 }

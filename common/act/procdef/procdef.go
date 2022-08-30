@@ -27,18 +27,20 @@ const (
 	FieldCreateTime = "create_time"
 	// FieldTargetID holds the string denoting the target_id field in the database.
 	FieldTargetID = "target_id"
-	// FieldYewuFormID holds the string denoting the yewu_form_id field in the database.
-	FieldYewuFormID = "yewu_form_id"
-	// FieldYewuName holds the string denoting the yewu_name field in the database.
-	FieldYewuName = "yewu_name"
+	// FieldFormID holds the string denoting the form_id field in the database.
+	FieldFormID = "form_id"
+	// FieldFormName holds the string denoting the form_name field in the database.
+	FieldFormName = "form_name"
 	// FieldRemainHours holds the string denoting the remain_hours field in the database.
 	FieldRemainHours = "remain_hours"
 	// FieldIsDel holds the string denoting the is_del field in the database.
 	FieldIsDel = "is_del"
 	// FieldIsActive holds the string denoting the is_active field in the database.
 	FieldIsActive = "is_active"
+	// FieldUpdateTime holds the string denoting the update_time field in the database.
+	FieldUpdateTime = "update_time"
 	// Table holds the table name of the procdef in the database.
-	Table = "proc_defs"
+	Table = "act_proc_def"
 )
 
 // Columns holds all SQL columns for procdef fields.
@@ -52,11 +54,12 @@ var Columns = []string{
 	FieldCreateUserName,
 	FieldCreateTime,
 	FieldTargetID,
-	FieldYewuFormID,
-	FieldYewuName,
+	FieldFormID,
+	FieldFormName,
 	FieldRemainHours,
 	FieldIsDel,
 	FieldIsActive,
+	FieldUpdateTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -82,14 +85,16 @@ var (
 	CreateUserNameValidator func(string) error
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime time.Time
-	// YewuFormIDValidator is a validator for the "yewu_form_id" field. It is called by the builders before save.
-	YewuFormIDValidator func(string) error
-	// YewuNameValidator is a validator for the "yewu_name" field. It is called by the builders before save.
-	YewuNameValidator func(string) error
+	// FormIDValidator is a validator for the "form_id" field. It is called by the builders before save.
+	FormIDValidator func(string) error
+	// FormNameValidator is a validator for the "form_name" field. It is called by the builders before save.
+	FormNameValidator func(string) error
 	// DefaultRemainHours holds the default value on creation for the "remain_hours" field.
 	DefaultRemainHours int
 	// DefaultIsDel holds the default value on creation for the "is_del" field.
 	DefaultIsDel int8
 	// DefaultIsActive holds the default value on creation for the "is_active" field.
 	DefaultIsActive int8
+	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
+	DefaultUpdateTime time.Time
 )

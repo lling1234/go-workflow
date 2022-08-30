@@ -5,6 +5,7 @@ package act
 import (
 	"act/common/act/execution"
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -25,25 +26,9 @@ func (ec *ExecutionCreate) SetProcInstID(i int64) *ExecutionCreate {
 	return ec
 }
 
-// SetNillableProcInstID sets the "proc_inst_id" field if the given value is not nil.
-func (ec *ExecutionCreate) SetNillableProcInstID(i *int64) *ExecutionCreate {
-	if i != nil {
-		ec.SetProcInstID(*i)
-	}
-	return ec
-}
-
 // SetProcDefID sets the "proc_def_id" field.
 func (ec *ExecutionCreate) SetProcDefID(i int64) *ExecutionCreate {
 	ec.mutation.SetProcDefID(i)
-	return ec
-}
-
-// SetNillableProcDefID sets the "proc_def_id" field if the given value is not nil.
-func (ec *ExecutionCreate) SetNillableProcDefID(i *int64) *ExecutionCreate {
-	if i != nil {
-		ec.SetProcDefID(*i)
-	}
 	return ec
 }
 
@@ -57,20 +42,6 @@ func (ec *ExecutionCreate) SetNodeInfos(s string) *ExecutionCreate {
 func (ec *ExecutionCreate) SetNillableNodeInfos(s *string) *ExecutionCreate {
 	if s != nil {
 		ec.SetNodeInfos(*s)
-	}
-	return ec
-}
-
-// SetIsActive sets the "is_active" field.
-func (ec *ExecutionCreate) SetIsActive(i int8) *ExecutionCreate {
-	ec.mutation.SetIsActive(i)
-	return ec
-}
-
-// SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (ec *ExecutionCreate) SetNillableIsActive(i *int8) *ExecutionCreate {
-	if i != nil {
-		ec.SetIsActive(*i)
 	}
 	return ec
 }
@@ -113,6 +84,20 @@ func (ec *ExecutionCreate) SetCreateTime(t time.Time) *ExecutionCreate {
 func (ec *ExecutionCreate) SetNillableCreateTime(t *time.Time) *ExecutionCreate {
 	if t != nil {
 		ec.SetCreateTime(*t)
+	}
+	return ec
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (ec *ExecutionCreate) SetUpdateTime(t time.Time) *ExecutionCreate {
+	ec.mutation.SetUpdateTime(t)
+	return ec
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (ec *ExecutionCreate) SetNillableUpdateTime(t *time.Time) *ExecutionCreate {
+	if t != nil {
+		ec.SetUpdateTime(*t)
 	}
 	return ec
 }
@@ -194,10 +179,6 @@ func (ec *ExecutionCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (ec *ExecutionCreate) defaults() {
-	if _, ok := ec.mutation.IsActive(); !ok {
-		v := execution.DefaultIsActive
-		ec.mutation.SetIsActive(v)
-	}
 	if _, ok := ec.mutation.StartTime(); !ok {
 		v := execution.DefaultStartTime
 		ec.mutation.SetStartTime(v)
@@ -210,10 +191,20 @@ func (ec *ExecutionCreate) defaults() {
 		v := execution.DefaultCreateTime
 		ec.mutation.SetCreateTime(v)
 	}
+	if _, ok := ec.mutation.UpdateTime(); !ok {
+		v := execution.DefaultUpdateTime
+		ec.mutation.SetUpdateTime(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (ec *ExecutionCreate) check() error {
+	if _, ok := ec.mutation.ProcInstID(); !ok {
+		return &ValidationError{Name: "proc_inst_id", err: errors.New(`act: missing required field "Execution.proc_inst_id"`)}
+	}
+	if _, ok := ec.mutation.ProcDefID(); !ok {
+		return &ValidationError{Name: "proc_def_id", err: errors.New(`act: missing required field "Execution.proc_def_id"`)}
+	}
 	if v, ok := ec.mutation.NodeInfos(); ok {
 		if err := execution.NodeInfosValidator(v); err != nil {
 			return &ValidationError{Name: "node_infos", err: fmt.Errorf(`act: validator failed for field "Execution.node_infos": %w`, err)}
@@ -270,14 +261,6 @@ func (ec *ExecutionCreate) createSpec() (*Execution, *sqlgraph.CreateSpec) {
 		})
 		_node.NodeInfos = value
 	}
-	if value, ok := ec.mutation.IsActive(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
-			Value:  value,
-			Column: execution.FieldIsActive,
-		})
-		_node.IsActive = value
-	}
 	if value, ok := ec.mutation.StartTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -301,6 +284,14 @@ func (ec *ExecutionCreate) createSpec() (*Execution, *sqlgraph.CreateSpec) {
 			Column: execution.FieldCreateTime,
 		})
 		_node.CreateTime = value
+	}
+	if value, ok := ec.mutation.UpdateTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: execution.FieldUpdateTime,
+		})
+		_node.UpdateTime = value
 	}
 	return _node, _spec
 }

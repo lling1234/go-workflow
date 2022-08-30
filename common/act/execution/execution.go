@@ -17,16 +17,16 @@ const (
 	FieldProcDefID = "proc_def_id"
 	// FieldNodeInfos holds the string denoting the node_infos field in the database.
 	FieldNodeInfos = "node_infos"
-	// FieldIsActive holds the string denoting the is_active field in the database.
-	FieldIsActive = "is_active"
 	// FieldStartTime holds the string denoting the start_time field in the database.
 	FieldStartTime = "start_time"
 	// FieldIsDel holds the string denoting the is_del field in the database.
 	FieldIsDel = "is_del"
 	// FieldCreateTime holds the string denoting the create_time field in the database.
 	FieldCreateTime = "create_time"
+	// FieldUpdateTime holds the string denoting the update_time field in the database.
+	FieldUpdateTime = "update_time"
 	// Table holds the table name of the execution in the database.
-	Table = "executions"
+	Table = "act_execution"
 )
 
 // Columns holds all SQL columns for execution fields.
@@ -35,10 +35,10 @@ var Columns = []string{
 	FieldProcInstID,
 	FieldProcDefID,
 	FieldNodeInfos,
-	FieldIsActive,
 	FieldStartTime,
 	FieldIsDel,
 	FieldCreateTime,
+	FieldUpdateTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -54,12 +54,12 @@ func ValidColumn(column string) bool {
 var (
 	// NodeInfosValidator is a validator for the "node_infos" field. It is called by the builders before save.
 	NodeInfosValidator func(string) error
-	// DefaultIsActive holds the default value on creation for the "is_active" field.
-	DefaultIsActive int8
 	// DefaultStartTime holds the default value on creation for the "start_time" field.
 	DefaultStartTime time.Time
 	// DefaultIsDel holds the default value on creation for the "is_del" field.
 	DefaultIsDel int8
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime time.Time
+	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
+	DefaultUpdateTime time.Time
 )

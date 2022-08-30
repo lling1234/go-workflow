@@ -30,7 +30,7 @@ type IdentityLink struct {
 	Comment string `json:"comment,omitempty"`
 	// 节点任务
 	TaskID int64 `json:"task_id,omitempty"`
-	// 审批结果
+	// 审批结果 3驳回、5未通过、6已通过
 	Result int `json:"result,omitempty"`
 	// 创建时间
 	CreateTime time.Time `json:"create_time,omitempty"`
@@ -38,6 +38,8 @@ type IdentityLink struct {
 	IsDel int8 `json:"is_del,omitempty"`
 	// 是否已审批 ,0:未审批,1:已审批
 	IsDeal int8 `json:"is_deal,omitempty"`
+	// 流程修改时间
+	UpdateTime time.Time `json:"update_time,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -49,7 +51,7 @@ func (*IdentityLink) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullInt64)
 		case identitylink.FieldUserName, identitylink.FieldComment:
 			values[i] = new(sql.NullString)
-		case identitylink.FieldCreateTime:
+		case identitylink.FieldCreateTime, identitylink.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type IdentityLink", columns[i])
@@ -138,6 +140,12 @@ func (il *IdentityLink) assignValues(columns []string, values []interface{}) err
 			} else if value.Valid {
 				il.IsDeal = int8(value.Int64)
 			}
+		case identitylink.FieldUpdateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
+			} else if value.Valid {
+				il.UpdateTime = value.Time
+			}
 		}
 	}
 	return nil
@@ -198,6 +206,9 @@ func (il *IdentityLink) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_deal=")
 	builder.WriteString(fmt.Sprintf("%v", il.IsDeal))
+	builder.WriteString(", ")
+	builder.WriteString("update_time=")
+	builder.WriteString(il.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

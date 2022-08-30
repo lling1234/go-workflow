@@ -136,17 +136,17 @@ func TargetID(v int64) predicate.ProcDef {
 	})
 }
 
-// YewuFormID applies equality check predicate on the "yewu_form_id" field. It's identical to YewuFormIDEQ.
-func YewuFormID(v string) predicate.ProcDef {
+// FormID applies equality check predicate on the "form_id" field. It's identical to FormIDEQ.
+func FormID(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldYewuFormID), v))
+		s.Where(sql.EQ(s.C(FieldFormID), v))
 	})
 }
 
-// YewuName applies equality check predicate on the "yewu_name" field. It's identical to YewuNameEQ.
-func YewuName(v string) predicate.ProcDef {
+// FormName applies equality check predicate on the "form_name" field. It's identical to FormNameEQ.
+func FormName(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldYewuName), v))
+		s.Where(sql.EQ(s.C(FieldFormName), v))
 	})
 }
 
@@ -168,6 +168,13 @@ func IsDel(v int8) predicate.ProcDef {
 func IsActive(v int8) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsActive), v))
+	})
+}
+
+// UpdateTime applies equality check predicate on the "update_time" field. It's identical to UpdateTimeEQ.
+func UpdateTime(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdateTime), v))
 	})
 }
 
@@ -935,229 +942,229 @@ func TargetIDNotNil() predicate.ProcDef {
 	})
 }
 
-// YewuFormIDEQ applies the EQ predicate on the "yewu_form_id" field.
-func YewuFormIDEQ(v string) predicate.ProcDef {
+// FormIDEQ applies the EQ predicate on the "form_id" field.
+func FormIDEQ(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldYewuFormID), v))
+		s.Where(sql.EQ(s.C(FieldFormID), v))
 	})
 }
 
-// YewuFormIDNEQ applies the NEQ predicate on the "yewu_form_id" field.
-func YewuFormIDNEQ(v string) predicate.ProcDef {
+// FormIDNEQ applies the NEQ predicate on the "form_id" field.
+func FormIDNEQ(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldYewuFormID), v))
+		s.Where(sql.NEQ(s.C(FieldFormID), v))
 	})
 }
 
-// YewuFormIDIn applies the In predicate on the "yewu_form_id" field.
-func YewuFormIDIn(vs ...string) predicate.ProcDef {
+// FormIDIn applies the In predicate on the "form_id" field.
+func FormIDIn(vs ...string) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldYewuFormID), v...))
+		s.Where(sql.In(s.C(FieldFormID), v...))
 	})
 }
 
-// YewuFormIDNotIn applies the NotIn predicate on the "yewu_form_id" field.
-func YewuFormIDNotIn(vs ...string) predicate.ProcDef {
+// FormIDNotIn applies the NotIn predicate on the "form_id" field.
+func FormIDNotIn(vs ...string) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldYewuFormID), v...))
+		s.Where(sql.NotIn(s.C(FieldFormID), v...))
 	})
 }
 
-// YewuFormIDGT applies the GT predicate on the "yewu_form_id" field.
-func YewuFormIDGT(v string) predicate.ProcDef {
+// FormIDGT applies the GT predicate on the "form_id" field.
+func FormIDGT(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldYewuFormID), v))
+		s.Where(sql.GT(s.C(FieldFormID), v))
 	})
 }
 
-// YewuFormIDGTE applies the GTE predicate on the "yewu_form_id" field.
-func YewuFormIDGTE(v string) predicate.ProcDef {
+// FormIDGTE applies the GTE predicate on the "form_id" field.
+func FormIDGTE(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldYewuFormID), v))
+		s.Where(sql.GTE(s.C(FieldFormID), v))
 	})
 }
 
-// YewuFormIDLT applies the LT predicate on the "yewu_form_id" field.
-func YewuFormIDLT(v string) predicate.ProcDef {
+// FormIDLT applies the LT predicate on the "form_id" field.
+func FormIDLT(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldYewuFormID), v))
+		s.Where(sql.LT(s.C(FieldFormID), v))
 	})
 }
 
-// YewuFormIDLTE applies the LTE predicate on the "yewu_form_id" field.
-func YewuFormIDLTE(v string) predicate.ProcDef {
+// FormIDLTE applies the LTE predicate on the "form_id" field.
+func FormIDLTE(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldYewuFormID), v))
+		s.Where(sql.LTE(s.C(FieldFormID), v))
 	})
 }
 
-// YewuFormIDContains applies the Contains predicate on the "yewu_form_id" field.
-func YewuFormIDContains(v string) predicate.ProcDef {
+// FormIDContains applies the Contains predicate on the "form_id" field.
+func FormIDContains(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldYewuFormID), v))
+		s.Where(sql.Contains(s.C(FieldFormID), v))
 	})
 }
 
-// YewuFormIDHasPrefix applies the HasPrefix predicate on the "yewu_form_id" field.
-func YewuFormIDHasPrefix(v string) predicate.ProcDef {
+// FormIDHasPrefix applies the HasPrefix predicate on the "form_id" field.
+func FormIDHasPrefix(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldYewuFormID), v))
+		s.Where(sql.HasPrefix(s.C(FieldFormID), v))
 	})
 }
 
-// YewuFormIDHasSuffix applies the HasSuffix predicate on the "yewu_form_id" field.
-func YewuFormIDHasSuffix(v string) predicate.ProcDef {
+// FormIDHasSuffix applies the HasSuffix predicate on the "form_id" field.
+func FormIDHasSuffix(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldYewuFormID), v))
+		s.Where(sql.HasSuffix(s.C(FieldFormID), v))
 	})
 }
 
-// YewuFormIDIsNil applies the IsNil predicate on the "yewu_form_id" field.
-func YewuFormIDIsNil() predicate.ProcDef {
+// FormIDIsNil applies the IsNil predicate on the "form_id" field.
+func FormIDIsNil() predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldYewuFormID)))
+		s.Where(sql.IsNull(s.C(FieldFormID)))
 	})
 }
 
-// YewuFormIDNotNil applies the NotNil predicate on the "yewu_form_id" field.
-func YewuFormIDNotNil() predicate.ProcDef {
+// FormIDNotNil applies the NotNil predicate on the "form_id" field.
+func FormIDNotNil() predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldYewuFormID)))
+		s.Where(sql.NotNull(s.C(FieldFormID)))
 	})
 }
 
-// YewuFormIDEqualFold applies the EqualFold predicate on the "yewu_form_id" field.
-func YewuFormIDEqualFold(v string) predicate.ProcDef {
+// FormIDEqualFold applies the EqualFold predicate on the "form_id" field.
+func FormIDEqualFold(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldYewuFormID), v))
+		s.Where(sql.EqualFold(s.C(FieldFormID), v))
 	})
 }
 
-// YewuFormIDContainsFold applies the ContainsFold predicate on the "yewu_form_id" field.
-func YewuFormIDContainsFold(v string) predicate.ProcDef {
+// FormIDContainsFold applies the ContainsFold predicate on the "form_id" field.
+func FormIDContainsFold(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldYewuFormID), v))
+		s.Where(sql.ContainsFold(s.C(FieldFormID), v))
 	})
 }
 
-// YewuNameEQ applies the EQ predicate on the "yewu_name" field.
-func YewuNameEQ(v string) predicate.ProcDef {
+// FormNameEQ applies the EQ predicate on the "form_name" field.
+func FormNameEQ(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldYewuName), v))
+		s.Where(sql.EQ(s.C(FieldFormName), v))
 	})
 }
 
-// YewuNameNEQ applies the NEQ predicate on the "yewu_name" field.
-func YewuNameNEQ(v string) predicate.ProcDef {
+// FormNameNEQ applies the NEQ predicate on the "form_name" field.
+func FormNameNEQ(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldYewuName), v))
+		s.Where(sql.NEQ(s.C(FieldFormName), v))
 	})
 }
 
-// YewuNameIn applies the In predicate on the "yewu_name" field.
-func YewuNameIn(vs ...string) predicate.ProcDef {
+// FormNameIn applies the In predicate on the "form_name" field.
+func FormNameIn(vs ...string) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldYewuName), v...))
+		s.Where(sql.In(s.C(FieldFormName), v...))
 	})
 }
 
-// YewuNameNotIn applies the NotIn predicate on the "yewu_name" field.
-func YewuNameNotIn(vs ...string) predicate.ProcDef {
+// FormNameNotIn applies the NotIn predicate on the "form_name" field.
+func FormNameNotIn(vs ...string) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldYewuName), v...))
+		s.Where(sql.NotIn(s.C(FieldFormName), v...))
 	})
 }
 
-// YewuNameGT applies the GT predicate on the "yewu_name" field.
-func YewuNameGT(v string) predicate.ProcDef {
+// FormNameGT applies the GT predicate on the "form_name" field.
+func FormNameGT(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldYewuName), v))
+		s.Where(sql.GT(s.C(FieldFormName), v))
 	})
 }
 
-// YewuNameGTE applies the GTE predicate on the "yewu_name" field.
-func YewuNameGTE(v string) predicate.ProcDef {
+// FormNameGTE applies the GTE predicate on the "form_name" field.
+func FormNameGTE(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldYewuName), v))
+		s.Where(sql.GTE(s.C(FieldFormName), v))
 	})
 }
 
-// YewuNameLT applies the LT predicate on the "yewu_name" field.
-func YewuNameLT(v string) predicate.ProcDef {
+// FormNameLT applies the LT predicate on the "form_name" field.
+func FormNameLT(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldYewuName), v))
+		s.Where(sql.LT(s.C(FieldFormName), v))
 	})
 }
 
-// YewuNameLTE applies the LTE predicate on the "yewu_name" field.
-func YewuNameLTE(v string) predicate.ProcDef {
+// FormNameLTE applies the LTE predicate on the "form_name" field.
+func FormNameLTE(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldYewuName), v))
+		s.Where(sql.LTE(s.C(FieldFormName), v))
 	})
 }
 
-// YewuNameContains applies the Contains predicate on the "yewu_name" field.
-func YewuNameContains(v string) predicate.ProcDef {
+// FormNameContains applies the Contains predicate on the "form_name" field.
+func FormNameContains(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldYewuName), v))
+		s.Where(sql.Contains(s.C(FieldFormName), v))
 	})
 }
 
-// YewuNameHasPrefix applies the HasPrefix predicate on the "yewu_name" field.
-func YewuNameHasPrefix(v string) predicate.ProcDef {
+// FormNameHasPrefix applies the HasPrefix predicate on the "form_name" field.
+func FormNameHasPrefix(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldYewuName), v))
+		s.Where(sql.HasPrefix(s.C(FieldFormName), v))
 	})
 }
 
-// YewuNameHasSuffix applies the HasSuffix predicate on the "yewu_name" field.
-func YewuNameHasSuffix(v string) predicate.ProcDef {
+// FormNameHasSuffix applies the HasSuffix predicate on the "form_name" field.
+func FormNameHasSuffix(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldYewuName), v))
+		s.Where(sql.HasSuffix(s.C(FieldFormName), v))
 	})
 }
 
-// YewuNameIsNil applies the IsNil predicate on the "yewu_name" field.
-func YewuNameIsNil() predicate.ProcDef {
+// FormNameIsNil applies the IsNil predicate on the "form_name" field.
+func FormNameIsNil() predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldYewuName)))
+		s.Where(sql.IsNull(s.C(FieldFormName)))
 	})
 }
 
-// YewuNameNotNil applies the NotNil predicate on the "yewu_name" field.
-func YewuNameNotNil() predicate.ProcDef {
+// FormNameNotNil applies the NotNil predicate on the "form_name" field.
+func FormNameNotNil() predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldYewuName)))
+		s.Where(sql.NotNull(s.C(FieldFormName)))
 	})
 }
 
-// YewuNameEqualFold applies the EqualFold predicate on the "yewu_name" field.
-func YewuNameEqualFold(v string) predicate.ProcDef {
+// FormNameEqualFold applies the EqualFold predicate on the "form_name" field.
+func FormNameEqualFold(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldYewuName), v))
+		s.Where(sql.EqualFold(s.C(FieldFormName), v))
 	})
 }
 
-// YewuNameContainsFold applies the ContainsFold predicate on the "yewu_name" field.
-func YewuNameContainsFold(v string) predicate.ProcDef {
+// FormNameContainsFold applies the ContainsFold predicate on the "form_name" field.
+func FormNameContainsFold(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldYewuName), v))
+		s.Where(sql.ContainsFold(s.C(FieldFormName), v))
 	})
 }
 
@@ -1392,6 +1399,84 @@ func IsActiveIsNil() predicate.ProcDef {
 func IsActiveNotNil() predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldIsActive)))
+	})
+}
+
+// UpdateTimeEQ applies the EQ predicate on the "update_time" field.
+func UpdateTimeEQ(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeNEQ applies the NEQ predicate on the "update_time" field.
+func UpdateTimeNEQ(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeIn applies the In predicate on the "update_time" field.
+func UpdateTimeIn(vs ...time.Time) predicate.ProcDef {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldUpdateTime), v...))
+	})
+}
+
+// UpdateTimeNotIn applies the NotIn predicate on the "update_time" field.
+func UpdateTimeNotIn(vs ...time.Time) predicate.ProcDef {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldUpdateTime), v...))
+	})
+}
+
+// UpdateTimeGT applies the GT predicate on the "update_time" field.
+func UpdateTimeGT(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeGTE applies the GTE predicate on the "update_time" field.
+func UpdateTimeGTE(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeLT applies the LT predicate on the "update_time" field.
+func UpdateTimeLT(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeLTE applies the LTE predicate on the "update_time" field.
+func UpdateTimeLTE(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeIsNil applies the IsNil predicate on the "update_time" field.
+func UpdateTimeIsNil() predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldUpdateTime)))
+	})
+}
+
+// UpdateTimeNotNil applies the NotNil predicate on the "update_time" field.
+func UpdateTimeNotNil() predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldUpdateTime)))
 	})
 }
 

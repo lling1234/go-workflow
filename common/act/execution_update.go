@@ -35,23 +35,9 @@ func (eu *ExecutionUpdate) SetProcInstID(i int64) *ExecutionUpdate {
 	return eu
 }
 
-// SetNillableProcInstID sets the "proc_inst_id" field if the given value is not nil.
-func (eu *ExecutionUpdate) SetNillableProcInstID(i *int64) *ExecutionUpdate {
-	if i != nil {
-		eu.SetProcInstID(*i)
-	}
-	return eu
-}
-
 // AddProcInstID adds i to the "proc_inst_id" field.
 func (eu *ExecutionUpdate) AddProcInstID(i int64) *ExecutionUpdate {
 	eu.mutation.AddProcInstID(i)
-	return eu
-}
-
-// ClearProcInstID clears the value of the "proc_inst_id" field.
-func (eu *ExecutionUpdate) ClearProcInstID() *ExecutionUpdate {
-	eu.mutation.ClearProcInstID()
 	return eu
 }
 
@@ -62,23 +48,9 @@ func (eu *ExecutionUpdate) SetProcDefID(i int64) *ExecutionUpdate {
 	return eu
 }
 
-// SetNillableProcDefID sets the "proc_def_id" field if the given value is not nil.
-func (eu *ExecutionUpdate) SetNillableProcDefID(i *int64) *ExecutionUpdate {
-	if i != nil {
-		eu.SetProcDefID(*i)
-	}
-	return eu
-}
-
 // AddProcDefID adds i to the "proc_def_id" field.
 func (eu *ExecutionUpdate) AddProcDefID(i int64) *ExecutionUpdate {
 	eu.mutation.AddProcDefID(i)
-	return eu
-}
-
-// ClearProcDefID clears the value of the "proc_def_id" field.
-func (eu *ExecutionUpdate) ClearProcDefID() *ExecutionUpdate {
-	eu.mutation.ClearProcDefID()
 	return eu
 }
 
@@ -99,33 +71,6 @@ func (eu *ExecutionUpdate) SetNillableNodeInfos(s *string) *ExecutionUpdate {
 // ClearNodeInfos clears the value of the "node_infos" field.
 func (eu *ExecutionUpdate) ClearNodeInfos() *ExecutionUpdate {
 	eu.mutation.ClearNodeInfos()
-	return eu
-}
-
-// SetIsActive sets the "is_active" field.
-func (eu *ExecutionUpdate) SetIsActive(i int8) *ExecutionUpdate {
-	eu.mutation.ResetIsActive()
-	eu.mutation.SetIsActive(i)
-	return eu
-}
-
-// SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (eu *ExecutionUpdate) SetNillableIsActive(i *int8) *ExecutionUpdate {
-	if i != nil {
-		eu.SetIsActive(*i)
-	}
-	return eu
-}
-
-// AddIsActive adds i to the "is_active" field.
-func (eu *ExecutionUpdate) AddIsActive(i int8) *ExecutionUpdate {
-	eu.mutation.AddIsActive(i)
-	return eu
-}
-
-// ClearIsActive clears the value of the "is_active" field.
-func (eu *ExecutionUpdate) ClearIsActive() *ExecutionUpdate {
-	eu.mutation.ClearIsActive()
 	return eu
 }
 
@@ -193,6 +138,26 @@ func (eu *ExecutionUpdate) SetNillableCreateTime(t *time.Time) *ExecutionUpdate 
 // ClearCreateTime clears the value of the "create_time" field.
 func (eu *ExecutionUpdate) ClearCreateTime() *ExecutionUpdate {
 	eu.mutation.ClearCreateTime()
+	return eu
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (eu *ExecutionUpdate) SetUpdateTime(t time.Time) *ExecutionUpdate {
+	eu.mutation.SetUpdateTime(t)
+	return eu
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (eu *ExecutionUpdate) SetNillableUpdateTime(t *time.Time) *ExecutionUpdate {
+	if t != nil {
+		eu.SetUpdateTime(*t)
+	}
+	return eu
+}
+
+// ClearUpdateTime clears the value of the "update_time" field.
+func (eu *ExecutionUpdate) ClearUpdateTime() *ExecutionUpdate {
+	eu.mutation.ClearUpdateTime()
 	return eu
 }
 
@@ -303,12 +268,6 @@ func (eu *ExecutionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: execution.FieldProcInstID,
 		})
 	}
-	if eu.mutation.ProcInstIDCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Column: execution.FieldProcInstID,
-		})
-	}
 	if value, ok := eu.mutation.ProcDefID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt64,
@@ -323,12 +282,6 @@ func (eu *ExecutionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: execution.FieldProcDefID,
 		})
 	}
-	if eu.mutation.ProcDefIDCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Column: execution.FieldProcDefID,
-		})
-	}
 	if value, ok := eu.mutation.NodeInfos(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -340,26 +293,6 @@ func (eu *ExecutionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Column: execution.FieldNodeInfos,
-		})
-	}
-	if value, ok := eu.mutation.IsActive(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
-			Value:  value,
-			Column: execution.FieldIsActive,
-		})
-	}
-	if value, ok := eu.mutation.AddedIsActive(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
-			Value:  value,
-			Column: execution.FieldIsActive,
-		})
-	}
-	if eu.mutation.IsActiveCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
-			Column: execution.FieldIsActive,
 		})
 	}
 	if value, ok := eu.mutation.StartTime(); ok {
@@ -408,6 +341,19 @@ func (eu *ExecutionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: execution.FieldCreateTime,
 		})
 	}
+	if value, ok := eu.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: execution.FieldUpdateTime,
+		})
+	}
+	if eu.mutation.UpdateTimeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: execution.FieldUpdateTime,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, eu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{execution.Label}
@@ -434,23 +380,9 @@ func (euo *ExecutionUpdateOne) SetProcInstID(i int64) *ExecutionUpdateOne {
 	return euo
 }
 
-// SetNillableProcInstID sets the "proc_inst_id" field if the given value is not nil.
-func (euo *ExecutionUpdateOne) SetNillableProcInstID(i *int64) *ExecutionUpdateOne {
-	if i != nil {
-		euo.SetProcInstID(*i)
-	}
-	return euo
-}
-
 // AddProcInstID adds i to the "proc_inst_id" field.
 func (euo *ExecutionUpdateOne) AddProcInstID(i int64) *ExecutionUpdateOne {
 	euo.mutation.AddProcInstID(i)
-	return euo
-}
-
-// ClearProcInstID clears the value of the "proc_inst_id" field.
-func (euo *ExecutionUpdateOne) ClearProcInstID() *ExecutionUpdateOne {
-	euo.mutation.ClearProcInstID()
 	return euo
 }
 
@@ -461,23 +393,9 @@ func (euo *ExecutionUpdateOne) SetProcDefID(i int64) *ExecutionUpdateOne {
 	return euo
 }
 
-// SetNillableProcDefID sets the "proc_def_id" field if the given value is not nil.
-func (euo *ExecutionUpdateOne) SetNillableProcDefID(i *int64) *ExecutionUpdateOne {
-	if i != nil {
-		euo.SetProcDefID(*i)
-	}
-	return euo
-}
-
 // AddProcDefID adds i to the "proc_def_id" field.
 func (euo *ExecutionUpdateOne) AddProcDefID(i int64) *ExecutionUpdateOne {
 	euo.mutation.AddProcDefID(i)
-	return euo
-}
-
-// ClearProcDefID clears the value of the "proc_def_id" field.
-func (euo *ExecutionUpdateOne) ClearProcDefID() *ExecutionUpdateOne {
-	euo.mutation.ClearProcDefID()
 	return euo
 }
 
@@ -498,33 +416,6 @@ func (euo *ExecutionUpdateOne) SetNillableNodeInfos(s *string) *ExecutionUpdateO
 // ClearNodeInfos clears the value of the "node_infos" field.
 func (euo *ExecutionUpdateOne) ClearNodeInfos() *ExecutionUpdateOne {
 	euo.mutation.ClearNodeInfos()
-	return euo
-}
-
-// SetIsActive sets the "is_active" field.
-func (euo *ExecutionUpdateOne) SetIsActive(i int8) *ExecutionUpdateOne {
-	euo.mutation.ResetIsActive()
-	euo.mutation.SetIsActive(i)
-	return euo
-}
-
-// SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (euo *ExecutionUpdateOne) SetNillableIsActive(i *int8) *ExecutionUpdateOne {
-	if i != nil {
-		euo.SetIsActive(*i)
-	}
-	return euo
-}
-
-// AddIsActive adds i to the "is_active" field.
-func (euo *ExecutionUpdateOne) AddIsActive(i int8) *ExecutionUpdateOne {
-	euo.mutation.AddIsActive(i)
-	return euo
-}
-
-// ClearIsActive clears the value of the "is_active" field.
-func (euo *ExecutionUpdateOne) ClearIsActive() *ExecutionUpdateOne {
-	euo.mutation.ClearIsActive()
 	return euo
 }
 
@@ -592,6 +483,26 @@ func (euo *ExecutionUpdateOne) SetNillableCreateTime(t *time.Time) *ExecutionUpd
 // ClearCreateTime clears the value of the "create_time" field.
 func (euo *ExecutionUpdateOne) ClearCreateTime() *ExecutionUpdateOne {
 	euo.mutation.ClearCreateTime()
+	return euo
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (euo *ExecutionUpdateOne) SetUpdateTime(t time.Time) *ExecutionUpdateOne {
+	euo.mutation.SetUpdateTime(t)
+	return euo
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (euo *ExecutionUpdateOne) SetNillableUpdateTime(t *time.Time) *ExecutionUpdateOne {
+	if t != nil {
+		euo.SetUpdateTime(*t)
+	}
+	return euo
+}
+
+// ClearUpdateTime clears the value of the "update_time" field.
+func (euo *ExecutionUpdateOne) ClearUpdateTime() *ExecutionUpdateOne {
+	euo.mutation.ClearUpdateTime()
 	return euo
 }
 
@@ -732,12 +643,6 @@ func (euo *ExecutionUpdateOne) sqlSave(ctx context.Context) (_node *Execution, e
 			Column: execution.FieldProcInstID,
 		})
 	}
-	if euo.mutation.ProcInstIDCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Column: execution.FieldProcInstID,
-		})
-	}
 	if value, ok := euo.mutation.ProcDefID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt64,
@@ -752,12 +657,6 @@ func (euo *ExecutionUpdateOne) sqlSave(ctx context.Context) (_node *Execution, e
 			Column: execution.FieldProcDefID,
 		})
 	}
-	if euo.mutation.ProcDefIDCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Column: execution.FieldProcDefID,
-		})
-	}
 	if value, ok := euo.mutation.NodeInfos(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -769,26 +668,6 @@ func (euo *ExecutionUpdateOne) sqlSave(ctx context.Context) (_node *Execution, e
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Column: execution.FieldNodeInfos,
-		})
-	}
-	if value, ok := euo.mutation.IsActive(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
-			Value:  value,
-			Column: execution.FieldIsActive,
-		})
-	}
-	if value, ok := euo.mutation.AddedIsActive(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
-			Value:  value,
-			Column: execution.FieldIsActive,
-		})
-	}
-	if euo.mutation.IsActiveCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
-			Column: execution.FieldIsActive,
 		})
 	}
 	if value, ok := euo.mutation.StartTime(); ok {
@@ -835,6 +714,19 @@ func (euo *ExecutionUpdateOne) sqlSave(ctx context.Context) (_node *Execution, e
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Column: execution.FieldCreateTime,
+		})
+	}
+	if value, ok := euo.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: execution.FieldUpdateTime,
+		})
+	}
+	if euo.mutation.UpdateTimeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: execution.FieldUpdateTime,
 		})
 	}
 	_node = &Execution{config: euo.config}

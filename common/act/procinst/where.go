@@ -185,17 +185,17 @@ func CreateTime(v time.Time) predicate.ProcInst {
 	})
 }
 
+// RemainHours applies equality check predicate on the "remain_hours" field. It's identical to RemainHoursEQ.
+func RemainHours(v int) predicate.ProcInst {
+	return predicate.ProcInst(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldRemainHours), v))
+	})
+}
+
 // UpdateTime applies equality check predicate on the "update_time" field. It's identical to UpdateTimeEQ.
 func UpdateTime(v time.Time) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldUpdateTime), v))
-	})
-}
-
-// RemainHours applies equality check predicate on the "remain_hours" field. It's identical to RemainHoursEQ.
-func RemainHours(v int64) predicate.ProcInst {
-	return predicate.ProcInst(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRemainHours), v))
 	})
 }
 
@@ -260,20 +260,6 @@ func ProcDefIDLT(v int64) predicate.ProcInst {
 func ProcDefIDLTE(v int64) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldProcDefID), v))
-	})
-}
-
-// ProcDefIDIsNil applies the IsNil predicate on the "proc_def_id" field.
-func ProcDefIDIsNil() predicate.ProcInst {
-	return predicate.ProcInst(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldProcDefID)))
-	})
-}
-
-// ProcDefIDNotNil applies the NotNil predicate on the "proc_def_id" field.
-func ProcDefIDNotNil() predicate.ProcInst {
-	return predicate.ProcInst(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldProcDefID)))
 	})
 }
 
@@ -1509,6 +1495,84 @@ func CreateTimeNotNil() predicate.ProcInst {
 	})
 }
 
+// RemainHoursEQ applies the EQ predicate on the "remain_hours" field.
+func RemainHoursEQ(v int) predicate.ProcInst {
+	return predicate.ProcInst(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldRemainHours), v))
+	})
+}
+
+// RemainHoursNEQ applies the NEQ predicate on the "remain_hours" field.
+func RemainHoursNEQ(v int) predicate.ProcInst {
+	return predicate.ProcInst(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldRemainHours), v))
+	})
+}
+
+// RemainHoursIn applies the In predicate on the "remain_hours" field.
+func RemainHoursIn(vs ...int) predicate.ProcInst {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcInst(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldRemainHours), v...))
+	})
+}
+
+// RemainHoursNotIn applies the NotIn predicate on the "remain_hours" field.
+func RemainHoursNotIn(vs ...int) predicate.ProcInst {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcInst(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldRemainHours), v...))
+	})
+}
+
+// RemainHoursGT applies the GT predicate on the "remain_hours" field.
+func RemainHoursGT(v int) predicate.ProcInst {
+	return predicate.ProcInst(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldRemainHours), v))
+	})
+}
+
+// RemainHoursGTE applies the GTE predicate on the "remain_hours" field.
+func RemainHoursGTE(v int) predicate.ProcInst {
+	return predicate.ProcInst(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldRemainHours), v))
+	})
+}
+
+// RemainHoursLT applies the LT predicate on the "remain_hours" field.
+func RemainHoursLT(v int) predicate.ProcInst {
+	return predicate.ProcInst(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldRemainHours), v))
+	})
+}
+
+// RemainHoursLTE applies the LTE predicate on the "remain_hours" field.
+func RemainHoursLTE(v int) predicate.ProcInst {
+	return predicate.ProcInst(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldRemainHours), v))
+	})
+}
+
+// RemainHoursIsNil applies the IsNil predicate on the "remain_hours" field.
+func RemainHoursIsNil() predicate.ProcInst {
+	return predicate.ProcInst(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldRemainHours)))
+	})
+}
+
+// RemainHoursNotNil applies the NotNil predicate on the "remain_hours" field.
+func RemainHoursNotNil() predicate.ProcInst {
+	return predicate.ProcInst(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldRemainHours)))
+	})
+}
+
 // UpdateTimeEQ applies the EQ predicate on the "update_time" field.
 func UpdateTimeEQ(v time.Time) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
@@ -1584,84 +1648,6 @@ func UpdateTimeIsNil() predicate.ProcInst {
 func UpdateTimeNotNil() predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldUpdateTime)))
-	})
-}
-
-// RemainHoursEQ applies the EQ predicate on the "remain_hours" field.
-func RemainHoursEQ(v int64) predicate.ProcInst {
-	return predicate.ProcInst(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRemainHours), v))
-	})
-}
-
-// RemainHoursNEQ applies the NEQ predicate on the "remain_hours" field.
-func RemainHoursNEQ(v int64) predicate.ProcInst {
-	return predicate.ProcInst(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldRemainHours), v))
-	})
-}
-
-// RemainHoursIn applies the In predicate on the "remain_hours" field.
-func RemainHoursIn(vs ...int64) predicate.ProcInst {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.ProcInst(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldRemainHours), v...))
-	})
-}
-
-// RemainHoursNotIn applies the NotIn predicate on the "remain_hours" field.
-func RemainHoursNotIn(vs ...int64) predicate.ProcInst {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.ProcInst(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldRemainHours), v...))
-	})
-}
-
-// RemainHoursGT applies the GT predicate on the "remain_hours" field.
-func RemainHoursGT(v int64) predicate.ProcInst {
-	return predicate.ProcInst(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldRemainHours), v))
-	})
-}
-
-// RemainHoursGTE applies the GTE predicate on the "remain_hours" field.
-func RemainHoursGTE(v int64) predicate.ProcInst {
-	return predicate.ProcInst(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldRemainHours), v))
-	})
-}
-
-// RemainHoursLT applies the LT predicate on the "remain_hours" field.
-func RemainHoursLT(v int64) predicate.ProcInst {
-	return predicate.ProcInst(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldRemainHours), v))
-	})
-}
-
-// RemainHoursLTE applies the LTE predicate on the "remain_hours" field.
-func RemainHoursLTE(v int64) predicate.ProcInst {
-	return predicate.ProcInst(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldRemainHours), v))
-	})
-}
-
-// RemainHoursIsNil applies the IsNil predicate on the "remain_hours" field.
-func RemainHoursIsNil() predicate.ProcInst {
-	return predicate.ProcInst(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldRemainHours)))
-	})
-}
-
-// RemainHoursNotNil applies the NotNil predicate on the "remain_hours" field.
-func RemainHoursNotNil() predicate.ProcInst {
-	return predicate.ProcInst(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldRemainHours)))
 	})
 }
 

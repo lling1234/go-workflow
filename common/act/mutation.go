@@ -45,12 +45,11 @@ type ExecutionMutation struct {
 	proc_def_id     *int64
 	addproc_def_id  *int64
 	node_infos      *string
-	is_active       *int8
-	addis_active    *int8
 	start_time      *time.Time
 	is_del          *int8
 	addis_del       *int8
 	create_time     *time.Time
+	update_time     *time.Time
 	clearedFields   map[string]struct{}
 	done            bool
 	oldValue        func(context.Context) (*Execution, error)
@@ -205,24 +204,10 @@ func (m *ExecutionMutation) AddedProcInstID() (r int64, exists bool) {
 	return *v, true
 }
 
-// ClearProcInstID clears the value of the "proc_inst_id" field.
-func (m *ExecutionMutation) ClearProcInstID() {
-	m.proc_inst_id = nil
-	m.addproc_inst_id = nil
-	m.clearedFields[execution.FieldProcInstID] = struct{}{}
-}
-
-// ProcInstIDCleared returns if the "proc_inst_id" field was cleared in this mutation.
-func (m *ExecutionMutation) ProcInstIDCleared() bool {
-	_, ok := m.clearedFields[execution.FieldProcInstID]
-	return ok
-}
-
 // ResetProcInstID resets all changes to the "proc_inst_id" field.
 func (m *ExecutionMutation) ResetProcInstID() {
 	m.proc_inst_id = nil
 	m.addproc_inst_id = nil
-	delete(m.clearedFields, execution.FieldProcInstID)
 }
 
 // SetProcDefID sets the "proc_def_id" field.
@@ -275,24 +260,10 @@ func (m *ExecutionMutation) AddedProcDefID() (r int64, exists bool) {
 	return *v, true
 }
 
-// ClearProcDefID clears the value of the "proc_def_id" field.
-func (m *ExecutionMutation) ClearProcDefID() {
-	m.proc_def_id = nil
-	m.addproc_def_id = nil
-	m.clearedFields[execution.FieldProcDefID] = struct{}{}
-}
-
-// ProcDefIDCleared returns if the "proc_def_id" field was cleared in this mutation.
-func (m *ExecutionMutation) ProcDefIDCleared() bool {
-	_, ok := m.clearedFields[execution.FieldProcDefID]
-	return ok
-}
-
 // ResetProcDefID resets all changes to the "proc_def_id" field.
 func (m *ExecutionMutation) ResetProcDefID() {
 	m.proc_def_id = nil
 	m.addproc_def_id = nil
-	delete(m.clearedFields, execution.FieldProcDefID)
 }
 
 // SetNodeInfos sets the "node_infos" field.
@@ -342,76 +313,6 @@ func (m *ExecutionMutation) NodeInfosCleared() bool {
 func (m *ExecutionMutation) ResetNodeInfos() {
 	m.node_infos = nil
 	delete(m.clearedFields, execution.FieldNodeInfos)
-}
-
-// SetIsActive sets the "is_active" field.
-func (m *ExecutionMutation) SetIsActive(i int8) {
-	m.is_active = &i
-	m.addis_active = nil
-}
-
-// IsActive returns the value of the "is_active" field in the mutation.
-func (m *ExecutionMutation) IsActive() (r int8, exists bool) {
-	v := m.is_active
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldIsActive returns the old "is_active" field's value of the Execution entity.
-// If the Execution object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ExecutionMutation) OldIsActive(ctx context.Context) (v int8, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldIsActive is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldIsActive requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldIsActive: %w", err)
-	}
-	return oldValue.IsActive, nil
-}
-
-// AddIsActive adds i to the "is_active" field.
-func (m *ExecutionMutation) AddIsActive(i int8) {
-	if m.addis_active != nil {
-		*m.addis_active += i
-	} else {
-		m.addis_active = &i
-	}
-}
-
-// AddedIsActive returns the value that was added to the "is_active" field in this mutation.
-func (m *ExecutionMutation) AddedIsActive() (r int8, exists bool) {
-	v := m.addis_active
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearIsActive clears the value of the "is_active" field.
-func (m *ExecutionMutation) ClearIsActive() {
-	m.is_active = nil
-	m.addis_active = nil
-	m.clearedFields[execution.FieldIsActive] = struct{}{}
-}
-
-// IsActiveCleared returns if the "is_active" field was cleared in this mutation.
-func (m *ExecutionMutation) IsActiveCleared() bool {
-	_, ok := m.clearedFields[execution.FieldIsActive]
-	return ok
-}
-
-// ResetIsActive resets all changes to the "is_active" field.
-func (m *ExecutionMutation) ResetIsActive() {
-	m.is_active = nil
-	m.addis_active = nil
-	delete(m.clearedFields, execution.FieldIsActive)
 }
 
 // SetStartTime sets the "start_time" field.
@@ -582,6 +483,55 @@ func (m *ExecutionMutation) ResetCreateTime() {
 	delete(m.clearedFields, execution.FieldCreateTime)
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (m *ExecutionMutation) SetUpdateTime(t time.Time) {
+	m.update_time = &t
+}
+
+// UpdateTime returns the value of the "update_time" field in the mutation.
+func (m *ExecutionMutation) UpdateTime() (r time.Time, exists bool) {
+	v := m.update_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTime returns the old "update_time" field's value of the Execution entity.
+// If the Execution object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ExecutionMutation) OldUpdateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTime: %w", err)
+	}
+	return oldValue.UpdateTime, nil
+}
+
+// ClearUpdateTime clears the value of the "update_time" field.
+func (m *ExecutionMutation) ClearUpdateTime() {
+	m.update_time = nil
+	m.clearedFields[execution.FieldUpdateTime] = struct{}{}
+}
+
+// UpdateTimeCleared returns if the "update_time" field was cleared in this mutation.
+func (m *ExecutionMutation) UpdateTimeCleared() bool {
+	_, ok := m.clearedFields[execution.FieldUpdateTime]
+	return ok
+}
+
+// ResetUpdateTime resets all changes to the "update_time" field.
+func (m *ExecutionMutation) ResetUpdateTime() {
+	m.update_time = nil
+	delete(m.clearedFields, execution.FieldUpdateTime)
+}
+
 // Where appends a list predicates to the ExecutionMutation builder.
 func (m *ExecutionMutation) Where(ps ...predicate.Execution) {
 	m.predicates = append(m.predicates, ps...)
@@ -611,9 +561,6 @@ func (m *ExecutionMutation) Fields() []string {
 	if m.node_infos != nil {
 		fields = append(fields, execution.FieldNodeInfos)
 	}
-	if m.is_active != nil {
-		fields = append(fields, execution.FieldIsActive)
-	}
 	if m.start_time != nil {
 		fields = append(fields, execution.FieldStartTime)
 	}
@@ -622,6 +569,9 @@ func (m *ExecutionMutation) Fields() []string {
 	}
 	if m.create_time != nil {
 		fields = append(fields, execution.FieldCreateTime)
+	}
+	if m.update_time != nil {
+		fields = append(fields, execution.FieldUpdateTime)
 	}
 	return fields
 }
@@ -637,14 +587,14 @@ func (m *ExecutionMutation) Field(name string) (ent.Value, bool) {
 		return m.ProcDefID()
 	case execution.FieldNodeInfos:
 		return m.NodeInfos()
-	case execution.FieldIsActive:
-		return m.IsActive()
 	case execution.FieldStartTime:
 		return m.StartTime()
 	case execution.FieldIsDel:
 		return m.IsDel()
 	case execution.FieldCreateTime:
 		return m.CreateTime()
+	case execution.FieldUpdateTime:
+		return m.UpdateTime()
 	}
 	return nil, false
 }
@@ -660,14 +610,14 @@ func (m *ExecutionMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldProcDefID(ctx)
 	case execution.FieldNodeInfos:
 		return m.OldNodeInfos(ctx)
-	case execution.FieldIsActive:
-		return m.OldIsActive(ctx)
 	case execution.FieldStartTime:
 		return m.OldStartTime(ctx)
 	case execution.FieldIsDel:
 		return m.OldIsDel(ctx)
 	case execution.FieldCreateTime:
 		return m.OldCreateTime(ctx)
+	case execution.FieldUpdateTime:
+		return m.OldUpdateTime(ctx)
 	}
 	return nil, fmt.Errorf("unknown Execution field %s", name)
 }
@@ -698,13 +648,6 @@ func (m *ExecutionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetNodeInfos(v)
 		return nil
-	case execution.FieldIsActive:
-		v, ok := value.(int8)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetIsActive(v)
-		return nil
 	case execution.FieldStartTime:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -726,6 +669,13 @@ func (m *ExecutionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCreateTime(v)
 		return nil
+	case execution.FieldUpdateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTime(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Execution field %s", name)
 }
@@ -739,9 +689,6 @@ func (m *ExecutionMutation) AddedFields() []string {
 	}
 	if m.addproc_def_id != nil {
 		fields = append(fields, execution.FieldProcDefID)
-	}
-	if m.addis_active != nil {
-		fields = append(fields, execution.FieldIsActive)
 	}
 	if m.addis_del != nil {
 		fields = append(fields, execution.FieldIsDel)
@@ -758,8 +705,6 @@ func (m *ExecutionMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedProcInstID()
 	case execution.FieldProcDefID:
 		return m.AddedProcDefID()
-	case execution.FieldIsActive:
-		return m.AddedIsActive()
 	case execution.FieldIsDel:
 		return m.AddedIsDel()
 	}
@@ -785,13 +730,6 @@ func (m *ExecutionMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddProcDefID(v)
 		return nil
-	case execution.FieldIsActive:
-		v, ok := value.(int8)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddIsActive(v)
-		return nil
 	case execution.FieldIsDel:
 		v, ok := value.(int8)
 		if !ok {
@@ -807,17 +745,8 @@ func (m *ExecutionMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *ExecutionMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(execution.FieldProcInstID) {
-		fields = append(fields, execution.FieldProcInstID)
-	}
-	if m.FieldCleared(execution.FieldProcDefID) {
-		fields = append(fields, execution.FieldProcDefID)
-	}
 	if m.FieldCleared(execution.FieldNodeInfos) {
 		fields = append(fields, execution.FieldNodeInfos)
-	}
-	if m.FieldCleared(execution.FieldIsActive) {
-		fields = append(fields, execution.FieldIsActive)
 	}
 	if m.FieldCleared(execution.FieldStartTime) {
 		fields = append(fields, execution.FieldStartTime)
@@ -827,6 +756,9 @@ func (m *ExecutionMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(execution.FieldCreateTime) {
 		fields = append(fields, execution.FieldCreateTime)
+	}
+	if m.FieldCleared(execution.FieldUpdateTime) {
+		fields = append(fields, execution.FieldUpdateTime)
 	}
 	return fields
 }
@@ -842,17 +774,8 @@ func (m *ExecutionMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *ExecutionMutation) ClearField(name string) error {
 	switch name {
-	case execution.FieldProcInstID:
-		m.ClearProcInstID()
-		return nil
-	case execution.FieldProcDefID:
-		m.ClearProcDefID()
-		return nil
 	case execution.FieldNodeInfos:
 		m.ClearNodeInfos()
-		return nil
-	case execution.FieldIsActive:
-		m.ClearIsActive()
 		return nil
 	case execution.FieldStartTime:
 		m.ClearStartTime()
@@ -862,6 +785,9 @@ func (m *ExecutionMutation) ClearField(name string) error {
 		return nil
 	case execution.FieldCreateTime:
 		m.ClearCreateTime()
+		return nil
+	case execution.FieldUpdateTime:
+		m.ClearUpdateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown Execution nullable field %s", name)
@@ -880,9 +806,6 @@ func (m *ExecutionMutation) ResetField(name string) error {
 	case execution.FieldNodeInfos:
 		m.ResetNodeInfos()
 		return nil
-	case execution.FieldIsActive:
-		m.ResetIsActive()
-		return nil
 	case execution.FieldStartTime:
 		m.ResetStartTime()
 		return nil
@@ -891,6 +814,9 @@ func (m *ExecutionMutation) ResetField(name string) error {
 		return nil
 	case execution.FieldCreateTime:
 		m.ResetCreateTime()
+		return nil
+	case execution.FieldUpdateTime:
+		m.ResetUpdateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown Execution field %s", name)
@@ -969,6 +895,7 @@ type IdentityLinkMutation struct {
 	addis_del       *int8
 	is_deal         *int8
 	addis_deal      *int8
+	update_time     *time.Time
 	clearedFields   map[string]struct{}
 	done            bool
 	oldValue        func(context.Context) (*IdentityLink, error)
@@ -1312,24 +1239,10 @@ func (m *IdentityLinkMutation) AddedProcInstID() (r int64, exists bool) {
 	return *v, true
 }
 
-// ClearProcInstID clears the value of the "proc_inst_id" field.
-func (m *IdentityLinkMutation) ClearProcInstID() {
-	m.proc_inst_id = nil
-	m.addproc_inst_id = nil
-	m.clearedFields[identitylink.FieldProcInstID] = struct{}{}
-}
-
-// ProcInstIDCleared returns if the "proc_inst_id" field was cleared in this mutation.
-func (m *IdentityLinkMutation) ProcInstIDCleared() bool {
-	_, ok := m.clearedFields[identitylink.FieldProcInstID]
-	return ok
-}
-
 // ResetProcInstID resets all changes to the "proc_inst_id" field.
 func (m *IdentityLinkMutation) ResetProcInstID() {
 	m.proc_inst_id = nil
 	m.addproc_inst_id = nil
-	delete(m.clearedFields, identitylink.FieldProcInstID)
 }
 
 // SetTargetID sets the "target_id" field.
@@ -1501,24 +1414,10 @@ func (m *IdentityLinkMutation) AddedTaskID() (r int64, exists bool) {
 	return *v, true
 }
 
-// ClearTaskID clears the value of the "task_id" field.
-func (m *IdentityLinkMutation) ClearTaskID() {
-	m.task_id = nil
-	m.addtask_id = nil
-	m.clearedFields[identitylink.FieldTaskID] = struct{}{}
-}
-
-// TaskIDCleared returns if the "task_id" field was cleared in this mutation.
-func (m *IdentityLinkMutation) TaskIDCleared() bool {
-	_, ok := m.clearedFields[identitylink.FieldTaskID]
-	return ok
-}
-
 // ResetTaskID resets all changes to the "task_id" field.
 func (m *IdentityLinkMutation) ResetTaskID() {
 	m.task_id = nil
 	m.addtask_id = nil
-	delete(m.clearedFields, identitylink.FieldTaskID)
 }
 
 // SetResult sets the "result" field.
@@ -1780,6 +1679,55 @@ func (m *IdentityLinkMutation) ResetIsDeal() {
 	delete(m.clearedFields, identitylink.FieldIsDeal)
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (m *IdentityLinkMutation) SetUpdateTime(t time.Time) {
+	m.update_time = &t
+}
+
+// UpdateTime returns the value of the "update_time" field in the mutation.
+func (m *IdentityLinkMutation) UpdateTime() (r time.Time, exists bool) {
+	v := m.update_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTime returns the old "update_time" field's value of the IdentityLink entity.
+// If the IdentityLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IdentityLinkMutation) OldUpdateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTime: %w", err)
+	}
+	return oldValue.UpdateTime, nil
+}
+
+// ClearUpdateTime clears the value of the "update_time" field.
+func (m *IdentityLinkMutation) ClearUpdateTime() {
+	m.update_time = nil
+	m.clearedFields[identitylink.FieldUpdateTime] = struct{}{}
+}
+
+// UpdateTimeCleared returns if the "update_time" field was cleared in this mutation.
+func (m *IdentityLinkMutation) UpdateTimeCleared() bool {
+	_, ok := m.clearedFields[identitylink.FieldUpdateTime]
+	return ok
+}
+
+// ResetUpdateTime resets all changes to the "update_time" field.
+func (m *IdentityLinkMutation) ResetUpdateTime() {
+	m.update_time = nil
+	delete(m.clearedFields, identitylink.FieldUpdateTime)
+}
+
 // Where appends a list predicates to the IdentityLinkMutation builder.
 func (m *IdentityLinkMutation) Where(ps ...predicate.IdentityLink) {
 	m.predicates = append(m.predicates, ps...)
@@ -1799,7 +1747,7 @@ func (m *IdentityLinkMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *IdentityLinkMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
 	if m.user_id != nil {
 		fields = append(fields, identitylink.FieldUserID)
 	}
@@ -1833,6 +1781,9 @@ func (m *IdentityLinkMutation) Fields() []string {
 	if m.is_deal != nil {
 		fields = append(fields, identitylink.FieldIsDeal)
 	}
+	if m.update_time != nil {
+		fields = append(fields, identitylink.FieldUpdateTime)
+	}
 	return fields
 }
 
@@ -1863,6 +1814,8 @@ func (m *IdentityLinkMutation) Field(name string) (ent.Value, bool) {
 		return m.IsDel()
 	case identitylink.FieldIsDeal:
 		return m.IsDeal()
+	case identitylink.FieldUpdateTime:
+		return m.UpdateTime()
 	}
 	return nil, false
 }
@@ -1894,6 +1847,8 @@ func (m *IdentityLinkMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldIsDel(ctx)
 	case identitylink.FieldIsDeal:
 		return m.OldIsDeal(ctx)
+	case identitylink.FieldUpdateTime:
+		return m.OldUpdateTime(ctx)
 	}
 	return nil, fmt.Errorf("unknown IdentityLink field %s", name)
 }
@@ -1979,6 +1934,13 @@ func (m *IdentityLinkMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIsDeal(v)
+		return nil
+	case identitylink.FieldUpdateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTime(v)
 		return nil
 	}
 	return fmt.Errorf("unknown IdentityLink field %s", name)
@@ -2118,17 +2080,11 @@ func (m *IdentityLinkMutation) ClearedFields() []string {
 	if m.FieldCleared(identitylink.FieldStep) {
 		fields = append(fields, identitylink.FieldStep)
 	}
-	if m.FieldCleared(identitylink.FieldProcInstID) {
-		fields = append(fields, identitylink.FieldProcInstID)
-	}
 	if m.FieldCleared(identitylink.FieldTargetID) {
 		fields = append(fields, identitylink.FieldTargetID)
 	}
 	if m.FieldCleared(identitylink.FieldComment) {
 		fields = append(fields, identitylink.FieldComment)
-	}
-	if m.FieldCleared(identitylink.FieldTaskID) {
-		fields = append(fields, identitylink.FieldTaskID)
 	}
 	if m.FieldCleared(identitylink.FieldResult) {
 		fields = append(fields, identitylink.FieldResult)
@@ -2141,6 +2097,9 @@ func (m *IdentityLinkMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(identitylink.FieldIsDeal) {
 		fields = append(fields, identitylink.FieldIsDeal)
+	}
+	if m.FieldCleared(identitylink.FieldUpdateTime) {
+		fields = append(fields, identitylink.FieldUpdateTime)
 	}
 	return fields
 }
@@ -2165,17 +2124,11 @@ func (m *IdentityLinkMutation) ClearField(name string) error {
 	case identitylink.FieldStep:
 		m.ClearStep()
 		return nil
-	case identitylink.FieldProcInstID:
-		m.ClearProcInstID()
-		return nil
 	case identitylink.FieldTargetID:
 		m.ClearTargetID()
 		return nil
 	case identitylink.FieldComment:
 		m.ClearComment()
-		return nil
-	case identitylink.FieldTaskID:
-		m.ClearTaskID()
 		return nil
 	case identitylink.FieldResult:
 		m.ClearResult()
@@ -2188,6 +2141,9 @@ func (m *IdentityLinkMutation) ClearField(name string) error {
 		return nil
 	case identitylink.FieldIsDeal:
 		m.ClearIsDeal()
+		return nil
+	case identitylink.FieldUpdateTime:
+		m.ClearUpdateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown IdentityLink nullable field %s", name)
@@ -2229,6 +2185,9 @@ func (m *IdentityLinkMutation) ResetField(name string) error {
 		return nil
 	case identitylink.FieldIsDeal:
 		m.ResetIsDeal()
+		return nil
+	case identitylink.FieldUpdateTime:
+		m.ResetUpdateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown IdentityLink field %s", name)
@@ -2299,14 +2258,15 @@ type ProcDefMutation struct {
 	create_time       *time.Time
 	target_id         *int64
 	addtarget_id      *int64
-	yewu_form_id      *string
-	yewu_name         *string
+	form_id           *string
+	form_name         *string
 	remain_hours      *int
 	addremain_hours   *int
 	is_del            *int8
 	addis_del         *int8
 	is_active         *int8
 	addis_active      *int8
+	update_time       *time.Time
 	clearedFields     map[string]struct{}
 	done              bool
 	oldValue          func(context.Context) (*ProcDef, error)
@@ -2866,102 +2826,102 @@ func (m *ProcDefMutation) ResetTargetID() {
 	delete(m.clearedFields, procdef.FieldTargetID)
 }
 
-// SetYewuFormID sets the "yewu_form_id" field.
-func (m *ProcDefMutation) SetYewuFormID(s string) {
-	m.yewu_form_id = &s
+// SetFormID sets the "form_id" field.
+func (m *ProcDefMutation) SetFormID(s string) {
+	m.form_id = &s
 }
 
-// YewuFormID returns the value of the "yewu_form_id" field in the mutation.
-func (m *ProcDefMutation) YewuFormID() (r string, exists bool) {
-	v := m.yewu_form_id
+// FormID returns the value of the "form_id" field in the mutation.
+func (m *ProcDefMutation) FormID() (r string, exists bool) {
+	v := m.form_id
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldYewuFormID returns the old "yewu_form_id" field's value of the ProcDef entity.
+// OldFormID returns the old "form_id" field's value of the ProcDef entity.
 // If the ProcDef object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcDefMutation) OldYewuFormID(ctx context.Context) (v string, err error) {
+func (m *ProcDefMutation) OldFormID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldYewuFormID is only allowed on UpdateOne operations")
+		return v, errors.New("OldFormID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldYewuFormID requires an ID field in the mutation")
+		return v, errors.New("OldFormID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldYewuFormID: %w", err)
+		return v, fmt.Errorf("querying old value for OldFormID: %w", err)
 	}
-	return oldValue.YewuFormID, nil
+	return oldValue.FormID, nil
 }
 
-// ClearYewuFormID clears the value of the "yewu_form_id" field.
-func (m *ProcDefMutation) ClearYewuFormID() {
-	m.yewu_form_id = nil
-	m.clearedFields[procdef.FieldYewuFormID] = struct{}{}
+// ClearFormID clears the value of the "form_id" field.
+func (m *ProcDefMutation) ClearFormID() {
+	m.form_id = nil
+	m.clearedFields[procdef.FieldFormID] = struct{}{}
 }
 
-// YewuFormIDCleared returns if the "yewu_form_id" field was cleared in this mutation.
-func (m *ProcDefMutation) YewuFormIDCleared() bool {
-	_, ok := m.clearedFields[procdef.FieldYewuFormID]
+// FormIDCleared returns if the "form_id" field was cleared in this mutation.
+func (m *ProcDefMutation) FormIDCleared() bool {
+	_, ok := m.clearedFields[procdef.FieldFormID]
 	return ok
 }
 
-// ResetYewuFormID resets all changes to the "yewu_form_id" field.
-func (m *ProcDefMutation) ResetYewuFormID() {
-	m.yewu_form_id = nil
-	delete(m.clearedFields, procdef.FieldYewuFormID)
+// ResetFormID resets all changes to the "form_id" field.
+func (m *ProcDefMutation) ResetFormID() {
+	m.form_id = nil
+	delete(m.clearedFields, procdef.FieldFormID)
 }
 
-// SetYewuName sets the "yewu_name" field.
-func (m *ProcDefMutation) SetYewuName(s string) {
-	m.yewu_name = &s
+// SetFormName sets the "form_name" field.
+func (m *ProcDefMutation) SetFormName(s string) {
+	m.form_name = &s
 }
 
-// YewuName returns the value of the "yewu_name" field in the mutation.
-func (m *ProcDefMutation) YewuName() (r string, exists bool) {
-	v := m.yewu_name
+// FormName returns the value of the "form_name" field in the mutation.
+func (m *ProcDefMutation) FormName() (r string, exists bool) {
+	v := m.form_name
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldYewuName returns the old "yewu_name" field's value of the ProcDef entity.
+// OldFormName returns the old "form_name" field's value of the ProcDef entity.
 // If the ProcDef object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcDefMutation) OldYewuName(ctx context.Context) (v string, err error) {
+func (m *ProcDefMutation) OldFormName(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldYewuName is only allowed on UpdateOne operations")
+		return v, errors.New("OldFormName is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldYewuName requires an ID field in the mutation")
+		return v, errors.New("OldFormName requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldYewuName: %w", err)
+		return v, fmt.Errorf("querying old value for OldFormName: %w", err)
 	}
-	return oldValue.YewuName, nil
+	return oldValue.FormName, nil
 }
 
-// ClearYewuName clears the value of the "yewu_name" field.
-func (m *ProcDefMutation) ClearYewuName() {
-	m.yewu_name = nil
-	m.clearedFields[procdef.FieldYewuName] = struct{}{}
+// ClearFormName clears the value of the "form_name" field.
+func (m *ProcDefMutation) ClearFormName() {
+	m.form_name = nil
+	m.clearedFields[procdef.FieldFormName] = struct{}{}
 }
 
-// YewuNameCleared returns if the "yewu_name" field was cleared in this mutation.
-func (m *ProcDefMutation) YewuNameCleared() bool {
-	_, ok := m.clearedFields[procdef.FieldYewuName]
+// FormNameCleared returns if the "form_name" field was cleared in this mutation.
+func (m *ProcDefMutation) FormNameCleared() bool {
+	_, ok := m.clearedFields[procdef.FieldFormName]
 	return ok
 }
 
-// ResetYewuName resets all changes to the "yewu_name" field.
-func (m *ProcDefMutation) ResetYewuName() {
-	m.yewu_name = nil
-	delete(m.clearedFields, procdef.FieldYewuName)
+// ResetFormName resets all changes to the "form_name" field.
+func (m *ProcDefMutation) ResetFormName() {
+	m.form_name = nil
+	delete(m.clearedFields, procdef.FieldFormName)
 }
 
 // SetRemainHours sets the "remain_hours" field.
@@ -3174,6 +3134,55 @@ func (m *ProcDefMutation) ResetIsActive() {
 	delete(m.clearedFields, procdef.FieldIsActive)
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (m *ProcDefMutation) SetUpdateTime(t time.Time) {
+	m.update_time = &t
+}
+
+// UpdateTime returns the value of the "update_time" field in the mutation.
+func (m *ProcDefMutation) UpdateTime() (r time.Time, exists bool) {
+	v := m.update_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTime returns the old "update_time" field's value of the ProcDef entity.
+// If the ProcDef object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcDefMutation) OldUpdateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTime: %w", err)
+	}
+	return oldValue.UpdateTime, nil
+}
+
+// ClearUpdateTime clears the value of the "update_time" field.
+func (m *ProcDefMutation) ClearUpdateTime() {
+	m.update_time = nil
+	m.clearedFields[procdef.FieldUpdateTime] = struct{}{}
+}
+
+// UpdateTimeCleared returns if the "update_time" field was cleared in this mutation.
+func (m *ProcDefMutation) UpdateTimeCleared() bool {
+	_, ok := m.clearedFields[procdef.FieldUpdateTime]
+	return ok
+}
+
+// ResetUpdateTime resets all changes to the "update_time" field.
+func (m *ProcDefMutation) ResetUpdateTime() {
+	m.update_time = nil
+	delete(m.clearedFields, procdef.FieldUpdateTime)
+}
+
 // Where appends a list predicates to the ProcDefMutation builder.
 func (m *ProcDefMutation) Where(ps ...predicate.ProcDef) {
 	m.predicates = append(m.predicates, ps...)
@@ -3193,7 +3202,7 @@ func (m *ProcDefMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProcDefMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 14)
 	if m.name != nil {
 		fields = append(fields, procdef.FieldName)
 	}
@@ -3218,11 +3227,11 @@ func (m *ProcDefMutation) Fields() []string {
 	if m.target_id != nil {
 		fields = append(fields, procdef.FieldTargetID)
 	}
-	if m.yewu_form_id != nil {
-		fields = append(fields, procdef.FieldYewuFormID)
+	if m.form_id != nil {
+		fields = append(fields, procdef.FieldFormID)
 	}
-	if m.yewu_name != nil {
-		fields = append(fields, procdef.FieldYewuName)
+	if m.form_name != nil {
+		fields = append(fields, procdef.FieldFormName)
 	}
 	if m.remain_hours != nil {
 		fields = append(fields, procdef.FieldRemainHours)
@@ -3232,6 +3241,9 @@ func (m *ProcDefMutation) Fields() []string {
 	}
 	if m.is_active != nil {
 		fields = append(fields, procdef.FieldIsActive)
+	}
+	if m.update_time != nil {
+		fields = append(fields, procdef.FieldUpdateTime)
 	}
 	return fields
 }
@@ -3257,16 +3269,18 @@ func (m *ProcDefMutation) Field(name string) (ent.Value, bool) {
 		return m.CreateTime()
 	case procdef.FieldTargetID:
 		return m.TargetID()
-	case procdef.FieldYewuFormID:
-		return m.YewuFormID()
-	case procdef.FieldYewuName:
-		return m.YewuName()
+	case procdef.FieldFormID:
+		return m.FormID()
+	case procdef.FieldFormName:
+		return m.FormName()
 	case procdef.FieldRemainHours:
 		return m.RemainHours()
 	case procdef.FieldIsDel:
 		return m.IsDel()
 	case procdef.FieldIsActive:
 		return m.IsActive()
+	case procdef.FieldUpdateTime:
+		return m.UpdateTime()
 	}
 	return nil, false
 }
@@ -3292,16 +3306,18 @@ func (m *ProcDefMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldCreateTime(ctx)
 	case procdef.FieldTargetID:
 		return m.OldTargetID(ctx)
-	case procdef.FieldYewuFormID:
-		return m.OldYewuFormID(ctx)
-	case procdef.FieldYewuName:
-		return m.OldYewuName(ctx)
+	case procdef.FieldFormID:
+		return m.OldFormID(ctx)
+	case procdef.FieldFormName:
+		return m.OldFormName(ctx)
 	case procdef.FieldRemainHours:
 		return m.OldRemainHours(ctx)
 	case procdef.FieldIsDel:
 		return m.OldIsDel(ctx)
 	case procdef.FieldIsActive:
 		return m.OldIsActive(ctx)
+	case procdef.FieldUpdateTime:
+		return m.OldUpdateTime(ctx)
 	}
 	return nil, fmt.Errorf("unknown ProcDef field %s", name)
 }
@@ -3367,19 +3383,19 @@ func (m *ProcDefMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetTargetID(v)
 		return nil
-	case procdef.FieldYewuFormID:
+	case procdef.FieldFormID:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetYewuFormID(v)
+		m.SetFormID(v)
 		return nil
-	case procdef.FieldYewuName:
+	case procdef.FieldFormName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetYewuName(v)
+		m.SetFormName(v)
 		return nil
 	case procdef.FieldRemainHours:
 		v, ok := value.(int)
@@ -3401,6 +3417,13 @@ func (m *ProcDefMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIsActive(v)
+		return nil
+	case procdef.FieldUpdateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTime(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ProcDef field %s", name)
@@ -3531,11 +3554,11 @@ func (m *ProcDefMutation) ClearedFields() []string {
 	if m.FieldCleared(procdef.FieldTargetID) {
 		fields = append(fields, procdef.FieldTargetID)
 	}
-	if m.FieldCleared(procdef.FieldYewuFormID) {
-		fields = append(fields, procdef.FieldYewuFormID)
+	if m.FieldCleared(procdef.FieldFormID) {
+		fields = append(fields, procdef.FieldFormID)
 	}
-	if m.FieldCleared(procdef.FieldYewuName) {
-		fields = append(fields, procdef.FieldYewuName)
+	if m.FieldCleared(procdef.FieldFormName) {
+		fields = append(fields, procdef.FieldFormName)
 	}
 	if m.FieldCleared(procdef.FieldRemainHours) {
 		fields = append(fields, procdef.FieldRemainHours)
@@ -3545,6 +3568,9 @@ func (m *ProcDefMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(procdef.FieldIsActive) {
 		fields = append(fields, procdef.FieldIsActive)
+	}
+	if m.FieldCleared(procdef.FieldUpdateTime) {
+		fields = append(fields, procdef.FieldUpdateTime)
 	}
 	return fields
 }
@@ -3584,11 +3610,11 @@ func (m *ProcDefMutation) ClearField(name string) error {
 	case procdef.FieldTargetID:
 		m.ClearTargetID()
 		return nil
-	case procdef.FieldYewuFormID:
-		m.ClearYewuFormID()
+	case procdef.FieldFormID:
+		m.ClearFormID()
 		return nil
-	case procdef.FieldYewuName:
-		m.ClearYewuName()
+	case procdef.FieldFormName:
+		m.ClearFormName()
 		return nil
 	case procdef.FieldRemainHours:
 		m.ClearRemainHours()
@@ -3598,6 +3624,9 @@ func (m *ProcDefMutation) ClearField(name string) error {
 		return nil
 	case procdef.FieldIsActive:
 		m.ClearIsActive()
+		return nil
+	case procdef.FieldUpdateTime:
+		m.ClearUpdateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown ProcDef nullable field %s", name)
@@ -3631,11 +3660,11 @@ func (m *ProcDefMutation) ResetField(name string) error {
 	case procdef.FieldTargetID:
 		m.ResetTargetID()
 		return nil
-	case procdef.FieldYewuFormID:
-		m.ResetYewuFormID()
+	case procdef.FieldFormID:
+		m.ResetFormID()
 		return nil
-	case procdef.FieldYewuName:
-		m.ResetYewuName()
+	case procdef.FieldFormName:
+		m.ResetFormName()
 		return nil
 	case procdef.FieldRemainHours:
 		m.ResetRemainHours()
@@ -3645,6 +3674,9 @@ func (m *ProcDefMutation) ResetField(name string) error {
 		return nil
 	case procdef.FieldIsActive:
 		m.ResetIsActive()
+		return nil
+	case procdef.FieldUpdateTime:
+		m.ResetUpdateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown ProcDef field %s", name)
@@ -3727,9 +3759,9 @@ type ProcInstMutation struct {
 	is_del           *int
 	addis_del        *int
 	create_time      *time.Time
+	remain_hours     *int
+	addremain_hours  *int
 	update_time      *time.Time
-	remain_hours     *int64
-	addremain_hours  *int64
 	clearedFields    map[string]struct{}
 	done             bool
 	oldValue         func(context.Context) (*ProcInst, error)
@@ -3884,24 +3916,10 @@ func (m *ProcInstMutation) AddedProcDefID() (r int64, exists bool) {
 	return *v, true
 }
 
-// ClearProcDefID clears the value of the "proc_def_id" field.
-func (m *ProcInstMutation) ClearProcDefID() {
-	m.proc_def_id = nil
-	m.addproc_def_id = nil
-	m.clearedFields[procinst.FieldProcDefID] = struct{}{}
-}
-
-// ProcDefIDCleared returns if the "proc_def_id" field was cleared in this mutation.
-func (m *ProcInstMutation) ProcDefIDCleared() bool {
-	_, ok := m.clearedFields[procinst.FieldProcDefID]
-	return ok
-}
-
 // ResetProcDefID resets all changes to the "proc_def_id" field.
 func (m *ProcInstMutation) ResetProcDefID() {
 	m.proc_def_id = nil
 	m.addproc_def_id = nil
-	delete(m.clearedFields, procinst.FieldProcDefID)
 }
 
 // SetTitle sets the "title" field.
@@ -4737,6 +4755,76 @@ func (m *ProcInstMutation) ResetCreateTime() {
 	delete(m.clearedFields, procinst.FieldCreateTime)
 }
 
+// SetRemainHours sets the "remain_hours" field.
+func (m *ProcInstMutation) SetRemainHours(i int) {
+	m.remain_hours = &i
+	m.addremain_hours = nil
+}
+
+// RemainHours returns the value of the "remain_hours" field in the mutation.
+func (m *ProcInstMutation) RemainHours() (r int, exists bool) {
+	v := m.remain_hours
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRemainHours returns the old "remain_hours" field's value of the ProcInst entity.
+// If the ProcInst object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcInstMutation) OldRemainHours(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRemainHours is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRemainHours requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRemainHours: %w", err)
+	}
+	return oldValue.RemainHours, nil
+}
+
+// AddRemainHours adds i to the "remain_hours" field.
+func (m *ProcInstMutation) AddRemainHours(i int) {
+	if m.addremain_hours != nil {
+		*m.addremain_hours += i
+	} else {
+		m.addremain_hours = &i
+	}
+}
+
+// AddedRemainHours returns the value that was added to the "remain_hours" field in this mutation.
+func (m *ProcInstMutation) AddedRemainHours() (r int, exists bool) {
+	v := m.addremain_hours
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearRemainHours clears the value of the "remain_hours" field.
+func (m *ProcInstMutation) ClearRemainHours() {
+	m.remain_hours = nil
+	m.addremain_hours = nil
+	m.clearedFields[procinst.FieldRemainHours] = struct{}{}
+}
+
+// RemainHoursCleared returns if the "remain_hours" field was cleared in this mutation.
+func (m *ProcInstMutation) RemainHoursCleared() bool {
+	_, ok := m.clearedFields[procinst.FieldRemainHours]
+	return ok
+}
+
+// ResetRemainHours resets all changes to the "remain_hours" field.
+func (m *ProcInstMutation) ResetRemainHours() {
+	m.remain_hours = nil
+	m.addremain_hours = nil
+	delete(m.clearedFields, procinst.FieldRemainHours)
+}
+
 // SetUpdateTime sets the "update_time" field.
 func (m *ProcInstMutation) SetUpdateTime(t time.Time) {
 	m.update_time = &t
@@ -4784,76 +4872,6 @@ func (m *ProcInstMutation) UpdateTimeCleared() bool {
 func (m *ProcInstMutation) ResetUpdateTime() {
 	m.update_time = nil
 	delete(m.clearedFields, procinst.FieldUpdateTime)
-}
-
-// SetRemainHours sets the "remain_hours" field.
-func (m *ProcInstMutation) SetRemainHours(i int64) {
-	m.remain_hours = &i
-	m.addremain_hours = nil
-}
-
-// RemainHours returns the value of the "remain_hours" field in the mutation.
-func (m *ProcInstMutation) RemainHours() (r int64, exists bool) {
-	v := m.remain_hours
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldRemainHours returns the old "remain_hours" field's value of the ProcInst entity.
-// If the ProcInst object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcInstMutation) OldRemainHours(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldRemainHours is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldRemainHours requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRemainHours: %w", err)
-	}
-	return oldValue.RemainHours, nil
-}
-
-// AddRemainHours adds i to the "remain_hours" field.
-func (m *ProcInstMutation) AddRemainHours(i int64) {
-	if m.addremain_hours != nil {
-		*m.addremain_hours += i
-	} else {
-		m.addremain_hours = &i
-	}
-}
-
-// AddedRemainHours returns the value that was added to the "remain_hours" field in this mutation.
-func (m *ProcInstMutation) AddedRemainHours() (r int64, exists bool) {
-	v := m.addremain_hours
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearRemainHours clears the value of the "remain_hours" field.
-func (m *ProcInstMutation) ClearRemainHours() {
-	m.remain_hours = nil
-	m.addremain_hours = nil
-	m.clearedFields[procinst.FieldRemainHours] = struct{}{}
-}
-
-// RemainHoursCleared returns if the "remain_hours" field was cleared in this mutation.
-func (m *ProcInstMutation) RemainHoursCleared() bool {
-	_, ok := m.clearedFields[procinst.FieldRemainHours]
-	return ok
-}
-
-// ResetRemainHours resets all changes to the "remain_hours" field.
-func (m *ProcInstMutation) ResetRemainHours() {
-	m.remain_hours = nil
-	m.addremain_hours = nil
-	delete(m.clearedFields, procinst.FieldRemainHours)
 }
 
 // Where appends a list predicates to the ProcInstMutation builder.
@@ -4921,11 +4939,11 @@ func (m *ProcInstMutation) Fields() []string {
 	if m.create_time != nil {
 		fields = append(fields, procinst.FieldCreateTime)
 	}
-	if m.update_time != nil {
-		fields = append(fields, procinst.FieldUpdateTime)
-	}
 	if m.remain_hours != nil {
 		fields = append(fields, procinst.FieldRemainHours)
+	}
+	if m.update_time != nil {
+		fields = append(fields, procinst.FieldUpdateTime)
 	}
 	return fields
 }
@@ -4965,10 +4983,10 @@ func (m *ProcInstMutation) Field(name string) (ent.Value, bool) {
 		return m.IsDel()
 	case procinst.FieldCreateTime:
 		return m.CreateTime()
-	case procinst.FieldUpdateTime:
-		return m.UpdateTime()
 	case procinst.FieldRemainHours:
 		return m.RemainHours()
+	case procinst.FieldUpdateTime:
+		return m.UpdateTime()
 	}
 	return nil, false
 }
@@ -5008,10 +5026,10 @@ func (m *ProcInstMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldIsDel(ctx)
 	case procinst.FieldCreateTime:
 		return m.OldCreateTime(ctx)
-	case procinst.FieldUpdateTime:
-		return m.OldUpdateTime(ctx)
 	case procinst.FieldRemainHours:
 		return m.OldRemainHours(ctx)
+	case procinst.FieldUpdateTime:
+		return m.OldUpdateTime(ctx)
 	}
 	return nil, fmt.Errorf("unknown ProcInst field %s", name)
 }
@@ -5126,19 +5144,19 @@ func (m *ProcInstMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCreateTime(v)
 		return nil
+	case procinst.FieldRemainHours:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRemainHours(v)
+		return nil
 	case procinst.FieldUpdateTime:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdateTime(v)
-		return nil
-	case procinst.FieldRemainHours:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetRemainHours(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ProcInst field %s", name)
@@ -5267,7 +5285,7 @@ func (m *ProcInstMutation) AddField(name string, value ent.Value) error {
 		m.AddIsDel(v)
 		return nil
 	case procinst.FieldRemainHours:
-		v, ok := value.(int64)
+		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5281,9 +5299,6 @@ func (m *ProcInstMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *ProcInstMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(procinst.FieldProcDefID) {
-		fields = append(fields, procinst.FieldProcDefID)
-	}
 	if m.FieldCleared(procinst.FieldTitle) {
 		fields = append(fields, procinst.FieldTitle)
 	}
@@ -5326,11 +5341,11 @@ func (m *ProcInstMutation) ClearedFields() []string {
 	if m.FieldCleared(procinst.FieldCreateTime) {
 		fields = append(fields, procinst.FieldCreateTime)
 	}
-	if m.FieldCleared(procinst.FieldUpdateTime) {
-		fields = append(fields, procinst.FieldUpdateTime)
-	}
 	if m.FieldCleared(procinst.FieldRemainHours) {
 		fields = append(fields, procinst.FieldRemainHours)
+	}
+	if m.FieldCleared(procinst.FieldUpdateTime) {
+		fields = append(fields, procinst.FieldUpdateTime)
 	}
 	return fields
 }
@@ -5346,9 +5361,6 @@ func (m *ProcInstMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *ProcInstMutation) ClearField(name string) error {
 	switch name {
-	case procinst.FieldProcDefID:
-		m.ClearProcDefID()
-		return nil
 	case procinst.FieldTitle:
 		m.ClearTitle()
 		return nil
@@ -5391,11 +5403,11 @@ func (m *ProcInstMutation) ClearField(name string) error {
 	case procinst.FieldCreateTime:
 		m.ClearCreateTime()
 		return nil
-	case procinst.FieldUpdateTime:
-		m.ClearUpdateTime()
-		return nil
 	case procinst.FieldRemainHours:
 		m.ClearRemainHours()
+		return nil
+	case procinst.FieldUpdateTime:
+		m.ClearUpdateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown ProcInst nullable field %s", name)
@@ -5450,11 +5462,11 @@ func (m *ProcInstMutation) ResetField(name string) error {
 	case procinst.FieldCreateTime:
 		m.ResetCreateTime()
 		return nil
-	case procinst.FieldUpdateTime:
-		m.ResetUpdateTime()
-		return nil
 	case procinst.FieldRemainHours:
 		m.ResetRemainHours()
+		return nil
+	case procinst.FieldUpdateTime:
+		m.ResetUpdateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown ProcInst field %s", name)
@@ -5536,6 +5548,7 @@ type TaskMutation struct {
 	adddata_id         *int64
 	is_del             *int
 	addis_del          *int
+	update_time        *time.Time
 	clearedFields      map[string]struct{}
 	done               bool
 	oldValue           func(context.Context) (*Task, error)
@@ -5879,24 +5892,10 @@ func (m *TaskMutation) AddedProcInstID() (r int64, exists bool) {
 	return *v, true
 }
 
-// ClearProcInstID clears the value of the "proc_inst_id" field.
-func (m *TaskMutation) ClearProcInstID() {
-	m.proc_inst_id = nil
-	m.addproc_inst_id = nil
-	m.clearedFields[task.FieldProcInstID] = struct{}{}
-}
-
-// ProcInstIDCleared returns if the "proc_inst_id" field was cleared in this mutation.
-func (m *TaskMutation) ProcInstIDCleared() bool {
-	_, ok := m.clearedFields[task.FieldProcInstID]
-	return ok
-}
-
 // ResetProcInstID resets all changes to the "proc_inst_id" field.
 func (m *TaskMutation) ResetProcInstID() {
 	m.proc_inst_id = nil
 	m.addproc_inst_id = nil
-	delete(m.clearedFields, task.FieldProcInstID)
 }
 
 // SetCreateTime sets the "create_time" field.
@@ -6466,6 +6465,55 @@ func (m *TaskMutation) ResetIsDel() {
 	delete(m.clearedFields, task.FieldIsDel)
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (m *TaskMutation) SetUpdateTime(t time.Time) {
+	m.update_time = &t
+}
+
+// UpdateTime returns the value of the "update_time" field in the mutation.
+func (m *TaskMutation) UpdateTime() (r time.Time, exists bool) {
+	v := m.update_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTime returns the old "update_time" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldUpdateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTime: %w", err)
+	}
+	return oldValue.UpdateTime, nil
+}
+
+// ClearUpdateTime clears the value of the "update_time" field.
+func (m *TaskMutation) ClearUpdateTime() {
+	m.update_time = nil
+	m.clearedFields[task.FieldUpdateTime] = struct{}{}
+}
+
+// UpdateTimeCleared returns if the "update_time" field was cleared in this mutation.
+func (m *TaskMutation) UpdateTimeCleared() bool {
+	_, ok := m.clearedFields[task.FieldUpdateTime]
+	return ok
+}
+
+// ResetUpdateTime resets all changes to the "update_time" field.
+func (m *TaskMutation) ResetUpdateTime() {
+	m.update_time = nil
+	delete(m.clearedFields, task.FieldUpdateTime)
+}
+
 // Where appends a list predicates to the TaskMutation builder.
 func (m *TaskMutation) Where(ps ...predicate.Task) {
 	m.predicates = append(m.predicates, ps...)
@@ -6485,7 +6533,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 14)
 	if m.node_id != nil {
 		fields = append(fields, task.FieldNodeID)
 	}
@@ -6525,6 +6573,9 @@ func (m *TaskMutation) Fields() []string {
 	if m.is_del != nil {
 		fields = append(fields, task.FieldIsDel)
 	}
+	if m.update_time != nil {
+		fields = append(fields, task.FieldUpdateTime)
+	}
 	return fields
 }
 
@@ -6559,6 +6610,8 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.DataID()
 	case task.FieldIsDel:
 		return m.IsDel()
+	case task.FieldUpdateTime:
+		return m.UpdateTime()
 	}
 	return nil, false
 }
@@ -6594,6 +6647,8 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldDataID(ctx)
 	case task.FieldIsDel:
 		return m.OldIsDel(ctx)
+	case task.FieldUpdateTime:
+		return m.OldUpdateTime(ctx)
 	}
 	return nil, fmt.Errorf("unknown Task field %s", name)
 }
@@ -6693,6 +6748,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIsDel(v)
+		return nil
+	case task.FieldUpdateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTime(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Task field %s", name)
@@ -6844,9 +6906,6 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldStep) {
 		fields = append(fields, task.FieldStep)
 	}
-	if m.FieldCleared(task.FieldProcInstID) {
-		fields = append(fields, task.FieldProcInstID)
-	}
 	if m.FieldCleared(task.FieldCreateTime) {
 		fields = append(fields, task.FieldCreateTime)
 	}
@@ -6874,6 +6933,9 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldIsDel) {
 		fields = append(fields, task.FieldIsDel)
 	}
+	if m.FieldCleared(task.FieldUpdateTime) {
+		fields = append(fields, task.FieldUpdateTime)
+	}
 	return fields
 }
 
@@ -6896,9 +6958,6 @@ func (m *TaskMutation) ClearField(name string) error {
 		return nil
 	case task.FieldStep:
 		m.ClearStep()
-		return nil
-	case task.FieldProcInstID:
-		m.ClearProcInstID()
 		return nil
 	case task.FieldCreateTime:
 		m.ClearCreateTime()
@@ -6926,6 +6985,9 @@ func (m *TaskMutation) ClearField(name string) error {
 		return nil
 	case task.FieldIsDel:
 		m.ClearIsDel()
+		return nil
+	case task.FieldUpdateTime:
+		m.ClearUpdateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown Task nullable field %s", name)
@@ -6973,6 +7035,9 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldIsDel:
 		m.ResetIsDel()
+		return nil
+	case task.FieldUpdateTime:
+		m.ResetUpdateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown Task field %s", name)

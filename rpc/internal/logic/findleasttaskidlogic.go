@@ -9,22 +9,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type SaveTaskLogic struct {
+type FindLeastTaskIdLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewSaveTaskLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SaveTaskLogic {
-	return &SaveTaskLogic{
+func NewFindLeastTaskIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindLeastTaskIdLogic {
+	return &FindLeastTaskIdLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *SaveTaskLogic) SaveTask(in *act.TaskReq) (*act.TaskReply, error) {
+func (l *FindLeastTaskIdLogic) FindLeastTaskId(in *act.DataIdReq) (*act.TaskIdReply, error) {
 	// todo: add your logic here and delete this line
 
-	return &act.TaskReply{}, nil
+	return &act.TaskIdReply{}, nil
 }

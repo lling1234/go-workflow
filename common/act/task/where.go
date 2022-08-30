@@ -164,6 +164,13 @@ func IsDel(v int) predicate.Task {
 	})
 }
 
+// UpdateTime applies equality check predicate on the "update_time" field. It's identical to UpdateTimeEQ.
+func UpdateTime(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdateTime), v))
+	})
+}
+
 // NodeIDEQ applies the EQ predicate on the "node_id" field.
 func NodeIDEQ(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
@@ -494,20 +501,6 @@ func ProcInstIDLT(v int64) predicate.Task {
 func ProcInstIDLTE(v int64) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldProcInstID), v))
-	})
-}
-
-// ProcInstIDIsNil applies the IsNil predicate on the "proc_inst_id" field.
-func ProcInstIDIsNil() predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldProcInstID)))
-	})
-}
-
-// ProcInstIDNotNil applies the NotNil predicate on the "proc_inst_id" field.
-func ProcInstIDNotNil() predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldProcInstID)))
 	})
 }
 
@@ -1182,6 +1175,84 @@ func IsDelIsNil() predicate.Task {
 func IsDelNotNil() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldIsDel)))
+	})
+}
+
+// UpdateTimeEQ applies the EQ predicate on the "update_time" field.
+func UpdateTimeEQ(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeNEQ applies the NEQ predicate on the "update_time" field.
+func UpdateTimeNEQ(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeIn applies the In predicate on the "update_time" field.
+func UpdateTimeIn(vs ...time.Time) predicate.Task {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldUpdateTime), v...))
+	})
+}
+
+// UpdateTimeNotIn applies the NotIn predicate on the "update_time" field.
+func UpdateTimeNotIn(vs ...time.Time) predicate.Task {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldUpdateTime), v...))
+	})
+}
+
+// UpdateTimeGT applies the GT predicate on the "update_time" field.
+func UpdateTimeGT(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeGTE applies the GTE predicate on the "update_time" field.
+func UpdateTimeGTE(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeLT applies the LT predicate on the "update_time" field.
+func UpdateTimeLT(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeLTE applies the LTE predicate on the "update_time" field.
+func UpdateTimeLTE(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeIsNil applies the IsNil predicate on the "update_time" field.
+func UpdateTimeIsNil() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldUpdateTime)))
+	})
+}
+
+// UpdateTimeNotNil applies the NotNil predicate on the "update_time" field.
+func UpdateTimeNotNil() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldUpdateTime)))
 	})
 }
 

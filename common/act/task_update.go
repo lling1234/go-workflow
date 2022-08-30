@@ -109,23 +109,9 @@ func (tu *TaskUpdate) SetProcInstID(i int64) *TaskUpdate {
 	return tu
 }
 
-// SetNillableProcInstID sets the "proc_inst_id" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableProcInstID(i *int64) *TaskUpdate {
-	if i != nil {
-		tu.SetProcInstID(*i)
-	}
-	return tu
-}
-
 // AddProcInstID adds i to the "proc_inst_id" field.
 func (tu *TaskUpdate) AddProcInstID(i int64) *TaskUpdate {
 	tu.mutation.AddProcInstID(i)
-	return tu
-}
-
-// ClearProcInstID clears the value of the "proc_inst_id" field.
-func (tu *TaskUpdate) ClearProcInstID() *TaskUpdate {
-	tu.mutation.ClearProcInstID()
 	return tu
 }
 
@@ -351,6 +337,26 @@ func (tu *TaskUpdate) ClearIsDel() *TaskUpdate {
 	return tu
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (tu *TaskUpdate) SetUpdateTime(t time.Time) *TaskUpdate {
+	tu.mutation.SetUpdateTime(t)
+	return tu
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableUpdateTime(t *time.Time) *TaskUpdate {
+	if t != nil {
+		tu.SetUpdateTime(*t)
+	}
+	return tu
+}
+
+// ClearUpdateTime clears the value of the "update_time" field.
+func (tu *TaskUpdate) ClearUpdateTime() *TaskUpdate {
+	tu.mutation.ClearUpdateTime()
+	return tu
+}
+
 // Mutation returns the TaskMutation object of the builder.
 func (tu *TaskUpdate) Mutation() *TaskMutation {
 	return tu.mutation
@@ -516,12 +522,6 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: task.FieldProcInstID,
 		})
 	}
-	if tu.mutation.ProcInstIDCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Column: task.FieldProcInstID,
-		})
-	}
 	if value, ok := tu.mutation.CreateTime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -681,6 +681,19 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: task.FieldIsDel,
 		})
 	}
+	if value, ok := tu.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: task.FieldUpdateTime,
+		})
+	}
+	if tu.mutation.UpdateTimeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: task.FieldUpdateTime,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{task.Label}
@@ -781,23 +794,9 @@ func (tuo *TaskUpdateOne) SetProcInstID(i int64) *TaskUpdateOne {
 	return tuo
 }
 
-// SetNillableProcInstID sets the "proc_inst_id" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableProcInstID(i *int64) *TaskUpdateOne {
-	if i != nil {
-		tuo.SetProcInstID(*i)
-	}
-	return tuo
-}
-
 // AddProcInstID adds i to the "proc_inst_id" field.
 func (tuo *TaskUpdateOne) AddProcInstID(i int64) *TaskUpdateOne {
 	tuo.mutation.AddProcInstID(i)
-	return tuo
-}
-
-// ClearProcInstID clears the value of the "proc_inst_id" field.
-func (tuo *TaskUpdateOne) ClearProcInstID() *TaskUpdateOne {
-	tuo.mutation.ClearProcInstID()
 	return tuo
 }
 
@@ -1023,6 +1022,26 @@ func (tuo *TaskUpdateOne) ClearIsDel() *TaskUpdateOne {
 	return tuo
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (tuo *TaskUpdateOne) SetUpdateTime(t time.Time) *TaskUpdateOne {
+	tuo.mutation.SetUpdateTime(t)
+	return tuo
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableUpdateTime(t *time.Time) *TaskUpdateOne {
+	if t != nil {
+		tuo.SetUpdateTime(*t)
+	}
+	return tuo
+}
+
+// ClearUpdateTime clears the value of the "update_time" field.
+func (tuo *TaskUpdateOne) ClearUpdateTime() *TaskUpdateOne {
+	tuo.mutation.ClearUpdateTime()
+	return tuo
+}
+
 // Mutation returns the TaskMutation object of the builder.
 func (tuo *TaskUpdateOne) Mutation() *TaskMutation {
 	return tuo.mutation
@@ -1218,12 +1237,6 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 			Column: task.FieldProcInstID,
 		})
 	}
-	if tuo.mutation.ProcInstIDCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Column: task.FieldProcInstID,
-		})
-	}
 	if value, ok := tuo.mutation.CreateTime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -1381,6 +1394,19 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt,
 			Column: task.FieldIsDel,
+		})
+	}
+	if value, ok := tuo.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: task.FieldUpdateTime,
+		})
+	}
+	if tuo.mutation.UpdateTimeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: task.FieldUpdateTime,
 		})
 	}
 	_node = &Task{config: tuo.config}

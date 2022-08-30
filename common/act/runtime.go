@@ -22,22 +22,22 @@ func init() {
 	executionDescNodeInfos := executionFields[2].Descriptor()
 	// execution.NodeInfosValidator is a validator for the "node_infos" field. It is called by the builders before save.
 	execution.NodeInfosValidator = executionDescNodeInfos.Validators[0].(func(string) error)
-	// executionDescIsActive is the schema descriptor for is_active field.
-	executionDescIsActive := executionFields[3].Descriptor()
-	// execution.DefaultIsActive holds the default value on creation for the is_active field.
-	execution.DefaultIsActive = executionDescIsActive.Default.(int8)
 	// executionDescStartTime is the schema descriptor for start_time field.
-	executionDescStartTime := executionFields[4].Descriptor()
+	executionDescStartTime := executionFields[3].Descriptor()
 	// execution.DefaultStartTime holds the default value on creation for the start_time field.
 	execution.DefaultStartTime = executionDescStartTime.Default.(time.Time)
 	// executionDescIsDel is the schema descriptor for is_del field.
-	executionDescIsDel := executionFields[5].Descriptor()
+	executionDescIsDel := executionFields[4].Descriptor()
 	// execution.DefaultIsDel holds the default value on creation for the is_del field.
 	execution.DefaultIsDel = executionDescIsDel.Default.(int8)
 	// executionDescCreateTime is the schema descriptor for create_time field.
-	executionDescCreateTime := executionFields[6].Descriptor()
+	executionDescCreateTime := executionFields[5].Descriptor()
 	// execution.DefaultCreateTime holds the default value on creation for the create_time field.
 	execution.DefaultCreateTime = executionDescCreateTime.Default.(time.Time)
+	// executionDescUpdateTime is the schema descriptor for update_time field.
+	executionDescUpdateTime := executionFields[6].Descriptor()
+	// execution.DefaultUpdateTime holds the default value on creation for the update_time field.
+	execution.DefaultUpdateTime = executionDescUpdateTime.Default.(time.Time)
 	identitylinkFields := schema.IdentityLink{}.Fields()
 	_ = identitylinkFields
 	// identitylinkDescUserName is the schema descriptor for user_name field.
@@ -60,6 +60,10 @@ func init() {
 	identitylinkDescIsDeal := identitylinkFields[10].Descriptor()
 	// identitylink.DefaultIsDeal holds the default value on creation for the is_deal field.
 	identitylink.DefaultIsDeal = identitylinkDescIsDeal.Default.(int8)
+	// identitylinkDescUpdateTime is the schema descriptor for update_time field.
+	identitylinkDescUpdateTime := identitylinkFields[11].Descriptor()
+	// identitylink.DefaultUpdateTime holds the default value on creation for the update_time field.
+	identitylink.DefaultUpdateTime = identitylinkDescUpdateTime.Default.(time.Time)
 	procdefFields := schema.ProcDef{}.Fields()
 	_ = procdefFields
 	// procdefDescName is the schema descriptor for name field.
@@ -86,14 +90,14 @@ func init() {
 	procdefDescCreateTime := procdefFields[6].Descriptor()
 	// procdef.DefaultCreateTime holds the default value on creation for the create_time field.
 	procdef.DefaultCreateTime = procdefDescCreateTime.Default.(time.Time)
-	// procdefDescYewuFormID is the schema descriptor for yewu_form_id field.
-	procdefDescYewuFormID := procdefFields[8].Descriptor()
-	// procdef.YewuFormIDValidator is a validator for the "yewu_form_id" field. It is called by the builders before save.
-	procdef.YewuFormIDValidator = procdefDescYewuFormID.Validators[0].(func(string) error)
-	// procdefDescYewuName is the schema descriptor for yewu_name field.
-	procdefDescYewuName := procdefFields[9].Descriptor()
-	// procdef.YewuNameValidator is a validator for the "yewu_name" field. It is called by the builders before save.
-	procdef.YewuNameValidator = procdefDescYewuName.Validators[0].(func(string) error)
+	// procdefDescFormID is the schema descriptor for form_id field.
+	procdefDescFormID := procdefFields[8].Descriptor()
+	// procdef.FormIDValidator is a validator for the "form_id" field. It is called by the builders before save.
+	procdef.FormIDValidator = procdefDescFormID.Validators[0].(func(string) error)
+	// procdefDescFormName is the schema descriptor for form_name field.
+	procdefDescFormName := procdefFields[9].Descriptor()
+	// procdef.FormNameValidator is a validator for the "form_name" field. It is called by the builders before save.
+	procdef.FormNameValidator = procdefDescFormName.Validators[0].(func(string) error)
 	// procdefDescRemainHours is the schema descriptor for remain_hours field.
 	procdefDescRemainHours := procdefFields[10].Descriptor()
 	// procdef.DefaultRemainHours holds the default value on creation for the remain_hours field.
@@ -106,6 +110,10 @@ func init() {
 	procdefDescIsActive := procdefFields[12].Descriptor()
 	// procdef.DefaultIsActive holds the default value on creation for the is_active field.
 	procdef.DefaultIsActive = procdefDescIsActive.Default.(int8)
+	// procdefDescUpdateTime is the schema descriptor for update_time field.
+	procdefDescUpdateTime := procdefFields[13].Descriptor()
+	// procdef.DefaultUpdateTime holds the default value on creation for the update_time field.
+	procdef.DefaultUpdateTime = procdefDescUpdateTime.Default.(time.Time)
 	procinstFields := schema.ProcInst{}.Fields()
 	_ = procinstFields
 	// procinstDescTitle is the schema descriptor for title field.
@@ -141,7 +149,7 @@ func init() {
 	// procinst.DefaultCreateTime holds the default value on creation for the create_time field.
 	procinst.DefaultCreateTime = procinstDescCreateTime.Default.(time.Time)
 	// procinstDescUpdateTime is the schema descriptor for update_time field.
-	procinstDescUpdateTime := procinstFields[15].Descriptor()
+	procinstDescUpdateTime := procinstFields[16].Descriptor()
 	// procinst.DefaultUpdateTime holds the default value on creation for the update_time field.
 	procinst.DefaultUpdateTime = procinstDescUpdateTime.Default.(time.Time)
 	taskFields := schema.Task{}.Fields()
@@ -166,4 +174,8 @@ func init() {
 	taskDescIsDel := taskFields[12].Descriptor()
 	// task.DefaultIsDel holds the default value on creation for the is_del field.
 	task.DefaultIsDel = taskDescIsDel.Default.(int)
+	// taskDescUpdateTime is the schema descriptor for update_time field.
+	taskDescUpdateTime := taskFields[13].Descriptor()
+	// task.DefaultUpdateTime holds the default value on creation for the update_time field.
+	task.DefaultUpdateTime = taskDescUpdateTime.Default.(time.Time)
 }

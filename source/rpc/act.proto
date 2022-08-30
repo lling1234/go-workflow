@@ -1,16 +1,16 @@
 syntax = "proto3";
 
-package ms;
+package act;
 
-option go_package = "./ms";
+option go_package = "./act";
 
 message ProcDefReq {
   int64 userId = 1;
   string userName = 2;
   string name = 3;
   string code = 4;
-  string yewuFormId = 5;
-  string yewuName = 6;
+  string FormId = 5;
+  string FormName = 6;
   int32 remainHours = 7;
   int64 targetId = 8;
   string resource = 9;
@@ -63,9 +63,7 @@ message ProcInstReply {
   string updateTime = 17;
   int32 remainHours = 18;
 }
-//message ProcInstIdReply {
-//  int64 id = 1;
-//}
+
 
 message ExecutionReq {
   int64 procInstId = 1;
@@ -130,12 +128,15 @@ message IdentityLinkReply {
   string isDel = 11;
   int32 isDeal = 12;
 }
-//message FindLastTask{
-//  int64 procInstId = 1;
-//}
-//message FindProInstByDataId {
-//  int64 dataId = 1;
-//}
+
+
+message DataIdReq {
+  int64 dataId = 1;
+}
+
+message TaskIdReply {
+  int64 id = 1;
+}
 
 service act {
   rpc saveProcDef(ProcDefReq) returns(ProcDefReply);
@@ -143,6 +144,5 @@ service act {
   rpc saveExecution(ExecutionReq) returns(ExecutionReply);
   rpc saveTask(TaskReq) returns(TaskReply);
   rpc saveIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
-//  rpc findLastTask(FindLastTask) returns(TaskReply);
-//  rpc findProInstByDataId(FindProInstByDataId) returns(ProcInstIdReply);
+  rpc findLeastTaskId(DataIdReq) returns(TaskIdReply);
 }

@@ -2,11 +2,10 @@ package logic
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"act/rpc/internal/svc"
-	"act/rpc/ms"
+	"act/rpc/types/act"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,42 +24,46 @@ func NewSaveProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SaveP
 	}
 }
 
-// 流程定义
-func (l *SaveProcDefLogic) SaveProcDef(in *ms.ProcDefReq) (*ms.ProcDefReply, error) {
-	// todo: add your logic here and delete this line
-	log.Println("SaveProcDef 流程定义------rpc 222222")
-	log.Println("req", in)
-
-	tx, err := l.svcCtx.ActStore.Tx(l.ctx)
+func (l *SaveProcDefLogic) SaveProcDef(in *act.ProcDefReq) (*act.ProcDefReply, error) {
+	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
 	if err != nil {
-		return &ms.ProcDefReply{}, err
+		return nil, err
 	}
+	//targetIdStr, err := l.svcCtx.CommonStore.Cache.Get(l.ctx, "targetId")
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	_, err = tx.ProcDef.Create().
-		SetName(in.Name).SetCode(in.Code).SetYewuName(in.YewuName).SetYewuFormID(in.YewuName).
+		SetName(in.Name).SetCode(in.Code).SetFormID(in.FormId).SetFormName(in.FormName).
 		SetRemainHours(int(in.RemainHours)).SetResource(in.Resource).
-		SetCreateUserID(111).SetCreateUserName("ling").SetCreateTime(time.Now()).SetVersion(1).SetTargetID(222).
+		SetCreateUserID(in.UserId).SetCreateUserName(in.UserName).SetCreateTime(time.Now()).SetVersion(1).SetTargetID(1727882).
 		Save(l.ctx)
 
 	if err != nil {
 		tx.Rollback()
-		return &ms.ProcDefReply{}, err
+		return nil, err
 	}
 	err = tx.Commit()
 	if err != nil {
-		return &ms.ProcDefReply{}, err
+		return nil, err
 	}
+	reply := l.convert(in)
+	return reply, nil
+}
 
-	// a, err := l.svcCtx.ActStore.ProcDef.Query().Where(procdef.IDIn(11)).Only(l.ctx)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// log.Println("aaaaaa11111111", a)
-	// errCache := l.svcCtx.ActStore.Cache.Add(l.ctx, "cache.Key{}", cache.Entry{Columns: []string{"111", "222"}}, time.Duration(1111*time.Second))
-	// if errCache != nil {
-	// 	return nil, err
-	// }
-	// log.Println("aaaaaa2222222222", a)
-
-	return &ms.ProcDefReply{}, nil
+func (l *SaveProcDefLogic) convert(in *act.ProcDefReq) *act.ProcDefReply {
+	return &act.ProcDefReply{
+		Name:        in.Name,
+		Code:        in.Code,
+		YewuFormId:  in.FormId,
+		YewuName:    in.FormName,
+		RemainHours: in.RemainHours,
+		Resource:    in.Resource,
+		CreateTime:  time.Now().Format("2006-01-02 15:04:05"),
+		Version:     1,
+		TargetId:    in.TargetId,
+		IsDel:       0,
+		IsActive:    1,
+	}
 }

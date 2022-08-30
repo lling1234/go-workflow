@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"act/rpc/internal/svc"
-	"act/rpc/ms"
+	"act/rpc/types/act"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +23,8 @@ func NewSaveProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Save
 	}
 }
 
-func (l *SaveProcInstLogic) SaveProcInst(in *ms.ProcInstReq) (*ms.ProcInstReply, error) {
+func (l *SaveProcInstLogic) SaveProcInst(in *act.ProcInstReq) (*act.ProcInstReply, error) {
 	// todo: add your logic here and delete this line
 
-	return &ms.ProcInstReply{}, nil
+	return &act.ProcInstReply{}, nil
 }

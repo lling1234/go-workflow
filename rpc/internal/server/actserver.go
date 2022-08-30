@@ -8,12 +8,12 @@ import (
 
 	"act/rpc/internal/logic"
 	"act/rpc/internal/svc"
-	"act/rpc/ms"
+	"act/rpc/types/act"
 )
 
 type ActServer struct {
 	svcCtx *svc.ServiceContext
-	ms.UnimplementedActServer
+	act.UnimplementedActServer
 }
 
 func NewActServer(svcCtx *svc.ServiceContext) *ActServer {
@@ -22,27 +22,32 @@ func NewActServer(svcCtx *svc.ServiceContext) *ActServer {
 	}
 }
 
-func (s *ActServer) SaveProcDef(ctx context.Context, in *ms.ProcDefReq) (*ms.ProcDefReply, error) {
+func (s *ActServer) SaveProcDef(ctx context.Context, in *act.ProcDefReq) (*act.ProcDefReply, error) {
 	l := logic.NewSaveProcDefLogic(ctx, s.svcCtx)
 	return l.SaveProcDef(in)
 }
 
-func (s *ActServer) SaveProcInst(ctx context.Context, in *ms.ProcInstReq) (*ms.ProcInstReply, error) {
+func (s *ActServer) SaveProcInst(ctx context.Context, in *act.ProcInstReq) (*act.ProcInstReply, error) {
 	l := logic.NewSaveProcInstLogic(ctx, s.svcCtx)
 	return l.SaveProcInst(in)
 }
 
-func (s *ActServer) SaveExecution(ctx context.Context, in *ms.ExecutionReq) (*ms.ExecutionReply, error) {
+func (s *ActServer) SaveExecution(ctx context.Context, in *act.ExecutionReq) (*act.ExecutionReply, error) {
 	l := logic.NewSaveExecutionLogic(ctx, s.svcCtx)
 	return l.SaveExecution(in)
 }
 
-func (s *ActServer) SaveTask(ctx context.Context, in *ms.TaskReq) (*ms.TaskReply, error) {
+func (s *ActServer) SaveTask(ctx context.Context, in *act.TaskReq) (*act.TaskReply, error) {
 	l := logic.NewSaveTaskLogic(ctx, s.svcCtx)
 	return l.SaveTask(in)
 }
 
-func (s *ActServer) SaveIdentityLink(ctx context.Context, in *ms.IdentityLinkReq) (*ms.IdentityLinkReply, error) {
+func (s *ActServer) SaveIdentityLink(ctx context.Context, in *act.IdentityLinkReq) (*act.IdentityLinkReply, error) {
 	l := logic.NewSaveIdentityLinkLogic(ctx, s.svcCtx)
 	return l.SaveIdentityLink(in)
+}
+
+func (s *ActServer) FindLeastTaskId(ctx context.Context, in *act.DataIdReq) (*act.TaskIdReply, error) {
+	l := logic.NewFindLeastTaskIdLogic(ctx, s.svcCtx)
+	return l.FindLeastTaskId(in)
 }

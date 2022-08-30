@@ -2,7 +2,6 @@ package config
 
 import (
 	"act/common/models"
-
 	"github.com/zeromicro/go-zero/zrpc"
 )
 

@@ -42,6 +42,8 @@ type Task struct {
 	DataID int64 `json:"data_id,omitempty"`
 	// 是否删除
 	IsDel int `json:"is_del,omitempty"`
+	// 流程修改时间
+	UpdateTime time.Time `json:"update_time,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -53,7 +55,7 @@ func (*Task) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullInt64)
 		case task.FieldNodeID, task.FieldActType:
 			values[i] = new(sql.NullString)
-		case task.FieldCreateTime, task.FieldClaimTime:
+		case task.FieldCreateTime, task.FieldClaimTime, task.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Task", columns[i])
@@ -154,6 +156,12 @@ func (t *Task) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				t.IsDel = int(value.Int64)
 			}
+		case task.FieldUpdateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
+			} else if value.Valid {
+				t.UpdateTime = value.Time
+			}
 		}
 	}
 	return nil
@@ -220,6 +228,9 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_del=")
 	builder.WriteString(fmt.Sprintf("%v", t.IsDel))
+	builder.WriteString(", ")
+	builder.WriteString("update_time=")
+	builder.WriteString(t.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }
