@@ -44,7 +44,7 @@ func (l *SaveExecutionLogic) SaveExecution(in *ms.ExecutionReq) (*ms.ExecutionRe
 	// }
 	return &ms.ExecutionReply{}, nil
 }
-func (l *SaveExecutionLogic) MoveStage(nodeInfos []*flow.NodeInfo, userID int64, username string, dataId int64,
+func (l *SaveIdentityLinkLogic) MoveStage(nodeInfos []*flow.NodeInfo, userID int64, username string, dataId int64,
 	targetId int64, comment string, taskID int64, procInstID int64, level int, result int) (err error) {
 	// 添加上一步的参与人
 	//err = AddParticipantTx(userID, username, dataId, comment, taskID, procInstID, level, tx)
@@ -125,7 +125,7 @@ func (l *SaveExecutionLogic) MoveStage(nodeInfos []*flow.NodeInfo, userID int64,
 
 // MoveToNextStage MoveToNextStage
 //通过
-func (l *SaveExecutionLogic) MoveToNextStage(nodeInfos []*flow.NodeInfo,
+func (l *SaveIdentityLinkLogic) MoveToNextStage(nodeInfos []*flow.NodeInfo,
 	targetId int64, procInstID int64, level int) error {
 	// TODO var task = getNewTask(nodeInfos, level, procInstID) //新任务
 	// TODO task.NodeIDEQ(nodeInfos)
@@ -224,7 +224,7 @@ func (l *SaveExecutionLogic) MoveToNextStage(nodeInfos []*flow.NodeInfo,
 
 // MoveToPrevStage MoveToPrevStage
 // 驳回
-func (l *SaveExecutionLogic) MoveToPrevStage(nodeInfos []*flow.NodeInfo, userID int64, dataId int64, targetId int64,
+func (l *SaveIdentityLinkLogic) MoveToPrevStage(nodeInfos []*flow.NodeInfo, userID int64, dataId int64, targetId int64,
 	procInstID int64, step int) error {
 	// 生成新的任务
 	// TODO var task = getNewTask(nodeInfos, step, procInstID) //新任务
