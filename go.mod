@@ -6,13 +6,10 @@ require (
 	entgo.io/ent v0.11.2
 	github.com/ahmetb/go-linq/v3 v3.2.0
 	github.com/duke-git/lancet/v2 v2.1.4
-	github.com/gitstliu/go-id-worker v0.0.0-20190725025543-5a5fe074e612
-	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang/glog v1.0.0
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
-	github.com/jinzhu/gorm v1.9.16
 	github.com/mitchellh/hashstructure v1.1.0
 	github.com/mumushuiding/util v0.0.0-20220111075258-3f1897a1475a
 	github.com/zeromicro/go-zero v1.4.0
@@ -46,7 +43,6 @@ require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/googleapis/gnostic v0.5.5 // indirect
 	github.com/hashicorp/hcl/v2 v2.10.0 // indirect
-	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/mattn/go-colorable v0.1.9 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
