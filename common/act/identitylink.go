@@ -15,7 +15,7 @@ import (
 type IdentityLink struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 审批人id
 	UserID int64 `json:"user_id,omitempty"`
 	// 审批人姓名
@@ -73,7 +73,7 @@ func (il *IdentityLink) assignValues(columns []string, values []interface{}) err
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			il.ID = int(value.Int64)
+			il.ID = value.Int64
 		case identitylink.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])

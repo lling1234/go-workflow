@@ -15,15 +15,13 @@ func Now() DateTime {
 	return DateTime(time.Now())
 }
 
-func Love() DateTime {
-	t, _ := time.Parse("2006-01-02", "20200520")
-	return DateTime(t)
-}
-
 func (t DateTime) String() string {
 	return time.Time(t).Format("2006-01-02 15:04:05")
 }
 
+func NowStr() string {
+	return Now().String()
+}
 func (t DateTime) ConvertValue(v any) (driver.Value, error) {
 	switch v.(type) {
 	case time.Time:

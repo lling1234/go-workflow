@@ -15,7 +15,7 @@ import (
 type ProcDef struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 流程名称
 	Name string `json:"name,omitempty"`
 	// 流程编码
@@ -77,7 +77,7 @@ func (pd *ProcDef) assignValues(columns []string, values []interface{}) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			pd.ID = int(value.Int64)
+			pd.ID = value.Int64
 		case procdef.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])

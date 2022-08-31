@@ -15,7 +15,7 @@ import (
 type ProcInst struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 流程定义id
 	ProcDefID int64 `json:"proc_def_id,omitempty"`
 	// 发起流程标题
@@ -83,7 +83,7 @@ func (pi *ProcInst) assignValues(columns []string, values []interface{}) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			pi.ID = int(value.Int64)
+			pi.ID = value.Int64
 		case procinst.FieldProcDefID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field proc_def_id", values[i])
