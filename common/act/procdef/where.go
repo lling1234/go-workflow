@@ -482,6 +482,14 @@ func VersionNotNil() predicate.ProcDef {
 	})
 }
 
+func MaxVersion() predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.GroupBy(s.C(FieldFormID))
+		s.Having(
+			sql.EQ(FieldVersion, sql.Raw(sql.Max(FieldVersion))))
+	})
+}
+
 // ResourceEQ applies the EQ predicate on the "resource" field.
 func ResourceEQ(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {

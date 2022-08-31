@@ -152,16 +152,16 @@ func (tc *TaskCreate) SetNillableIsFinished(i *int8) *TaskCreate {
 	return tc
 }
 
-// SetActType sets the "act_type" field.
-func (tc *TaskCreate) SetActType(tt task.ActType) *TaskCreate {
-	tc.mutation.SetActType(tt)
+// SetActMode sets the "act_mode" field.
+func (tc *TaskCreate) SetActMode(tt task.ActMode) *TaskCreate {
+	tc.mutation.SetActMode(tt)
 	return tc
 }
 
-// SetNillableActType sets the "act_type" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableActType(tt *task.ActType) *TaskCreate {
+// SetNillableActMode sets the "act_mode" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableActMode(tt *task.ActMode) *TaskCreate {
 	if tt != nil {
-		tc.SetActType(*tt)
+		tc.SetActMode(*tt)
 	}
 	return tc
 }
@@ -297,9 +297,9 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultIsFinished
 		tc.mutation.SetIsFinished(v)
 	}
-	if _, ok := tc.mutation.ActType(); !ok {
-		v := task.DefaultActType
-		tc.mutation.SetActType(v)
+	if _, ok := tc.mutation.ActMode(); !ok {
+		v := task.DefaultActMode
+		tc.mutation.SetActMode(v)
 	}
 	if _, ok := tc.mutation.IsDel(); !ok {
 		v := task.DefaultIsDel
@@ -321,9 +321,9 @@ func (tc *TaskCreate) check() error {
 	if _, ok := tc.mutation.ProcInstID(); !ok {
 		return &ValidationError{Name: "proc_inst_id", err: errors.New(`act: missing required field "Task.proc_inst_id"`)}
 	}
-	if v, ok := tc.mutation.ActType(); ok {
-		if err := task.ActTypeValidator(v); err != nil {
-			return &ValidationError{Name: "act_type", err: fmt.Errorf(`act: validator failed for field "Task.act_type": %w`, err)}
+	if v, ok := tc.mutation.ActMode(); ok {
+		if err := task.ActModeValidator(v); err != nil {
+			return &ValidationError{Name: "act_mode", err: fmt.Errorf(`act: validator failed for field "Task.act_mode": %w`, err)}
 		}
 	}
 	return nil
@@ -433,13 +433,13 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		})
 		_node.IsFinished = value
 	}
-	if value, ok := tc.mutation.ActType(); ok {
+	if value, ok := tc.mutation.ActMode(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
 			Value:  value,
-			Column: task.FieldActType,
+			Column: task.FieldActMode,
 		})
-		_node.ActType = value
+		_node.ActMode = value
 	}
 	if value, ok := tc.mutation.DataID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

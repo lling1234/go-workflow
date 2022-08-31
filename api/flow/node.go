@@ -150,7 +150,7 @@ func IfProcessConifgIsValid(node *Node) error {
 	// 当前节点是否设置有审批人
 	if node.Type == NodeTypes[APPROVAL] || node.Type == NodeTypes[NOTIFIER] {
 		if node.Props == nil {
-			return errors.New("节点【" + node.NodeID + "】的Properties属性不能为空，如：`\"properties\": {\"actionerRules\": [{\"type\": \"target_label\",\"labelNames\": \"人事\",\"memberCount\": 1,\"actType\": \"and\"}],}`")
+			return errors.New("节点【" + node.NodeID + "】的Properties属性不能为空，如：`\"properties\": {\"actionerRules\": [{\"type\": \"target_label\",\"labelNames\": \"人事\",\"memberCount\": 1,\"actMode\": \"and\"}],}`")
 		}
 	}
 	// 条件节点是否存在

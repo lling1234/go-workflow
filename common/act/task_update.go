@@ -263,23 +263,23 @@ func (tu *TaskUpdate) ClearIsFinished() *TaskUpdate {
 	return tu
 }
 
-// SetActType sets the "act_type" field.
-func (tu *TaskUpdate) SetActType(tt task.ActType) *TaskUpdate {
-	tu.mutation.SetActType(tt)
+// SetActMode sets the "act_mode" field.
+func (tu *TaskUpdate) SetActMode(tt task.ActMode) *TaskUpdate {
+	tu.mutation.SetActMode(tt)
 	return tu
 }
 
-// SetNillableActType sets the "act_type" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableActType(tt *task.ActType) *TaskUpdate {
+// SetNillableActMode sets the "act_mode" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableActMode(tt *task.ActMode) *TaskUpdate {
 	if tt != nil {
-		tu.SetActType(*tt)
+		tu.SetActMode(*tt)
 	}
 	return tu
 }
 
-// ClearActType clears the value of the "act_type" field.
-func (tu *TaskUpdate) ClearActType() *TaskUpdate {
-	tu.mutation.ClearActType()
+// ClearActMode clears the value of the "act_mode" field.
+func (tu *TaskUpdate) ClearActMode() *TaskUpdate {
+	tu.mutation.ClearActMode()
 	return tu
 }
 
@@ -429,9 +429,9 @@ func (tu *TaskUpdate) check() error {
 			return &ValidationError{Name: "node_id", err: fmt.Errorf(`act: validator failed for field "Task.node_id": %w`, err)}
 		}
 	}
-	if v, ok := tu.mutation.ActType(); ok {
-		if err := task.ActTypeValidator(v); err != nil {
-			return &ValidationError{Name: "act_type", err: fmt.Errorf(`act: validator failed for field "Task.act_type": %w`, err)}
+	if v, ok := tu.mutation.ActMode(); ok {
+		if err := task.ActModeValidator(v); err != nil {
+			return &ValidationError{Name: "act_mode", err: fmt.Errorf(`act: validator failed for field "Task.act_mode": %w`, err)}
 		}
 	}
 	return nil
@@ -628,17 +628,17 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: task.FieldIsFinished,
 		})
 	}
-	if value, ok := tu.mutation.ActType(); ok {
+	if value, ok := tu.mutation.ActMode(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
 			Value:  value,
-			Column: task.FieldActType,
+			Column: task.FieldActMode,
 		})
 	}
-	if tu.mutation.ActTypeCleared() {
+	if tu.mutation.ActModeCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
-			Column: task.FieldActType,
+			Column: task.FieldActMode,
 		})
 	}
 	if value, ok := tu.mutation.DataID(); ok {
@@ -948,23 +948,23 @@ func (tuo *TaskUpdateOne) ClearIsFinished() *TaskUpdateOne {
 	return tuo
 }
 
-// SetActType sets the "act_type" field.
-func (tuo *TaskUpdateOne) SetActType(tt task.ActType) *TaskUpdateOne {
-	tuo.mutation.SetActType(tt)
+// SetActMode sets the "act_mode" field.
+func (tuo *TaskUpdateOne) SetActMode(tt task.ActMode) *TaskUpdateOne {
+	tuo.mutation.SetActMode(tt)
 	return tuo
 }
 
-// SetNillableActType sets the "act_type" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableActType(tt *task.ActType) *TaskUpdateOne {
+// SetNillableActMode sets the "act_mode" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableActMode(tt *task.ActMode) *TaskUpdateOne {
 	if tt != nil {
-		tuo.SetActType(*tt)
+		tuo.SetActMode(*tt)
 	}
 	return tuo
 }
 
-// ClearActType clears the value of the "act_type" field.
-func (tuo *TaskUpdateOne) ClearActType() *TaskUpdateOne {
-	tuo.mutation.ClearActType()
+// ClearActMode clears the value of the "act_mode" field.
+func (tuo *TaskUpdateOne) ClearActMode() *TaskUpdateOne {
+	tuo.mutation.ClearActMode()
 	return tuo
 }
 
@@ -1127,9 +1127,9 @@ func (tuo *TaskUpdateOne) check() error {
 			return &ValidationError{Name: "node_id", err: fmt.Errorf(`act: validator failed for field "Task.node_id": %w`, err)}
 		}
 	}
-	if v, ok := tuo.mutation.ActType(); ok {
-		if err := task.ActTypeValidator(v); err != nil {
-			return &ValidationError{Name: "act_type", err: fmt.Errorf(`act: validator failed for field "Task.act_type": %w`, err)}
+	if v, ok := tuo.mutation.ActMode(); ok {
+		if err := task.ActModeValidator(v); err != nil {
+			return &ValidationError{Name: "act_mode", err: fmt.Errorf(`act: validator failed for field "Task.act_mode": %w`, err)}
 		}
 	}
 	return nil
@@ -1343,17 +1343,17 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 			Column: task.FieldIsFinished,
 		})
 	}
-	if value, ok := tuo.mutation.ActType(); ok {
+	if value, ok := tuo.mutation.ActMode(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
 			Value:  value,
-			Column: task.FieldActType,
+			Column: task.FieldActMode,
 		})
 	}
-	if tuo.mutation.ActTypeCleared() {
+	if tuo.mutation.ActModeCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
-			Column: task.FieldActType,
+			Column: task.FieldActMode,
 		})
 	}
 	if value, ok := tuo.mutation.DataID(); ok {

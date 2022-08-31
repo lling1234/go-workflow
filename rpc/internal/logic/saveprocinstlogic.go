@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"time"
 
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
@@ -24,7 +25,17 @@ func NewSaveProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Save
 }
 
 func (l *SaveProcInstLogic) SaveProcInst(in *act.ProcInstReq) (*act.ProcInstReply, error) {
-	// todo: add your logic here and delete this line
-
-	return &act.ProcInstReply{}, nil
+	procInst, err := l.svcCtx.CommonStore.ProcInst.Create().SetDataID(in.DataId).SetCreateTime(time.Now()).SetTargetID(1727882).SetStartTime(time.Now()).
+		SetTitle(in.Title).SetIsFinished(0).SetRemainHours(in.RemainHours).SetStartUserID(11025).SetStartUserName("xiaoming").
+		SetState(1).
+		Save(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &act.ProcInstReply{
+		Id:          procInst.ID,
+		DataId:      in.DataId,
+		Title:       in.Title,
+		RemainHours: in.RemainHours,
+	}, nil
 }

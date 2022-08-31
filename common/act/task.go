@@ -37,7 +37,7 @@ type Task struct {
 	// 任务是否完成 2:未结束 1:已完成
 	IsFinished int8 `json:"is_finished,omitempty"`
 	// 会签or或签
-	ActType task.ActType `json:"act_type,omitempty"`
+	ActMode task.ActMode `json:"act_mode,omitempty"`
 	// 流程绑定数据ID
 	DataID int64 `json:"data_id,omitempty"`
 	// 是否删除
@@ -53,7 +53,7 @@ func (*Task) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case task.FieldID, task.FieldLevel, task.FieldStep, task.FieldProcInstID, task.FieldMemberCount, task.FieldUnCompleteNum, task.FieldAgreeNum, task.FieldIsFinished, task.FieldDataID, task.FieldIsDel:
 			values[i] = new(sql.NullInt64)
-		case task.FieldNodeID, task.FieldActType:
+		case task.FieldNodeID, task.FieldActMode:
 			values[i] = new(sql.NullString)
 		case task.FieldCreateTime, task.FieldClaimTime, task.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
@@ -138,11 +138,11 @@ func (t *Task) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				t.IsFinished = int8(value.Int64)
 			}
-		case task.FieldActType:
+		case task.FieldActMode:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field act_type", values[i])
+				return fmt.Errorf("unexpected type %T for field act_mode", values[i])
 			} else if value.Valid {
-				t.ActType = task.ActType(value.String)
+				t.ActMode = task.ActMode(value.String)
 			}
 		case task.FieldDataID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -220,8 +220,8 @@ func (t *Task) String() string {
 	builder.WriteString("is_finished=")
 	builder.WriteString(fmt.Sprintf("%v", t.IsFinished))
 	builder.WriteString(", ")
-	builder.WriteString("act_type=")
-	builder.WriteString(fmt.Sprintf("%v", t.ActType))
+	builder.WriteString("act_mode=")
+	builder.WriteString(fmt.Sprintf("%v", t.ActMode))
 	builder.WriteString(", ")
 	builder.WriteString("data_id=")
 	builder.WriteString(fmt.Sprintf("%v", t.DataID))

@@ -5543,7 +5543,7 @@ type TaskMutation struct {
 	addagree_num       *int
 	is_finished        *int8
 	addis_finished     *int8
-	act_type           *task.ActType
+	act_mode           *task.ActMode
 	data_id            *int64
 	adddata_id         *int64
 	is_del             *int
@@ -6276,53 +6276,53 @@ func (m *TaskMutation) ResetIsFinished() {
 	delete(m.clearedFields, task.FieldIsFinished)
 }
 
-// SetActType sets the "act_type" field.
-func (m *TaskMutation) SetActType(tt task.ActType) {
-	m.act_type = &tt
+// SetActMode sets the "act_mode" field.
+func (m *TaskMutation) SetActMode(tt task.ActMode) {
+	m.act_mode = &tt
 }
 
-// ActType returns the value of the "act_type" field in the mutation.
-func (m *TaskMutation) ActType() (r task.ActType, exists bool) {
-	v := m.act_type
+// ActMode returns the value of the "act_mode" field in the mutation.
+func (m *TaskMutation) ActMode() (r task.ActMode, exists bool) {
+	v := m.act_mode
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldActType returns the old "act_type" field's value of the Task entity.
+// OldActMode returns the old "act_mode" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldActType(ctx context.Context) (v task.ActType, err error) {
+func (m *TaskMutation) OldActMode(ctx context.Context) (v task.ActMode, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldActType is only allowed on UpdateOne operations")
+		return v, errors.New("OldActMode is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldActType requires an ID field in the mutation")
+		return v, errors.New("OldActMode requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldActType: %w", err)
+		return v, fmt.Errorf("querying old value for OldActMode: %w", err)
 	}
-	return oldValue.ActType, nil
+	return oldValue.ActMode, nil
 }
 
-// ClearActType clears the value of the "act_type" field.
-func (m *TaskMutation) ClearActType() {
-	m.act_type = nil
-	m.clearedFields[task.FieldActType] = struct{}{}
+// ClearActMode clears the value of the "act_mode" field.
+func (m *TaskMutation) ClearActMode() {
+	m.act_mode = nil
+	m.clearedFields[task.FieldActMode] = struct{}{}
 }
 
-// ActTypeCleared returns if the "act_type" field was cleared in this mutation.
-func (m *TaskMutation) ActTypeCleared() bool {
-	_, ok := m.clearedFields[task.FieldActType]
+// ActModeCleared returns if the "act_mode" field was cleared in this mutation.
+func (m *TaskMutation) ActModeCleared() bool {
+	_, ok := m.clearedFields[task.FieldActMode]
 	return ok
 }
 
-// ResetActType resets all changes to the "act_type" field.
-func (m *TaskMutation) ResetActType() {
-	m.act_type = nil
-	delete(m.clearedFields, task.FieldActType)
+// ResetActMode resets all changes to the "act_mode" field.
+func (m *TaskMutation) ResetActMode() {
+	m.act_mode = nil
+	delete(m.clearedFields, task.FieldActMode)
 }
 
 // SetDataID sets the "data_id" field.
@@ -6564,8 +6564,8 @@ func (m *TaskMutation) Fields() []string {
 	if m.is_finished != nil {
 		fields = append(fields, task.FieldIsFinished)
 	}
-	if m.act_type != nil {
-		fields = append(fields, task.FieldActType)
+	if m.act_mode != nil {
+		fields = append(fields, task.FieldActMode)
 	}
 	if m.data_id != nil {
 		fields = append(fields, task.FieldDataID)
@@ -6604,8 +6604,8 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.AgreeNum()
 	case task.FieldIsFinished:
 		return m.IsFinished()
-	case task.FieldActType:
-		return m.ActType()
+	case task.FieldActMode:
+		return m.ActMode()
 	case task.FieldDataID:
 		return m.DataID()
 	case task.FieldIsDel:
@@ -6641,8 +6641,8 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldAgreeNum(ctx)
 	case task.FieldIsFinished:
 		return m.OldIsFinished(ctx)
-	case task.FieldActType:
-		return m.OldActType(ctx)
+	case task.FieldActMode:
+		return m.OldActMode(ctx)
 	case task.FieldDataID:
 		return m.OldDataID(ctx)
 	case task.FieldIsDel:
@@ -6728,12 +6728,12 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIsFinished(v)
 		return nil
-	case task.FieldActType:
-		v, ok := value.(task.ActType)
+	case task.FieldActMode:
+		v, ok := value.(task.ActMode)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetActType(v)
+		m.SetActMode(v)
 		return nil
 	case task.FieldDataID:
 		v, ok := value.(int64)
@@ -6924,8 +6924,8 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldIsFinished) {
 		fields = append(fields, task.FieldIsFinished)
 	}
-	if m.FieldCleared(task.FieldActType) {
-		fields = append(fields, task.FieldActType)
+	if m.FieldCleared(task.FieldActMode) {
+		fields = append(fields, task.FieldActMode)
 	}
 	if m.FieldCleared(task.FieldDataID) {
 		fields = append(fields, task.FieldDataID)
@@ -6977,8 +6977,8 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldIsFinished:
 		m.ClearIsFinished()
 		return nil
-	case task.FieldActType:
-		m.ClearActType()
+	case task.FieldActMode:
+		m.ClearActMode()
 		return nil
 	case task.FieldDataID:
 		m.ClearDataID()
@@ -7027,8 +7027,8 @@ func (m *TaskMutation) ResetField(name string) error {
 	case task.FieldIsFinished:
 		m.ResetIsFinished()
 		return nil
-	case task.FieldActType:
-		m.ResetActType()
+	case task.FieldActMode:
+		m.ResetActMode()
 		return nil
 	case task.FieldDataID:
 		m.ResetDataID()

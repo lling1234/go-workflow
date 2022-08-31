@@ -24,7 +24,7 @@ func (Task) Fields() []ent.Field {
 		field.Int("un_complete_num").Comment("未审批人数").Optional(),
 		field.Int("agree_num").Comment("已通过人数").Optional(),
 		field.Int8("is_finished").Default(2).Comment("任务是否完成 2:未结束 1:已完成").Optional(),
-		field.Enum("act_type").Values("and", "or").Default("or").Comment("会签or或签").Optional(),
+		field.Enum("act_mode").Values("and", "or").Default("or").Comment("会签or或签").Optional(),
 		field.Int64("data_id").Comment("流程绑定数据ID").Optional(),
 		field.Int("is_del").Default(0).Comment("是否删除").Optional(),
 		field.Time("update_time").Default(time.Now()).Comment("流程修改时间").Optional(),

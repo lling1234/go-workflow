@@ -972,53 +972,53 @@ func IsFinishedNotNil() predicate.Task {
 	})
 }
 
-// ActTypeEQ applies the EQ predicate on the "act_type" field.
-func ActTypeEQ(v ActType) predicate.Task {
+// ActModeEQ applies the EQ predicate on the "act_mode" field.
+func ActModeEQ(v ActMode) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldActType), v))
+		s.Where(sql.EQ(s.C(FieldActMode), v))
 	})
 }
 
-// ActTypeNEQ applies the NEQ predicate on the "act_type" field.
-func ActTypeNEQ(v ActType) predicate.Task {
+// ActModeNEQ applies the NEQ predicate on the "act_mode" field.
+func ActModeNEQ(v ActMode) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldActType), v))
+		s.Where(sql.NEQ(s.C(FieldActMode), v))
 	})
 }
 
-// ActTypeIn applies the In predicate on the "act_type" field.
-func ActTypeIn(vs ...ActType) predicate.Task {
+// ActModeIn applies the In predicate on the "act_mode" field.
+func ActModeIn(vs ...ActMode) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldActType), v...))
+		s.Where(sql.In(s.C(FieldActMode), v...))
 	})
 }
 
-// ActTypeNotIn applies the NotIn predicate on the "act_type" field.
-func ActTypeNotIn(vs ...ActType) predicate.Task {
+// ActModeNotIn applies the NotIn predicate on the "act_mode" field.
+func ActModeNotIn(vs ...ActMode) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldActType), v...))
+		s.Where(sql.NotIn(s.C(FieldActMode), v...))
 	})
 }
 
-// ActTypeIsNil applies the IsNil predicate on the "act_type" field.
-func ActTypeIsNil() predicate.Task {
+// ActModeIsNil applies the IsNil predicate on the "act_mode" field.
+func ActModeIsNil() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldActType)))
+		s.Where(sql.IsNull(s.C(FieldActMode)))
 	})
 }
 
-// ActTypeNotNil applies the NotNil predicate on the "act_type" field.
-func ActTypeNotNil() predicate.Task {
+// ActModeNotNil applies the NotNil predicate on the "act_mode" field.
+func ActModeNotNil() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldActType)))
+		s.Where(sql.NotNull(s.C(FieldActMode)))
 	})
 }
 

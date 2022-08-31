@@ -32,8 +32,8 @@ const (
 	FieldAgreeNum = "agree_num"
 	// FieldIsFinished holds the string denoting the is_finished field in the database.
 	FieldIsFinished = "is_finished"
-	// FieldActType holds the string denoting the act_type field in the database.
-	FieldActType = "act_type"
+	// FieldActType holds the string denoting the act_mode field in the database.
+	FieldActMode = "act_mode"
 	// FieldDataID holds the string denoting the data_id field in the database.
 	FieldDataID = "data_id"
 	// FieldIsDel holds the string denoting the is_del field in the database.
@@ -57,7 +57,7 @@ var Columns = []string{
 	FieldUnCompleteNum,
 	FieldAgreeNum,
 	FieldIsFinished,
-	FieldActType,
+	FieldActMode,
 	FieldDataID,
 	FieldIsDel,
 	FieldUpdateTime,
@@ -88,28 +88,28 @@ var (
 	DefaultUpdateTime time.Time
 )
 
-// ActType defines the type for the "act_type" enum field.
-type ActType string
+// ActType defines the type for the "act_mode" enum field.
+type ActMode string
 
 // ActTypeOr is the default value of the ActType enum.
-const DefaultActType = ActTypeOr
+const DefaultActMode = ActModeOr
 
 // ActType values.
 const (
-	ActTypeAnd ActType = "and"
-	ActTypeOr  ActType = "or"
+	ActModeAnd ActMode = "and"
+	ActModeOr  ActMode = "or"
 )
 
-func (at ActType) String() string {
+func (at ActMode) String() string {
 	return string(at)
 }
 
-// ActTypeValidator is a validator for the "act_type" field enum values. It is called by the builders before save.
-func ActTypeValidator(at ActType) error {
+// ActTypeValidator is a validator for the "act_mode" field enum values. It is called by the builders before save.
+func ActModeValidator(at ActMode) error {
 	switch at {
-	case ActTypeAnd, ActTypeOr:
+	case ActModeAnd, ActModeOr:
 		return nil
 	default:
-		return fmt.Errorf("task: invalid enum value for act_type field: %q", at)
+		return fmt.Errorf("task: invalid enum value for act_mode field: %q", at)
 	}
 }

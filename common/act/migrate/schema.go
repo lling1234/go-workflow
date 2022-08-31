@@ -111,7 +111,7 @@ var (
 		{Name: "un_complete_num", Type: field.TypeInt, Nullable: true},
 		{Name: "agree_num", Type: field.TypeInt, Nullable: true},
 		{Name: "is_finished", Type: field.TypeInt8, Nullable: true, Default: 2},
-		{Name: "act_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"and", "or"}, Default: "or"},
+		{Name: "act_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"and", "or"}, Default: "or"},
 		{Name: "data_id", Type: field.TypeInt64, Nullable: true},
 		{Name: "is_del", Type: field.TypeInt, Nullable: true, Default: 0},
 		{Name: "update_time", Type: field.TypeTime, Nullable: true},

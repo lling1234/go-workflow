@@ -1,7 +1,9 @@
 package logic
 
 import (
+	"act/common/act/task"
 	"context"
+	"time"
 
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
@@ -24,7 +26,19 @@ func NewSaveTaskLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SaveTask
 }
 
 func (l *SaveTaskLogic) SaveTask(in *act.TaskReq) (*act.TaskReply, error) {
-	// todo: add your logic here and delete this line
-
+	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	var actMode task.ActMode
+	if "or" == in.ActMode {
+		actMode = task.ActModeOr
+	} else if "and" == in.ActMode {
+		actMode = task.ActModeAnd
+	}
+	tx.Task.Create().SetDataID(in.DataId).SetCreateTime(time.Now()).SetClaimTime(time.Now()).SetLevel(in.Level).
+		SetStep(in.Step).SetIsDel(0).SetActMode(actMode).SetMemberCount(in.MemberCount).SetUnCompleteNum(in.UnCompleteNum).
+		SetAgreeNum(in.AgreeNum).
+		Save(l.ctx)
 	return &act.TaskReply{}, nil
 }
