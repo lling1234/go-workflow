@@ -83,8 +83,8 @@ func (eq *ExecutionQuery) FirstX(ctx context.Context) *Execution {
 
 // FirstID returns the first Execution ID from the query.
 // Returns a *NotFoundError when no Execution ID was found.
-func (eq *ExecutionQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (eq *ExecutionQuery) FirstID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = eq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func (eq *ExecutionQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (eq *ExecutionQuery) FirstIDX(ctx context.Context) int {
+func (eq *ExecutionQuery) FirstIDX(ctx context.Context) int64 {
 	id, err := eq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -134,8 +134,8 @@ func (eq *ExecutionQuery) OnlyX(ctx context.Context) *Execution {
 // OnlyID is like Only, but returns the only Execution ID in the query.
 // Returns a *NotSingularError when more than one Execution ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (eq *ExecutionQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (eq *ExecutionQuery) OnlyID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = eq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -151,7 +151,7 @@ func (eq *ExecutionQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (eq *ExecutionQuery) OnlyIDX(ctx context.Context) int {
+func (eq *ExecutionQuery) OnlyIDX(ctx context.Context) int64 {
 	id, err := eq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,8 +177,8 @@ func (eq *ExecutionQuery) AllX(ctx context.Context) []*Execution {
 }
 
 // IDs executes the query and returns a list of Execution IDs.
-func (eq *ExecutionQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (eq *ExecutionQuery) IDs(ctx context.Context) ([]int64, error) {
+	var ids []int64
 	if err := eq.Select(execution.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func (eq *ExecutionQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (eq *ExecutionQuery) IDsX(ctx context.Context) []int {
+func (eq *ExecutionQuery) IDsX(ctx context.Context) []int64 {
 	ids, err := eq.IDs(ctx)
 	if err != nil {
 		panic(err)

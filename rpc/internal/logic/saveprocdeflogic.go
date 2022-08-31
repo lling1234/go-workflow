@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"act/common/tools/date"
 	"context"
 	"time"
 
@@ -36,7 +37,7 @@ func (l *SaveProcDefLogic) SaveProcDef(in *act.ProcDefReq) (*act.ProcDefReply, e
 
 	_, err = tx.ProcDef.Create().
 		SetName(in.Name).SetCode(in.Code).SetFormID(in.FormId).SetFormName(in.FormName).
-		SetRemainHours(int(in.RemainHours)).SetResource(in.Resource).
+		SetRemainHours(in.RemainHours).SetResource(in.Resource).
 		SetCreateUserID(in.UserId).SetCreateUserName(in.UserName).SetCreateTime(time.Now()).SetVersion(1).SetTargetID(1727882).
 		Save(l.ctx)
 
@@ -56,11 +57,11 @@ func (l *SaveProcDefLogic) convert(in *act.ProcDefReq) *act.ProcDefReply {
 	return &act.ProcDefReply{
 		Name:        in.Name,
 		Code:        in.Code,
-		YewuFormId:  in.FormId,
-		YewuName:    in.FormName,
+		FormId:      in.FormId,
+		FormName:    in.FormName,
 		RemainHours: in.RemainHours,
 		Resource:    in.Resource,
-		CreateTime:  time.Now().Format("2006-01-02 15:04:05"),
+		CreateTime:  date.NowStr(),
 		Version:     1,
 		TargetId:    in.TargetId,
 		IsDel:       0,

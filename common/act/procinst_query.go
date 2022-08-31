@@ -83,8 +83,8 @@ func (piq *ProcInstQuery) FirstX(ctx context.Context) *ProcInst {
 
 // FirstID returns the first ProcInst ID from the query.
 // Returns a *NotFoundError when no ProcInst ID was found.
-func (piq *ProcInstQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (piq *ProcInstQuery) FirstID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = piq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func (piq *ProcInstQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (piq *ProcInstQuery) FirstIDX(ctx context.Context) int {
+func (piq *ProcInstQuery) FirstIDX(ctx context.Context) int64 {
 	id, err := piq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -134,8 +134,8 @@ func (piq *ProcInstQuery) OnlyX(ctx context.Context) *ProcInst {
 // OnlyID is like Only, but returns the only ProcInst ID in the query.
 // Returns a *NotSingularError when more than one ProcInst ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (piq *ProcInstQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (piq *ProcInstQuery) OnlyID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = piq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -151,7 +151,7 @@ func (piq *ProcInstQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (piq *ProcInstQuery) OnlyIDX(ctx context.Context) int {
+func (piq *ProcInstQuery) OnlyIDX(ctx context.Context) int64 {
 	id, err := piq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,8 +177,8 @@ func (piq *ProcInstQuery) AllX(ctx context.Context) []*ProcInst {
 }
 
 // IDs executes the query and returns a list of ProcInst IDs.
-func (piq *ProcInstQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (piq *ProcInstQuery) IDs(ctx context.Context) ([]int64, error) {
+	var ids []int64
 	if err := piq.Select(procinst.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func (piq *ProcInstQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (piq *ProcInstQuery) IDsX(ctx context.Context) []int {
+func (piq *ProcInstQuery) IDsX(ctx context.Context) []int64 {
 	ids, err := piq.IDs(ctx)
 	if err != nil {
 		panic(err)

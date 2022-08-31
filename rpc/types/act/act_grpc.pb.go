@@ -28,6 +28,7 @@ type ActClient interface {
 	SaveTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error)
 	SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
 	FindLeastTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdReply, error)
+	FindDefByFormId(ctx context.Context, in *FormIdReq, opts ...grpc.CallOption) (*ProcDefReply, error)
 }
 
 type actClient struct {
@@ -92,6 +93,15 @@ func (c *actClient) FindLeastTaskId(ctx context.Context, in *DataIdReq, opts ...
 	return out, nil
 }
 
+func (c *actClient) FindDefByFormId(ctx context.Context, in *FormIdReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
+	out := new(ProcDefReply)
+	err := c.cc.Invoke(ctx, "/act.act/findDefByFormId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ActServer is the server API for Act service.
 // All implementations must embed UnimplementedActServer
 // for forward compatibility
@@ -102,6 +112,7 @@ type ActServer interface {
 	SaveTask(context.Context, *TaskReq) (*TaskReply, error)
 	SaveIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error)
 	FindLeastTaskId(context.Context, *DataIdReq) (*TaskIdReply, error)
+	FindDefByFormId(context.Context, *FormIdReq) (*ProcDefReply, error)
 	mustEmbedUnimplementedActServer()
 }
 
@@ -126,6 +137,9 @@ func (UnimplementedActServer) SaveIdentityLink(context.Context, *IdentityLinkReq
 }
 func (UnimplementedActServer) FindLeastTaskId(context.Context, *DataIdReq) (*TaskIdReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindLeastTaskId not implemented")
+}
+func (UnimplementedActServer) FindDefByFormId(context.Context, *FormIdReq) (*ProcDefReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindDefByFormId not implemented")
 }
 func (UnimplementedActServer) mustEmbedUnimplementedActServer() {}
 
@@ -248,6 +262,24 @@ func _Act_FindLeastTaskId_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Act_FindDefByFormId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FormIdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActServer).FindDefByFormId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/act.act/findDefByFormId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActServer).FindDefByFormId(ctx, req.(*FormIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Act_ServiceDesc is the grpc.ServiceDesc for Act service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +310,10 @@ var Act_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "findLeastTaskId",
 			Handler:    _Act_FindLeastTaskId_Handler,
+		},
+		{
+			MethodName: "findDefByFormId",
+			Handler:    _Act_FindDefByFormId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

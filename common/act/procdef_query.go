@@ -83,8 +83,8 @@ func (pdq *ProcDefQuery) FirstX(ctx context.Context) *ProcDef {
 
 // FirstID returns the first ProcDef ID from the query.
 // Returns a *NotFoundError when no ProcDef ID was found.
-func (pdq *ProcDefQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (pdq *ProcDefQuery) FirstID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = pdq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func (pdq *ProcDefQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (pdq *ProcDefQuery) FirstIDX(ctx context.Context) int {
+func (pdq *ProcDefQuery) FirstIDX(ctx context.Context) int64 {
 	id, err := pdq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -134,8 +134,8 @@ func (pdq *ProcDefQuery) OnlyX(ctx context.Context) *ProcDef {
 // OnlyID is like Only, but returns the only ProcDef ID in the query.
 // Returns a *NotSingularError when more than one ProcDef ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (pdq *ProcDefQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (pdq *ProcDefQuery) OnlyID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = pdq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -151,7 +151,7 @@ func (pdq *ProcDefQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (pdq *ProcDefQuery) OnlyIDX(ctx context.Context) int {
+func (pdq *ProcDefQuery) OnlyIDX(ctx context.Context) int64 {
 	id, err := pdq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,8 +177,8 @@ func (pdq *ProcDefQuery) AllX(ctx context.Context) []*ProcDef {
 }
 
 // IDs executes the query and returns a list of ProcDef IDs.
-func (pdq *ProcDefQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (pdq *ProcDefQuery) IDs(ctx context.Context) ([]int64, error) {
+	var ids []int64
 	if err := pdq.Select(procdef.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func (pdq *ProcDefQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (pdq *ProcDefQuery) IDsX(ctx context.Context) []int {
+func (pdq *ProcDefQuery) IDsX(ctx context.Context) []int64 {
 	ids, err := pdq.IDs(ctx)
 	if err != nil {
 		panic(err)

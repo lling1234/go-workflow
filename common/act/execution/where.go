@@ -10,7 +10,7 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Execution {
+func ID(id int64) predicate.Execution {
 	return predicate.Execution(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldID), id))
 	})

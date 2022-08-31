@@ -39,7 +39,7 @@ type ExecutionMutation struct {
 	config
 	op              Op
 	typ             string
-	id              *int
+	id              *int64
 	proc_inst_id    *int64
 	addproc_inst_id *int64
 	proc_def_id     *int64
@@ -76,7 +76,7 @@ func newExecutionMutation(c config, op Op, opts ...executionOption) *ExecutionMu
 }
 
 // withExecutionID sets the ID field of the mutation.
-func withExecutionID(id int) executionOption {
+func withExecutionID(id int64) executionOption {
 	return func(m *ExecutionMutation) {
 		var (
 			err   error
@@ -128,7 +128,7 @@ func (m ExecutionMutation) Tx() (*Tx, error) {
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ExecutionMutation) ID() (id int, exists bool) {
+func (m *ExecutionMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -139,12 +139,12 @@ func (m *ExecutionMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ExecutionMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ExecutionMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -875,7 +875,7 @@ type IdentityLinkMutation struct {
 	config
 	op              Op
 	typ             string
-	id              *int
+	id              *int64
 	user_id         *int64
 	adduser_id      *int64
 	user_name       *string
@@ -922,7 +922,7 @@ func newIdentityLinkMutation(c config, op Op, opts ...identitylinkOption) *Ident
 }
 
 // withIdentityLinkID sets the ID field of the mutation.
-func withIdentityLinkID(id int) identitylinkOption {
+func withIdentityLinkID(id int64) identitylinkOption {
 	return func(m *IdentityLinkMutation) {
 		var (
 			err   error
@@ -974,7 +974,7 @@ func (m IdentityLinkMutation) Tx() (*Tx, error) {
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *IdentityLinkMutation) ID() (id int, exists bool) {
+func (m *IdentityLinkMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -985,12 +985,12 @@ func (m *IdentityLinkMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *IdentityLinkMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *IdentityLinkMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -2246,7 +2246,7 @@ type ProcDefMutation struct {
 	config
 	op                Op
 	typ               string
-	id                *int
+	id                *int64
 	name              *string
 	code              *string
 	version           *int
@@ -2293,7 +2293,7 @@ func newProcDefMutation(c config, op Op, opts ...procdefOption) *ProcDefMutation
 }
 
 // withProcDefID sets the ID field of the mutation.
-func withProcDefID(id int) procdefOption {
+func withProcDefID(id int64) procdefOption {
 	return func(m *ProcDefMutation) {
 		var (
 			err   error
@@ -2345,7 +2345,7 @@ func (m ProcDefMutation) Tx() (*Tx, error) {
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ProcDefMutation) ID() (id int, exists bool) {
+func (m *ProcDefMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -2356,12 +2356,12 @@ func (m *ProcDefMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ProcDefMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ProcDefMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -3735,7 +3735,7 @@ type ProcInstMutation struct {
 	config
 	op               Op
 	typ              string
-	id               *int
+	id               *int64
 	proc_def_id      *int64
 	addproc_def_id   *int64
 	title            *string
@@ -3788,7 +3788,7 @@ func newProcInstMutation(c config, op Op, opts ...procinstOption) *ProcInstMutat
 }
 
 // withProcInstID sets the ID field of the mutation.
-func withProcInstID(id int) procinstOption {
+func withProcInstID(id int64) procinstOption {
 	return func(m *ProcInstMutation) {
 		var (
 			err   error
@@ -3840,7 +3840,7 @@ func (m ProcInstMutation) Tx() (*Tx, error) {
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ProcInstMutation) ID() (id int, exists bool) {
+func (m *ProcInstMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -3851,12 +3851,12 @@ func (m *ProcInstMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ProcInstMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ProcInstMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -5525,7 +5525,7 @@ type TaskMutation struct {
 	config
 	op                 Op
 	typ                string
-	id                 *int
+	id                 *int64
 	node_id            *string
 	level              *int
 	addlevel           *int
@@ -5575,7 +5575,7 @@ func newTaskMutation(c config, op Op, opts ...taskOption) *TaskMutation {
 }
 
 // withTaskID sets the ID field of the mutation.
-func withTaskID(id int) taskOption {
+func withTaskID(id int64) taskOption {
 	return func(m *TaskMutation) {
 		var (
 			err   error
@@ -5627,7 +5627,7 @@ func (m TaskMutation) Tx() (*Tx, error) {
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *TaskMutation) ID() (id int, exists bool) {
+func (m *TaskMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -5638,12 +5638,12 @@ func (m *TaskMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *TaskMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *TaskMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):

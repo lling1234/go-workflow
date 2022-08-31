@@ -57,12 +57,12 @@ type AssignedUser struct {
 
 // NodeInfo 节点信息
 type NodeInfo struct {
-	NodeID       string `json:"nodeId"`
-	Type         string `json:"type"`
-	AssignedType string `json:"assignedType"`
-	MemberCount  int    `json:"memberCount"`
-	Level        int    `json:"level"`
-	//ActMode       string `json:"actMode"`
+	NodeID        string `json:"nodeId"`
+	Type          string `json:"type"`
+	AssignedType  string `json:"assignedType"`
+	MemberCount   int    `json:"memberCount"`
+	Level         int    `json:"level"`
+	ActMode       string `json:"actMode"`
 	ApproverNames string `json:"approverNames"`
 	ApproverIds   string `json:"approverIds"`
 }
@@ -86,9 +86,9 @@ func (n *Node) add2ExecutionList(list *list.List) {
 			NodeID: n.NodeID,
 			Type:   n.Type,
 			//Level:         n.Props.ActionerRules[0].Level,
-			AssignedType: n.Props.AssignedType,
-			MemberCount:  n.Props.getMemberCount(),
-			//ActMode:       n.Props.ActMode,
+			AssignedType:  n.Props.AssignedType,
+			MemberCount:   n.Props.getMemberCount(),
+			ActMode:       n.Props.ActMode,
 			ApproverIds:   n.Props.getApproverIds(),
 			ApproverNames: n.Props.getApproverNames(),
 		})

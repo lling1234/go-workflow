@@ -83,8 +83,8 @@ func (ilq *IdentityLinkQuery) FirstX(ctx context.Context) *IdentityLink {
 
 // FirstID returns the first IdentityLink ID from the query.
 // Returns a *NotFoundError when no IdentityLink ID was found.
-func (ilq *IdentityLinkQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (ilq *IdentityLinkQuery) FirstID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = ilq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func (ilq *IdentityLinkQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (ilq *IdentityLinkQuery) FirstIDX(ctx context.Context) int {
+func (ilq *IdentityLinkQuery) FirstIDX(ctx context.Context) int64 {
 	id, err := ilq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -134,8 +134,8 @@ func (ilq *IdentityLinkQuery) OnlyX(ctx context.Context) *IdentityLink {
 // OnlyID is like Only, but returns the only IdentityLink ID in the query.
 // Returns a *NotSingularError when more than one IdentityLink ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (ilq *IdentityLinkQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (ilq *IdentityLinkQuery) OnlyID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = ilq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -151,7 +151,7 @@ func (ilq *IdentityLinkQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (ilq *IdentityLinkQuery) OnlyIDX(ctx context.Context) int {
+func (ilq *IdentityLinkQuery) OnlyIDX(ctx context.Context) int64 {
 	id, err := ilq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,8 +177,8 @@ func (ilq *IdentityLinkQuery) AllX(ctx context.Context) []*IdentityLink {
 }
 
 // IDs executes the query and returns a list of IdentityLink IDs.
-func (ilq *IdentityLinkQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (ilq *IdentityLinkQuery) IDs(ctx context.Context) ([]int64, error) {
+	var ids []int64
 	if err := ilq.Select(identitylink.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func (ilq *IdentityLinkQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (ilq *IdentityLinkQuery) IDsX(ctx context.Context) []int {
+func (ilq *IdentityLinkQuery) IDsX(ctx context.Context) []int64 {
 	ids, err := ilq.IDs(ctx)
 	if err != nil {
 		panic(err)

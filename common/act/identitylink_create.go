@@ -297,7 +297,7 @@ func (ilc *IdentityLinkCreate) sqlSave(ctx context.Context) (*IdentityLink, erro
 		return nil, err
 	}
 	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	_node.ID = id
 	return _node, nil
 }
 
@@ -454,7 +454,7 @@ func (ilcb *IdentityLinkCreateBulk) Save(ctx context.Context) ([]*IdentityLink, 
 				mutation.id = &nodes[i].ID
 				if specs[i].ID.Value != nil {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = id
 				}
 				mutation.done = true
 				return nodes[i], nil

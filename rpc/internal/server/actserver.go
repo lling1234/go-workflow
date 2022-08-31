@@ -51,3 +51,8 @@ func (s *ActServer) FindLeastTaskId(ctx context.Context, in *act.DataIdReq) (*ac
 	l := logic.NewFindLeastTaskIdLogic(ctx, s.svcCtx)
 	return l.FindLeastTaskId(in)
 }
+
+func (s *ActServer) FindDefByFormId(ctx context.Context, in *act.FormIdReq) (*act.ProcDefReply, error) {
+	l := logic.NewFindDefByFormIdLogic(ctx, s.svcCtx)
+	return l.FindDefByFormId(in)
+}
