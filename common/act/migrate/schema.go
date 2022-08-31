@@ -10,7 +10,7 @@ import (
 var (
 	// ExecutionsColumns holds the columns for the "executions" table.
 	ExecutionsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "proc_inst_id", Type: field.TypeInt64},
 		{Name: "proc_def_id", Type: field.TypeInt64},
 		{Name: "node_infos", Type: field.TypeString, Nullable: true, Size: 5000},
@@ -27,7 +27,7 @@ var (
 	}
 	// IdentityLinksColumns holds the columns for the "identity_links" table.
 	IdentityLinksColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "user_id", Type: field.TypeInt64, Nullable: true},
 		{Name: "user_name", Type: field.TypeString, Nullable: true, Size: 50},
 		{Name: "step", Type: field.TypeInt, Nullable: true},
@@ -49,7 +49,7 @@ var (
 	}
 	// ProcDefsColumns holds the columns for the "proc_defs" table.
 	ProcDefsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "name", Type: field.TypeString, Nullable: true, Size: 200},
 		{Name: "code", Type: field.TypeString, Nullable: true, Size: 100},
 		{Name: "version", Type: field.TypeInt, Nullable: true, Default: 1},
@@ -73,7 +73,7 @@ var (
 	}
 	// ProcInstsColumns holds the columns for the "proc_insts" table.
 	ProcInstsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "proc_def_id", Type: field.TypeInt64},
 		{Name: "title", Type: field.TypeString, Nullable: true, Size: 100},
 		{Name: "code", Type: field.TypeString, Nullable: true, Size: 100},
@@ -100,7 +100,7 @@ var (
 	}
 	// TasksColumns holds the columns for the "tasks" table.
 	TasksColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "node_id", Type: field.TypeString, Nullable: true, Size: 50},
 		{Name: "level", Type: field.TypeInt, Nullable: true},
 		{Name: "step", Type: field.TypeInt, Nullable: true},
