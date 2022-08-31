@@ -482,12 +482,11 @@ func VersionNotNil() predicate.ProcDef {
 	})
 }
 
-//TODO 错误写法
-func MaxVersion() predicate.ProcDef {
+//TODO
+func MaxVersion(formId string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
-		s.GroupBy(s.C(FieldFormID))
-		s.Having(
-			sql.EQ(FieldVersion, sql.Raw(sql.Max(FieldVersion))))
+		s.Where(sql.EQ(s.C(FieldFormID), formId))
+		sql.Max(FieldVersion)
 	})
 }
 

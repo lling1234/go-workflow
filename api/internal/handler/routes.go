@@ -20,6 +20,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
+				Path:    "/procdef/setActive",
+				Handler: act.SetActiveHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
 				Path:    "/process/start",
 				Handler: act.StartProcessHandler(serverCtx),
 			},

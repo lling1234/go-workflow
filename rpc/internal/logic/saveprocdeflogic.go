@@ -79,7 +79,7 @@ func (l *SaveProcDefLogic) FindMaxVersionByFormId(formId string) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	prodef, err := tx.ProcDef.Query().Where(procdef.MaxVersion(), procdef.FormIDEQ(formId)).First(l.ctx)
+	prodef, err := tx.ProcDef.Query().Where(procdef.MaxVersion(formId), procdef.FormIDEQ(formId)).First(l.ctx)
 	if err != nil {
 		return 0, err
 	}

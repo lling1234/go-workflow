@@ -24,7 +24,7 @@ func NewAddProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPro
 	}
 }
 
-func (l *AddProcDefLogic) AddProcDef(req *types.SaveProcProdef) (resp *types.CommonResponse, err error) {
+func (l *AddProcDefLogic) AddProcDef(req *types.SaveProcDef) (resp *types.CommonResponse, err error) {
 	if len(req.FormId) == 0 {
 		return types.GetErrorCommonResponse("业务表单数据未获取到！")
 	}

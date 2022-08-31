@@ -19,7 +19,7 @@ type (
 	FormIdReq         = act.FormIdReq
 	IdentityLinkReply = act.IdentityLinkReply
 	IdentityLinkReq   = act.IdentityLinkReq
-	MaxVersionReply   = act.MaxVersionReply
+	ProcDefIdReq      = act.ProcDefIdReq
 	ProcDefReply      = act.ProcDefReply
 	ProcDefReq        = act.ProcDefReq
 	ProcInstReply     = act.ProcInstReply
@@ -36,7 +36,8 @@ type (
 		SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
 		FindLeastTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdReply, error)
 		FindDefByFormId(ctx context.Context, in *FormIdReq, opts ...grpc.CallOption) (*ProcDefReply, error)
-		FindMaxVersionByFormId(ctx context.Context, in *FormIdReq, opts ...grpc.CallOption) (*MaxVersionReply, error)
+		//   rpc findDefsByFormId(FormIdReq) returns(ProcDefReply);
+		SetProcDefActive(ctx context.Context, in *ProcDefIdReq, opts ...grpc.CallOption) (*ProcDefReply, error)
 	}
 
 	defaultAct struct {
@@ -85,7 +86,8 @@ func (m *defaultAct) FindDefByFormId(ctx context.Context, in *FormIdReq, opts ..
 	return client.FindDefByFormId(ctx, in, opts...)
 }
 
-func (m *defaultAct) FindMaxVersionByFormId(ctx context.Context, in *FormIdReq, opts ...grpc.CallOption) (*MaxVersionReply, error) {
+//   rpc findDefsByFormId(FormIdReq) returns(ProcDefReply);
+func (m *defaultAct) SetProcDefActive(ctx context.Context, in *ProcDefIdReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
 	client := act.NewActClient(m.cli.Conn())
-	return client.FindMaxVersionByFormId(ctx, in, opts...)
+	return client.SetProcDefActive(ctx, in, opts...)
 }

@@ -57,7 +57,8 @@ func (s *ActServer) FindDefByFormId(ctx context.Context, in *act.FormIdReq) (*ac
 	return l.FindDefByFormId(in)
 }
 
-func (s *ActServer) FindMaxVersionByFormId(ctx context.Context, in *act.FormIdReq) (*act.MaxVersionReply, error) {
-	l := logic.NewFindMaxVersionByFormIdLogic(ctx, s.svcCtx)
-	return l.FindMaxVersionByFormId(in)
+//   rpc findDefsByFormId(FormIdReq) returns(ProcDefReply);
+func (s *ActServer) SetProcDefActive(ctx context.Context, in *act.ProcDefIdReq) (*act.ProcDefReply, error) {
+	l := logic.NewSetProcDefActiveLogic(ctx, s.svcCtx)
+	return l.SetProcDefActive(in)
 }

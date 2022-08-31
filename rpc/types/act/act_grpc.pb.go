@@ -29,7 +29,8 @@ type ActClient interface {
 	SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
 	FindLeastTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdReply, error)
 	FindDefByFormId(ctx context.Context, in *FormIdReq, opts ...grpc.CallOption) (*ProcDefReply, error)
-	FindMaxVersionByFormId(ctx context.Context, in *FormIdReq, opts ...grpc.CallOption) (*MaxVersionReply, error)
+	//  rpc findDefsByFormId(FormIdReq) returns(ProcDefReply);
+	SetProcDefActive(ctx context.Context, in *ProcDefIdReq, opts ...grpc.CallOption) (*ProcDefReply, error)
 }
 
 type actClient struct {
@@ -103,9 +104,9 @@ func (c *actClient) FindDefByFormId(ctx context.Context, in *FormIdReq, opts ...
 	return out, nil
 }
 
-func (c *actClient) FindMaxVersionByFormId(ctx context.Context, in *FormIdReq, opts ...grpc.CallOption) (*MaxVersionReply, error) {
-	out := new(MaxVersionReply)
-	err := c.cc.Invoke(ctx, "/act.act/findMaxVersionByFormId", in, out, opts...)
+func (c *actClient) SetProcDefActive(ctx context.Context, in *ProcDefIdReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
+	out := new(ProcDefReply)
+	err := c.cc.Invoke(ctx, "/act.act/setProcDefActive", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +124,8 @@ type ActServer interface {
 	SaveIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error)
 	FindLeastTaskId(context.Context, *DataIdReq) (*TaskIdReply, error)
 	FindDefByFormId(context.Context, *FormIdReq) (*ProcDefReply, error)
-	FindMaxVersionByFormId(context.Context, *FormIdReq) (*MaxVersionReply, error)
+	//  rpc findDefsByFormId(FormIdReq) returns(ProcDefReply);
+	SetProcDefActive(context.Context, *ProcDefIdReq) (*ProcDefReply, error)
 	mustEmbedUnimplementedActServer()
 }
 
@@ -152,8 +154,8 @@ func (UnimplementedActServer) FindLeastTaskId(context.Context, *DataIdReq) (*Tas
 func (UnimplementedActServer) FindDefByFormId(context.Context, *FormIdReq) (*ProcDefReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindDefByFormId not implemented")
 }
-func (UnimplementedActServer) FindMaxVersionByFormId(context.Context, *FormIdReq) (*MaxVersionReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindMaxVersionByFormId not implemented")
+func (UnimplementedActServer) SetProcDefActive(context.Context, *ProcDefIdReq) (*ProcDefReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetProcDefActive not implemented")
 }
 func (UnimplementedActServer) mustEmbedUnimplementedActServer() {}
 
@@ -294,20 +296,20 @@ func _Act_FindDefByFormId_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Act_FindMaxVersionByFormId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FormIdReq)
+func _Act_SetProcDefActive_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProcDefIdReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ActServer).FindMaxVersionByFormId(ctx, in)
+		return srv.(ActServer).SetProcDefActive(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/act.act/findMaxVersionByFormId",
+		FullMethod: "/act.act/setProcDefActive",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActServer).FindMaxVersionByFormId(ctx, req.(*FormIdReq))
+		return srv.(ActServer).SetProcDefActive(ctx, req.(*ProcDefIdReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -348,8 +350,8 @@ var Act_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Act_FindDefByFormId_Handler,
 		},
 		{
-			MethodName: "findMaxVersionByFormId",
-			Handler:    _Act_FindMaxVersionByFormId_Handler,
+			MethodName: "setProcDefActive",
+			Handler:    _Act_SetProcDefActive_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

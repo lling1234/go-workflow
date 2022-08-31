@@ -30,7 +30,7 @@ func (l *FindDefByFormIdLogic) FindDefByFormId(in *act.FormIdReq) (*act.ProcDefR
 	if err != nil {
 		return nil, err
 	}
-	procdef, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(123)).First(l.ctx)
+	procdef, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(123), procdef.IsActiveEQ(1)).First(l.ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func convert(actpd *act2.ProcDef) *act.ProcDefReply {
 		Id:             actpd.ID,
 		Name:           actpd.Name,
 		Code:           actpd.Code,
-		Version:        int32(actpd.Version),
+		Version:        actpd.Version,
 		CreateUserId:   actpd.CreateUserID,
 		CreateUserName: actpd.CreateUserName,
 		CreateTime:     actpd.CreateTime.Format("2006-01-02 15:04:05"),
