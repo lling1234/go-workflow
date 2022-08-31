@@ -2,7 +2,7 @@ package act
 
 import (
 	"act/api/flow"
-	"act/rpc/act"
+	"act/rpc/actclient"
 	"container/list"
 	"context"
 	"github.com/mumushuiding/util"
@@ -29,7 +29,7 @@ func NewStartProcessLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Star
 }
 
 func (l *StartProcessLogic) StartProcess(req *types.StartProcess) (resp *types.CommonResponse, err error) {
-	prodef, err := l.svcCtx.Rpc.FindDefByFormId(l.ctx, &act.FormIdReq{
+	prodef, err := l.svcCtx.Rpc.FindDefByFormId(l.ctx, &actclient.FormIdReq{
 		FormId: req.FormId,
 	})
 	if err != nil {
@@ -37,7 +37,7 @@ func (l *StartProcessLogic) StartProcess(req *types.StartProcess) (resp *types.C
 	}
 	resource := prodef.Resource
 	level := 0
-	inst, err := l.svcCtx.Rpc.SaveProcInst(l.ctx, &act.ProcInstReq{
+	inst, err := l.svcCtx.Rpc.SaveProcInst(l.ctx, &actclient.ProcInstReq{
 		Title:       req.Title,
 		FormId:      req.FormId,
 		DataId:      req.DataId,
@@ -47,7 +47,7 @@ func (l *StartProcessLogic) StartProcess(req *types.StartProcess) (resp *types.C
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
-	task := act.TaskReq{
+	task := actclient.TaskReq{
 		NodeId:        "开始",
 		ProcInstId:    inst.Id,
 		DataId:        req.DataId,
@@ -70,7 +70,7 @@ func (l *StartProcessLogic) StartProcess(req *types.StartProcess) (resp *types.C
 	}
 	list, err := flow.ParseProcessConfig(node)
 	listStr, err := GenerateExec(list)
-	exec := &act.ExecutionReq{
+	exec := &actclient.ExecutionReq{
 		ProcDefId:  prodef.Id,
 		ProcInstId: inst.Id,
 		NodeInfos:  listStr,
@@ -94,7 +94,7 @@ func (l *StartProcessLogic) StartProcess(req *types.StartProcess) (resp *types.C
 	task.ActMode = firstNode.ActMode
 	newTask, err := l.svcCtx.Rpc.SaveTask(l.ctx, &task)
 	userId, _ := strconv.ParseInt(firstNode.ApproverIds, 10, 64)
-	identityLink := act.IdentityLinkReq{
+	identityLink := actclient.IdentityLinkReq{
 		ProcInstId: inst.Id,
 		TaskId:     newTask.Id,
 		UserId:     userId,

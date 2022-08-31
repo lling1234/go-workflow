@@ -8,7 +8,7 @@ type SaveProcProdef struct {
 	Code        string     `json:"code"`
 	FormId      string     `json:"formId"`
 	FormName    string     `json:"formName"`
-	RemainHours int32      `json:"remainHours"`
+	RemainHours int        `json:"remainHours"`
 	Resource    *flow.Node `json:"resource"`
 }
 

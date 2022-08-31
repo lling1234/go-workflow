@@ -482,6 +482,7 @@ func VersionNotNil() predicate.ProcDef {
 	})
 }
 
+//TODO 错误写法
 func MaxVersion() predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.GroupBy(s.C(FieldFormID))

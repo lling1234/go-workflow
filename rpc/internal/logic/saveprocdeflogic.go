@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"act/common/act/procdef"
 	"act/common/tools/date"
 	"context"
 	"time"
@@ -49,11 +50,15 @@ func (l *SaveProcDefLogic) SaveProcDef(in *act.ProcDefReq) (*act.ProcDefReply, e
 	if err != nil {
 		return nil, err
 	}
-	reply := l.convert(in)
+	version, err := l.FindMaxVersionByFormId(in.FormId)
+	if err != nil {
+		return nil, err
+	}
+	reply := l.convert(in, version)
 	return reply, nil
 }
 
-func (l *SaveProcDefLogic) convert(in *act.ProcDefReq) *act.ProcDefReply {
+func (l *SaveProcDefLogic) convert(in *act.ProcDefReq, version int) *act.ProcDefReply {
 	return &act.ProcDefReply{
 		Name:        in.Name,
 		Code:        in.Code,
@@ -62,9 +67,24 @@ func (l *SaveProcDefLogic) convert(in *act.ProcDefReq) *act.ProcDefReply {
 		RemainHours: in.RemainHours,
 		Resource:    in.Resource,
 		CreateTime:  date.NowStr(),
-		Version:     1,
+		Version:     version,
 		TargetId:    in.TargetId,
 		IsDel:       0,
 		IsActive:    1,
 	}
+}
+
+func (l *SaveProcDefLogic) FindMaxVersionByFormId(formId string) (int, error) {
+	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
+	if err != nil {
+		return 0, err
+	}
+	prodef, err := tx.ProcDef.Query().Where(procdef.MaxVersion(), procdef.FormIDEQ(formId)).First(l.ctx)
+	if err != nil {
+		return 0, err
+	}
+	if prodef == nil {
+		return 1, nil
+	}
+	return prodef.Version, nil
 }

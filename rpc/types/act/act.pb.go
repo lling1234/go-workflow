@@ -139,7 +139,7 @@ type ProcDefReply struct {
 	Id             int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name           string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Code           string `protobuf:"bytes,3,opt,name=code,proto3" json:"code,omitempty"`
-	Version        int32  `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`
+	Version        int    `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`
 	Resource       string `protobuf:"bytes,5,opt,name=resource,proto3" json:"resource,omitempty"`
 	CreateUserId   int64  `protobuf:"varint,6,opt,name=createUserId,proto3" json:"createUserId,omitempty"`
 	CreateUserName string `protobuf:"bytes,7,opt,name=createUserName,proto3" json:"createUserName,omitempty"`
@@ -205,7 +205,7 @@ func (x *ProcDefReply) GetCode() string {
 	return ""
 }
 
-func (x *ProcDefReply) GetVersion() int32 {
+func (x *ProcDefReply) GetVersion() int {
 	if x != nil {
 		return x.Version
 	}
@@ -1365,6 +1365,21 @@ type FormIdReq struct {
 	unknownFields protoimpl.UnknownFields
 
 	FormId string `protobuf:"bytes,1,opt,name=formId,proto3" json:"formId,omitempty"`
+}
+
+func (x *FormIdReq) Done() <-chan struct{} {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (x *FormIdReq) Err() error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (x *FormIdReq) Value(key any) any {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (x *FormIdReq) Reset() {
