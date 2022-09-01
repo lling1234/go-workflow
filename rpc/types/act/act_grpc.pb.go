@@ -29,7 +29,7 @@ type ActClient interface {
 	SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
 	FindLeastTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdReply, error)
 	FindDefByFormId(ctx context.Context, in *FormIdReq, opts ...grpc.CallOption) (*ProcDefReply, error)
-	SetProcDefActive(ctx context.Context, in *ProcDefIdReq, opts ...grpc.CallOption) (*ProcDefReply, error)
+	SetProcDefActive(ctx context.Context, in *SetProcessActiveReq, opts ...grpc.CallOption) (*ProcDefReply, error)
 }
 
 type actClient struct {
@@ -103,7 +103,7 @@ func (c *actClient) FindDefByFormId(ctx context.Context, in *FormIdReq, opts ...
 	return out, nil
 }
 
-func (c *actClient) SetProcDefActive(ctx context.Context, in *ProcDefIdReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
+func (c *actClient) SetProcDefActive(ctx context.Context, in *SetProcessActiveReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
 	out := new(ProcDefReply)
 	err := c.cc.Invoke(ctx, "/act.act/setProcDefActive", in, out, opts...)
 	if err != nil {
@@ -123,7 +123,7 @@ type ActServer interface {
 	SaveIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error)
 	FindLeastTaskId(context.Context, *DataIdReq) (*TaskIdReply, error)
 	FindDefByFormId(context.Context, *FormIdReq) (*ProcDefReply, error)
-	SetProcDefActive(context.Context, *ProcDefIdReq) (*ProcDefReply, error)
+	SetProcDefActive(context.Context, *SetProcessActiveReq) (*ProcDefReply, error)
 	mustEmbedUnimplementedActServer()
 }
 
@@ -152,7 +152,7 @@ func (UnimplementedActServer) FindLeastTaskId(context.Context, *DataIdReq) (*Tas
 func (UnimplementedActServer) FindDefByFormId(context.Context, *FormIdReq) (*ProcDefReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindDefByFormId not implemented")
 }
-func (UnimplementedActServer) SetProcDefActive(context.Context, *ProcDefIdReq) (*ProcDefReply, error) {
+func (UnimplementedActServer) SetProcDefActive(context.Context, *SetProcessActiveReq) (*ProcDefReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetProcDefActive not implemented")
 }
 func (UnimplementedActServer) mustEmbedUnimplementedActServer() {}
@@ -295,7 +295,7 @@ func _Act_FindDefByFormId_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _Act_SetProcDefActive_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ProcDefIdReq)
+	in := new(SetProcessActiveReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -307,7 +307,7 @@ func _Act_SetProcDefActive_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/act.act/setProcDefActive",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActServer).SetProcDefActive(ctx, req.(*ProcDefIdReq))
+		return srv.(ActServer).SetProcDefActive(ctx, req.(*SetProcessActiveReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }

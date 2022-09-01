@@ -31,11 +31,14 @@ func (l *SaveProcDefLogic) SaveProcDef(in *act.ProcDefReq) (*act.ProcDefReply, e
 	if err != nil {
 		return nil, err
 	}
-
+	version, err := l.FindMaxVersionByFormId(in.FormId)
+	if err != nil {
+		return nil, err
+	}
 	_, err = tx.ProcDef.Create().
 		SetName(in.Name).SetCode(in.Code).SetFormID(in.FormId).SetFormName(in.FormName).
 		SetRemainHours(int(in.RemainHours)).SetResource(in.Resource).
-		SetCreateUserID(in.UserId).SetCreateUserName(in.UserName).SetCreateTime(time.Now()).SetVersion(1).SetTargetID(1727882).
+		SetCreateUserID(in.UserId).SetCreateUserName(in.UserName).SetCreateTime(time.Now()).SetVersion(version + 1).SetTargetID(1727882).
 		Save(l.ctx)
 
 	if err != nil {
@@ -46,10 +49,7 @@ func (l *SaveProcDefLogic) SaveProcDef(in *act.ProcDefReq) (*act.ProcDefReply, e
 	if err != nil {
 		return nil, err
 	}
-	version, err := l.FindMaxVersionByFormId(in.FormId)
-	if err != nil {
-		return nil, err
-	}
+
 	reply := l.convert(in, version)
 	return reply, nil
 }
@@ -63,7 +63,7 @@ func (l *SaveProcDefLogic) convert(in *act.ProcDefReq, version int) *act.ProcDef
 		RemainHours: in.RemainHours,
 		Resource:    in.Resource,
 		CreateTime:  date.NowStr(),
-		Version:     int32(version),
+		Version:     int32(version) + 1,
 		TargetId:    in.TargetId,
 		IsDel:       0,
 		IsActive:    1,
@@ -75,12 +75,17 @@ func (l *SaveProcDefLogic) FindMaxVersionByFormId(formId string) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	prodef, err := tx.ProcDef.Query().Where(procdef.MaxVersion(formId), procdef.FormIDEQ(formId)).First(l.ctx)
+	defs, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(formId)).All(l.ctx)
 	if err != nil {
 		return 0, err
 	}
-	if prodef == nil {
-		return 1, nil
+	maxVersion := 1
+	for _, v := range defs {
+		if maxVersion < v.Version {
+			maxVersion = v.Version
+		}
 	}
-	return prodef.Version, nil
+	//prodef, err := tx.ProcDef.Query().Where(procdef.MaxVersion(formId), procdef.FormIDEQ(formId)).First(l.ctx)
+
+	return maxVersion, nil
 }

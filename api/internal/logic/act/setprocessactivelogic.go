@@ -24,9 +24,10 @@ func NewSetProcessActiveLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *SetProcessActiveLogic) SetProcessActive(req *types.ProcDefIdReq) (resp *types.CommonResponse, err error) {
-	reply, err := l.svcCtx.Rpc.SetProcDefActive(l.ctx, &act.ProcDefIdReq{
-		Id: req.ProcDefId,
+func (l *SetProcessActiveLogic) SetProcessActive(req *types.SetProcessActiveReq) (resp *types.CommonResponse, err error) {
+	reply, err := l.svcCtx.Rpc.SetProcDefActive(l.ctx, &act.SetProcessActiveReq{
+		FormId:  req.FormId,
+		Version: req.Version,
 	})
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())

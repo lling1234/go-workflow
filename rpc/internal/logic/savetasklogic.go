@@ -24,7 +24,6 @@ func NewSaveTaskLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SaveTask
 		Logger: logx.WithContext(ctx),
 	}
 }
-
 func (l *SaveTaskLogic) SaveTask(in *act.TaskReq) (*act.TaskReply, error) {
 	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
 	if err != nil {

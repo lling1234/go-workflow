@@ -12,8 +12,9 @@ type SaveProcDef struct {
 	Resource    *flow.Node `json:"resource"`
 }
 
-type ProcDefIdReq struct {
-	ProcDefId int64 `json:"formId"`
+type SetProcessActiveReq struct {
+	FormId  string `json:"formId"`
+	Version int32  `json:"version"`
 }
 
 type StartProcess struct {
