@@ -139,7 +139,7 @@ type ProcDefReply struct {
 	Id             int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name           string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Code           string `protobuf:"bytes,3,opt,name=code,proto3" json:"code,omitempty"`
-	Version        int    `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`
+	Version        int32  `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`
 	Resource       string `protobuf:"bytes,5,opt,name=resource,proto3" json:"resource,omitempty"`
 	CreateUserId   int64  `protobuf:"varint,6,opt,name=createUserId,proto3" json:"createUserId,omitempty"`
 	CreateUserName string `protobuf:"bytes,7,opt,name=createUserName,proto3" json:"createUserName,omitempty"`
@@ -205,7 +205,7 @@ func (x *ProcDefReply) GetCode() string {
 	return ""
 }
 
-func (x *ProcDefReply) GetVersion() int {
+func (x *ProcDefReply) GetVersion() int32 {
 	if x != nil {
 		return x.Version
 	}
@@ -454,7 +454,7 @@ type ProcInstReply struct {
 	IsDel         int32  `protobuf:"varint,15,opt,name=isDel,proto3" json:"isDel,omitempty"`
 	CreateTime    string `protobuf:"bytes,16,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty"`
 	UpdateTime    string `protobuf:"bytes,17,opt,name=updateTime,proto3" json:"updateTime,omitempty"`
-	RemainHours   int    `protobuf:"varint,18,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
+	RemainHours   int32  `protobuf:"varint,18,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
 }
 
 func (x *ProcInstReply) Reset() {
@@ -608,7 +608,7 @@ func (x *ProcInstReply) GetUpdateTime() string {
 	return ""
 }
 
-func (x *ProcInstReply) GetRemainHours() int {
+func (x *ProcInstReply) GetRemainHours() int32 {
 	if x != nil {
 		return x.RemainHours
 	}
@@ -781,13 +781,13 @@ type TaskReq struct {
 	NodeId        string `protobuf:"bytes,1,opt,name=nodeId,proto3" json:"nodeId,omitempty"`
 	ProcInstId    int64  `protobuf:"varint,2,opt,name=procInstId,proto3" json:"procInstId,omitempty"`
 	DataId        int64  `protobuf:"varint,3,opt,name=dataId,proto3" json:"dataId,omitempty"`
-	Level         int    `protobuf:"varint,4,opt,name=level,proto3" json:"level,omitempty"`
-	IsFinished    int    `protobuf:"bytes,5,opt,name=isFinished,proto3" json:"isFinished,omitempty"`
-	Step          int    `protobuf:"varint,6,opt,name=step,proto3" json:"step,omitempty"`
-	MemberCount   int    `protobuf:"bytes,7,opt,name=memberCount,proto3" json:"memberCount,omitempty"`
-	UnCompleteNum int    `protobuf:"bytes,8,opt,name=unCompleteNum,proto3" json:"unCompleteNum,omitempty"`
+	Level         int32  `protobuf:"varint,4,opt,name=level,proto3" json:"level,omitempty"`
+	IsFinished    int32  `protobuf:"bytes,5,opt,name=isFinished,proto3" json:"isFinished,omitempty"`
+	Step          int32  `protobuf:"varint,6,opt,name=step,proto3" json:"step,omitempty"`
+	MemberCount   int32  `protobuf:"bytes,7,opt,name=memberCount,proto3" json:"memberCount,omitempty"`
+	UnCompleteNum int32  `protobuf:"bytes,8,opt,name=unCompleteNum,proto3" json:"unCompleteNum,omitempty"`
 	ActMode       string `protobuf:"bytes,9,opt,name=actMode,proto3" json:"actMode,omitempty"`
-	AgreeNum      int    `protobuf:"varint,10,opt,name=agreeNum,proto3" json:"agreeNum,omitempty"`
+	AgreeNum      int32  `protobuf:"varint,10,opt,name=agreeNum,proto3" json:"agreeNum,omitempty"`
 }
 
 func (x *TaskReq) Reset() {
@@ -843,35 +843,35 @@ func (x *TaskReq) GetDataId() int64 {
 	return 0
 }
 
-func (x *TaskReq) GetLevel() int {
+func (x *TaskReq) GetLevel() int32 {
 	if x != nil {
 		return x.Level
 	}
 	return 0
 }
 
-func (x *TaskReq) GetIsFinished() int {
+func (x *TaskReq) GetIsFinished() int32 {
 	if x != nil {
 		return x.IsFinished
 	}
 	return 0
 }
 
-func (x *TaskReq) GetStep() int {
+func (x *TaskReq) GetStep() int32 {
 	if x != nil {
 		return x.Step
 	}
 	return 0
 }
 
-func (x *TaskReq) GetMemberCount() int {
+func (x *TaskReq) GetMemberCount() int32 {
 	if x != nil {
 		return x.MemberCount
 	}
 	return 0
 }
 
-func (x *TaskReq) GetUnCompleteNum() int {
+func (x *TaskReq) GetUnCompleteNum() int32 {
 	if x != nil {
 		return x.UnCompleteNum
 	}
@@ -885,7 +885,7 @@ func (x *TaskReq) GetActMode() string {
 	return ""
 }
 
-func (x *TaskReq) GetAgreeNum() int {
+func (x *TaskReq) GetAgreeNum() int32 {
 	if x != nil {
 		return x.AgreeNum
 	}

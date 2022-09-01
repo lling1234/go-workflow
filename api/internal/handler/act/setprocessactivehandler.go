@@ -9,7 +9,7 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func SetActiveHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func SetProcessActiveHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.ProcDefIdReq
 		if err := httpx.Parse(r, &req); err != nil {
@@ -17,8 +17,8 @@ func SetActiveHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := act.NewSetActiveLogic(r.Context(), svcCtx)
-		resp, err := l.SetActive(&req)
+		l := act.NewSetProcessActiveLogic(r.Context(), svcCtx)
+		resp, err := l.SetProcessActive(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

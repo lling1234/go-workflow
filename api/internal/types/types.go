@@ -5,10 +5,10 @@ import "act/api/flow"
 
 type SaveProcDef struct {
 	Name        string     `json:"name"`
-	Code        string     `json:"code,optional"`
+	Code        string     `json:"code"`
 	FormId      string     `json:"formId"`
 	FormName    string     `json:"formName"`
-	RemainHours int        `json:"remainHours,optional"`
+	RemainHours int32      `json:"remainHours"`
 	Resource    *flow.Node `json:"resource"`
 }
 

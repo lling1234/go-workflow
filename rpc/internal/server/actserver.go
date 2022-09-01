@@ -57,7 +57,6 @@ func (s *ActServer) FindDefByFormId(ctx context.Context, in *act.FormIdReq) (*ac
 	return l.FindDefByFormId(in)
 }
 
-//   rpc findDefsByFormId(FormIdReq) returns(ProcDefReply);
 func (s *ActServer) SetProcDefActive(ctx context.Context, in *act.ProcDefIdReq) (*act.ProcDefReply, error) {
 	l := logic.NewSetProcDefActiveLogic(ctx, s.svcCtx)
 	return l.SetProcDefActive(in)

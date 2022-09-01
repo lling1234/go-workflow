@@ -36,9 +36,9 @@ func (l *SaveTaskLogic) SaveTask(in *act.TaskReq) (*act.TaskReply, error) {
 	} else if "and" == in.ActMode {
 		actMode = task.ActModeAnd
 	}
-	tx.Task.Create().SetDataID(in.DataId).SetCreateTime(time.Now()).SetClaimTime(time.Now()).SetLevel(in.Level).
-		SetStep(in.Step).SetIsDel(0).SetActMode(actMode).SetMemberCount(in.MemberCount).SetUnCompleteNum(in.UnCompleteNum).
-		SetAgreeNum(in.AgreeNum).
+	tx.Task.Create().SetDataID(in.DataId).SetCreateTime(time.Now()).SetClaimTime(time.Now()).SetLevel(int(in.Level)).
+		SetStep(int(in.Step)).SetIsDel(0).SetActMode(actMode).SetMemberCount(int(in.MemberCount)).SetUnCompleteNum(int(in.UnCompleteNum)).
+		SetAgreeNum(int(in.AgreeNum)).
 		Save(l.ctx)
 	return &act.TaskReply{}, nil
 }

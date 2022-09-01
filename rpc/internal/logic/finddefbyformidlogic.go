@@ -1,10 +1,11 @@
 package logic
 
 import (
+	act2 "act/common/act"
 	"act/common/act/procdef"
+	"act/common/tools/date"
 	"context"
 
-	act2 "act/common/act"
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -42,15 +43,15 @@ func convert(actpd *act2.ProcDef) *act.ProcDefReply {
 		Id:             actpd.ID,
 		Name:           actpd.Name,
 		Code:           actpd.Code,
-		Version:        actpd.Version,
+		Version:        int32(actpd.Version),
 		CreateUserId:   actpd.CreateUserID,
 		CreateUserName: actpd.CreateUserName,
-		CreateTime:     actpd.CreateTime.Format("2006-01-02 15:04:05"),
+		CreateTime:     date.NowStr(),
 		TargetId:       actpd.TargetID,
 		FormId:         actpd.FormID,
 		FormName:       actpd.FormName,
 		Resource:       actpd.Resource,
-		RemainHours:    actpd.RemainHours,
+		RemainHours:    int32(actpd.RemainHours),
 		IsActive:       int32(actpd.IsActive),
 	}
 }

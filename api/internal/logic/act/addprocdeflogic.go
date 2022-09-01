@@ -1,11 +1,12 @@
 package act
 
 import (
-	"act/api/internal/svc"
-	"act/api/internal/types"
 	"act/rpc/types/act"
 	"context"
 	"encoding/json"
+
+	"act/api/internal/svc"
+	"act/api/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

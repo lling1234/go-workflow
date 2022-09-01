@@ -29,7 +29,6 @@ type ActClient interface {
 	SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
 	FindLeastTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdReply, error)
 	FindDefByFormId(ctx context.Context, in *FormIdReq, opts ...grpc.CallOption) (*ProcDefReply, error)
-	//  rpc findDefsByFormId(FormIdReq) returns(ProcDefReply);
 	SetProcDefActive(ctx context.Context, in *ProcDefIdReq, opts ...grpc.CallOption) (*ProcDefReply, error)
 }
 
@@ -124,7 +123,6 @@ type ActServer interface {
 	SaveIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error)
 	FindLeastTaskId(context.Context, *DataIdReq) (*TaskIdReply, error)
 	FindDefByFormId(context.Context, *FormIdReq) (*ProcDefReply, error)
-	//  rpc findDefsByFormId(FormIdReq) returns(ProcDefReply);
 	SetProcDefActive(context.Context, *ProcDefIdReq) (*ProcDefReply, error)
 	mustEmbedUnimplementedActServer()
 }

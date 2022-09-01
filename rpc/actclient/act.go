@@ -36,7 +36,6 @@ type (
 		SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
 		FindLeastTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdReply, error)
 		FindDefByFormId(ctx context.Context, in *FormIdReq, opts ...grpc.CallOption) (*ProcDefReply, error)
-		//   rpc findDefsByFormId(FormIdReq) returns(ProcDefReply);
 		SetProcDefActive(ctx context.Context, in *ProcDefIdReq, opts ...grpc.CallOption) (*ProcDefReply, error)
 	}
 
@@ -86,7 +85,6 @@ func (m *defaultAct) FindDefByFormId(ctx context.Context, in *FormIdReq, opts ..
 	return client.FindDefByFormId(ctx, in, opts...)
 }
 
-//   rpc findDefsByFormId(FormIdReq) returns(ProcDefReply);
 func (m *defaultAct) SetProcDefActive(ctx context.Context, in *ProcDefIdReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
 	client := act.NewActClient(m.cli.Conn())
 	return client.SetProcDefActive(ctx, in, opts...)

@@ -31,14 +31,10 @@ func (l *SaveProcDefLogic) SaveProcDef(in *act.ProcDefReq) (*act.ProcDefReply, e
 	if err != nil {
 		return nil, err
 	}
-	//targetIdStr, err := l.svcCtx.CommonStore.Cache.Get(l.ctx, "targetId")
-	//if err != nil {
-	//	return nil, err
-	//}
 
 	_, err = tx.ProcDef.Create().
 		SetName(in.Name).SetCode(in.Code).SetFormID(in.FormId).SetFormName(in.FormName).
-		SetRemainHours(in.RemainHours).SetResource(in.Resource).
+		SetRemainHours(int(in.RemainHours)).SetResource(in.Resource).
 		SetCreateUserID(in.UserId).SetCreateUserName(in.UserName).SetCreateTime(time.Now()).SetVersion(1).SetTargetID(1727882).
 		Save(l.ctx)
 
@@ -67,7 +63,7 @@ func (l *SaveProcDefLogic) convert(in *act.ProcDefReq, version int) *act.ProcDef
 		RemainHours: in.RemainHours,
 		Resource:    in.Resource,
 		CreateTime:  date.NowStr(),
-		Version:     version,
+		Version:     int32(version),
 		TargetId:    in.TargetId,
 		IsDel:       0,
 		IsActive:    1,
