@@ -97,7 +97,7 @@ func (n *Node) add2ExecutionList(list *list.List) {
 	}
 }
 func (n *NodeProps) getApproverIds() string {
-	if n.AssignedType == "user" {
+	if n.AssignedType == "user" || n.AssignedType == "ASSIGN_USER" {
 		str := ""
 		for _, v := range n.AssignedUser {
 			str += string(v.ID) + ","
@@ -195,6 +195,7 @@ func ParseProcessConfig(node *Node) (*list.List, error) {
 	err := parseProcessConfig(node, list)
 	return list, err
 }
+
 func parseProcessConfig(node *Node, list *list.List) (err error) {
 	if node != nil {
 		node.add2ExecutionList(list)
