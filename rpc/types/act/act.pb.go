@@ -31,7 +31,7 @@ type ProcDefReq struct {
 	Code        string `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty"`
 	FormId      string `protobuf:"bytes,5,opt,name=FormId,proto3" json:"FormId,omitempty"`
 	FormName    string `protobuf:"bytes,6,opt,name=FormName,proto3" json:"FormName,omitempty"`
-	RemainHours int32  `protobuf:"varint,7,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
+	RemainHours int    `protobuf:"varint,7,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
 	TargetId    int64  `protobuf:"varint,8,opt,name=targetId,proto3" json:"targetId,omitempty"`
 	Resource    string `protobuf:"bytes,9,opt,name=resource,proto3" json:"resource,omitempty"`
 }
@@ -110,7 +110,7 @@ func (x *ProcDefReq) GetFormName() string {
 	return ""
 }
 
-func (x *ProcDefReq) GetRemainHours() int32 {
+func (x *ProcDefReq) GetRemainHours() int {
 	if x != nil {
 		return x.RemainHours
 	}
@@ -340,8 +340,8 @@ type ProcInstReq struct {
 	DataId      int64  `protobuf:"varint,4,opt,name=dataId,proto3" json:"dataId,omitempty"`
 	FormId      string `protobuf:"bytes,5,opt,name=formId,proto3" json:"formId,omitempty"`
 	TargetId    int64  `protobuf:"varint,6,opt,name=targetId,proto3" json:"targetId,omitempty"`
-	RemainHours int32  `protobuf:"varint,7,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
-	State       int32  `protobuf:"varint,8,opt,name=state,proto3" json:"state,omitempty"`
+	RemainHours int    `protobuf:"varint,7,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
+	State       int    `protobuf:"varint,8,opt,name=state,proto3" json:"state,omitempty"`
 }
 
 func (x *ProcInstReq) Reset() {
@@ -418,14 +418,14 @@ func (x *ProcInstReq) GetTargetId() int64 {
 	return 0
 }
 
-func (x *ProcInstReq) GetRemainHours() int32 {
+func (x *ProcInstReq) GetRemainHours() int {
 	if x != nil {
 		return x.RemainHours
 	}
 	return 0
 }
 
-func (x *ProcInstReq) GetState() int32 {
+func (x *ProcInstReq) GetState() int {
 	if x != nil {
 		return x.State
 	}
@@ -449,12 +449,12 @@ type ProcInstReply struct {
 	StartUserId   int64  `protobuf:"varint,10,opt,name=startUserId,proto3" json:"startUserId,omitempty"`
 	StartUserName string `protobuf:"bytes,11,opt,name=startUserName,proto3" json:"startUserName,omitempty"`
 	IsFinished    int32  `protobuf:"varint,12,opt,name=isFinished,proto3" json:"isFinished,omitempty"`
-	State         int32  `protobuf:"varint,13,opt,name=state,proto3" json:"state,omitempty"`
+	State         int    `protobuf:"varint,13,opt,name=state,proto3" json:"state,omitempty"`
 	DataId        int64  `protobuf:"varint,14,opt,name=dataId,proto3" json:"dataId,omitempty"`
 	IsDel         int32  `protobuf:"varint,15,opt,name=isDel,proto3" json:"isDel,omitempty"`
 	CreateTime    string `protobuf:"bytes,16,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty"`
 	UpdateTime    string `protobuf:"bytes,17,opt,name=updateTime,proto3" json:"updateTime,omitempty"`
-	RemainHours   int32  `protobuf:"varint,18,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
+	RemainHours   int    `protobuf:"varint,18,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
 }
 
 func (x *ProcInstReply) Reset() {
@@ -573,7 +573,7 @@ func (x *ProcInstReply) GetIsFinished() int32 {
 	return 0
 }
 
-func (x *ProcInstReply) GetState() int32 {
+func (x *ProcInstReply) GetState() int {
 	if x != nil {
 		return x.State
 	}
@@ -608,7 +608,7 @@ func (x *ProcInstReply) GetUpdateTime() string {
 	return ""
 }
 
-func (x *ProcInstReply) GetRemainHours() int32 {
+func (x *ProcInstReply) GetRemainHours() int {
 	if x != nil {
 		return x.RemainHours
 	}
@@ -781,13 +781,13 @@ type TaskReq struct {
 	NodeId        string `protobuf:"bytes,1,opt,name=nodeId,proto3" json:"nodeId,omitempty"`
 	ProcInstId    int64  `protobuf:"varint,2,opt,name=procInstId,proto3" json:"procInstId,omitempty"`
 	DataId        int64  `protobuf:"varint,3,opt,name=dataId,proto3" json:"dataId,omitempty"`
-	Level         int32  `protobuf:"varint,4,opt,name=level,proto3" json:"level,omitempty"`
-	IsFinished    string `protobuf:"bytes,5,opt,name=isFinished,proto3" json:"isFinished,omitempty"`
-	Step          int32  `protobuf:"varint,6,opt,name=step,proto3" json:"step,omitempty"`
-	MemberCount   string `protobuf:"bytes,7,opt,name=memberCount,proto3" json:"memberCount,omitempty"`
-	UnCompleteNum string `protobuf:"bytes,8,opt,name=unCompleteNum,proto3" json:"unCompleteNum,omitempty"`
+	Level         int    `protobuf:"varint,4,opt,name=level,proto3" json:"level,omitempty"`
+	IsFinished    int    `protobuf:"bytes,5,opt,name=isFinished,proto3" json:"isFinished,omitempty"`
+	Step          int    `protobuf:"varint,6,opt,name=step,proto3" json:"step,omitempty"`
+	MemberCount   int    `protobuf:"bytes,7,opt,name=memberCount,proto3" json:"memberCount,omitempty"`
+	UnCompleteNum int    `protobuf:"bytes,8,opt,name=unCompleteNum,proto3" json:"unCompleteNum,omitempty"`
 	ActMode       string `protobuf:"bytes,9,opt,name=actMode,proto3" json:"actMode,omitempty"`
-	AgreeNum      int64  `protobuf:"varint,10,opt,name=agreeNum,proto3" json:"agreeNum,omitempty"`
+	AgreeNum      int    `protobuf:"varint,10,opt,name=agreeNum,proto3" json:"agreeNum,omitempty"`
 }
 
 func (x *TaskReq) Reset() {
@@ -843,39 +843,39 @@ func (x *TaskReq) GetDataId() int64 {
 	return 0
 }
 
-func (x *TaskReq) GetLevel() int32 {
+func (x *TaskReq) GetLevel() int {
 	if x != nil {
 		return x.Level
 	}
 	return 0
 }
 
-func (x *TaskReq) GetIsFinished() string {
+func (x *TaskReq) GetIsFinished() int {
 	if x != nil {
 		return x.IsFinished
 	}
-	return ""
+	return 0
 }
 
-func (x *TaskReq) GetStep() int32 {
+func (x *TaskReq) GetStep() int {
 	if x != nil {
 		return x.Step
 	}
 	return 0
 }
 
-func (x *TaskReq) GetMemberCount() string {
+func (x *TaskReq) GetMemberCount() int {
 	if x != nil {
 		return x.MemberCount
 	}
-	return ""
+	return 0
 }
 
-func (x *TaskReq) GetUnCompleteNum() string {
+func (x *TaskReq) GetUnCompleteNum() int {
 	if x != nil {
 		return x.UnCompleteNum
 	}
-	return ""
+	return 0
 }
 
 func (x *TaskReq) GetActMode() string {
@@ -885,7 +885,7 @@ func (x *TaskReq) GetActMode() string {
 	return ""
 }
 
-func (x *TaskReq) GetAgreeNum() int64 {
+func (x *TaskReq) GetAgreeNum() int {
 	if x != nil {
 		return x.AgreeNum
 	}

@@ -99,7 +99,7 @@ message TaskReply {
   string unCompleteNum = 9;
   int64 agreeNum = 10;
   string isFinished = 11;
-  int64 actType = 12;
+  int64 actMode = 12;
   int32 isDel = 13;
 }
 
