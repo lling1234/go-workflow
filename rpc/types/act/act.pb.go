@@ -31,7 +31,7 @@ type ProcDefReq struct {
 	Code        string `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty"`
 	FormId      string `protobuf:"bytes,5,opt,name=FormId,proto3" json:"FormId,omitempty"`
 	FormName    string `protobuf:"bytes,6,opt,name=FormName,proto3" json:"FormName,omitempty"`
-	RemainHours int    `protobuf:"varint,7,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
+	RemainHours int32  `protobuf:"varint,7,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
 	TargetId    int64  `protobuf:"varint,8,opt,name=targetId,proto3" json:"targetId,omitempty"`
 	Resource    string `protobuf:"bytes,9,opt,name=resource,proto3" json:"resource,omitempty"`
 }
@@ -110,7 +110,7 @@ func (x *ProcDefReq) GetFormName() string {
 	return ""
 }
 
-func (x *ProcDefReq) GetRemainHours() int {
+func (x *ProcDefReq) GetRemainHours() int32 {
 	if x != nil {
 		return x.RemainHours
 	}
@@ -147,7 +147,7 @@ type ProcDefReply struct {
 	TargetId       int64  `protobuf:"varint,9,opt,name=targetId,proto3" json:"targetId,omitempty"`
 	FormId         string `protobuf:"bytes,10,opt,name=formId,proto3" json:"formId,omitempty"`
 	FormName       string `protobuf:"bytes,11,opt,name=formName,proto3" json:"formName,omitempty"`
-	RemainHours    int    `protobuf:"varint,12,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
+	RemainHours    int32  `protobuf:"varint,12,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
 	IsDel          int32  `protobuf:"varint,13,opt,name=isDel,proto3" json:"isDel,omitempty"`
 	IsActive       int32  `protobuf:"varint,14,opt,name=isActive,proto3" json:"isActive,omitempty"`
 }
@@ -261,7 +261,7 @@ func (x *ProcDefReply) GetFormName() string {
 	return ""
 }
 
-func (x *ProcDefReply) GetRemainHours() int {
+func (x *ProcDefReply) GetRemainHours() int32 {
 	if x != nil {
 		return x.RemainHours
 	}
@@ -340,8 +340,8 @@ type ProcInstReq struct {
 	DataId      int64  `protobuf:"varint,4,opt,name=dataId,proto3" json:"dataId,omitempty"`
 	FormId      string `protobuf:"bytes,5,opt,name=formId,proto3" json:"formId,omitempty"`
 	TargetId    int64  `protobuf:"varint,6,opt,name=targetId,proto3" json:"targetId,omitempty"`
-	RemainHours int    `protobuf:"varint,7,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
-	State       int    `protobuf:"varint,8,opt,name=state,proto3" json:"state,omitempty"`
+	RemainHours int32  `protobuf:"varint,7,opt,name=remainHours,proto3" json:"remainHours,omitempty"`
+	State       int32  `protobuf:"varint,8,opt,name=state,proto3" json:"state,omitempty"`
 }
 
 func (x *ProcInstReq) Reset() {
@@ -418,14 +418,14 @@ func (x *ProcInstReq) GetTargetId() int64 {
 	return 0
 }
 
-func (x *ProcInstReq) GetRemainHours() int {
+func (x *ProcInstReq) GetRemainHours() int32 {
 	if x != nil {
 		return x.RemainHours
 	}
 	return 0
 }
 
-func (x *ProcInstReq) GetState() int {
+func (x *ProcInstReq) GetState() int32 {
 	if x != nil {
 		return x.State
 	}
@@ -449,7 +449,7 @@ type ProcInstReply struct {
 	StartUserId   int64  `protobuf:"varint,10,opt,name=startUserId,proto3" json:"startUserId,omitempty"`
 	StartUserName string `protobuf:"bytes,11,opt,name=startUserName,proto3" json:"startUserName,omitempty"`
 	IsFinished    int32  `protobuf:"varint,12,opt,name=isFinished,proto3" json:"isFinished,omitempty"`
-	State         int    `protobuf:"varint,13,opt,name=state,proto3" json:"state,omitempty"`
+	State         int32  `protobuf:"varint,13,opt,name=state,proto3" json:"state,omitempty"`
 	DataId        int64  `protobuf:"varint,14,opt,name=dataId,proto3" json:"dataId,omitempty"`
 	IsDel         int32  `protobuf:"varint,15,opt,name=isDel,proto3" json:"isDel,omitempty"`
 	CreateTime    string `protobuf:"bytes,16,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty"`
@@ -573,7 +573,7 @@ func (x *ProcInstReply) GetIsFinished() int32 {
 	return 0
 }
 
-func (x *ProcInstReply) GetState() int {
+func (x *ProcInstReply) GetState() int32 {
 	if x != nil {
 		return x.State
 	}
