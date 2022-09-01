@@ -18,6 +18,28 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// 查询版本最大 select max(version) from act_proc_def where form_id=''
+func TestActDbCreate6(t *testing.T) {
+	store := store.NewActrStore(models.DbStoreConfig{
+		Driver:       "mysql",
+		Mode:         "dev",
+		DataCenterId: 1,
+		WorkerId:     1,
+		DataSource:   "root:123456@(localhost)/workflowdemo?charset=utf8&parseTime=true&loc=Local",
+		Cache: cache.CacheConfig{
+			Addr:     "qkbyte.orginone.cn:6002",
+			Password: "orginone",
+		},
+	})
+	defer store.Close()
+	ctx := context.Background()
+
+	procdefList, err := store.ProcDef.Query().Where(procdef.CreateUserName("ling")).All(ctx)
+	if err != nil {
+		t.Log("procdefList err")
+	}
+	log.Println("procdefList", procdefList)
+}
 func TestActDbCreate5(t *testing.T) {
 	store := store.NewActrStore(models.DbStoreConfig{
 		Driver:       "mysql",
