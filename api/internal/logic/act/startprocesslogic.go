@@ -29,19 +29,19 @@ func NewStartProcessLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Star
 }
 
 func (l *StartProcessLogic) StartProcess(req *types.StartProcess) (resp *types.CommonResponse, err error) {
-	prodef, err := l.svcCtx.Rpc.FindDefByFormId(l.ctx, &actclient.FormIdReq{
+	def, err := l.svcCtx.Rpc.FindDefByFormId(l.ctx, &actclient.FormIdReq{
 		FormId: req.FormId,
 	})
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
-	resource := prodef.Resource
+	resource := def.Resource
 
 	inst, err := l.svcCtx.Rpc.SaveProcInst(l.ctx, &actclient.ProcInstReq{
 		Title:       req.Title,
 		FormId:      req.FormId,
 		DataId:      req.DataId,
-		RemainHours: prodef.RemainHours,
+		RemainHours: def.RemainHours,
 		State:       flow.PENDING,
 	})
 	if err != nil {
@@ -71,7 +71,7 @@ func (l *StartProcessLogic) StartProcess(req *types.StartProcess) (resp *types.C
 	list, err := flow.ParseProcessConfig(node)
 	listStr, err := GenerateExec(list)
 	exec := &actclient.ExecutionReq{
-		ProcDefId:  prodef.Id,
+		ProcDefId:  def.Id,
 		ProcInstId: inst.Id,
 		NodeInfos:  listStr,
 	}

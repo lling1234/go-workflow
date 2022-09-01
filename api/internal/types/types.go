@@ -18,7 +18,7 @@ type SetProcessActiveReq struct {
 }
 
 type StartProcess struct {
-	Title  string `json:"name"`
+	Title  string `json:"title"`
 	FormId string `json:"formId"`
 	DataId int64  `json:"dataId"`
 }

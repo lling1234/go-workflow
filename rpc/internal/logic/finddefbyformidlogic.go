@@ -31,11 +31,11 @@ func (l *FindDefByFormIdLogic) FindDefByFormId(in *act.FormIdReq) (*act.ProcDefR
 	if err != nil {
 		return nil, err
 	}
-	procdef, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(123), procdef.IsActiveEQ(1)).First(l.ctx)
+	def, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(1727882), procdef.IsActiveEQ(1)).First(l.ctx)
 	if err != nil {
 		return nil, err
 	}
-	return convert(procdef), nil
+	return convert(def), nil
 }
 
 func convert(actpd *act2.ProcDef) *act.ProcDefReply {
