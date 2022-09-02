@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"sync"
 	"time"
 
 	"act/common/act"
@@ -56,7 +57,7 @@ func (l *SaveIdentityLinkLogic) SaveIdentityLink(in *ms.IdentityLinkReq) (*ms.Id
 		return nil, err
 	}
 	log.Println("procInstQuery", procInstQuery)
-	taskId := procInstQuery.ID
+	taskId := procInstQuery.TaskID
 	log.Println("taskId", taskId)
 
 	/*
@@ -106,7 +107,13 @@ func (l *SaveIdentityLinkLogic) SaveIdentityLink(in *ms.IdentityLinkReq) (*ms.Id
 // 7个参数
 func (l *SaveIdentityLinkLogic) Complete(taskID int64, userID int64, username string, dataId int64, targetId int64, comment string, result int) error {
 	var err error
-	store := l.svcCtx.ActStore
+	mtx := sync.Mutex{}
+	mtx.Lock()
+	defer mtx.Unlock()
+	store, err := l.svcCtx.ActStore.Tx(l.ctx)
+	if err != nil {
+		return err
+	}
 
 	/*
 		1.更新任务
@@ -114,13 +121,14 @@ func (l *SaveIdentityLinkLogic) Complete(taskID int64, userID int64, username st
 	*/
 	taskQuery, err := store.Task.Query().Where(task.IDEQ(int(taskID))).Only(l.ctx)
 	if err != nil {
+		store.Rollback()
 		return err
 	}
 	if taskQuery == nil {
 		return errors.New("任务【" + fmt.Sprintf("%d", taskQuery.ID) + "】不存在")
 	}
 	// 1.2判断是否已经结束
-	if taskQuery.IsFinished == 1 {
+	if taskQuery.IsFinished == const2.IsFinishYes {
 		if taskQuery.NodeID == "结束" {
 			return errors.New("流程已经结束")
 		}
@@ -134,7 +142,7 @@ func (l *SaveIdentityLinkLogic) Complete(taskID int64, userID int64, username st
 	taskQuery.UnCompleteNum--
 	// 判断是否结束
 	if taskQuery.UnCompleteNum == 0 {
-		taskQuery.IsFinished = 1
+		taskQuery.IsFinished = const2.IsFinishYes
 	}
 
 	/*
@@ -153,11 +161,13 @@ func (l *SaveIdentityLinkLogic) Complete(taskID int64, userID int64, username st
 			`proc_inst_id` = 5469563801642631168
 			WHERE `act_task`.`id` = 9212524636351135768
 	*/
+	// TODO
 	err = store.Task.Update().
-		SetClaimTime(time.Now()).SetAgreeNum(taskQuery.AgreeNum).
-		SetUnCompleteNum(taskQuery.UnCompleteNum).SetIsFinished(taskQuery.IsFinished).
+		SetAgreeNum(taskQuery.AgreeNum).SetIsFinished(taskQuery.IsFinished).SetUnCompleteNum(taskQuery.UnCompleteNum).
+		SetClaimTime(time.Now()).SetCreateTime(time.Now()).
 		Exec(l.ctx)
 	if err != nil {
+		store.Rollback()
 		return err
 	}
 	/*
@@ -169,6 +179,7 @@ func (l *SaveIdentityLinkLogic) Complete(taskID int64, userID int64, username st
 			Where(identitylink.UserIDEQ(userID), identitylink.TargetIDEQ(taskID)).
 			Count(l.ctx)
 		if err != nil {
+			store.Rollback()
 			return err
 		}
 		if identityLinkCount > 0 {
@@ -177,7 +188,7 @@ func (l *SaveIdentityLinkLogic) Complete(taskID int64, userID int64, username st
 
 	}
 	// 3.查看任务的未审批人数是否为0，不为0就不流转
-	/*TODO entsql
+	/* entsql
 	INSERT INTO `act_identity_link`
 	(`id`,`create_time`,`type`,`user_id`,`user_name`,`task_id`,`target_id`,`step`,`proc_inst_id`,`comment`,`result`)
 	VALUES (5893377269455290368,'2022-08-30 15:25:25','participant',122298283,'小春',9212524636351135768,1727882,1,5469563801642631168,'小春评论1111',7)
@@ -189,6 +200,7 @@ func (l *SaveIdentityLinkLogic) Complete(taskID int64, userID int64, username st
 			SetProcInstID(taskQuery.ProcInstID).SetComment(comment).SetResult(result).
 			Save(l.ctx)
 		if err != nil {
+			store.Rollback()
 			return err
 		}
 	}
@@ -199,10 +211,17 @@ func (l *SaveIdentityLinkLogic) Complete(taskID int64, userID int64, username st
 	executionQuery, err := store.Execution.Query().Where(execution.ProcInstID(taskQuery.ProcInstID)).
 		Only(l.ctx)
 	if err != nil {
+		store.Rollback()
+		return err
+	}
+	err = store.Commit()
+	if err != nil {
+		store.Rollback()
 		return err
 	}
 	nodeInfos := executionQuery.NodeInfos
 	log.Println("nodeInfos", nodeInfos)
+	// TODO nodeInfos
 	l.MoveStage(nil, userID, username, dataId, targetId, comment, targetId, executionQuery.ProcInstID, taskQuery.Level, result)
 	return nil
 }
@@ -269,6 +288,10 @@ func (l *SaveIdentityLinkLogic) MoveStage(nodeInfos []*flow.NodeInfo, userID int
 //通过
 func (l *SaveIdentityLinkLogic) MoveToNextStage(nodeInfos []*flow.NodeInfo,
 	targetId int64, procInstID int64, level int) error {
+	tx, err := l.svcCtx.ActStore.Tx(l.ctx)
+	if err != nil {
+		return err
+	}
 	//新任务
 	taskQuery := l.svcCtx.ActStore.Task.Query().Where(task.LevelEQ(level), task.ProcInstIDEQ(procInstID))
 	if taskQuery == nil {
@@ -283,13 +306,14 @@ func (l *SaveIdentityLinkLogic) MoveToNextStage(nodeInfos []*flow.NodeInfo,
 		`un_complete_num`,`agree_num`,`act_type`)
 		VALUES ('2022-08-30 15:25:25','1659320226296',2,5469563801642631168,'2022-08-30 15:25:25',1,1,0,'or')
 		*/
-		taskCreate, err := l.svcCtx.ActStore.Task.Create().
+		taskCreate, err := tx.Task.Create().
 			SetNodeID(nodeInfos[level].NodeID).SetLevel(level).SetCreateTime(time.Now()).
 			SetProcInstID(procInstID).SetMemberCount(nodeInfos[level].MemberCount).
 			SetUnCompleteNum(nodeInfos[level].MemberCount).SetActType(task.ActType(nodeInfos[level].ActType)).
 			SetCreateTime(time.Now()).SetClaimTime(time.Now()).
 			Save(l.ctx)
 		if err != nil {
+			tx.Rollback()
 			return err
 		}
 		taskID := taskCreate.ID
@@ -313,11 +337,16 @@ func (l *SaveIdentityLinkLogic) MoveToNextStage(nodeInfos []*flow.NodeInfo,
 			UPDATE `act_proc_inst`
 			SET `is_finished` = 2, `node_id` = '1659320226296', `state` = 2, `task_id` = 9212524636351135769
 		*/
-		updateRow, err := l.svcCtx.ActStore.ProcInst.Update().
+		updateRow, err := tx.ProcInst.Update().
 			SetNodeID(nodeInfos[level].NodeID).SetTaskID(int64(taskID)).
 			SetState(flow.DEALING).SetIsFinished(int8(const2.IsFinishNo)).
 			Save(l.ctx)
 
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+		err = tx.Commit()
 		if err != nil {
 			return err
 		}
@@ -327,14 +356,17 @@ func (l *SaveIdentityLinkLogic) MoveToNextStage(nodeInfos []*flow.NodeInfo,
 	} else { // 最后一步直接结束
 		// 生成新的任务
 		/* entsql
-		INSERT INTO `act_task` (`create_time`,`node_id`,`level`,`proc_inst_id`,`claim_time`,`agree_num`,`is_finished`) VALUES ('2022-08-30 15:25:51','结束',3,5469563801642631168,'2022-08-30 15:25:51',0,1)
+		INSERT INTO `act_task`
+		 (`create_time`,`node_id`,`level`,`proc_inst_id`,`claim_time`,`agree_num`,`is_finished`)
+		 VALUES ('2022-08-30 15:25:51','结束',3,5469563801642631168,'2022-08-30 15:25:51',0,1)
 		*/
 		//TODO entsql   SELECT `member_count`, `un_complete_num`, `act_type` FROM `act_task`  WHERE (id = 9212524636351135770)
-		taskCreate, err := l.svcCtx.ActStore.Task.Create().
-			SetIsFinished(int8(const2.IsFinishYes)).SetClaimTime(time.Now()).
-			SetCreateTime(time.Now()).SetCreateTime(time.Now()).
+		taskCreate, err := tx.Task.Create().
+			SetCreateTime(time.Now()).SetNodeID(nodeInfos[level].NodeID).SetLevel(level).
+			SetProcInstID(procInstID).SetClaimTime(time.Now()).SetAgreeNum(0).SetIsFinished(int8(const2.IsFinishYes)).
 			Save(l.ctx)
 		if err != nil {
+			tx.Rollback()
 			return err
 		}
 		log.Println("else taskCreate", taskCreate)
@@ -351,11 +383,22 @@ func (l *SaveIdentityLinkLogic) MoveToNextStage(nodeInfos []*flow.NodeInfo,
 		// procInst.State = flow.HAVEPASS
 		// TODO procInst.Candidate = "审批结束"
 		// TODO err = UpdateProcInst(procInst, tx)
-		updateRow, err := l.svcCtx.ActStore.ProcInst.Update().
-			SetTaskID(int64(taskID)).SetEndTime(time.Now()).SetState(flow.HAVEPASS).
-			SetIsFinished(int8(const2.IsFinishYes)).
+
+		/* TODO entsql
+		UPDATE `act_proc_inst`
+		SET `end_time` = '2022-08-30 15:25:51', `is_finished` = 1, `node_id` = '结束',
+		`state` = 7, `task_id` = 9212524636351135770
+		*/
+		updateRow, err := tx.ProcInst.Update().
+			SetEndTime(time.Now()).SetIsFinished(int8(const2.IsFinishYes)).SetNodeID(nodeInfos[level].NodeID).
+			SetState(flow.HAVEPASS).SetTaskID(int64(taskID)).
 			Save(l.ctx)
 
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+		err = tx.Commit()
 		if err != nil {
 			return err
 		}
@@ -375,14 +418,25 @@ func (l *SaveIdentityLinkLogic) MoveToNextStage(nodeInfos []*flow.NodeInfo,
 }
 
 // MoveToPrevStage MoveToPrevStage
-// 驳回
-func (l *SaveIdentityLinkLogic) MoveToPrevStage(nodeInfos []*flow.NodeInfo, userID int64, dataId int64, targetId int64,
-	procInstID int64, step int) error {
+// TODO驳回
+func (l *SaveIdentityLinkLogic) MoveToPrevStage(nodeInfos []*flow.NodeInfo, userID int64, dataId int64,
+	targetId int64, procInstID int64, step int) error {
 	// 生成新的任务
 	// TODO var task = getNewTask(nodeInfos, step, procInstID) //新任务
 	// taksID, err := task.NewTaskTx(tx)
-	taskQueryArr := l.svcCtx.ActStore.Task.Query().Where(task.StepEQ(step), task.ProcInstIDEQ(procInstID)).
-		IDsX(l.ctx)
+	tx, err := l.svcCtx.ActStore.Tx(l.ctx)
+	if err != nil {
+		return err
+	}
+	taskQueryArr, err := l.svcCtx.ActStore.Task.Query().
+		Where(task.StepEQ(step), task.ProcInstIDEQ(procInstID)).
+		Where(task.NodeIDEQ(nodeInfos[step].NodeID), task.MemberCountEQ(nodeInfos[step].MemberCount)).
+		Where(task.UnCompleteNumEQ(nodeInfos[step].MemberCount)).
+		Where(task.ActTypeEQ(task.ActType(nodeInfos[step].ActType))).
+		IDs(l.ctx)
+	if err != nil {
+		return err
+	}
 	if len(taskQueryArr) == 0 {
 		return errors.New("err  MoveToPrevStage")
 	}
@@ -397,25 +451,30 @@ func (l *SaveIdentityLinkLogic) MoveToPrevStage(nodeInfos []*flow.NodeInfo, user
 	// TODO  err = UpdateProcInst(procInst, tx)
 	// TODO // 	//Candidate: nodeInfos[step].Aprover,
 	// nodeInfosStr:=convertor.ToString(nodeInfos)
-	updateRow, err := l.svcCtx.ActStore.ProcInst.Update().
+	updateRow, err := tx.ProcInst.Update().
 		SetNodeID(string(nodeInfos[step].NodeID)).SetTaskID(int64(taskID)).SetProcDefID(procInstID).
 		SetEndTime(time.Now()).SetState(flow.HAVEPASS).
 		Save(l.ctx)
 
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	err = tx.Commit()
 	if err != nil {
 		return err
 	}
 	if updateRow == 0 {
 		return err
 	}
-	// if step == 0 { // 流程回到起始位置，注意起始位置为0,
+	//TODO if step == 0 { // 流程回到起始位置，注意起始位置为0,
 	// 	err = AddCandidateUserTx(userID, dataId, step, taksID, procInstID, tx)
 	// 	if err != nil {
 	// 		return err
 	// 	}
 	// 	return nil
 	// }
-	// // 添加candidate group
+	// //TODO 添加candidate group
 	// err = AddIdentityLinkCandidateTx(targetId, step, taksID, procInstID, tx)
 	// if err != nil {
 	// 	return err

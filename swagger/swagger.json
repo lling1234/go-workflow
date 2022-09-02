@@ -1,0 +1,389 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/procdef/add": {
+      "post": {
+        "operationId": "addProcDef",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SaveProcProdef"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/process/findbytargetid": {
+      "post": {
+        "operationId": "findByTargetId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FindByTargetId"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/process/findmyapproveprocess": {
+      "post": {
+        "operationId": "findMyApproveProcess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FindMyApproveProcess"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/process/findmystartprocess": {
+      "post": {
+        "operationId": "findMyStartProcess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FindMyStartProcess"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/process/start": {
+      "post": {
+        "operationId": "startProcess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StartProcess"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/task/compelete": {
+      "post": {
+        "operationId": "compeleteTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CompeleteTask"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/task/withdraw": {
+      "post": {
+        "operationId": "withdraw",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Withdraw"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CommonResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "data": {
+          "type": "object"
+        },
+        "msg": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      },
+      "title": "CommonResponse",
+      "required": [
+        "code",
+        "data",
+        "msg",
+        "success"
+      ]
+    },
+    "CompeleteTask": {
+      "type": "object",
+      "properties": {
+        "dataId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "result": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "comment": {
+          "type": "string"
+        }
+      },
+      "title": "CompeleteTask",
+      "required": [
+        "dataId",
+        "result",
+        "comment"
+      ]
+    },
+    "FindByTargetId": {
+      "type": "object",
+      "properties": {
+        "targetId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "FindByTargetId",
+      "required": [
+        "targetId"
+      ]
+    },
+    "FindMyApproveProcess": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userName": {
+          "type": "string"
+        }
+      },
+      "title": "FindMyApproveProcess",
+      "required": [
+        "userId",
+        "userName"
+      ]
+    },
+    "FindMyStartProcess": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userName": {
+          "type": "string"
+        }
+      },
+      "title": "FindMyStartProcess",
+      "required": [
+        "userId",
+        "userName"
+      ]
+    },
+    "Nil": {
+      "type": "object",
+      "title": "Nil"
+    },
+    "SaveProcProdef": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "yewuFormId": {
+          "type": "string"
+        },
+        "yewuName": {
+          "type": "string"
+        },
+        "remainHours": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "resource": {
+          "type": "string"
+        }
+      },
+      "title": "SaveProcProdef",
+      "required": [
+        "name",
+        "code",
+        "yewuFormId",
+        "yewuName",
+        "remainHours",
+        "resource"
+      ]
+    },
+    "StartProcess": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "yewuFormId": {
+          "type": "string"
+        },
+        "dataId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "StartProcess",
+      "required": [
+        "name",
+        "yewuFormId",
+        "dataId"
+      ]
+    },
+    "Withdraw": {
+      "type": "object",
+      "properties": {
+        "dataId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "Withdraw",
+      "required": [
+        "dataId"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}
