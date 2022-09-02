@@ -95,7 +95,7 @@ func UserName(v string) predicate.IdentityLink {
 }
 
 // Step applies equality check predicate on the "step" field. It's identical to StepEQ.
-func Step(v int) predicate.IdentityLink {
+func Step(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldStep), v))
 	})
@@ -130,7 +130,7 @@ func TaskID(v int64) predicate.IdentityLink {
 }
 
 // Result applies equality check predicate on the "result" field. It's identical to ResultEQ.
-func Result(v int) predicate.IdentityLink {
+func Result(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldResult), v))
 	})
@@ -356,21 +356,21 @@ func UserNameContainsFold(v string) predicate.IdentityLink {
 }
 
 // StepEQ applies the EQ predicate on the "step" field.
-func StepEQ(v int) predicate.IdentityLink {
+func StepEQ(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldStep), v))
 	})
 }
 
 // StepNEQ applies the NEQ predicate on the "step" field.
-func StepNEQ(v int) predicate.IdentityLink {
+func StepNEQ(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldStep), v))
 	})
 }
 
 // StepIn applies the In predicate on the "step" field.
-func StepIn(vs ...int) predicate.IdentityLink {
+func StepIn(vs ...int32) predicate.IdentityLink {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -381,7 +381,7 @@ func StepIn(vs ...int) predicate.IdentityLink {
 }
 
 // StepNotIn applies the NotIn predicate on the "step" field.
-func StepNotIn(vs ...int) predicate.IdentityLink {
+func StepNotIn(vs ...int32) predicate.IdentityLink {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -392,28 +392,28 @@ func StepNotIn(vs ...int) predicate.IdentityLink {
 }
 
 // StepGT applies the GT predicate on the "step" field.
-func StepGT(v int) predicate.IdentityLink {
+func StepGT(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldStep), v))
 	})
 }
 
 // StepGTE applies the GTE predicate on the "step" field.
-func StepGTE(v int) predicate.IdentityLink {
+func StepGTE(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldStep), v))
 	})
 }
 
 // StepLT applies the LT predicate on the "step" field.
-func StepLT(v int) predicate.IdentityLink {
+func StepLT(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldStep), v))
 	})
 }
 
 // StepLTE applies the LTE predicate on the "step" field.
-func StepLTE(v int) predicate.IdentityLink {
+func StepLTE(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldStep), v))
 	})
@@ -753,21 +753,21 @@ func TaskIDLTE(v int64) predicate.IdentityLink {
 }
 
 // ResultEQ applies the EQ predicate on the "result" field.
-func ResultEQ(v int) predicate.IdentityLink {
+func ResultEQ(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldResult), v))
 	})
 }
 
 // ResultNEQ applies the NEQ predicate on the "result" field.
-func ResultNEQ(v int) predicate.IdentityLink {
+func ResultNEQ(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldResult), v))
 	})
 }
 
 // ResultIn applies the In predicate on the "result" field.
-func ResultIn(vs ...int) predicate.IdentityLink {
+func ResultIn(vs ...int32) predicate.IdentityLink {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -778,7 +778,7 @@ func ResultIn(vs ...int) predicate.IdentityLink {
 }
 
 // ResultNotIn applies the NotIn predicate on the "result" field.
-func ResultNotIn(vs ...int) predicate.IdentityLink {
+func ResultNotIn(vs ...int32) predicate.IdentityLink {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -789,28 +789,28 @@ func ResultNotIn(vs ...int) predicate.IdentityLink {
 }
 
 // ResultGT applies the GT predicate on the "result" field.
-func ResultGT(v int) predicate.IdentityLink {
+func ResultGT(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldResult), v))
 	})
 }
 
 // ResultGTE applies the GTE predicate on the "result" field.
-func ResultGTE(v int) predicate.IdentityLink {
+func ResultGTE(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldResult), v))
 	})
 }
 
 // ResultLT applies the LT predicate on the "result" field.
-func ResultLT(v int) predicate.IdentityLink {
+func ResultLT(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldResult), v))
 	})
 }
 
 // ResultLTE applies the LTE predicate on the "result" field.
-func ResultLTE(v int) predicate.IdentityLink {
+func ResultLTE(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldResult), v))
 	})

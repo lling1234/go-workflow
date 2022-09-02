@@ -39,15 +39,15 @@ type ProcInst struct {
 	// 流程是否结束,0:未结束,1:已结束
 	IsFinished int8 `json:"is_finished,omitempty"`
 	// 流程状态,类型为:1待处理、2处理中、3驳回、4已撤回、5未通过、6已通过、7废弃
-	State int `json:"state,omitempty"`
+	State int32 `json:"state,omitempty"`
 	// 流程绑定数据id
 	DataID int64 `json:"data_id,omitempty"`
 	// 是否删除
-	IsDel int `json:"is_del,omitempty"`
+	IsDel int8 `json:"is_del,omitempty"`
 	// 创建时间
 	CreateTime time.Time `json:"create_time,omitempty"`
 	// 审批限定时间
-	RemainHours int `json:"remain_hours,omitempty"`
+	RemainHours int32 `json:"remain_hours,omitempty"`
 	// 流程修改时间
 	UpdateTime time.Time `json:"update_time,omitempty"`
 }
@@ -154,7 +154,7 @@ func (pi *ProcInst) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field state", values[i])
 			} else if value.Valid {
-				pi.State = int(value.Int64)
+				pi.State = int32(value.Int64)
 			}
 		case procinst.FieldDataID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -166,7 +166,7 @@ func (pi *ProcInst) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field is_del", values[i])
 			} else if value.Valid {
-				pi.IsDel = int(value.Int64)
+				pi.IsDel = int8(value.Int64)
 			}
 		case procinst.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -178,7 +178,7 @@ func (pi *ProcInst) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field remain_hours", values[i])
 			} else if value.Valid {
-				pi.RemainHours = int(value.Int64)
+				pi.RemainHours = int32(value.Int64)
 			}
 		case procinst.FieldUpdateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {

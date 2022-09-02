@@ -1,6 +1,8 @@
 package logic
 
 import (
+	act2 "act/common/act"
+	"act/common/act/task"
 	"context"
 
 	"act/rpc/internal/svc"
@@ -24,7 +26,16 @@ func NewFindLeastTaskIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *F
 }
 
 func (l *FindLeastTaskIdLogic) FindLeastTaskId(in *act.DataIdReq) (*act.TaskIdReply, error) {
-	// todo: add your logic here and delete this line
-
-	return &act.TaskIdReply{}, nil
+	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	t := tx.Task.Query().Where(task.DataID(in.DataId)).Order(act2.Desc(task.FieldCreateTime))
+	ds, err := t.IDs(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &act.TaskIdReply{
+		Id: ds[0],
+	}, nil
 }

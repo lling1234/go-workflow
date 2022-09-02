@@ -3,7 +3,7 @@ package types
 
 import "act/api/flow"
 
-type SaveProcDef struct {
+type SaveProcdef struct {
 	Name        string     `json:"name"`
 	Code        string     `json:"code"`
 	FormId      string     `json:"formId"`
@@ -12,12 +12,12 @@ type SaveProcDef struct {
 	Resource    *flow.Node `json:"resource"`
 }
 
-type SetProcessActiveReq struct {
+type FormIdReq struct {
 	FormId  string `json:"formId"`
 	Version int32  `json:"version"`
 }
 
-type StartProcess struct {
+type StartProcinst struct {
 	Title  string `json:"title"`
 	FormId string `json:"formId"`
 	DataId int64  `json:"dataId"`
@@ -29,22 +29,29 @@ type CompeleteTask struct {
 	Comment string `json:"comment"`
 }
 
-type Withdraw struct {
+type DataIdReq struct {
 	DataId int64 `json:"dataId"`
 }
 
-type FindByTargetId struct {
-	TargetId int64 `json:"targetId"`
+type SearchProcess struct {
+	Starter   string `json:"starter"`
+	Title     string `json:"title"`
+	Code      string `json:"code"`
+	State     int32  `json:"state"`
+	PageSize  int32  `json:"pageSize"`
+	PageIndex int32  `json:"pageIndex"`
 }
 
-type FindMyStartProcess struct {
-	UserId   int64  `json:"userId"`
-	UserName string `json:"userName"`
+type PageReq struct {
+	PageSize  int32 `json:"pageSize"`
+	PageIndex int32 `json:"pageIndex"`
 }
 
-type FindMyApproveProcess struct {
-	UserId   int64  `json:"userId"`
-	UserName string `json:"userName"`
+type UserReq struct {
+	UserId    int64  `json:"userId"`
+	UserName  string `json:"userName"`
+	PageSize  int32  `json:"pageSize"`
+	PageIndex int32  `json:"pageIndex"`
 }
 
 type CommonResponse struct {

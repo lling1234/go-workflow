@@ -2,9 +2,11 @@ package logic
 
 import (
 	"act/common/act/procdef"
+	"context"
+	"time"
+
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
-	"context"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,14 +25,14 @@ func NewSetProcDefActiveLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *SetProcDefActiveLogic) SetProcDefActive(in *act.SetProcessActiveReq) (*act.ProcDefReply, error) {
+func (l *SetProcDefActiveLogic) SetProcDefActive(in *act.FindProcdefReq) (*act.ProcDefReply, error) {
 	formId := in.FormId
-	version := int(in.Version)
+	version := in.Version
 	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
 	if err != nil {
 		return nil, err
 	}
-	err = tx.ProcDef.Update().Where(procdef.FormIDEQ(formId), procdef.VersionEQ(version)).SetIsActive(1).Exec(l.ctx)
+	err = tx.ProcDef.Update().Where(procdef.FormIDEQ(formId), procdef.VersionEQ(version)).SetIsActive(1).SetUpdateTime(time.Now()).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err

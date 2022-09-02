@@ -9,21 +9,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type FindByTargetIdLogic struct {
+type FindAllProcessLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewFindByTargetIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindByTargetIdLogic {
-	return &FindByTargetIdLogic{
+func NewFindAllProcessLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindAllProcessLogic {
+	return &FindAllProcessLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *FindByTargetIdLogic) FindByTargetId(req *types.FindByTargetId) (resp *types.CommonResponse, err error) {
+func (l *FindAllProcessLogic) FindAllProcess(req *types.SearchProcess) (resp *types.CommonResponse, err error) {
 	// todo: add your logic here and delete this line
 
 	return

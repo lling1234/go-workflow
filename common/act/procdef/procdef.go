@@ -77,8 +77,6 @@ var (
 	NameValidator func(string) error
 	// CodeValidator is a validator for the "code" field. It is called by the builders before save.
 	CodeValidator func(string) error
-	// DefaultVersion holds the default value on creation for the "version" field.
-	DefaultVersion int
 	// ResourceValidator is a validator for the "resource" field. It is called by the builders before save.
 	ResourceValidator func(string) error
 	// CreateUserNameValidator is a validator for the "create_user_name" field. It is called by the builders before save.
@@ -90,7 +88,7 @@ var (
 	// FormNameValidator is a validator for the "form_name" field. It is called by the builders before save.
 	FormNameValidator func(string) error
 	// DefaultRemainHours holds the default value on creation for the "remain_hours" field.
-	DefaultRemainHours int
+	DefaultRemainHours int32
 	// DefaultIsDel holds the default value on creation for the "is_del" field.
 	DefaultIsDel int8
 	// DefaultIsActive holds the default value on creation for the "is_active" field.

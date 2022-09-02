@@ -4,6 +4,7 @@ import (
 	"container/list"
 	"errors"
 	"github.com/mumushuiding/util"
+	"strconv"
 )
 
 // Node represents a specific logical unit of processing and routing
@@ -38,7 +39,7 @@ var NodeTypes = [...]string{ROOT: "ROOT", CONDITIONS: "CONDITIONS", CONDITION: "
 
 type NodeProps struct {
 	AssignedType string          `json:"assignedType,optional"`
-	ActMode      string          `json:"actMode,optional"`
+	Mode         string          `json:"mode,optional"`
 	Station      string          `json:"station,optional,optional"`
 	AssignedUser []*AssignedUser `json:"assignedUser,optional"`
 	Refuse       string          `json:"refuse,optional"`
@@ -57,12 +58,12 @@ type AssignedUser struct {
 
 // NodeInfo 节点信息
 type NodeInfo struct {
-	NodeID        string `json:"nodeId"`
-	Type          string `json:"type"`
-	AssignedType  string `json:"assignedType"`
-	MemberCount   int    `json:"memberCount"`
+	NodeID       string `json:"nodeId"`
+	Type         string `json:"type"`
+	AssignedType string `json:"assignedType"`
+	//MemberCount   int    `json:"memberCount"`
 	Level         int    `json:"level"`
-	ActMode       string `json:"actMode"`
+	Mode          string `json:"mode"`
 	ApproverNames string `json:"approverNames"`
 	ApproverIds   string `json:"approverIds"`
 }
@@ -86,9 +87,9 @@ func (n *Node) add2ExecutionList(list *list.List) {
 			NodeID: n.NodeID,
 			Type:   n.Type,
 			//Level:         n.Props.ActionerRules[0].Level,
-			AssignedType:  n.Props.AssignedType,
-			MemberCount:   n.Props.getMemberCount(),
-			ActMode:       n.Props.ActMode,
+			AssignedType: n.Props.AssignedType,
+			//MemberCount:   n.Props.getMemberCount(),
+			Mode:          n.Props.Mode,
 			ApproverIds:   n.Props.getApproverIds(),
 			ApproverNames: n.Props.getApproverNames(),
 		})
@@ -100,7 +101,7 @@ func (n *NodeProps) getApproverIds() string {
 	if n.AssignedType == "user" || n.AssignedType == "ASSIGN_USER" {
 		str := ""
 		for _, v := range n.AssignedUser {
-			str += string(v.ID) + ","
+			str += strconv.FormatInt(v.ID, 10) + ","
 		}
 		return str[0 : len(str)-1]
 	}
@@ -116,15 +117,16 @@ func (n *NodeProps) getApproverNames() string {
 	}
 	return ""
 }
-func (n *NodeProps) getMemberCount() int {
-	if n.AssignedUser != nil {
-		if n.ActMode == "or" {
-			return 1
-		}
-		return len(n.AssignedUser)
-	}
-	return 0
-}
+
+//func (n *NodeProps) getMemberCount() int {
+//	if n.AssignedUser != nil {
+//		if n.ActMode == "or" {
+//			return 1
+//		}
+//		return len(n.AssignedUser)
+//	}
+//	return 0
+//}
 
 // IfProcessConifgIsValid 检查流程配置是否有效
 func IfProcessConifgIsValid(node *Node) error {

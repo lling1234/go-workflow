@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"time"
 
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
@@ -24,7 +25,15 @@ func NewSaveExecutionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Sav
 }
 
 func (l *SaveExecutionLogic) SaveExecution(in *act.ExecutionReq) (*act.ExecutionReply, error) {
-	// todo: add your logic here and delete this line
-
+	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	_, err = tx.Execution.Create().SetProcDefID(in.ProcDefId).SetProcInstID(in.ProcInstId).SetNodeInfos(in.NodeInfos).SetStartTime(time.Now()).Save(l.ctx)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	tx.Commit()
 	return &act.ExecutionReply{}, nil
 }

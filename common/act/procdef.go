@@ -21,7 +21,7 @@ type ProcDef struct {
 	// 流程编码
 	Code string `json:"code,omitempty"`
 	// 版本
-	Version int `json:"version,omitempty"`
+	Version int32 `json:"version,omitempty"`
 	// 流程图数据
 	Resource string `json:"resource,omitempty"`
 	// 创建人id
@@ -37,7 +37,7 @@ type ProcDef struct {
 	// 业务表单名称
 	FormName string `json:"form_name,omitempty"`
 	// 审批限定时间
-	RemainHours int `json:"remain_hours,omitempty"`
+	RemainHours int32 `json:"remain_hours,omitempty"`
 	// 是否删除,0:未删除,1:已删除
 	IsDel int8 `json:"is_del,omitempty"`
 	// 流程是否生效,0:否,1:是
@@ -94,7 +94,7 @@ func (pd *ProcDef) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
 			} else if value.Valid {
-				pd.Version = int(value.Int64)
+				pd.Version = int32(value.Int64)
 			}
 		case procdef.FieldResource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -142,7 +142,7 @@ func (pd *ProcDef) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field remain_hours", values[i])
 			} else if value.Valid {
-				pd.RemainHours = int(value.Int64)
+				pd.RemainHours = int32(value.Int64)
 			}
 		case procdef.FieldIsDel:
 			if value, ok := values[i].(*sql.NullInt64); !ok {

@@ -74,10 +74,6 @@ func init() {
 	procdefDescCode := procdefFields[1].Descriptor()
 	// procdef.CodeValidator is a validator for the "code" field. It is called by the builders before save.
 	procdef.CodeValidator = procdefDescCode.Validators[0].(func(string) error)
-	// procdefDescVersion is the schema descriptor for version field.
-	procdefDescVersion := procdefFields[2].Descriptor()
-	// procdef.DefaultVersion holds the default value on creation for the version field.
-	procdef.DefaultVersion = procdefDescVersion.Default.(int)
 	// procdefDescResource is the schema descriptor for resource field.
 	procdefDescResource := procdefFields[3].Descriptor()
 	// procdef.ResourceValidator is a validator for the "resource" field. It is called by the builders before save.
@@ -101,7 +97,7 @@ func init() {
 	// procdefDescRemainHours is the schema descriptor for remain_hours field.
 	procdefDescRemainHours := procdefFields[10].Descriptor()
 	// procdef.DefaultRemainHours holds the default value on creation for the remain_hours field.
-	procdef.DefaultRemainHours = procdefDescRemainHours.Default.(int)
+	procdef.DefaultRemainHours = procdefDescRemainHours.Default.(int32)
 	// procdefDescIsDel is the schema descriptor for is_del field.
 	procdefDescIsDel := procdefFields[11].Descriptor()
 	// procdef.DefaultIsDel holds the default value on creation for the is_del field.
@@ -143,7 +139,7 @@ func init() {
 	// procinstDescIsDel is the schema descriptor for is_del field.
 	procinstDescIsDel := procinstFields[13].Descriptor()
 	// procinst.DefaultIsDel holds the default value on creation for the is_del field.
-	procinst.DefaultIsDel = procinstDescIsDel.Default.(int)
+	procinst.DefaultIsDel = procinstDescIsDel.Default.(int8)
 	// procinstDescCreateTime is the schema descriptor for create_time field.
 	procinstDescCreateTime := procinstFields[14].Descriptor()
 	// procinst.DefaultCreateTime holds the default value on creation for the create_time field.
@@ -166,16 +162,24 @@ func init() {
 	taskDescClaimTime := taskFields[5].Descriptor()
 	// task.DefaultClaimTime holds the default value on creation for the claim_time field.
 	task.DefaultClaimTime = taskDescClaimTime.Default.(time.Time)
+	// taskDescMemberApprover is the schema descriptor for member_approver field.
+	taskDescMemberApprover := taskFields[6].Descriptor()
+	// task.MemberApproverValidator is a validator for the "member_approver" field. It is called by the builders before save.
+	task.MemberApproverValidator = taskDescMemberApprover.Validators[0].(func(string) error)
+	// taskDescAgreeApprover is the schema descriptor for agree_approver field.
+	taskDescAgreeApprover := taskFields[7].Descriptor()
+	// task.AgreeApproverValidator is a validator for the "agree_approver" field. It is called by the builders before save.
+	task.AgreeApproverValidator = taskDescAgreeApprover.Validators[0].(func(string) error)
 	// taskDescIsFinished is the schema descriptor for is_finished field.
-	taskDescIsFinished := taskFields[9].Descriptor()
+	taskDescIsFinished := taskFields[8].Descriptor()
 	// task.DefaultIsFinished holds the default value on creation for the is_finished field.
 	task.DefaultIsFinished = taskDescIsFinished.Default.(int8)
 	// taskDescIsDel is the schema descriptor for is_del field.
-	taskDescIsDel := taskFields[12].Descriptor()
+	taskDescIsDel := taskFields[11].Descriptor()
 	// task.DefaultIsDel holds the default value on creation for the is_del field.
-	task.DefaultIsDel = taskDescIsDel.Default.(int)
+	task.DefaultIsDel = taskDescIsDel.Default.(int8)
 	// taskDescUpdateTime is the schema descriptor for update_time field.
-	taskDescUpdateTime := taskFields[13].Descriptor()
+	taskDescUpdateTime := taskFields[12].Descriptor()
 	// task.DefaultUpdateTime holds the default value on creation for the update_time field.
 	task.DefaultUpdateTime = taskDescUpdateTime.Default.(time.Time)
 }

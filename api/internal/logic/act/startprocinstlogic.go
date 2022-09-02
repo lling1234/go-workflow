@@ -6,6 +6,7 @@ import (
 	"container/list"
 	"context"
 	"github.com/mumushuiding/util"
+	"log"
 	"strconv"
 
 	"act/api/internal/svc"
@@ -14,30 +15,30 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type StartProcessLogic struct {
+type StartProcinstLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewStartProcessLogic(ctx context.Context, svcCtx *svc.ServiceContext) *StartProcessLogic {
-	return &StartProcessLogic{
+func NewStartProcinstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *StartProcinstLogic {
+	return &StartProcinstLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *StartProcessLogic) StartProcess(req *types.StartProcess) (resp *types.CommonResponse, err error) {
-	def, err := l.svcCtx.Rpc.FindDefByFormId(l.ctx, &actclient.FormIdReq{
+func (l *StartProcinstLogic) StartProcinst(req *types.StartProcinst) (resp *types.CommonResponse, err error) {
+	def, err := l.svcCtx.Rpc.FindDefByFormId(l.ctx, &actclient.FindProcdefReq{
 		FormId: req.FormId,
 	})
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
 	resource := def.Resource
-
 	inst, err := l.svcCtx.Rpc.SaveProcInst(l.ctx, &actclient.ProcInstReq{
+		ProcDefId:   def.Id,
 		Title:       req.Title,
 		FormId:      req.FormId,
 		DataId:      req.DataId,
@@ -48,16 +49,14 @@ func (l *StartProcessLogic) StartProcess(req *types.StartProcess) (resp *types.C
 		return types.GetErrorCommonResponse(err.Error())
 	}
 	task := actclient.TaskReq{
-		NodeId:        "开始",
-		ProcInstId:    inst.Id,
-		DataId:        req.DataId,
-		Level:         1,
-		IsFinished:    1,
-		Step:          1,
-		MemberCount:   1,
-		UnCompleteNum: 0,
-		ActMode:       "or",
-		AgreeNum:      1,
+		NodeId:     "开始",
+		ProcInstId: inst.Id,
+		DataId:     req.DataId,
+		Level:      1,
+		IsFinished: 1,
+		Step:       1,
+		//MemberCount:   1,
+		Mode: "or",
 	}
 	_, err = l.svcCtx.Rpc.SaveTask(l.ctx, &task)
 	if err != nil {
@@ -70,37 +69,53 @@ func (l *StartProcessLogic) StartProcess(req *types.StartProcess) (resp *types.C
 	}
 	list, err := flow.ParseProcessConfig(node)
 	listStr, err := GenerateExec(list)
+	log.Printf("listStr:%s", listStr)
 	exec := &actclient.ExecutionReq{
 		ProcDefId:  def.Id,
 		ProcInstId: inst.Id,
 		NodeInfos:  listStr,
 	}
-	l.svcCtx.Rpc.SaveExecution(l.ctx, exec)
+	_, err = l.svcCtx.Rpc.SaveExecution(l.ctx, exec)
+	if err != nil {
+		return types.GetErrorCommonResponse(err.Error())
+	}
 	// 获取执行流信息
 	var nodeInfos []*flow.NodeInfo
 	util.Str2Struct(exec.NodeInfos, &nodeInfos)
-
+	log.Printf("11111,nodeInfos.id:%s,nodeInfos.name:%s,nodeInfos.mode:%s", nodeInfos[1].ApproverIds, nodeInfos[1].ApproverNames, nodeInfos[1].Mode)
 	// -----------------生成新任务-------------
 	firstNode := nodeInfos[1]
-	if firstNode.ActMode == "and" {
-		task.UnCompleteNum = int32(firstNode.MemberCount)
-		task.MemberCount = int32(firstNode.MemberCount)
+	if firstNode.Mode == "AND" {
+		//task.MemberCount = int32(firstNode.MemberCount)
 	}
 	task.NodeId = firstNode.NodeID
-	task.AgreeNum = 0
+	//task.AgreeNum = 0
 	task.IsFinished = 2
 	task.Level = 1
 	task.Step = 1
-	task.ActMode = firstNode.ActMode
+	task.Mode = firstNode.Mode
+	log.Println("task", task.Mode)
 	newTask, err := l.svcCtx.Rpc.SaveTask(l.ctx, &task)
+	if err != nil {
+		return types.GetErrorCommonResponse(err.Error())
+	}
+	log.Println(22222, newTask.Id)
 	userId, _ := strconv.ParseInt(firstNode.ApproverIds, 10, 64)
+	log.Println(33333, userId)
 	identityLink := actclient.IdentityLinkReq{
 		ProcInstId: inst.Id,
 		TaskId:     newTask.Id,
 		UserId:     userId,
 		UserName:   firstNode.ApproverNames,
+		Comment:    "",
+		Result:     1,
 	}
-	l.svcCtx.Rpc.SaveIdentityLink(l.ctx, &identityLink)
+	log.Println(333333)
+	_, err = l.svcCtx.Rpc.SaveIdentityLink(l.ctx, &identityLink)
+	log.Println(44444)
+	if err != nil {
+		return types.GetErrorCommonResponse(err.Error())
+	}
 	return types.GetCommonResponse(nil, inst)
 }
 

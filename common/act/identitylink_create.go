@@ -49,13 +49,13 @@ func (ilc *IdentityLinkCreate) SetNillableUserName(s *string) *IdentityLinkCreat
 }
 
 // SetStep sets the "step" field.
-func (ilc *IdentityLinkCreate) SetStep(i int) *IdentityLinkCreate {
+func (ilc *IdentityLinkCreate) SetStep(i int32) *IdentityLinkCreate {
 	ilc.mutation.SetStep(i)
 	return ilc
 }
 
 // SetNillableStep sets the "step" field if the given value is not nil.
-func (ilc *IdentityLinkCreate) SetNillableStep(i *int) *IdentityLinkCreate {
+func (ilc *IdentityLinkCreate) SetNillableStep(i *int32) *IdentityLinkCreate {
 	if i != nil {
 		ilc.SetStep(*i)
 	}
@@ -103,13 +103,13 @@ func (ilc *IdentityLinkCreate) SetTaskID(i int64) *IdentityLinkCreate {
 }
 
 // SetResult sets the "result" field.
-func (ilc *IdentityLinkCreate) SetResult(i int) *IdentityLinkCreate {
+func (ilc *IdentityLinkCreate) SetResult(i int32) *IdentityLinkCreate {
 	ilc.mutation.SetResult(i)
 	return ilc
 }
 
 // SetNillableResult sets the "result" field if the given value is not nil.
-func (ilc *IdentityLinkCreate) SetNillableResult(i *int) *IdentityLinkCreate {
+func (ilc *IdentityLinkCreate) SetNillableResult(i *int32) *IdentityLinkCreate {
 	if i != nil {
 		ilc.SetResult(*i)
 	}
@@ -330,7 +330,7 @@ func (ilc *IdentityLinkCreate) createSpec() (*IdentityLink, *sqlgraph.CreateSpec
 	}
 	if value, ok := ilc.mutation.Step(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldStep,
 		})
@@ -370,7 +370,7 @@ func (ilc *IdentityLinkCreate) createSpec() (*IdentityLink, *sqlgraph.CreateSpec
 	}
 	if value, ok := ilc.mutation.Result(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldResult,
 		})

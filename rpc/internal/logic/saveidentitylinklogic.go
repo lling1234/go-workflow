@@ -1,10 +1,9 @@
 package logic
 
 import (
-	"context"
-
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
+	"context"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +23,16 @@ func NewSaveIdentityLinkLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 }
 
 func (l *SaveIdentityLinkLogic) SaveIdentityLink(in *act.IdentityLinkReq) (*act.IdentityLinkReply, error) {
-	// todo: add your logic here and delete this line
-
+	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	_, err = tx.IdentityLink.Create().SetProcInstID(in.ProcInstId).SetTaskID(in.TaskId).SetTargetID(123).
+		SetIsDeal(0).SetStep(1).SetUserID(in.UserId).SetUserName(in.UserName).Save(l.ctx)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	tx.Commit()
 	return &act.IdentityLinkReply{}, nil
 }

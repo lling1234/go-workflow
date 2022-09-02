@@ -9,16 +9,16 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func FindMyStartProcessHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func SetActiveHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.FindMyStartProcess
+		var req types.FormIdReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
-		l := act.NewFindMyStartProcessLogic(r.Context(), svcCtx)
-		resp, err := l.FindMyStartProcess(&req)
+		l := act.NewSetActiveLogic(r.Context(), svcCtx)
+		resp, err := l.SetActive(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

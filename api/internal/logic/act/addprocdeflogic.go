@@ -11,21 +11,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type AddProcDefLogic struct {
+type AddProcdefLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewAddProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddProcDefLogic {
-	return &AddProcDefLogic{
+func NewAddProcdefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddProcdefLogic {
+	return &AddProcdefLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *AddProcDefLogic) AddProcDef(req *types.SaveProcDef) (resp *types.CommonResponse, err error) {
+func (l *AddProcdefLogic) AddProcdef(req *types.SaveProcdef) (resp *types.CommonResponse, err error) {
 	if len(req.FormId) == 0 {
 		return types.GetErrorCommonResponse("业务表单数据未获取到！")
 	}

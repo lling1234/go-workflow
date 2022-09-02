@@ -35,10 +35,11 @@ func (l *SaveProcDefLogic) SaveProcDef(in *act.ProcDefReq) (*act.ProcDefReply, e
 	if err != nil {
 		return nil, err
 	}
+	version = version + 1
 	_, err = tx.ProcDef.Create().
 		SetName(in.Name).SetCode(in.Code).SetFormID(in.FormId).SetFormName(in.FormName).
-		SetRemainHours(int(in.RemainHours)).SetResource(in.Resource).
-		SetCreateUserID(in.UserId).SetCreateUserName(in.UserName).SetCreateTime(time.Now()).SetVersion(version + 1).SetTargetID(1727882).
+		SetRemainHours(in.RemainHours).SetResource(in.Resource).
+		SetCreateUserID(in.UserId).SetCreateUserName(in.UserName).SetCreateTime(time.Now()).SetVersion(version).SetTargetID(1727882).
 		Save(l.ctx)
 
 	if err != nil {
@@ -54,7 +55,7 @@ func (l *SaveProcDefLogic) SaveProcDef(in *act.ProcDefReq) (*act.ProcDefReply, e
 	return reply, nil
 }
 
-func (l *SaveProcDefLogic) convert(in *act.ProcDefReq, version int) *act.ProcDefReply {
+func (l *SaveProcDefLogic) convert(in *act.ProcDefReq, version int32) *act.ProcDefReply {
 	return &act.ProcDefReply{
 		Name:        in.Name,
 		Code:        in.Code,
@@ -63,14 +64,14 @@ func (l *SaveProcDefLogic) convert(in *act.ProcDefReq, version int) *act.ProcDef
 		RemainHours: in.RemainHours,
 		Resource:    in.Resource,
 		CreateTime:  date.NowStr(),
-		Version:     int32(version) + 1,
+		Version:     version,
 		TargetId:    in.TargetId,
 		IsDel:       0,
 		IsActive:    1,
 	}
 }
 
-func (l *SaveProcDefLogic) FindMaxVersionByFormId(formId string) (int, error) {
+func (l *SaveProcDefLogic) FindMaxVersionByFormId(formId string) (int32, error) {
 	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
 	if err != nil {
 		return 0, err
@@ -79,13 +80,11 @@ func (l *SaveProcDefLogic) FindMaxVersionByFormId(formId string) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	maxVersion := 1
+	var maxVersion int32 = 0
 	for _, v := range defs {
 		if maxVersion < v.Version {
 			maxVersion = v.Version
 		}
 	}
-	//prodef, err := tx.ProcDef.Query().Where(procdef.MaxVersion(formId), procdef.FormIDEQ(formId)).First(l.ctx)
-
 	return maxVersion, nil
 }

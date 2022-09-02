@@ -10,22 +10,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type SetProcessActiveLogic struct {
+type SetActiveLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewSetProcessActiveLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SetProcessActiveLogic {
-	return &SetProcessActiveLogic{
+func NewSetActiveLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SetActiveLogic {
+	return &SetActiveLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *SetProcessActiveLogic) SetProcessActive(req *types.SetProcessActiveReq) (resp *types.CommonResponse, err error) {
-	reply, err := l.svcCtx.Rpc.SetProcDefActive(l.ctx, &act.SetProcessActiveReq{
+func (l *SetActiveLogic) SetActive(req *types.FormIdReq) (resp *types.CommonResponse, err error) {
+	reply, err := l.svcCtx.Rpc.SetProcDefActive(l.ctx, &act.FindProcdefReq{
 		FormId:  req.FormId,
 		Version: req.Version,
 	})

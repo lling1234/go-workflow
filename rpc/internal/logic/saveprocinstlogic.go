@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"act/rpc/internal/svc"
@@ -25,12 +26,22 @@ func NewSaveProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Save
 }
 
 func (l *SaveProcInstLogic) SaveProcInst(in *act.ProcInstReq) (*act.ProcInstReply, error) {
-	procInst, err := l.svcCtx.CommonStore.ProcInst.Create().SetProcDefID(6).SetDataID(in.DataId).SetCreateTime(time.Now()).SetTargetID(1727882).SetStartTime(time.Now()).
-		SetTitle(in.Title).SetIsFinished(0).SetRemainHours(int(in.RemainHours)).SetStartUserID(11025).SetStartUserName("xiaoming").
-		SetState(1).Save(l.ctx)
+	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
 	if err != nil {
 		return nil, err
 	}
+	procInst, err := tx.ProcInst.Create().SetProcDefID(in.ProcDefId).SetDataID(in.DataId).SetTargetID(1727882).SetStartTime(time.Now()).
+		SetTitle(in.Title).SetIsFinished(0).SetRemainHours(in.RemainHours).SetStartUserID(11025).SetStartUserName("xiaoming").
+		SetState(1).Save(l.ctx)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	err = tx.Commit()
+	if err != nil {
+		return nil, err
+	}
+	log.Println("ffff")
 	return &act.ProcInstReply{
 		Id:          procInst.ID,
 		DataId:      in.DataId,

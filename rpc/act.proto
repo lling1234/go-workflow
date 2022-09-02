@@ -14,6 +14,7 @@ message ProcDefReq {
   int32 remainHours = 7;
   int64 targetId = 8;
   string resource = 9;
+  int32 version = 10;
 }
 
 message ProcDefReply {
@@ -26,21 +27,29 @@ message ProcDefReply {
   string createUserName = 7;
   string createTime = 8;
   int64 targetId = 9;
-  string yewuFormId = 10;
-  string yewuName = 11;
+  string formId = 10;
+  string formName = 11;
   int32 remainHours = 12;
   int32 isDel = 13;
   int32 isActive = 14;
+}
+message FindProcdefReq {
+  string formId = 1;
+  int32 version = 2;
+  int32 isActive = 3;
 }
 
 
 message ProcInstReq {
   int64 userId = 1;
   string userName = 2;
-  string title = 3;
-  string dataId = 4;
-  string yewuFormId = 5;
-  int64 targetId = 6;
+  int64 procDefId = 3;
+  string title = 4;
+  int64 dataId = 5;
+  string formId = 6;
+  int64 targetId = 7;
+  int32 remainHours = 8;
+  int32 state = 9;
 }
 
 message ProcInstReply {
@@ -59,7 +68,7 @@ message ProcInstReply {
   int32 state = 13;
   int64 dataId = 14;
   int32 isDel = 15;
-  string create_time = 16;
+  string createTime = 16;
   string updateTime = 17;
   int32 remainHours = 18;
 }
@@ -77,7 +86,7 @@ message ExecutionReply {
   int64 procInstId = 2;
   int64 procDefId = 3;
   string nodeInfos = 4;
-  int64 isActive = 5;
+  int32 isActive = 5;
   string startTime = 6;
 }
 
@@ -85,6 +94,12 @@ message TaskReq {
   string nodeId = 1;
   int64 procInstId = 2;
   int64 dataId = 3;
+  int32 level = 4;
+  int32 isFinished = 5;
+  int32 step = 6;
+  string memberApprover = 7;
+  string agreeApprover = 8;
+  string mode = 9;
 }
 
 message TaskReply {
@@ -94,13 +109,12 @@ message TaskReply {
   int32 step = 4;
   int64 procInstId = 5;
   string createTime = 6;
-  int64 claimTime = 7;
-  string memberCount = 8;
-  string unCompleteNum = 9;
-  int64 agreeNum = 10;
-  string isFinished = 11;
-  int64 actMode = 12;
-  int32 isDel = 13;
+  string claimTime = 7;
+  string memberApprover = 8;
+  string agreeApprover = 9;
+  int32 isFinished = 10;
+  string mode = 11;
+  int32 isDel = 12;
 }
 
 
@@ -108,10 +122,11 @@ message IdentityLinkReq {
   int64 userId = 1;
   string userName = 2;
   int64 procInstId = 3;
-  int64 targetId = 4;
+  int64 taskId = 4;
   string comment = 5;
-  int64 taskId = 6;
-  int64 result = 7;
+  int32 result = 6;
+  int32 step = 7;
+  int32 isDeal = 8;
 }
 
 message IdentityLinkReply {
@@ -120,12 +135,12 @@ message IdentityLinkReply {
   string userName = 3;
   int32 step = 4;
   int64 procInstId = 5;
-  string targetId = 6;
-  int64 comment = 7;
-  string taskId = 8;
-  string result = 9;
-  int64 createTime = 10;
-  string isDel = 11;
+  int64 targetId = 6;
+  string comment = 7;
+  int64 taskId = 8;
+  int32 result = 9;
+  string createTime = 10;
+  int32 isDel = 11;
   int32 isDeal = 12;
 }
 
@@ -137,12 +152,57 @@ message DataIdReq {
 message TaskIdReply {
   int64 id = 1;
 }
+message Nil{
+}
+
+message SearchProcInstReq {
+  string userName = 1;
+  int32 state = 2;
+  string title = 3;
+  string code = 4;
+  PageReq page = 5;
+}
+
+message MyProcInstReq {
+  int32 isFinish = 1;
+  PageReq page = 2;
+}
+
+message PageReq {
+  int32 pageSize = 1;
+  int32 pageIndex = 2;
+}
+
+message UserReq {
+  int64 userId = 1;
+  string userName = 2;
+  PageReq page = 3;
+}
+
+message ElapsedTimeReply {
+  int64 userId = 1;
+  string userName = 2;
+  int64 targetId = 3;
+  int32 cost = 4;
+}
 
 service act {
   rpc saveProcDef(ProcDefReq) returns(ProcDefReply);
+  rpc findDefByFormId(FindProcdefReq) returns(ProcDefReply);
+  rpc setProcDefActive(FindProcdefReq) returns(ProcDefReply);
+  rpc delProcDef(FindProcdefReq) returns(Nil);
+
   rpc saveProcInst(ProcInstReq) returns(ProcInstReply);
   rpc saveExecution(ExecutionReq) returns(ExecutionReply);
   rpc saveTask(TaskReq) returns(TaskReply);
   rpc saveIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
   rpc findLeastTaskId(DataIdReq) returns(TaskIdReply);
+  rpc delProcInst(DataIdReq) returns(ProcInstReply);
+
+  rpc findAllProcInst(ProcInstReq) returns(ProcInstReply);
+  rpc findMyProcInst(MyProcInstReq) returns(ProcInstReply);
+  rpc findMyApproval(MyProcInstReq) returns(ProcInstReply);
+  rpc findOverTime(UserReq) returns(ProcInstReply);
+  rpc findElapsedTime(UserReq) returns(ElapsedTimeReply);
+
 }

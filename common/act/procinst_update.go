@@ -270,14 +270,14 @@ func (piu *ProcInstUpdate) ClearIsFinished() *ProcInstUpdate {
 }
 
 // SetState sets the "state" field.
-func (piu *ProcInstUpdate) SetState(i int) *ProcInstUpdate {
+func (piu *ProcInstUpdate) SetState(i int32) *ProcInstUpdate {
 	piu.mutation.ResetState()
 	piu.mutation.SetState(i)
 	return piu
 }
 
 // SetNillableState sets the "state" field if the given value is not nil.
-func (piu *ProcInstUpdate) SetNillableState(i *int) *ProcInstUpdate {
+func (piu *ProcInstUpdate) SetNillableState(i *int32) *ProcInstUpdate {
 	if i != nil {
 		piu.SetState(*i)
 	}
@@ -285,7 +285,7 @@ func (piu *ProcInstUpdate) SetNillableState(i *int) *ProcInstUpdate {
 }
 
 // AddState adds i to the "state" field.
-func (piu *ProcInstUpdate) AddState(i int) *ProcInstUpdate {
+func (piu *ProcInstUpdate) AddState(i int32) *ProcInstUpdate {
 	piu.mutation.AddState(i)
 	return piu
 }
@@ -324,14 +324,14 @@ func (piu *ProcInstUpdate) ClearDataID() *ProcInstUpdate {
 }
 
 // SetIsDel sets the "is_del" field.
-func (piu *ProcInstUpdate) SetIsDel(i int) *ProcInstUpdate {
+func (piu *ProcInstUpdate) SetIsDel(i int8) *ProcInstUpdate {
 	piu.mutation.ResetIsDel()
 	piu.mutation.SetIsDel(i)
 	return piu
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (piu *ProcInstUpdate) SetNillableIsDel(i *int) *ProcInstUpdate {
+func (piu *ProcInstUpdate) SetNillableIsDel(i *int8) *ProcInstUpdate {
 	if i != nil {
 		piu.SetIsDel(*i)
 	}
@@ -339,7 +339,7 @@ func (piu *ProcInstUpdate) SetNillableIsDel(i *int) *ProcInstUpdate {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (piu *ProcInstUpdate) AddIsDel(i int) *ProcInstUpdate {
+func (piu *ProcInstUpdate) AddIsDel(i int8) *ProcInstUpdate {
 	piu.mutation.AddIsDel(i)
 	return piu
 }
@@ -371,14 +371,14 @@ func (piu *ProcInstUpdate) ClearCreateTime() *ProcInstUpdate {
 }
 
 // SetRemainHours sets the "remain_hours" field.
-func (piu *ProcInstUpdate) SetRemainHours(i int) *ProcInstUpdate {
+func (piu *ProcInstUpdate) SetRemainHours(i int32) *ProcInstUpdate {
 	piu.mutation.ResetRemainHours()
 	piu.mutation.SetRemainHours(i)
 	return piu
 }
 
 // SetNillableRemainHours sets the "remain_hours" field if the given value is not nil.
-func (piu *ProcInstUpdate) SetNillableRemainHours(i *int) *ProcInstUpdate {
+func (piu *ProcInstUpdate) SetNillableRemainHours(i *int32) *ProcInstUpdate {
 	if i != nil {
 		piu.SetRemainHours(*i)
 	}
@@ -386,7 +386,7 @@ func (piu *ProcInstUpdate) SetNillableRemainHours(i *int) *ProcInstUpdate {
 }
 
 // AddRemainHours adds i to the "remain_hours" field.
-func (piu *ProcInstUpdate) AddRemainHours(i int) *ProcInstUpdate {
+func (piu *ProcInstUpdate) AddRemainHours(i int32) *ProcInstUpdate {
 	piu.mutation.AddRemainHours(i)
 	return piu
 }
@@ -699,21 +699,21 @@ func (piu *ProcInstUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := piu.mutation.State(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldState,
 		})
 	}
 	if value, ok := piu.mutation.AddedState(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldState,
 		})
 	}
 	if piu.mutation.StateCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Column: procinst.FieldState,
 		})
 	}
@@ -739,21 +739,21 @@ func (piu *ProcInstUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := piu.mutation.IsDel(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Value:  value,
 			Column: procinst.FieldIsDel,
 		})
 	}
 	if value, ok := piu.mutation.AddedIsDel(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Value:  value,
 			Column: procinst.FieldIsDel,
 		})
 	}
 	if piu.mutation.IsDelCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Column: procinst.FieldIsDel,
 		})
 	}
@@ -772,21 +772,21 @@ func (piu *ProcInstUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := piu.mutation.RemainHours(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldRemainHours,
 		})
 	}
 	if value, ok := piu.mutation.AddedRemainHours(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldRemainHours,
 		})
 	}
 	if piu.mutation.RemainHoursCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Column: procinst.FieldRemainHours,
 		})
 	}
@@ -1064,14 +1064,14 @@ func (piuo *ProcInstUpdateOne) ClearIsFinished() *ProcInstUpdateOne {
 }
 
 // SetState sets the "state" field.
-func (piuo *ProcInstUpdateOne) SetState(i int) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) SetState(i int32) *ProcInstUpdateOne {
 	piuo.mutation.ResetState()
 	piuo.mutation.SetState(i)
 	return piuo
 }
 
 // SetNillableState sets the "state" field if the given value is not nil.
-func (piuo *ProcInstUpdateOne) SetNillableState(i *int) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) SetNillableState(i *int32) *ProcInstUpdateOne {
 	if i != nil {
 		piuo.SetState(*i)
 	}
@@ -1079,7 +1079,7 @@ func (piuo *ProcInstUpdateOne) SetNillableState(i *int) *ProcInstUpdateOne {
 }
 
 // AddState adds i to the "state" field.
-func (piuo *ProcInstUpdateOne) AddState(i int) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) AddState(i int32) *ProcInstUpdateOne {
 	piuo.mutation.AddState(i)
 	return piuo
 }
@@ -1118,14 +1118,14 @@ func (piuo *ProcInstUpdateOne) ClearDataID() *ProcInstUpdateOne {
 }
 
 // SetIsDel sets the "is_del" field.
-func (piuo *ProcInstUpdateOne) SetIsDel(i int) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) SetIsDel(i int8) *ProcInstUpdateOne {
 	piuo.mutation.ResetIsDel()
 	piuo.mutation.SetIsDel(i)
 	return piuo
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (piuo *ProcInstUpdateOne) SetNillableIsDel(i *int) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) SetNillableIsDel(i *int8) *ProcInstUpdateOne {
 	if i != nil {
 		piuo.SetIsDel(*i)
 	}
@@ -1133,7 +1133,7 @@ func (piuo *ProcInstUpdateOne) SetNillableIsDel(i *int) *ProcInstUpdateOne {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (piuo *ProcInstUpdateOne) AddIsDel(i int) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) AddIsDel(i int8) *ProcInstUpdateOne {
 	piuo.mutation.AddIsDel(i)
 	return piuo
 }
@@ -1165,14 +1165,14 @@ func (piuo *ProcInstUpdateOne) ClearCreateTime() *ProcInstUpdateOne {
 }
 
 // SetRemainHours sets the "remain_hours" field.
-func (piuo *ProcInstUpdateOne) SetRemainHours(i int) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) SetRemainHours(i int32) *ProcInstUpdateOne {
 	piuo.mutation.ResetRemainHours()
 	piuo.mutation.SetRemainHours(i)
 	return piuo
 }
 
 // SetNillableRemainHours sets the "remain_hours" field if the given value is not nil.
-func (piuo *ProcInstUpdateOne) SetNillableRemainHours(i *int) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) SetNillableRemainHours(i *int32) *ProcInstUpdateOne {
 	if i != nil {
 		piuo.SetRemainHours(*i)
 	}
@@ -1180,7 +1180,7 @@ func (piuo *ProcInstUpdateOne) SetNillableRemainHours(i *int) *ProcInstUpdateOne
 }
 
 // AddRemainHours adds i to the "remain_hours" field.
-func (piuo *ProcInstUpdateOne) AddRemainHours(i int) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) AddRemainHours(i int32) *ProcInstUpdateOne {
 	piuo.mutation.AddRemainHours(i)
 	return piuo
 }
@@ -1523,21 +1523,21 @@ func (piuo *ProcInstUpdateOne) sqlSave(ctx context.Context) (_node *ProcInst, er
 	}
 	if value, ok := piuo.mutation.State(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldState,
 		})
 	}
 	if value, ok := piuo.mutation.AddedState(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldState,
 		})
 	}
 	if piuo.mutation.StateCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Column: procinst.FieldState,
 		})
 	}
@@ -1563,21 +1563,21 @@ func (piuo *ProcInstUpdateOne) sqlSave(ctx context.Context) (_node *ProcInst, er
 	}
 	if value, ok := piuo.mutation.IsDel(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Value:  value,
 			Column: procinst.FieldIsDel,
 		})
 	}
 	if value, ok := piuo.mutation.AddedIsDel(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Value:  value,
 			Column: procinst.FieldIsDel,
 		})
 	}
 	if piuo.mutation.IsDelCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Column: procinst.FieldIsDel,
 		})
 	}
@@ -1596,21 +1596,21 @@ func (piuo *ProcInstUpdateOne) sqlSave(ctx context.Context) (_node *ProcInst, er
 	}
 	if value, ok := piuo.mutation.RemainHours(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldRemainHours,
 		})
 	}
 	if value, ok := piuo.mutation.AddedRemainHours(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldRemainHours,
 		})
 	}
 	if piuo.mutation.RemainHoursCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Column: procinst.FieldRemainHours,
 		})
 	}

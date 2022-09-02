@@ -1,13 +1,14 @@
 package logic
 
 import (
+	act2 "act/common/act"
 	"act/common/act/procdef"
 	"act/common/tools/date"
 	"context"
 
-	act2 "act/common/act"
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
+
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -25,7 +26,7 @@ func NewFindDefByFormIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *F
 	}
 }
 
-func (l *FindDefByFormIdLogic) FindDefByFormId(in *act.FormIdReq) (*act.ProcDefReply, error) {
+func (l *FindDefByFormIdLogic) FindDefByFormId(in *act.FindProcdefReq) (*act.ProcDefReply, error) {
 	formId := in.GetFormId()
 	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
 	if err != nil {
@@ -43,7 +44,7 @@ func convert(actpd *act2.ProcDef) *act.ProcDefReply {
 		Id:             actpd.ID,
 		Name:           actpd.Name,
 		Code:           actpd.Code,
-		Version:        int32(actpd.Version),
+		Version:        actpd.Version,
 		CreateUserId:   actpd.CreateUserID,
 		CreateUserName: actpd.CreateUserName,
 		CreateTime:     date.NowStr(),
@@ -51,7 +52,7 @@ func convert(actpd *act2.ProcDef) *act.ProcDefReply {
 		FormId:         actpd.FormID,
 		FormName:       actpd.FormName,
 		Resource:       actpd.Resource,
-		RemainHours:    int32(actpd.RemainHours),
+		RemainHours:    actpd.RemainHours,
 		IsActive:       int32(actpd.IsActive),
 	}
 }

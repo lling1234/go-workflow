@@ -95,7 +95,7 @@ func Code(v string) predicate.ProcDef {
 }
 
 // Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
-func Version(v int) predicate.ProcDef {
+func Version(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldVersion), v))
 	})
@@ -151,7 +151,7 @@ func FormName(v string) predicate.ProcDef {
 }
 
 // RemainHours applies equality check predicate on the "remain_hours" field. It's identical to RemainHoursEQ.
-func RemainHours(v int) predicate.ProcDef {
+func RemainHours(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldRemainHours), v))
 	})
@@ -405,21 +405,21 @@ func CodeContainsFold(v string) predicate.ProcDef {
 }
 
 // VersionEQ applies the EQ predicate on the "version" field.
-func VersionEQ(v int) predicate.ProcDef {
+func VersionEQ(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldVersion), v))
 	})
 }
 
 // VersionNEQ applies the NEQ predicate on the "version" field.
-func VersionNEQ(v int) predicate.ProcDef {
+func VersionNEQ(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldVersion), v))
 	})
 }
 
 // VersionIn applies the In predicate on the "version" field.
-func VersionIn(vs ...int) predicate.ProcDef {
+func VersionIn(vs ...int32) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -430,7 +430,7 @@ func VersionIn(vs ...int) predicate.ProcDef {
 }
 
 // VersionNotIn applies the NotIn predicate on the "version" field.
-func VersionNotIn(vs ...int) predicate.ProcDef {
+func VersionNotIn(vs ...int32) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -441,28 +441,28 @@ func VersionNotIn(vs ...int) predicate.ProcDef {
 }
 
 // VersionGT applies the GT predicate on the "version" field.
-func VersionGT(v int) predicate.ProcDef {
+func VersionGT(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldVersion), v))
 	})
 }
 
 // VersionGTE applies the GTE predicate on the "version" field.
-func VersionGTE(v int) predicate.ProcDef {
+func VersionGTE(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldVersion), v))
 	})
 }
 
 // VersionLT applies the LT predicate on the "version" field.
-func VersionLT(v int) predicate.ProcDef {
+func VersionLT(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldVersion), v))
 	})
 }
 
 // VersionLTE applies the LTE predicate on the "version" field.
-func VersionLTE(v int) predicate.ProcDef {
+func VersionLTE(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldVersion), v))
 	})
@@ -479,14 +479,6 @@ func VersionIsNil() predicate.ProcDef {
 func VersionNotNil() predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldVersion)))
-	})
-}
-
-//TODO
-func MaxVersion(formId string) predicate.ProcDef {
-	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldFormID), formId))
-		sql.Max(FieldVersion)
 	})
 }
 
@@ -572,20 +564,6 @@ func ResourceHasPrefix(v string) predicate.ProcDef {
 func ResourceHasSuffix(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.HasSuffix(s.C(FieldResource), v))
-	})
-}
-
-// ResourceIsNil applies the IsNil predicate on the "resource" field.
-func ResourceIsNil() predicate.ProcDef {
-	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldResource)))
-	})
-}
-
-// ResourceNotNil applies the NotNil predicate on the "resource" field.
-func ResourceNotNil() predicate.ProcDef {
-	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldResource)))
 	})
 }
 
@@ -1177,21 +1155,21 @@ func FormNameContainsFold(v string) predicate.ProcDef {
 }
 
 // RemainHoursEQ applies the EQ predicate on the "remain_hours" field.
-func RemainHoursEQ(v int) predicate.ProcDef {
+func RemainHoursEQ(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldRemainHours), v))
 	})
 }
 
 // RemainHoursNEQ applies the NEQ predicate on the "remain_hours" field.
-func RemainHoursNEQ(v int) predicate.ProcDef {
+func RemainHoursNEQ(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldRemainHours), v))
 	})
 }
 
 // RemainHoursIn applies the In predicate on the "remain_hours" field.
-func RemainHoursIn(vs ...int) predicate.ProcDef {
+func RemainHoursIn(vs ...int32) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1202,7 +1180,7 @@ func RemainHoursIn(vs ...int) predicate.ProcDef {
 }
 
 // RemainHoursNotIn applies the NotIn predicate on the "remain_hours" field.
-func RemainHoursNotIn(vs ...int) predicate.ProcDef {
+func RemainHoursNotIn(vs ...int32) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1213,28 +1191,28 @@ func RemainHoursNotIn(vs ...int) predicate.ProcDef {
 }
 
 // RemainHoursGT applies the GT predicate on the "remain_hours" field.
-func RemainHoursGT(v int) predicate.ProcDef {
+func RemainHoursGT(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldRemainHours), v))
 	})
 }
 
 // RemainHoursGTE applies the GTE predicate on the "remain_hours" field.
-func RemainHoursGTE(v int) predicate.ProcDef {
+func RemainHoursGTE(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldRemainHours), v))
 	})
 }
 
 // RemainHoursLT applies the LT predicate on the "remain_hours" field.
-func RemainHoursLT(v int) predicate.ProcDef {
+func RemainHoursLT(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldRemainHours), v))
 	})
 }
 
 // RemainHoursLTE applies the LTE predicate on the "remain_hours" field.
-func RemainHoursLTE(v int) predicate.ProcDef {
+func RemainHoursLTE(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldRemainHours), v))
 	})

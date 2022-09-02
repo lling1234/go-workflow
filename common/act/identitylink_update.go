@@ -76,14 +76,14 @@ func (ilu *IdentityLinkUpdate) ClearUserName() *IdentityLinkUpdate {
 }
 
 // SetStep sets the "step" field.
-func (ilu *IdentityLinkUpdate) SetStep(i int) *IdentityLinkUpdate {
+func (ilu *IdentityLinkUpdate) SetStep(i int32) *IdentityLinkUpdate {
 	ilu.mutation.ResetStep()
 	ilu.mutation.SetStep(i)
 	return ilu
 }
 
 // SetNillableStep sets the "step" field if the given value is not nil.
-func (ilu *IdentityLinkUpdate) SetNillableStep(i *int) *IdentityLinkUpdate {
+func (ilu *IdentityLinkUpdate) SetNillableStep(i *int32) *IdentityLinkUpdate {
 	if i != nil {
 		ilu.SetStep(*i)
 	}
@@ -91,7 +91,7 @@ func (ilu *IdentityLinkUpdate) SetNillableStep(i *int) *IdentityLinkUpdate {
 }
 
 // AddStep adds i to the "step" field.
-func (ilu *IdentityLinkUpdate) AddStep(i int) *IdentityLinkUpdate {
+func (ilu *IdentityLinkUpdate) AddStep(i int32) *IdentityLinkUpdate {
 	ilu.mutation.AddStep(i)
 	return ilu
 }
@@ -176,14 +176,14 @@ func (ilu *IdentityLinkUpdate) AddTaskID(i int64) *IdentityLinkUpdate {
 }
 
 // SetResult sets the "result" field.
-func (ilu *IdentityLinkUpdate) SetResult(i int) *IdentityLinkUpdate {
+func (ilu *IdentityLinkUpdate) SetResult(i int32) *IdentityLinkUpdate {
 	ilu.mutation.ResetResult()
 	ilu.mutation.SetResult(i)
 	return ilu
 }
 
 // SetNillableResult sets the "result" field if the given value is not nil.
-func (ilu *IdentityLinkUpdate) SetNillableResult(i *int) *IdentityLinkUpdate {
+func (ilu *IdentityLinkUpdate) SetNillableResult(i *int32) *IdentityLinkUpdate {
 	if i != nil {
 		ilu.SetResult(*i)
 	}
@@ -191,7 +191,7 @@ func (ilu *IdentityLinkUpdate) SetNillableResult(i *int) *IdentityLinkUpdate {
 }
 
 // AddResult adds i to the "result" field.
-func (ilu *IdentityLinkUpdate) AddResult(i int) *IdentityLinkUpdate {
+func (ilu *IdentityLinkUpdate) AddResult(i int32) *IdentityLinkUpdate {
 	ilu.mutation.AddResult(i)
 	return ilu
 }
@@ -429,21 +429,21 @@ func (ilu *IdentityLinkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := ilu.mutation.Step(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldStep,
 		})
 	}
 	if value, ok := ilu.mutation.AddedStep(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldStep,
 		})
 	}
 	if ilu.mutation.StepCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Column: identitylink.FieldStep,
 		})
 	}
@@ -510,21 +510,21 @@ func (ilu *IdentityLinkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := ilu.mutation.Result(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldResult,
 		})
 	}
 	if value, ok := ilu.mutation.AddedResult(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldResult,
 		})
 	}
 	if ilu.mutation.ResultCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Column: identitylink.FieldResult,
 		})
 	}
@@ -661,14 +661,14 @@ func (iluo *IdentityLinkUpdateOne) ClearUserName() *IdentityLinkUpdateOne {
 }
 
 // SetStep sets the "step" field.
-func (iluo *IdentityLinkUpdateOne) SetStep(i int) *IdentityLinkUpdateOne {
+func (iluo *IdentityLinkUpdateOne) SetStep(i int32) *IdentityLinkUpdateOne {
 	iluo.mutation.ResetStep()
 	iluo.mutation.SetStep(i)
 	return iluo
 }
 
 // SetNillableStep sets the "step" field if the given value is not nil.
-func (iluo *IdentityLinkUpdateOne) SetNillableStep(i *int) *IdentityLinkUpdateOne {
+func (iluo *IdentityLinkUpdateOne) SetNillableStep(i *int32) *IdentityLinkUpdateOne {
 	if i != nil {
 		iluo.SetStep(*i)
 	}
@@ -676,7 +676,7 @@ func (iluo *IdentityLinkUpdateOne) SetNillableStep(i *int) *IdentityLinkUpdateOn
 }
 
 // AddStep adds i to the "step" field.
-func (iluo *IdentityLinkUpdateOne) AddStep(i int) *IdentityLinkUpdateOne {
+func (iluo *IdentityLinkUpdateOne) AddStep(i int32) *IdentityLinkUpdateOne {
 	iluo.mutation.AddStep(i)
 	return iluo
 }
@@ -761,14 +761,14 @@ func (iluo *IdentityLinkUpdateOne) AddTaskID(i int64) *IdentityLinkUpdateOne {
 }
 
 // SetResult sets the "result" field.
-func (iluo *IdentityLinkUpdateOne) SetResult(i int) *IdentityLinkUpdateOne {
+func (iluo *IdentityLinkUpdateOne) SetResult(i int32) *IdentityLinkUpdateOne {
 	iluo.mutation.ResetResult()
 	iluo.mutation.SetResult(i)
 	return iluo
 }
 
 // SetNillableResult sets the "result" field if the given value is not nil.
-func (iluo *IdentityLinkUpdateOne) SetNillableResult(i *int) *IdentityLinkUpdateOne {
+func (iluo *IdentityLinkUpdateOne) SetNillableResult(i *int32) *IdentityLinkUpdateOne {
 	if i != nil {
 		iluo.SetResult(*i)
 	}
@@ -776,7 +776,7 @@ func (iluo *IdentityLinkUpdateOne) SetNillableResult(i *int) *IdentityLinkUpdate
 }
 
 // AddResult adds i to the "result" field.
-func (iluo *IdentityLinkUpdateOne) AddResult(i int) *IdentityLinkUpdateOne {
+func (iluo *IdentityLinkUpdateOne) AddResult(i int32) *IdentityLinkUpdateOne {
 	iluo.mutation.AddResult(i)
 	return iluo
 }
@@ -1044,21 +1044,21 @@ func (iluo *IdentityLinkUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 	}
 	if value, ok := iluo.mutation.Step(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldStep,
 		})
 	}
 	if value, ok := iluo.mutation.AddedStep(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldStep,
 		})
 	}
 	if iluo.mutation.StepCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Column: identitylink.FieldStep,
 		})
 	}
@@ -1125,21 +1125,21 @@ func (iluo *IdentityLinkUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 	}
 	if value, ok := iluo.mutation.Result(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldResult,
 		})
 	}
 	if value, ok := iluo.mutation.AddedResult(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldResult,
 		})
 	}
 	if iluo.mutation.ResultCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Column: identitylink.FieldResult,
 		})
 	}

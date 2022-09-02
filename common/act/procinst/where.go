@@ -158,7 +158,7 @@ func IsFinished(v int8) predicate.ProcInst {
 }
 
 // State applies equality check predicate on the "state" field. It's identical to StateEQ.
-func State(v int) predicate.ProcInst {
+func State(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldState), v))
 	})
@@ -172,7 +172,7 @@ func DataID(v int64) predicate.ProcInst {
 }
 
 // IsDel applies equality check predicate on the "is_del" field. It's identical to IsDelEQ.
-func IsDel(v int) predicate.ProcInst {
+func IsDel(v int8) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDel), v))
 	})
@@ -186,7 +186,7 @@ func CreateTime(v time.Time) predicate.ProcInst {
 }
 
 // RemainHours applies equality check predicate on the "remain_hours" field. It's identical to RemainHoursEQ.
-func RemainHours(v int) predicate.ProcInst {
+func RemainHours(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldRemainHours), v))
 	})
@@ -1184,21 +1184,21 @@ func IsFinishedNotNil() predicate.ProcInst {
 }
 
 // StateEQ applies the EQ predicate on the "state" field.
-func StateEQ(v int) predicate.ProcInst {
+func StateEQ(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldState), v))
 	})
 }
 
 // StateNEQ applies the NEQ predicate on the "state" field.
-func StateNEQ(v int) predicate.ProcInst {
+func StateNEQ(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldState), v))
 	})
 }
 
 // StateIn applies the In predicate on the "state" field.
-func StateIn(vs ...int) predicate.ProcInst {
+func StateIn(vs ...int32) predicate.ProcInst {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1209,7 +1209,7 @@ func StateIn(vs ...int) predicate.ProcInst {
 }
 
 // StateNotIn applies the NotIn predicate on the "state" field.
-func StateNotIn(vs ...int) predicate.ProcInst {
+func StateNotIn(vs ...int32) predicate.ProcInst {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1220,28 +1220,28 @@ func StateNotIn(vs ...int) predicate.ProcInst {
 }
 
 // StateGT applies the GT predicate on the "state" field.
-func StateGT(v int) predicate.ProcInst {
+func StateGT(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldState), v))
 	})
 }
 
 // StateGTE applies the GTE predicate on the "state" field.
-func StateGTE(v int) predicate.ProcInst {
+func StateGTE(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldState), v))
 	})
 }
 
 // StateLT applies the LT predicate on the "state" field.
-func StateLT(v int) predicate.ProcInst {
+func StateLT(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldState), v))
 	})
 }
 
 // StateLTE applies the LTE predicate on the "state" field.
-func StateLTE(v int) predicate.ProcInst {
+func StateLTE(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldState), v))
 	})
@@ -1340,21 +1340,21 @@ func DataIDNotNil() predicate.ProcInst {
 }
 
 // IsDelEQ applies the EQ predicate on the "is_del" field.
-func IsDelEQ(v int) predicate.ProcInst {
+func IsDelEQ(v int8) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelNEQ applies the NEQ predicate on the "is_del" field.
-func IsDelNEQ(v int) predicate.ProcInst {
+func IsDelNEQ(v int8) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelIn applies the In predicate on the "is_del" field.
-func IsDelIn(vs ...int) predicate.ProcInst {
+func IsDelIn(vs ...int8) predicate.ProcInst {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1365,7 +1365,7 @@ func IsDelIn(vs ...int) predicate.ProcInst {
 }
 
 // IsDelNotIn applies the NotIn predicate on the "is_del" field.
-func IsDelNotIn(vs ...int) predicate.ProcInst {
+func IsDelNotIn(vs ...int8) predicate.ProcInst {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1376,28 +1376,28 @@ func IsDelNotIn(vs ...int) predicate.ProcInst {
 }
 
 // IsDelGT applies the GT predicate on the "is_del" field.
-func IsDelGT(v int) predicate.ProcInst {
+func IsDelGT(v int8) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelGTE applies the GTE predicate on the "is_del" field.
-func IsDelGTE(v int) predicate.ProcInst {
+func IsDelGTE(v int8) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelLT applies the LT predicate on the "is_del" field.
-func IsDelLT(v int) predicate.ProcInst {
+func IsDelLT(v int8) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelLTE applies the LTE predicate on the "is_del" field.
-func IsDelLTE(v int) predicate.ProcInst {
+func IsDelLTE(v int8) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldIsDel), v))
 	})
@@ -1496,21 +1496,21 @@ func CreateTimeNotNil() predicate.ProcInst {
 }
 
 // RemainHoursEQ applies the EQ predicate on the "remain_hours" field.
-func RemainHoursEQ(v int) predicate.ProcInst {
+func RemainHoursEQ(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldRemainHours), v))
 	})
 }
 
 // RemainHoursNEQ applies the NEQ predicate on the "remain_hours" field.
-func RemainHoursNEQ(v int) predicate.ProcInst {
+func RemainHoursNEQ(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldRemainHours), v))
 	})
 }
 
 // RemainHoursIn applies the In predicate on the "remain_hours" field.
-func RemainHoursIn(vs ...int) predicate.ProcInst {
+func RemainHoursIn(vs ...int32) predicate.ProcInst {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1521,7 +1521,7 @@ func RemainHoursIn(vs ...int) predicate.ProcInst {
 }
 
 // RemainHoursNotIn applies the NotIn predicate on the "remain_hours" field.
-func RemainHoursNotIn(vs ...int) predicate.ProcInst {
+func RemainHoursNotIn(vs ...int32) predicate.ProcInst {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1532,28 +1532,28 @@ func RemainHoursNotIn(vs ...int) predicate.ProcInst {
 }
 
 // RemainHoursGT applies the GT predicate on the "remain_hours" field.
-func RemainHoursGT(v int) predicate.ProcInst {
+func RemainHoursGT(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldRemainHours), v))
 	})
 }
 
 // RemainHoursGTE applies the GTE predicate on the "remain_hours" field.
-func RemainHoursGTE(v int) predicate.ProcInst {
+func RemainHoursGTE(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldRemainHours), v))
 	})
 }
 
 // RemainHoursLT applies the LT predicate on the "remain_hours" field.
-func RemainHoursLT(v int) predicate.ProcInst {
+func RemainHoursLT(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldRemainHours), v))
 	})
 }
 
 // RemainHoursLTE applies the LTE predicate on the "remain_hours" field.
-func RemainHoursLTE(v int) predicate.ProcInst {
+func RemainHoursLTE(v int32) predicate.ProcInst {
 	return predicate.ProcInst(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldRemainHours), v))
 	})

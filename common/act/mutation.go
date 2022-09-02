@@ -879,8 +879,8 @@ type IdentityLinkMutation struct {
 	user_id         *int64
 	adduser_id      *int64
 	user_name       *string
-	step            *int
-	addstep         *int
+	step            *int32
+	addstep         *int32
 	proc_inst_id    *int64
 	addproc_inst_id *int64
 	target_id       *int64
@@ -888,8 +888,8 @@ type IdentityLinkMutation struct {
 	comment         *string
 	task_id         *int64
 	addtask_id      *int64
-	result          *int
-	addresult       *int
+	result          *int32
+	addresult       *int32
 	create_time     *time.Time
 	is_del          *int8
 	addis_del       *int8
@@ -1120,13 +1120,13 @@ func (m *IdentityLinkMutation) ResetUserName() {
 }
 
 // SetStep sets the "step" field.
-func (m *IdentityLinkMutation) SetStep(i int) {
+func (m *IdentityLinkMutation) SetStep(i int32) {
 	m.step = &i
 	m.addstep = nil
 }
 
 // Step returns the value of the "step" field in the mutation.
-func (m *IdentityLinkMutation) Step() (r int, exists bool) {
+func (m *IdentityLinkMutation) Step() (r int32, exists bool) {
 	v := m.step
 	if v == nil {
 		return
@@ -1137,7 +1137,7 @@ func (m *IdentityLinkMutation) Step() (r int, exists bool) {
 // OldStep returns the old "step" field's value of the IdentityLink entity.
 // If the IdentityLink object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *IdentityLinkMutation) OldStep(ctx context.Context) (v int, err error) {
+func (m *IdentityLinkMutation) OldStep(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStep is only allowed on UpdateOne operations")
 	}
@@ -1152,7 +1152,7 @@ func (m *IdentityLinkMutation) OldStep(ctx context.Context) (v int, err error) {
 }
 
 // AddStep adds i to the "step" field.
-func (m *IdentityLinkMutation) AddStep(i int) {
+func (m *IdentityLinkMutation) AddStep(i int32) {
 	if m.addstep != nil {
 		*m.addstep += i
 	} else {
@@ -1161,7 +1161,7 @@ func (m *IdentityLinkMutation) AddStep(i int) {
 }
 
 // AddedStep returns the value that was added to the "step" field in this mutation.
-func (m *IdentityLinkMutation) AddedStep() (r int, exists bool) {
+func (m *IdentityLinkMutation) AddedStep() (r int32, exists bool) {
 	v := m.addstep
 	if v == nil {
 		return
@@ -1421,13 +1421,13 @@ func (m *IdentityLinkMutation) ResetTaskID() {
 }
 
 // SetResult sets the "result" field.
-func (m *IdentityLinkMutation) SetResult(i int) {
+func (m *IdentityLinkMutation) SetResult(i int32) {
 	m.result = &i
 	m.addresult = nil
 }
 
 // Result returns the value of the "result" field in the mutation.
-func (m *IdentityLinkMutation) Result() (r int, exists bool) {
+func (m *IdentityLinkMutation) Result() (r int32, exists bool) {
 	v := m.result
 	if v == nil {
 		return
@@ -1438,7 +1438,7 @@ func (m *IdentityLinkMutation) Result() (r int, exists bool) {
 // OldResult returns the old "result" field's value of the IdentityLink entity.
 // If the IdentityLink object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *IdentityLinkMutation) OldResult(ctx context.Context) (v int, err error) {
+func (m *IdentityLinkMutation) OldResult(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldResult is only allowed on UpdateOne operations")
 	}
@@ -1453,7 +1453,7 @@ func (m *IdentityLinkMutation) OldResult(ctx context.Context) (v int, err error)
 }
 
 // AddResult adds i to the "result" field.
-func (m *IdentityLinkMutation) AddResult(i int) {
+func (m *IdentityLinkMutation) AddResult(i int32) {
 	if m.addresult != nil {
 		*m.addresult += i
 	} else {
@@ -1462,7 +1462,7 @@ func (m *IdentityLinkMutation) AddResult(i int) {
 }
 
 // AddedResult returns the value that was added to the "result" field in this mutation.
-func (m *IdentityLinkMutation) AddedResult() (r int, exists bool) {
+func (m *IdentityLinkMutation) AddedResult() (r int32, exists bool) {
 	v := m.addresult
 	if v == nil {
 		return
@@ -1873,7 +1873,7 @@ func (m *IdentityLinkMutation) SetField(name string, value ent.Value) error {
 		m.SetUserName(v)
 		return nil
 	case identitylink.FieldStep:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1908,7 +1908,7 @@ func (m *IdentityLinkMutation) SetField(name string, value ent.Value) error {
 		m.SetTaskID(v)
 		return nil
 	case identitylink.FieldResult:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2015,7 +2015,7 @@ func (m *IdentityLinkMutation) AddField(name string, value ent.Value) error {
 		m.AddUserID(v)
 		return nil
 	case identitylink.FieldStep:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2043,7 +2043,7 @@ func (m *IdentityLinkMutation) AddField(name string, value ent.Value) error {
 		m.AddTaskID(v)
 		return nil
 	case identitylink.FieldResult:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2249,8 +2249,8 @@ type ProcDefMutation struct {
 	id                *int64
 	name              *string
 	code              *string
-	version           *int
-	addversion        *int
+	version           *int32
+	addversion        *int32
 	resource          *string
 	create_user_id    *int64
 	addcreate_user_id *int64
@@ -2260,8 +2260,8 @@ type ProcDefMutation struct {
 	addtarget_id      *int64
 	form_id           *string
 	form_name         *string
-	remain_hours      *int
-	addremain_hours   *int
+	remain_hours      *int32
+	addremain_hours   *int32
 	is_del            *int8
 	addis_del         *int8
 	is_active         *int8
@@ -2470,13 +2470,13 @@ func (m *ProcDefMutation) ResetCode() {
 }
 
 // SetVersion sets the "version" field.
-func (m *ProcDefMutation) SetVersion(i int) {
+func (m *ProcDefMutation) SetVersion(i int32) {
 	m.version = &i
 	m.addversion = nil
 }
 
 // Version returns the value of the "version" field in the mutation.
-func (m *ProcDefMutation) Version() (r int, exists bool) {
+func (m *ProcDefMutation) Version() (r int32, exists bool) {
 	v := m.version
 	if v == nil {
 		return
@@ -2487,7 +2487,7 @@ func (m *ProcDefMutation) Version() (r int, exists bool) {
 // OldVersion returns the old "version" field's value of the ProcDef entity.
 // If the ProcDef object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcDefMutation) OldVersion(ctx context.Context) (v int, err error) {
+func (m *ProcDefMutation) OldVersion(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldVersion is only allowed on UpdateOne operations")
 	}
@@ -2502,7 +2502,7 @@ func (m *ProcDefMutation) OldVersion(ctx context.Context) (v int, err error) {
 }
 
 // AddVersion adds i to the "version" field.
-func (m *ProcDefMutation) AddVersion(i int) {
+func (m *ProcDefMutation) AddVersion(i int32) {
 	if m.addversion != nil {
 		*m.addversion += i
 	} else {
@@ -2511,7 +2511,7 @@ func (m *ProcDefMutation) AddVersion(i int) {
 }
 
 // AddedVersion returns the value that was added to the "version" field in this mutation.
-func (m *ProcDefMutation) AddedVersion() (r int, exists bool) {
+func (m *ProcDefMutation) AddedVersion() (r int32, exists bool) {
 	v := m.addversion
 	if v == nil {
 		return
@@ -2570,22 +2570,9 @@ func (m *ProcDefMutation) OldResource(ctx context.Context) (v string, err error)
 	return oldValue.Resource, nil
 }
 
-// ClearResource clears the value of the "resource" field.
-func (m *ProcDefMutation) ClearResource() {
-	m.resource = nil
-	m.clearedFields[procdef.FieldResource] = struct{}{}
-}
-
-// ResourceCleared returns if the "resource" field was cleared in this mutation.
-func (m *ProcDefMutation) ResourceCleared() bool {
-	_, ok := m.clearedFields[procdef.FieldResource]
-	return ok
-}
-
 // ResetResource resets all changes to the "resource" field.
 func (m *ProcDefMutation) ResetResource() {
 	m.resource = nil
-	delete(m.clearedFields, procdef.FieldResource)
 }
 
 // SetCreateUserID sets the "create_user_id" field.
@@ -2925,13 +2912,13 @@ func (m *ProcDefMutation) ResetFormName() {
 }
 
 // SetRemainHours sets the "remain_hours" field.
-func (m *ProcDefMutation) SetRemainHours(i int) {
+func (m *ProcDefMutation) SetRemainHours(i int32) {
 	m.remain_hours = &i
 	m.addremain_hours = nil
 }
 
 // RemainHours returns the value of the "remain_hours" field in the mutation.
-func (m *ProcDefMutation) RemainHours() (r int, exists bool) {
+func (m *ProcDefMutation) RemainHours() (r int32, exists bool) {
 	v := m.remain_hours
 	if v == nil {
 		return
@@ -2942,7 +2929,7 @@ func (m *ProcDefMutation) RemainHours() (r int, exists bool) {
 // OldRemainHours returns the old "remain_hours" field's value of the ProcDef entity.
 // If the ProcDef object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcDefMutation) OldRemainHours(ctx context.Context) (v int, err error) {
+func (m *ProcDefMutation) OldRemainHours(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRemainHours is only allowed on UpdateOne operations")
 	}
@@ -2957,7 +2944,7 @@ func (m *ProcDefMutation) OldRemainHours(ctx context.Context) (v int, err error)
 }
 
 // AddRemainHours adds i to the "remain_hours" field.
-func (m *ProcDefMutation) AddRemainHours(i int) {
+func (m *ProcDefMutation) AddRemainHours(i int32) {
 	if m.addremain_hours != nil {
 		*m.addremain_hours += i
 	} else {
@@ -2966,7 +2953,7 @@ func (m *ProcDefMutation) AddRemainHours(i int) {
 }
 
 // AddedRemainHours returns the value that was added to the "remain_hours" field in this mutation.
-func (m *ProcDefMutation) AddedRemainHours() (r int, exists bool) {
+func (m *ProcDefMutation) AddedRemainHours() (r int32, exists bool) {
 	v := m.addremain_hours
 	if v == nil {
 		return
@@ -3342,7 +3329,7 @@ func (m *ProcDefMutation) SetField(name string, value ent.Value) error {
 		m.SetCode(v)
 		return nil
 	case procdef.FieldVersion:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3398,7 +3385,7 @@ func (m *ProcDefMutation) SetField(name string, value ent.Value) error {
 		m.SetFormName(v)
 		return nil
 	case procdef.FieldRemainHours:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3481,7 +3468,7 @@ func (m *ProcDefMutation) AddedField(name string) (ent.Value, bool) {
 func (m *ProcDefMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case procdef.FieldVersion:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3502,7 +3489,7 @@ func (m *ProcDefMutation) AddField(name string, value ent.Value) error {
 		m.AddTargetID(v)
 		return nil
 	case procdef.FieldRemainHours:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3538,9 +3525,6 @@ func (m *ProcDefMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(procdef.FieldVersion) {
 		fields = append(fields, procdef.FieldVersion)
-	}
-	if m.FieldCleared(procdef.FieldResource) {
-		fields = append(fields, procdef.FieldResource)
 	}
 	if m.FieldCleared(procdef.FieldCreateUserID) {
 		fields = append(fields, procdef.FieldCreateUserID)
@@ -3594,9 +3578,6 @@ func (m *ProcDefMutation) ClearField(name string) error {
 		return nil
 	case procdef.FieldVersion:
 		m.ClearVersion()
-		return nil
-	case procdef.FieldResource:
-		m.ClearResource()
 		return nil
 	case procdef.FieldCreateUserID:
 		m.ClearCreateUserID()
@@ -3752,15 +3733,15 @@ type ProcInstMutation struct {
 	start_user_name  *string
 	is_finished      *int8
 	addis_finished   *int8
-	state            *int
-	addstate         *int
+	state            *int32
+	addstate         *int32
 	data_id          *int64
 	adddata_id       *int64
-	is_del           *int
-	addis_del        *int
+	is_del           *int8
+	addis_del        *int8
 	create_time      *time.Time
-	remain_hours     *int
-	addremain_hours  *int
+	remain_hours     *int32
+	addremain_hours  *int32
 	update_time      *time.Time
 	clearedFields    map[string]struct{}
 	done             bool
@@ -4497,13 +4478,13 @@ func (m *ProcInstMutation) ResetIsFinished() {
 }
 
 // SetState sets the "state" field.
-func (m *ProcInstMutation) SetState(i int) {
+func (m *ProcInstMutation) SetState(i int32) {
 	m.state = &i
 	m.addstate = nil
 }
 
 // State returns the value of the "state" field in the mutation.
-func (m *ProcInstMutation) State() (r int, exists bool) {
+func (m *ProcInstMutation) State() (r int32, exists bool) {
 	v := m.state
 	if v == nil {
 		return
@@ -4514,7 +4495,7 @@ func (m *ProcInstMutation) State() (r int, exists bool) {
 // OldState returns the old "state" field's value of the ProcInst entity.
 // If the ProcInst object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcInstMutation) OldState(ctx context.Context) (v int, err error) {
+func (m *ProcInstMutation) OldState(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldState is only allowed on UpdateOne operations")
 	}
@@ -4529,7 +4510,7 @@ func (m *ProcInstMutation) OldState(ctx context.Context) (v int, err error) {
 }
 
 // AddState adds i to the "state" field.
-func (m *ProcInstMutation) AddState(i int) {
+func (m *ProcInstMutation) AddState(i int32) {
 	if m.addstate != nil {
 		*m.addstate += i
 	} else {
@@ -4538,7 +4519,7 @@ func (m *ProcInstMutation) AddState(i int) {
 }
 
 // AddedState returns the value that was added to the "state" field in this mutation.
-func (m *ProcInstMutation) AddedState() (r int, exists bool) {
+func (m *ProcInstMutation) AddedState() (r int32, exists bool) {
 	v := m.addstate
 	if v == nil {
 		return
@@ -4637,13 +4618,13 @@ func (m *ProcInstMutation) ResetDataID() {
 }
 
 // SetIsDel sets the "is_del" field.
-func (m *ProcInstMutation) SetIsDel(i int) {
+func (m *ProcInstMutation) SetIsDel(i int8) {
 	m.is_del = &i
 	m.addis_del = nil
 }
 
 // IsDel returns the value of the "is_del" field in the mutation.
-func (m *ProcInstMutation) IsDel() (r int, exists bool) {
+func (m *ProcInstMutation) IsDel() (r int8, exists bool) {
 	v := m.is_del
 	if v == nil {
 		return
@@ -4654,7 +4635,7 @@ func (m *ProcInstMutation) IsDel() (r int, exists bool) {
 // OldIsDel returns the old "is_del" field's value of the ProcInst entity.
 // If the ProcInst object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcInstMutation) OldIsDel(ctx context.Context) (v int, err error) {
+func (m *ProcInstMutation) OldIsDel(ctx context.Context) (v int8, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsDel is only allowed on UpdateOne operations")
 	}
@@ -4669,7 +4650,7 @@ func (m *ProcInstMutation) OldIsDel(ctx context.Context) (v int, err error) {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (m *ProcInstMutation) AddIsDel(i int) {
+func (m *ProcInstMutation) AddIsDel(i int8) {
 	if m.addis_del != nil {
 		*m.addis_del += i
 	} else {
@@ -4678,7 +4659,7 @@ func (m *ProcInstMutation) AddIsDel(i int) {
 }
 
 // AddedIsDel returns the value that was added to the "is_del" field in this mutation.
-func (m *ProcInstMutation) AddedIsDel() (r int, exists bool) {
+func (m *ProcInstMutation) AddedIsDel() (r int8, exists bool) {
 	v := m.addis_del
 	if v == nil {
 		return
@@ -4756,13 +4737,13 @@ func (m *ProcInstMutation) ResetCreateTime() {
 }
 
 // SetRemainHours sets the "remain_hours" field.
-func (m *ProcInstMutation) SetRemainHours(i int) {
+func (m *ProcInstMutation) SetRemainHours(i int32) {
 	m.remain_hours = &i
 	m.addremain_hours = nil
 }
 
 // RemainHours returns the value of the "remain_hours" field in the mutation.
-func (m *ProcInstMutation) RemainHours() (r int, exists bool) {
+func (m *ProcInstMutation) RemainHours() (r int32, exists bool) {
 	v := m.remain_hours
 	if v == nil {
 		return
@@ -4773,7 +4754,7 @@ func (m *ProcInstMutation) RemainHours() (r int, exists bool) {
 // OldRemainHours returns the old "remain_hours" field's value of the ProcInst entity.
 // If the ProcInst object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcInstMutation) OldRemainHours(ctx context.Context) (v int, err error) {
+func (m *ProcInstMutation) OldRemainHours(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRemainHours is only allowed on UpdateOne operations")
 	}
@@ -4788,7 +4769,7 @@ func (m *ProcInstMutation) OldRemainHours(ctx context.Context) (v int, err error
 }
 
 // AddRemainHours adds i to the "remain_hours" field.
-func (m *ProcInstMutation) AddRemainHours(i int) {
+func (m *ProcInstMutation) AddRemainHours(i int32) {
 	if m.addremain_hours != nil {
 		*m.addremain_hours += i
 	} else {
@@ -4797,7 +4778,7 @@ func (m *ProcInstMutation) AddRemainHours(i int) {
 }
 
 // AddedRemainHours returns the value that was added to the "remain_hours" field in this mutation.
-func (m *ProcInstMutation) AddedRemainHours() (r int, exists bool) {
+func (m *ProcInstMutation) AddedRemainHours() (r int32, exists bool) {
 	v := m.addremain_hours
 	if v == nil {
 		return
@@ -5117,7 +5098,7 @@ func (m *ProcInstMutation) SetField(name string, value ent.Value) error {
 		m.SetIsFinished(v)
 		return nil
 	case procinst.FieldState:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5131,7 +5112,7 @@ func (m *ProcInstMutation) SetField(name string, value ent.Value) error {
 		m.SetDataID(v)
 		return nil
 	case procinst.FieldIsDel:
-		v, ok := value.(int)
+		v, ok := value.(int8)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5145,7 +5126,7 @@ func (m *ProcInstMutation) SetField(name string, value ent.Value) error {
 		m.SetCreateTime(v)
 		return nil
 	case procinst.FieldRemainHours:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5264,7 +5245,7 @@ func (m *ProcInstMutation) AddField(name string, value ent.Value) error {
 		m.AddIsFinished(v)
 		return nil
 	case procinst.FieldState:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5278,14 +5259,14 @@ func (m *ProcInstMutation) AddField(name string, value ent.Value) error {
 		m.AddDataID(v)
 		return nil
 	case procinst.FieldIsDel:
-		v, ok := value.(int)
+		v, ok := value.(int8)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddIsDel(v)
 		return nil
 	case procinst.FieldRemainHours:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5523,36 +5504,32 @@ func (m *ProcInstMutation) ResetEdge(name string) error {
 // TaskMutation represents an operation that mutates the Task nodes in the graph.
 type TaskMutation struct {
 	config
-	op                 Op
-	typ                string
-	id                 *int64
-	node_id            *string
-	level              *int
-	addlevel           *int
-	step               *int
-	addstep            *int
-	proc_inst_id       *int64
-	addproc_inst_id    *int64
-	create_time        *time.Time
-	claim_time         *time.Time
-	member_count       *int
-	addmember_count    *int
-	un_complete_num    *int
-	addun_complete_num *int
-	agree_num          *int
-	addagree_num       *int
-	is_finished        *int8
-	addis_finished     *int8
-	act_mode           *task.ActMode
-	data_id            *int64
-	adddata_id         *int64
-	is_del             *int
-	addis_del          *int
-	update_time        *time.Time
-	clearedFields      map[string]struct{}
-	done               bool
-	oldValue           func(context.Context) (*Task, error)
-	predicates         []predicate.Task
+	op              Op
+	typ             string
+	id              *int64
+	node_id         *string
+	level           *int32
+	addlevel        *int32
+	step            *int32
+	addstep         *int32
+	proc_inst_id    *int64
+	addproc_inst_id *int64
+	create_time     *time.Time
+	claim_time      *time.Time
+	member_approver *string
+	agree_approver  *string
+	is_finished     *int8
+	addis_finished  *int8
+	mode            *task.Mode
+	data_id         *int64
+	adddata_id      *int64
+	is_del          *int8
+	addis_del       *int8
+	update_time     *time.Time
+	clearedFields   map[string]struct{}
+	done            bool
+	oldValue        func(context.Context) (*Task, error)
+	predicates      []predicate.Task
 }
 
 var _ ent.Mutation = (*TaskMutation)(nil)
@@ -5703,13 +5680,13 @@ func (m *TaskMutation) ResetNodeID() {
 }
 
 // SetLevel sets the "level" field.
-func (m *TaskMutation) SetLevel(i int) {
+func (m *TaskMutation) SetLevel(i int32) {
 	m.level = &i
 	m.addlevel = nil
 }
 
 // Level returns the value of the "level" field in the mutation.
-func (m *TaskMutation) Level() (r int, exists bool) {
+func (m *TaskMutation) Level() (r int32, exists bool) {
 	v := m.level
 	if v == nil {
 		return
@@ -5720,7 +5697,7 @@ func (m *TaskMutation) Level() (r int, exists bool) {
 // OldLevel returns the old "level" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldLevel(ctx context.Context) (v int, err error) {
+func (m *TaskMutation) OldLevel(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLevel is only allowed on UpdateOne operations")
 	}
@@ -5735,7 +5712,7 @@ func (m *TaskMutation) OldLevel(ctx context.Context) (v int, err error) {
 }
 
 // AddLevel adds i to the "level" field.
-func (m *TaskMutation) AddLevel(i int) {
+func (m *TaskMutation) AddLevel(i int32) {
 	if m.addlevel != nil {
 		*m.addlevel += i
 	} else {
@@ -5744,7 +5721,7 @@ func (m *TaskMutation) AddLevel(i int) {
 }
 
 // AddedLevel returns the value that was added to the "level" field in this mutation.
-func (m *TaskMutation) AddedLevel() (r int, exists bool) {
+func (m *TaskMutation) AddedLevel() (r int32, exists bool) {
 	v := m.addlevel
 	if v == nil {
 		return
@@ -5773,13 +5750,13 @@ func (m *TaskMutation) ResetLevel() {
 }
 
 // SetStep sets the "step" field.
-func (m *TaskMutation) SetStep(i int) {
+func (m *TaskMutation) SetStep(i int32) {
 	m.step = &i
 	m.addstep = nil
 }
 
 // Step returns the value of the "step" field in the mutation.
-func (m *TaskMutation) Step() (r int, exists bool) {
+func (m *TaskMutation) Step() (r int32, exists bool) {
 	v := m.step
 	if v == nil {
 		return
@@ -5790,7 +5767,7 @@ func (m *TaskMutation) Step() (r int, exists bool) {
 // OldStep returns the old "step" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldStep(ctx context.Context) (v int, err error) {
+func (m *TaskMutation) OldStep(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStep is only allowed on UpdateOne operations")
 	}
@@ -5805,7 +5782,7 @@ func (m *TaskMutation) OldStep(ctx context.Context) (v int, err error) {
 }
 
 // AddStep adds i to the "step" field.
-func (m *TaskMutation) AddStep(i int) {
+func (m *TaskMutation) AddStep(i int32) {
 	if m.addstep != nil {
 		*m.addstep += i
 	} else {
@@ -5814,7 +5791,7 @@ func (m *TaskMutation) AddStep(i int) {
 }
 
 // AddedStep returns the value that was added to the "step" field in this mutation.
-func (m *TaskMutation) AddedStep() (r int, exists bool) {
+func (m *TaskMutation) AddedStep() (r int32, exists bool) {
 	v := m.addstep
 	if v == nil {
 		return
@@ -5996,214 +5973,102 @@ func (m *TaskMutation) ResetClaimTime() {
 	delete(m.clearedFields, task.FieldClaimTime)
 }
 
-// SetMemberCount sets the "member_count" field.
-func (m *TaskMutation) SetMemberCount(i int) {
-	m.member_count = &i
-	m.addmember_count = nil
+// SetMemberApprover sets the "member_approver" field.
+func (m *TaskMutation) SetMemberApprover(s string) {
+	m.member_approver = &s
 }
 
-// MemberCount returns the value of the "member_count" field in the mutation.
-func (m *TaskMutation) MemberCount() (r int, exists bool) {
-	v := m.member_count
+// MemberApprover returns the value of the "member_approver" field in the mutation.
+func (m *TaskMutation) MemberApprover() (r string, exists bool) {
+	v := m.member_approver
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldMemberCount returns the old "member_count" field's value of the Task entity.
+// OldMemberApprover returns the old "member_approver" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldMemberCount(ctx context.Context) (v int, err error) {
+func (m *TaskMutation) OldMemberApprover(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldMemberCount is only allowed on UpdateOne operations")
+		return v, errors.New("OldMemberApprover is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldMemberCount requires an ID field in the mutation")
+		return v, errors.New("OldMemberApprover requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldMemberCount: %w", err)
+		return v, fmt.Errorf("querying old value for OldMemberApprover: %w", err)
 	}
-	return oldValue.MemberCount, nil
+	return oldValue.MemberApprover, nil
 }
 
-// AddMemberCount adds i to the "member_count" field.
-func (m *TaskMutation) AddMemberCount(i int) {
-	if m.addmember_count != nil {
-		*m.addmember_count += i
-	} else {
-		m.addmember_count = &i
-	}
+// ClearMemberApprover clears the value of the "member_approver" field.
+func (m *TaskMutation) ClearMemberApprover() {
+	m.member_approver = nil
+	m.clearedFields[task.FieldMemberApprover] = struct{}{}
 }
 
-// AddedMemberCount returns the value that was added to the "member_count" field in this mutation.
-func (m *TaskMutation) AddedMemberCount() (r int, exists bool) {
-	v := m.addmember_count
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearMemberCount clears the value of the "member_count" field.
-func (m *TaskMutation) ClearMemberCount() {
-	m.member_count = nil
-	m.addmember_count = nil
-	m.clearedFields[task.FieldMemberCount] = struct{}{}
-}
-
-// MemberCountCleared returns if the "member_count" field was cleared in this mutation.
-func (m *TaskMutation) MemberCountCleared() bool {
-	_, ok := m.clearedFields[task.FieldMemberCount]
+// MemberApproverCleared returns if the "member_approver" field was cleared in this mutation.
+func (m *TaskMutation) MemberApproverCleared() bool {
+	_, ok := m.clearedFields[task.FieldMemberApprover]
 	return ok
 }
 
-// ResetMemberCount resets all changes to the "member_count" field.
-func (m *TaskMutation) ResetMemberCount() {
-	m.member_count = nil
-	m.addmember_count = nil
-	delete(m.clearedFields, task.FieldMemberCount)
+// ResetMemberApprover resets all changes to the "member_approver" field.
+func (m *TaskMutation) ResetMemberApprover() {
+	m.member_approver = nil
+	delete(m.clearedFields, task.FieldMemberApprover)
 }
 
-// SetUnCompleteNum sets the "un_complete_num" field.
-func (m *TaskMutation) SetUnCompleteNum(i int) {
-	m.un_complete_num = &i
-	m.addun_complete_num = nil
+// SetAgreeApprover sets the "agree_approver" field.
+func (m *TaskMutation) SetAgreeApprover(s string) {
+	m.agree_approver = &s
 }
 
-// UnCompleteNum returns the value of the "un_complete_num" field in the mutation.
-func (m *TaskMutation) UnCompleteNum() (r int, exists bool) {
-	v := m.un_complete_num
+// AgreeApprover returns the value of the "agree_approver" field in the mutation.
+func (m *TaskMutation) AgreeApprover() (r string, exists bool) {
+	v := m.agree_approver
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldUnCompleteNum returns the old "un_complete_num" field's value of the Task entity.
+// OldAgreeApprover returns the old "agree_approver" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldUnCompleteNum(ctx context.Context) (v int, err error) {
+func (m *TaskMutation) OldAgreeApprover(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUnCompleteNum is only allowed on UpdateOne operations")
+		return v, errors.New("OldAgreeApprover is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUnCompleteNum requires an ID field in the mutation")
+		return v, errors.New("OldAgreeApprover requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUnCompleteNum: %w", err)
+		return v, fmt.Errorf("querying old value for OldAgreeApprover: %w", err)
 	}
-	return oldValue.UnCompleteNum, nil
+	return oldValue.AgreeApprover, nil
 }
 
-// AddUnCompleteNum adds i to the "un_complete_num" field.
-func (m *TaskMutation) AddUnCompleteNum(i int) {
-	if m.addun_complete_num != nil {
-		*m.addun_complete_num += i
-	} else {
-		m.addun_complete_num = &i
-	}
+// ClearAgreeApprover clears the value of the "agree_approver" field.
+func (m *TaskMutation) ClearAgreeApprover() {
+	m.agree_approver = nil
+	m.clearedFields[task.FieldAgreeApprover] = struct{}{}
 }
 
-// AddedUnCompleteNum returns the value that was added to the "un_complete_num" field in this mutation.
-func (m *TaskMutation) AddedUnCompleteNum() (r int, exists bool) {
-	v := m.addun_complete_num
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearUnCompleteNum clears the value of the "un_complete_num" field.
-func (m *TaskMutation) ClearUnCompleteNum() {
-	m.un_complete_num = nil
-	m.addun_complete_num = nil
-	m.clearedFields[task.FieldUnCompleteNum] = struct{}{}
-}
-
-// UnCompleteNumCleared returns if the "un_complete_num" field was cleared in this mutation.
-func (m *TaskMutation) UnCompleteNumCleared() bool {
-	_, ok := m.clearedFields[task.FieldUnCompleteNum]
+// AgreeApproverCleared returns if the "agree_approver" field was cleared in this mutation.
+func (m *TaskMutation) AgreeApproverCleared() bool {
+	_, ok := m.clearedFields[task.FieldAgreeApprover]
 	return ok
 }
 
-// ResetUnCompleteNum resets all changes to the "un_complete_num" field.
-func (m *TaskMutation) ResetUnCompleteNum() {
-	m.un_complete_num = nil
-	m.addun_complete_num = nil
-	delete(m.clearedFields, task.FieldUnCompleteNum)
-}
-
-// SetAgreeNum sets the "agree_num" field.
-func (m *TaskMutation) SetAgreeNum(i int) {
-	m.agree_num = &i
-	m.addagree_num = nil
-}
-
-// AgreeNum returns the value of the "agree_num" field in the mutation.
-func (m *TaskMutation) AgreeNum() (r int, exists bool) {
-	v := m.agree_num
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAgreeNum returns the old "agree_num" field's value of the Task entity.
-// If the Task object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldAgreeNum(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAgreeNum is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAgreeNum requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAgreeNum: %w", err)
-	}
-	return oldValue.AgreeNum, nil
-}
-
-// AddAgreeNum adds i to the "agree_num" field.
-func (m *TaskMutation) AddAgreeNum(i int) {
-	if m.addagree_num != nil {
-		*m.addagree_num += i
-	} else {
-		m.addagree_num = &i
-	}
-}
-
-// AddedAgreeNum returns the value that was added to the "agree_num" field in this mutation.
-func (m *TaskMutation) AddedAgreeNum() (r int, exists bool) {
-	v := m.addagree_num
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearAgreeNum clears the value of the "agree_num" field.
-func (m *TaskMutation) ClearAgreeNum() {
-	m.agree_num = nil
-	m.addagree_num = nil
-	m.clearedFields[task.FieldAgreeNum] = struct{}{}
-}
-
-// AgreeNumCleared returns if the "agree_num" field was cleared in this mutation.
-func (m *TaskMutation) AgreeNumCleared() bool {
-	_, ok := m.clearedFields[task.FieldAgreeNum]
-	return ok
-}
-
-// ResetAgreeNum resets all changes to the "agree_num" field.
-func (m *TaskMutation) ResetAgreeNum() {
-	m.agree_num = nil
-	m.addagree_num = nil
-	delete(m.clearedFields, task.FieldAgreeNum)
+// ResetAgreeApprover resets all changes to the "agree_approver" field.
+func (m *TaskMutation) ResetAgreeApprover() {
+	m.agree_approver = nil
+	delete(m.clearedFields, task.FieldAgreeApprover)
 }
 
 // SetIsFinished sets the "is_finished" field.
@@ -6276,53 +6141,53 @@ func (m *TaskMutation) ResetIsFinished() {
 	delete(m.clearedFields, task.FieldIsFinished)
 }
 
-// SetActMode sets the "act_mode" field.
-func (m *TaskMutation) SetActMode(tt task.ActMode) {
-	m.act_mode = &tt
+// SetMode sets the "mode" field.
+func (m *TaskMutation) SetMode(t task.Mode) {
+	m.mode = &t
 }
 
-// ActMode returns the value of the "act_mode" field in the mutation.
-func (m *TaskMutation) ActMode() (r task.ActMode, exists bool) {
-	v := m.act_mode
+// Mode returns the value of the "mode" field in the mutation.
+func (m *TaskMutation) Mode() (r task.Mode, exists bool) {
+	v := m.mode
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldActMode returns the old "act_mode" field's value of the Task entity.
+// OldMode returns the old "mode" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldActMode(ctx context.Context) (v task.ActMode, err error) {
+func (m *TaskMutation) OldMode(ctx context.Context) (v task.Mode, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldActMode is only allowed on UpdateOne operations")
+		return v, errors.New("OldMode is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldActMode requires an ID field in the mutation")
+		return v, errors.New("OldMode requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldActMode: %w", err)
+		return v, fmt.Errorf("querying old value for OldMode: %w", err)
 	}
-	return oldValue.ActMode, nil
+	return oldValue.Mode, nil
 }
 
-// ClearActMode clears the value of the "act_mode" field.
-func (m *TaskMutation) ClearActMode() {
-	m.act_mode = nil
-	m.clearedFields[task.FieldActMode] = struct{}{}
+// ClearMode clears the value of the "mode" field.
+func (m *TaskMutation) ClearMode() {
+	m.mode = nil
+	m.clearedFields[task.FieldMode] = struct{}{}
 }
 
-// ActModeCleared returns if the "act_mode" field was cleared in this mutation.
-func (m *TaskMutation) ActModeCleared() bool {
-	_, ok := m.clearedFields[task.FieldActMode]
+// ModeCleared returns if the "mode" field was cleared in this mutation.
+func (m *TaskMutation) ModeCleared() bool {
+	_, ok := m.clearedFields[task.FieldMode]
 	return ok
 }
 
-// ResetActMode resets all changes to the "act_mode" field.
-func (m *TaskMutation) ResetActMode() {
-	m.act_mode = nil
-	delete(m.clearedFields, task.FieldActMode)
+// ResetMode resets all changes to the "mode" field.
+func (m *TaskMutation) ResetMode() {
+	m.mode = nil
+	delete(m.clearedFields, task.FieldMode)
 }
 
 // SetDataID sets the "data_id" field.
@@ -6396,13 +6261,13 @@ func (m *TaskMutation) ResetDataID() {
 }
 
 // SetIsDel sets the "is_del" field.
-func (m *TaskMutation) SetIsDel(i int) {
+func (m *TaskMutation) SetIsDel(i int8) {
 	m.is_del = &i
 	m.addis_del = nil
 }
 
 // IsDel returns the value of the "is_del" field in the mutation.
-func (m *TaskMutation) IsDel() (r int, exists bool) {
+func (m *TaskMutation) IsDel() (r int8, exists bool) {
 	v := m.is_del
 	if v == nil {
 		return
@@ -6413,7 +6278,7 @@ func (m *TaskMutation) IsDel() (r int, exists bool) {
 // OldIsDel returns the old "is_del" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldIsDel(ctx context.Context) (v int, err error) {
+func (m *TaskMutation) OldIsDel(ctx context.Context) (v int8, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsDel is only allowed on UpdateOne operations")
 	}
@@ -6428,7 +6293,7 @@ func (m *TaskMutation) OldIsDel(ctx context.Context) (v int, err error) {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (m *TaskMutation) AddIsDel(i int) {
+func (m *TaskMutation) AddIsDel(i int8) {
 	if m.addis_del != nil {
 		*m.addis_del += i
 	} else {
@@ -6437,7 +6302,7 @@ func (m *TaskMutation) AddIsDel(i int) {
 }
 
 // AddedIsDel returns the value that was added to the "is_del" field in this mutation.
-func (m *TaskMutation) AddedIsDel() (r int, exists bool) {
+func (m *TaskMutation) AddedIsDel() (r int8, exists bool) {
 	v := m.addis_del
 	if v == nil {
 		return
@@ -6533,7 +6398,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 13)
 	if m.node_id != nil {
 		fields = append(fields, task.FieldNodeID)
 	}
@@ -6552,20 +6417,17 @@ func (m *TaskMutation) Fields() []string {
 	if m.claim_time != nil {
 		fields = append(fields, task.FieldClaimTime)
 	}
-	if m.member_count != nil {
-		fields = append(fields, task.FieldMemberCount)
+	if m.member_approver != nil {
+		fields = append(fields, task.FieldMemberApprover)
 	}
-	if m.un_complete_num != nil {
-		fields = append(fields, task.FieldUnCompleteNum)
-	}
-	if m.agree_num != nil {
-		fields = append(fields, task.FieldAgreeNum)
+	if m.agree_approver != nil {
+		fields = append(fields, task.FieldAgreeApprover)
 	}
 	if m.is_finished != nil {
 		fields = append(fields, task.FieldIsFinished)
 	}
-	if m.act_mode != nil {
-		fields = append(fields, task.FieldActMode)
+	if m.mode != nil {
+		fields = append(fields, task.FieldMode)
 	}
 	if m.data_id != nil {
 		fields = append(fields, task.FieldDataID)
@@ -6596,16 +6458,14 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.CreateTime()
 	case task.FieldClaimTime:
 		return m.ClaimTime()
-	case task.FieldMemberCount:
-		return m.MemberCount()
-	case task.FieldUnCompleteNum:
-		return m.UnCompleteNum()
-	case task.FieldAgreeNum:
-		return m.AgreeNum()
+	case task.FieldMemberApprover:
+		return m.MemberApprover()
+	case task.FieldAgreeApprover:
+		return m.AgreeApprover()
 	case task.FieldIsFinished:
 		return m.IsFinished()
-	case task.FieldActMode:
-		return m.ActMode()
+	case task.FieldMode:
+		return m.Mode()
 	case task.FieldDataID:
 		return m.DataID()
 	case task.FieldIsDel:
@@ -6633,16 +6493,14 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCreateTime(ctx)
 	case task.FieldClaimTime:
 		return m.OldClaimTime(ctx)
-	case task.FieldMemberCount:
-		return m.OldMemberCount(ctx)
-	case task.FieldUnCompleteNum:
-		return m.OldUnCompleteNum(ctx)
-	case task.FieldAgreeNum:
-		return m.OldAgreeNum(ctx)
+	case task.FieldMemberApprover:
+		return m.OldMemberApprover(ctx)
+	case task.FieldAgreeApprover:
+		return m.OldAgreeApprover(ctx)
 	case task.FieldIsFinished:
 		return m.OldIsFinished(ctx)
-	case task.FieldActMode:
-		return m.OldActMode(ctx)
+	case task.FieldMode:
+		return m.OldMode(ctx)
 	case task.FieldDataID:
 		return m.OldDataID(ctx)
 	case task.FieldIsDel:
@@ -6666,14 +6524,14 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		m.SetNodeID(v)
 		return nil
 	case task.FieldLevel:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLevel(v)
 		return nil
 	case task.FieldStep:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -6700,26 +6558,19 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetClaimTime(v)
 		return nil
-	case task.FieldMemberCount:
-		v, ok := value.(int)
+	case task.FieldMemberApprover:
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetMemberCount(v)
+		m.SetMemberApprover(v)
 		return nil
-	case task.FieldUnCompleteNum:
-		v, ok := value.(int)
+	case task.FieldAgreeApprover:
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetUnCompleteNum(v)
-		return nil
-	case task.FieldAgreeNum:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAgreeNum(v)
+		m.SetAgreeApprover(v)
 		return nil
 	case task.FieldIsFinished:
 		v, ok := value.(int8)
@@ -6728,12 +6579,12 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIsFinished(v)
 		return nil
-	case task.FieldActMode:
-		v, ok := value.(task.ActMode)
+	case task.FieldMode:
+		v, ok := value.(task.Mode)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetActMode(v)
+		m.SetMode(v)
 		return nil
 	case task.FieldDataID:
 		v, ok := value.(int64)
@@ -6743,7 +6594,7 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		m.SetDataID(v)
 		return nil
 	case task.FieldIsDel:
-		v, ok := value.(int)
+		v, ok := value.(int8)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -6773,15 +6624,6 @@ func (m *TaskMutation) AddedFields() []string {
 	if m.addproc_inst_id != nil {
 		fields = append(fields, task.FieldProcInstID)
 	}
-	if m.addmember_count != nil {
-		fields = append(fields, task.FieldMemberCount)
-	}
-	if m.addun_complete_num != nil {
-		fields = append(fields, task.FieldUnCompleteNum)
-	}
-	if m.addagree_num != nil {
-		fields = append(fields, task.FieldAgreeNum)
-	}
 	if m.addis_finished != nil {
 		fields = append(fields, task.FieldIsFinished)
 	}
@@ -6805,12 +6647,6 @@ func (m *TaskMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedStep()
 	case task.FieldProcInstID:
 		return m.AddedProcInstID()
-	case task.FieldMemberCount:
-		return m.AddedMemberCount()
-	case task.FieldUnCompleteNum:
-		return m.AddedUnCompleteNum()
-	case task.FieldAgreeNum:
-		return m.AddedAgreeNum()
 	case task.FieldIsFinished:
 		return m.AddedIsFinished()
 	case task.FieldDataID:
@@ -6827,14 +6663,14 @@ func (m *TaskMutation) AddedField(name string) (ent.Value, bool) {
 func (m *TaskMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case task.FieldLevel:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddLevel(v)
 		return nil
 	case task.FieldStep:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -6846,27 +6682,6 @@ func (m *TaskMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddProcInstID(v)
-		return nil
-	case task.FieldMemberCount:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddMemberCount(v)
-		return nil
-	case task.FieldUnCompleteNum:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddUnCompleteNum(v)
-		return nil
-	case task.FieldAgreeNum:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddAgreeNum(v)
 		return nil
 	case task.FieldIsFinished:
 		v, ok := value.(int8)
@@ -6883,7 +6698,7 @@ func (m *TaskMutation) AddField(name string, value ent.Value) error {
 		m.AddDataID(v)
 		return nil
 	case task.FieldIsDel:
-		v, ok := value.(int)
+		v, ok := value.(int8)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -6912,20 +6727,17 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldClaimTime) {
 		fields = append(fields, task.FieldClaimTime)
 	}
-	if m.FieldCleared(task.FieldMemberCount) {
-		fields = append(fields, task.FieldMemberCount)
+	if m.FieldCleared(task.FieldMemberApprover) {
+		fields = append(fields, task.FieldMemberApprover)
 	}
-	if m.FieldCleared(task.FieldUnCompleteNum) {
-		fields = append(fields, task.FieldUnCompleteNum)
-	}
-	if m.FieldCleared(task.FieldAgreeNum) {
-		fields = append(fields, task.FieldAgreeNum)
+	if m.FieldCleared(task.FieldAgreeApprover) {
+		fields = append(fields, task.FieldAgreeApprover)
 	}
 	if m.FieldCleared(task.FieldIsFinished) {
 		fields = append(fields, task.FieldIsFinished)
 	}
-	if m.FieldCleared(task.FieldActMode) {
-		fields = append(fields, task.FieldActMode)
+	if m.FieldCleared(task.FieldMode) {
+		fields = append(fields, task.FieldMode)
 	}
 	if m.FieldCleared(task.FieldDataID) {
 		fields = append(fields, task.FieldDataID)
@@ -6965,20 +6777,17 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldClaimTime:
 		m.ClearClaimTime()
 		return nil
-	case task.FieldMemberCount:
-		m.ClearMemberCount()
+	case task.FieldMemberApprover:
+		m.ClearMemberApprover()
 		return nil
-	case task.FieldUnCompleteNum:
-		m.ClearUnCompleteNum()
-		return nil
-	case task.FieldAgreeNum:
-		m.ClearAgreeNum()
+	case task.FieldAgreeApprover:
+		m.ClearAgreeApprover()
 		return nil
 	case task.FieldIsFinished:
 		m.ClearIsFinished()
 		return nil
-	case task.FieldActMode:
-		m.ClearActMode()
+	case task.FieldMode:
+		m.ClearMode()
 		return nil
 	case task.FieldDataID:
 		m.ClearDataID()
@@ -7015,20 +6824,17 @@ func (m *TaskMutation) ResetField(name string) error {
 	case task.FieldClaimTime:
 		m.ResetClaimTime()
 		return nil
-	case task.FieldMemberCount:
-		m.ResetMemberCount()
+	case task.FieldMemberApprover:
+		m.ResetMemberApprover()
 		return nil
-	case task.FieldUnCompleteNum:
-		m.ResetUnCompleteNum()
-		return nil
-	case task.FieldAgreeNum:
-		m.ResetAgreeNum()
+	case task.FieldAgreeApprover:
+		m.ResetAgreeApprover()
 		return nil
 	case task.FieldIsFinished:
 		m.ResetIsFinished()
 		return nil
-	case task.FieldActMode:
-		m.ResetActMode()
+	case task.FieldMode:
+		m.ResetMode()
 		return nil
 	case task.FieldDataID:
 		m.ResetDataID()

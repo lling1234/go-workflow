@@ -5,6 +5,7 @@ package act
 import (
 	"act/common/act/procdef"
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -48,13 +49,13 @@ func (pdc *ProcDefCreate) SetNillableCode(s *string) *ProcDefCreate {
 }
 
 // SetVersion sets the "version" field.
-func (pdc *ProcDefCreate) SetVersion(i int) *ProcDefCreate {
+func (pdc *ProcDefCreate) SetVersion(i int32) *ProcDefCreate {
 	pdc.mutation.SetVersion(i)
 	return pdc
 }
 
 // SetNillableVersion sets the "version" field if the given value is not nil.
-func (pdc *ProcDefCreate) SetNillableVersion(i *int) *ProcDefCreate {
+func (pdc *ProcDefCreate) SetNillableVersion(i *int32) *ProcDefCreate {
 	if i != nil {
 		pdc.SetVersion(*i)
 	}
@@ -64,14 +65,6 @@ func (pdc *ProcDefCreate) SetNillableVersion(i *int) *ProcDefCreate {
 // SetResource sets the "resource" field.
 func (pdc *ProcDefCreate) SetResource(s string) *ProcDefCreate {
 	pdc.mutation.SetResource(s)
-	return pdc
-}
-
-// SetNillableResource sets the "resource" field if the given value is not nil.
-func (pdc *ProcDefCreate) SetNillableResource(s *string) *ProcDefCreate {
-	if s != nil {
-		pdc.SetResource(*s)
-	}
 	return pdc
 }
 
@@ -160,13 +153,13 @@ func (pdc *ProcDefCreate) SetNillableFormName(s *string) *ProcDefCreate {
 }
 
 // SetRemainHours sets the "remain_hours" field.
-func (pdc *ProcDefCreate) SetRemainHours(i int) *ProcDefCreate {
+func (pdc *ProcDefCreate) SetRemainHours(i int32) *ProcDefCreate {
 	pdc.mutation.SetRemainHours(i)
 	return pdc
 }
 
 // SetNillableRemainHours sets the "remain_hours" field if the given value is not nil.
-func (pdc *ProcDefCreate) SetNillableRemainHours(i *int) *ProcDefCreate {
+func (pdc *ProcDefCreate) SetNillableRemainHours(i *int32) *ProcDefCreate {
 	if i != nil {
 		pdc.SetRemainHours(*i)
 	}
@@ -292,10 +285,6 @@ func (pdc *ProcDefCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (pdc *ProcDefCreate) defaults() {
-	if _, ok := pdc.mutation.Version(); !ok {
-		v := procdef.DefaultVersion
-		pdc.mutation.SetVersion(v)
-	}
 	if _, ok := pdc.mutation.CreateTime(); !ok {
 		v := procdef.DefaultCreateTime
 		pdc.mutation.SetCreateTime(v)
@@ -329,6 +318,9 @@ func (pdc *ProcDefCreate) check() error {
 		if err := procdef.CodeValidator(v); err != nil {
 			return &ValidationError{Name: "code", err: fmt.Errorf(`act: validator failed for field "ProcDef.code": %w`, err)}
 		}
+	}
+	if _, ok := pdc.mutation.Resource(); !ok {
+		return &ValidationError{Name: "resource", err: errors.New(`act: missing required field "ProcDef.resource"`)}
 	}
 	if v, ok := pdc.mutation.Resource(); ok {
 		if err := procdef.ResourceValidator(v); err != nil {
@@ -395,7 +387,7 @@ func (pdc *ProcDefCreate) createSpec() (*ProcDef, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pdc.mutation.Version(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldVersion,
 		})
@@ -459,7 +451,7 @@ func (pdc *ProcDefCreate) createSpec() (*ProcDef, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pdc.mutation.RemainHours(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldRemainHours,
 		})

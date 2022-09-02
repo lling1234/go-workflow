@@ -1,0 +1,171 @@
+syntax = "v1"
+
+type (
+	SaveProcdef {
+		Name        string `json:"name"`
+		Code        string `json:"code"`
+		FormId      string `json:"formId"`
+		FormName    string `json:"formName"`
+		RemainHours int32  `json:"remainHours"`
+		Resource    string `json:"resource"`
+	}
+
+	FormIdReq {
+		FormId  string `json:"formId"`
+		Version int32  `json:"version"`
+	}
+
+	StartProcinst {
+		Title  string `json:"title"`
+		FormId string `json:"formId"`
+		DataId int64  `json:"dataId"`
+	}
+
+	CompeleteTask {
+		DataId  int64  `json:"dataId"`
+		Result  int    `json:"result"`
+		Comment string `json:"comment"`
+	}
+	DataIdReq {
+		DataId int64 `json:"dataId"`
+	}
+
+	SearchProcess {
+		Starter   string `json:"starter"`
+		Title     string `json:"title"`
+		Code      string `json:"code"`
+		State     int32  `json:"state"`
+		PageSize  int32  `json:"pageSize"`
+		PageIndex int32  `json:"pageIndex"`
+	}
+
+	PageReq {
+		PageSize  int32 `json:"pageSize"`
+		PageIndex int32 `json:"pageIndex"`
+	}
+
+	UserReq {
+		UserId    int64  `json:"userId"`
+		UserName  string `json:"userName"`
+		PageSize  int32  `json:"pageSize"`
+		PageIndex int32  `json:"pageIndex"`
+	}
+)
+
+type (
+	CommonResponse {
+		Code    int32       `json:"code"`
+		Data    interface{} `json:"data"`
+		Msg     string      `json:"msg"`
+		Success bool        `json:"success"`
+	}
+)
+service act-api {
+	@server(
+		group: act
+		handler: addProcdef
+	)
+	post /act/procdef/add (SaveProcdef) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findOneProcdef
+	)
+	post /act/procdef/findoneprocdef (FormIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findAllProcdef
+	)
+	post /act/procdef/findallprocdef (FormIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: setActive
+	)
+	post /act/procdef/setactive (FormIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: delProcdef
+	)
+	post /act/procdef/del (FormIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: startProcinst
+	)
+	post /act/procinst/start (StartProcinst) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: compeleteTask
+	)
+	post /act/procinst/compelete (CompeleteTask) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findByDataId
+	)
+	post /act/procinst/findbydataid (DataIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: withdraw
+	)
+	post /act/procinst/withdraw (DataIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: delProcinst
+	)
+	post /act/procinst/del (DataIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findAllProcess
+	)
+	post /act/process/findallprocess (SearchProcess) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findMyStart
+	)
+	post /act/process/findmystart (PageReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findMyUnFinish
+	)
+	post /act/process/findmyunfinish (PageReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findMyFinish
+	)
+	post /act/process/findmyfinish (PageReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findMyPending
+	)
+	post /act/process/findmypending (PageReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findMyApproved
+	)
+	post /act/process/findmyapproved (PageReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findElapsedTime
+	)
+	post /act/process/findelapsedtime (UserReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findOverTime
+	)
+	post /act/process/findovertime (UserReq) returns (CommonResponse)
+}

@@ -167,13 +167,13 @@ func (pic *ProcInstCreate) SetNillableIsFinished(i *int8) *ProcInstCreate {
 }
 
 // SetState sets the "state" field.
-func (pic *ProcInstCreate) SetState(i int) *ProcInstCreate {
+func (pic *ProcInstCreate) SetState(i int32) *ProcInstCreate {
 	pic.mutation.SetState(i)
 	return pic
 }
 
 // SetNillableState sets the "state" field if the given value is not nil.
-func (pic *ProcInstCreate) SetNillableState(i *int) *ProcInstCreate {
+func (pic *ProcInstCreate) SetNillableState(i *int32) *ProcInstCreate {
 	if i != nil {
 		pic.SetState(*i)
 	}
@@ -195,13 +195,13 @@ func (pic *ProcInstCreate) SetNillableDataID(i *int64) *ProcInstCreate {
 }
 
 // SetIsDel sets the "is_del" field.
-func (pic *ProcInstCreate) SetIsDel(i int) *ProcInstCreate {
+func (pic *ProcInstCreate) SetIsDel(i int8) *ProcInstCreate {
 	pic.mutation.SetIsDel(i)
 	return pic
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (pic *ProcInstCreate) SetNillableIsDel(i *int) *ProcInstCreate {
+func (pic *ProcInstCreate) SetNillableIsDel(i *int8) *ProcInstCreate {
 	if i != nil {
 		pic.SetIsDel(*i)
 	}
@@ -223,13 +223,13 @@ func (pic *ProcInstCreate) SetNillableCreateTime(t *time.Time) *ProcInstCreate {
 }
 
 // SetRemainHours sets the "remain_hours" field.
-func (pic *ProcInstCreate) SetRemainHours(i int) *ProcInstCreate {
+func (pic *ProcInstCreate) SetRemainHours(i int32) *ProcInstCreate {
 	pic.mutation.SetRemainHours(i)
 	return pic
 }
 
 // SetNillableRemainHours sets the "remain_hours" field if the given value is not nil.
-func (pic *ProcInstCreate) SetNillableRemainHours(i *int) *ProcInstCreate {
+func (pic *ProcInstCreate) SetNillableRemainHours(i *int32) *ProcInstCreate {
 	if i != nil {
 		pic.SetRemainHours(*i)
 	}
@@ -491,7 +491,7 @@ func (pic *ProcInstCreate) createSpec() (*ProcInst, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pic.mutation.State(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldState,
 		})
@@ -507,7 +507,7 @@ func (pic *ProcInstCreate) createSpec() (*ProcInst, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pic.mutation.IsDel(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Value:  value,
 			Column: procinst.FieldIsDel,
 		})
@@ -523,7 +523,7 @@ func (pic *ProcInstCreate) createSpec() (*ProcInst, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pic.mutation.RemainHours(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldRemainHours,
 		})

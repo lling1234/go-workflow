@@ -35,13 +35,13 @@ func (tc *TaskCreate) SetNillableNodeID(s *string) *TaskCreate {
 }
 
 // SetLevel sets the "level" field.
-func (tc *TaskCreate) SetLevel(i int) *TaskCreate {
+func (tc *TaskCreate) SetLevel(i int32) *TaskCreate {
 	tc.mutation.SetLevel(i)
 	return tc
 }
 
 // SetNillableLevel sets the "level" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableLevel(i *int) *TaskCreate {
+func (tc *TaskCreate) SetNillableLevel(i *int32) *TaskCreate {
 	if i != nil {
 		tc.SetLevel(*i)
 	}
@@ -49,13 +49,13 @@ func (tc *TaskCreate) SetNillableLevel(i *int) *TaskCreate {
 }
 
 // SetStep sets the "step" field.
-func (tc *TaskCreate) SetStep(i int) *TaskCreate {
+func (tc *TaskCreate) SetStep(i int32) *TaskCreate {
 	tc.mutation.SetStep(i)
 	return tc
 }
 
 // SetNillableStep sets the "step" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableStep(i *int) *TaskCreate {
+func (tc *TaskCreate) SetNillableStep(i *int32) *TaskCreate {
 	if i != nil {
 		tc.SetStep(*i)
 	}
@@ -96,44 +96,30 @@ func (tc *TaskCreate) SetNillableClaimTime(t *time.Time) *TaskCreate {
 	return tc
 }
 
-// SetMemberCount sets the "member_count" field.
-func (tc *TaskCreate) SetMemberCount(i int) *TaskCreate {
-	tc.mutation.SetMemberCount(i)
+// SetMemberApprover sets the "member_approver" field.
+func (tc *TaskCreate) SetMemberApprover(s string) *TaskCreate {
+	tc.mutation.SetMemberApprover(s)
 	return tc
 }
 
-// SetNillableMemberCount sets the "member_count" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableMemberCount(i *int) *TaskCreate {
-	if i != nil {
-		tc.SetMemberCount(*i)
+// SetNillableMemberApprover sets the "member_approver" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableMemberApprover(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetMemberApprover(*s)
 	}
 	return tc
 }
 
-// SetUnCompleteNum sets the "un_complete_num" field.
-func (tc *TaskCreate) SetUnCompleteNum(i int) *TaskCreate {
-	tc.mutation.SetUnCompleteNum(i)
+// SetAgreeApprover sets the "agree_approver" field.
+func (tc *TaskCreate) SetAgreeApprover(s string) *TaskCreate {
+	tc.mutation.SetAgreeApprover(s)
 	return tc
 }
 
-// SetNillableUnCompleteNum sets the "un_complete_num" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableUnCompleteNum(i *int) *TaskCreate {
-	if i != nil {
-		tc.SetUnCompleteNum(*i)
-	}
-	return tc
-}
-
-// SetAgreeNum sets the "agree_num" field.
-func (tc *TaskCreate) SetAgreeNum(i int) *TaskCreate {
-	tc.mutation.SetAgreeNum(i)
-	return tc
-}
-
-// SetNillableAgreeNum sets the "agree_num" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableAgreeNum(i *int) *TaskCreate {
-	if i != nil {
-		tc.SetAgreeNum(*i)
+// SetNillableAgreeApprover sets the "agree_approver" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAgreeApprover(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetAgreeApprover(*s)
 	}
 	return tc
 }
@@ -152,16 +138,16 @@ func (tc *TaskCreate) SetNillableIsFinished(i *int8) *TaskCreate {
 	return tc
 }
 
-// SetActMode sets the "act_mode" field.
-func (tc *TaskCreate) SetActMode(tt task.ActMode) *TaskCreate {
-	tc.mutation.SetActMode(tt)
+// SetMode sets the "mode" field.
+func (tc *TaskCreate) SetMode(t task.Mode) *TaskCreate {
+	tc.mutation.SetMode(t)
 	return tc
 }
 
-// SetNillableActMode sets the "act_mode" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableActMode(tt *task.ActMode) *TaskCreate {
-	if tt != nil {
-		tc.SetActMode(*tt)
+// SetNillableMode sets the "mode" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableMode(t *task.Mode) *TaskCreate {
+	if t != nil {
+		tc.SetMode(*t)
 	}
 	return tc
 }
@@ -181,13 +167,13 @@ func (tc *TaskCreate) SetNillableDataID(i *int64) *TaskCreate {
 }
 
 // SetIsDel sets the "is_del" field.
-func (tc *TaskCreate) SetIsDel(i int) *TaskCreate {
+func (tc *TaskCreate) SetIsDel(i int8) *TaskCreate {
 	tc.mutation.SetIsDel(i)
 	return tc
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableIsDel(i *int) *TaskCreate {
+func (tc *TaskCreate) SetNillableIsDel(i *int8) *TaskCreate {
 	if i != nil {
 		tc.SetIsDel(*i)
 	}
@@ -297,9 +283,9 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultIsFinished
 		tc.mutation.SetIsFinished(v)
 	}
-	if _, ok := tc.mutation.ActMode(); !ok {
-		v := task.DefaultActMode
-		tc.mutation.SetActMode(v)
+	if _, ok := tc.mutation.Mode(); !ok {
+		v := task.DefaultMode
+		tc.mutation.SetMode(v)
 	}
 	if _, ok := tc.mutation.IsDel(); !ok {
 		v := task.DefaultIsDel
@@ -321,9 +307,19 @@ func (tc *TaskCreate) check() error {
 	if _, ok := tc.mutation.ProcInstID(); !ok {
 		return &ValidationError{Name: "proc_inst_id", err: errors.New(`act: missing required field "Task.proc_inst_id"`)}
 	}
-	if v, ok := tc.mutation.ActMode(); ok {
-		if err := task.ActModeValidator(v); err != nil {
-			return &ValidationError{Name: "act_mode", err: fmt.Errorf(`act: validator failed for field "Task.act_mode": %w`, err)}
+	if v, ok := tc.mutation.MemberApprover(); ok {
+		if err := task.MemberApproverValidator(v); err != nil {
+			return &ValidationError{Name: "member_approver", err: fmt.Errorf(`act: validator failed for field "Task.member_approver": %w`, err)}
+		}
+	}
+	if v, ok := tc.mutation.AgreeApprover(); ok {
+		if err := task.AgreeApproverValidator(v); err != nil {
+			return &ValidationError{Name: "agree_approver", err: fmt.Errorf(`act: validator failed for field "Task.agree_approver": %w`, err)}
+		}
+	}
+	if v, ok := tc.mutation.Mode(); ok {
+		if err := task.ModeValidator(v); err != nil {
+			return &ValidationError{Name: "mode", err: fmt.Errorf(`act: validator failed for field "Task.mode": %w`, err)}
 		}
 	}
 	return nil
@@ -363,7 +359,7 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := tc.mutation.Level(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: task.FieldLevel,
 		})
@@ -371,7 +367,7 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := tc.mutation.Step(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: task.FieldStep,
 		})
@@ -401,29 +397,21 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		})
 		_node.ClaimTime = value
 	}
-	if value, ok := tc.mutation.MemberCount(); ok {
+	if value, ok := tc.mutation.MemberApprover(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeString,
 			Value:  value,
-			Column: task.FieldMemberCount,
+			Column: task.FieldMemberApprover,
 		})
-		_node.MemberCount = value
+		_node.MemberApprover = value
 	}
-	if value, ok := tc.mutation.UnCompleteNum(); ok {
+	if value, ok := tc.mutation.AgreeApprover(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeString,
 			Value:  value,
-			Column: task.FieldUnCompleteNum,
+			Column: task.FieldAgreeApprover,
 		})
-		_node.UnCompleteNum = value
-	}
-	if value, ok := tc.mutation.AgreeNum(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: task.FieldAgreeNum,
-		})
-		_node.AgreeNum = value
+		_node.AgreeApprover = value
 	}
 	if value, ok := tc.mutation.IsFinished(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -433,13 +421,13 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		})
 		_node.IsFinished = value
 	}
-	if value, ok := tc.mutation.ActMode(); ok {
+	if value, ok := tc.mutation.Mode(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
 			Value:  value,
-			Column: task.FieldActMode,
+			Column: task.FieldMode,
 		})
-		_node.ActMode = value
+		_node.Mode = value
 	}
 	if value, ok := tc.mutation.DataID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -451,7 +439,7 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := tc.mutation.IsDel(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Value:  value,
 			Column: task.FieldIsDel,
 		})

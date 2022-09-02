@@ -9,16 +9,16 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func StartProcessHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func FindMyUnFinishHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.StartProcess
+		var req types.PageReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
-		l := act.NewStartProcessLogic(r.Context(), svcCtx)
-		resp, err := l.StartProcess(&req)
+		l := act.NewFindMyUnFinishLogic(r.Context(), svcCtx)
+		resp, err := l.FindMyUnFinish(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

@@ -69,14 +69,14 @@ func (pdu *ProcDefUpdate) ClearCode() *ProcDefUpdate {
 }
 
 // SetVersion sets the "version" field.
-func (pdu *ProcDefUpdate) SetVersion(i int) *ProcDefUpdate {
+func (pdu *ProcDefUpdate) SetVersion(i int32) *ProcDefUpdate {
 	pdu.mutation.ResetVersion()
 	pdu.mutation.SetVersion(i)
 	return pdu
 }
 
 // SetNillableVersion sets the "version" field if the given value is not nil.
-func (pdu *ProcDefUpdate) SetNillableVersion(i *int) *ProcDefUpdate {
+func (pdu *ProcDefUpdate) SetNillableVersion(i *int32) *ProcDefUpdate {
 	if i != nil {
 		pdu.SetVersion(*i)
 	}
@@ -84,7 +84,7 @@ func (pdu *ProcDefUpdate) SetNillableVersion(i *int) *ProcDefUpdate {
 }
 
 // AddVersion adds i to the "version" field.
-func (pdu *ProcDefUpdate) AddVersion(i int) *ProcDefUpdate {
+func (pdu *ProcDefUpdate) AddVersion(i int32) *ProcDefUpdate {
 	pdu.mutation.AddVersion(i)
 	return pdu
 }
@@ -98,20 +98,6 @@ func (pdu *ProcDefUpdate) ClearVersion() *ProcDefUpdate {
 // SetResource sets the "resource" field.
 func (pdu *ProcDefUpdate) SetResource(s string) *ProcDefUpdate {
 	pdu.mutation.SetResource(s)
-	return pdu
-}
-
-// SetNillableResource sets the "resource" field if the given value is not nil.
-func (pdu *ProcDefUpdate) SetNillableResource(s *string) *ProcDefUpdate {
-	if s != nil {
-		pdu.SetResource(*s)
-	}
-	return pdu
-}
-
-// ClearResource clears the value of the "resource" field.
-func (pdu *ProcDefUpdate) ClearResource() *ProcDefUpdate {
-	pdu.mutation.ClearResource()
 	return pdu
 }
 
@@ -250,14 +236,14 @@ func (pdu *ProcDefUpdate) ClearFormName() *ProcDefUpdate {
 }
 
 // SetRemainHours sets the "remain_hours" field.
-func (pdu *ProcDefUpdate) SetRemainHours(i int) *ProcDefUpdate {
+func (pdu *ProcDefUpdate) SetRemainHours(i int32) *ProcDefUpdate {
 	pdu.mutation.ResetRemainHours()
 	pdu.mutation.SetRemainHours(i)
 	return pdu
 }
 
 // SetNillableRemainHours sets the "remain_hours" field if the given value is not nil.
-func (pdu *ProcDefUpdate) SetNillableRemainHours(i *int) *ProcDefUpdate {
+func (pdu *ProcDefUpdate) SetNillableRemainHours(i *int32) *ProcDefUpdate {
 	if i != nil {
 		pdu.SetRemainHours(*i)
 	}
@@ -265,7 +251,7 @@ func (pdu *ProcDefUpdate) SetNillableRemainHours(i *int) *ProcDefUpdate {
 }
 
 // AddRemainHours adds i to the "remain_hours" field.
-func (pdu *ProcDefUpdate) AddRemainHours(i int) *ProcDefUpdate {
+func (pdu *ProcDefUpdate) AddRemainHours(i int32) *ProcDefUpdate {
 	pdu.mutation.AddRemainHours(i)
 	return pdu
 }
@@ -496,21 +482,21 @@ func (pdu *ProcDefUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pdu.mutation.Version(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldVersion,
 		})
 	}
 	if value, ok := pdu.mutation.AddedVersion(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldVersion,
 		})
 	}
 	if pdu.mutation.VersionCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Column: procdef.FieldVersion,
 		})
 	}
@@ -518,12 +504,6 @@ func (pdu *ProcDefUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: procdef.FieldResource,
-		})
-	}
-	if pdu.mutation.ResourceCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
 			Column: procdef.FieldResource,
 		})
 	}
@@ -621,21 +601,21 @@ func (pdu *ProcDefUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pdu.mutation.RemainHours(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldRemainHours,
 		})
 	}
 	if value, ok := pdu.mutation.AddedRemainHours(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldRemainHours,
 		})
 	}
 	if pdu.mutation.RemainHoursCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Column: procdef.FieldRemainHours,
 		})
 	}
@@ -752,14 +732,14 @@ func (pduo *ProcDefUpdateOne) ClearCode() *ProcDefUpdateOne {
 }
 
 // SetVersion sets the "version" field.
-func (pduo *ProcDefUpdateOne) SetVersion(i int) *ProcDefUpdateOne {
+func (pduo *ProcDefUpdateOne) SetVersion(i int32) *ProcDefUpdateOne {
 	pduo.mutation.ResetVersion()
 	pduo.mutation.SetVersion(i)
 	return pduo
 }
 
 // SetNillableVersion sets the "version" field if the given value is not nil.
-func (pduo *ProcDefUpdateOne) SetNillableVersion(i *int) *ProcDefUpdateOne {
+func (pduo *ProcDefUpdateOne) SetNillableVersion(i *int32) *ProcDefUpdateOne {
 	if i != nil {
 		pduo.SetVersion(*i)
 	}
@@ -767,7 +747,7 @@ func (pduo *ProcDefUpdateOne) SetNillableVersion(i *int) *ProcDefUpdateOne {
 }
 
 // AddVersion adds i to the "version" field.
-func (pduo *ProcDefUpdateOne) AddVersion(i int) *ProcDefUpdateOne {
+func (pduo *ProcDefUpdateOne) AddVersion(i int32) *ProcDefUpdateOne {
 	pduo.mutation.AddVersion(i)
 	return pduo
 }
@@ -781,20 +761,6 @@ func (pduo *ProcDefUpdateOne) ClearVersion() *ProcDefUpdateOne {
 // SetResource sets the "resource" field.
 func (pduo *ProcDefUpdateOne) SetResource(s string) *ProcDefUpdateOne {
 	pduo.mutation.SetResource(s)
-	return pduo
-}
-
-// SetNillableResource sets the "resource" field if the given value is not nil.
-func (pduo *ProcDefUpdateOne) SetNillableResource(s *string) *ProcDefUpdateOne {
-	if s != nil {
-		pduo.SetResource(*s)
-	}
-	return pduo
-}
-
-// ClearResource clears the value of the "resource" field.
-func (pduo *ProcDefUpdateOne) ClearResource() *ProcDefUpdateOne {
-	pduo.mutation.ClearResource()
 	return pduo
 }
 
@@ -933,14 +899,14 @@ func (pduo *ProcDefUpdateOne) ClearFormName() *ProcDefUpdateOne {
 }
 
 // SetRemainHours sets the "remain_hours" field.
-func (pduo *ProcDefUpdateOne) SetRemainHours(i int) *ProcDefUpdateOne {
+func (pduo *ProcDefUpdateOne) SetRemainHours(i int32) *ProcDefUpdateOne {
 	pduo.mutation.ResetRemainHours()
 	pduo.mutation.SetRemainHours(i)
 	return pduo
 }
 
 // SetNillableRemainHours sets the "remain_hours" field if the given value is not nil.
-func (pduo *ProcDefUpdateOne) SetNillableRemainHours(i *int) *ProcDefUpdateOne {
+func (pduo *ProcDefUpdateOne) SetNillableRemainHours(i *int32) *ProcDefUpdateOne {
 	if i != nil {
 		pduo.SetRemainHours(*i)
 	}
@@ -948,7 +914,7 @@ func (pduo *ProcDefUpdateOne) SetNillableRemainHours(i *int) *ProcDefUpdateOne {
 }
 
 // AddRemainHours adds i to the "remain_hours" field.
-func (pduo *ProcDefUpdateOne) AddRemainHours(i int) *ProcDefUpdateOne {
+func (pduo *ProcDefUpdateOne) AddRemainHours(i int32) *ProcDefUpdateOne {
 	pduo.mutation.AddRemainHours(i)
 	return pduo
 }
@@ -1209,21 +1175,21 @@ func (pduo *ProcDefUpdateOne) sqlSave(ctx context.Context) (_node *ProcDef, err 
 	}
 	if value, ok := pduo.mutation.Version(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldVersion,
 		})
 	}
 	if value, ok := pduo.mutation.AddedVersion(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldVersion,
 		})
 	}
 	if pduo.mutation.VersionCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Column: procdef.FieldVersion,
 		})
 	}
@@ -1231,12 +1197,6 @@ func (pduo *ProcDefUpdateOne) sqlSave(ctx context.Context) (_node *ProcDef, err 
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: procdef.FieldResource,
-		})
-	}
-	if pduo.mutation.ResourceCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
 			Column: procdef.FieldResource,
 		})
 	}
@@ -1334,21 +1294,21 @@ func (pduo *ProcDefUpdateOne) sqlSave(ctx context.Context) (_node *ProcDef, err 
 	}
 	if value, ok := pduo.mutation.RemainHours(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldRemainHours,
 		})
 	}
 	if value, ok := pduo.mutation.AddedRemainHours(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldRemainHours,
 		})
 	}
 	if pduo.mutation.RemainHoursCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Column: procdef.FieldRemainHours,
 		})
 	}

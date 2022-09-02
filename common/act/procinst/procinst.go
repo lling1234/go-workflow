@@ -95,7 +95,7 @@ var (
 	// DefaultIsFinished holds the default value on creation for the "is_finished" field.
 	DefaultIsFinished int8
 	// DefaultIsDel holds the default value on creation for the "is_del" field.
-	DefaultIsDel int
+	DefaultIsDel int8
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime time.Time
 	// DefaultUpdateTime holds the default value on creation for the "update_time" field.

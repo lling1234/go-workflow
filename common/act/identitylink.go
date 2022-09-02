@@ -21,7 +21,7 @@ type IdentityLink struct {
 	// 审批人姓名
 	UserName string `json:"user_name,omitempty"`
 	// 审批步数
-	Step int `json:"step,omitempty"`
+	Step int32 `json:"step,omitempty"`
 	// 流程实例id
 	ProcInstID int64 `json:"proc_inst_id,omitempty"`
 	// 岗位id
@@ -31,7 +31,7 @@ type IdentityLink struct {
 	// 节点任务
 	TaskID int64 `json:"task_id,omitempty"`
 	// 审批结果 3驳回、5未通过、6已通过
-	Result int `json:"result,omitempty"`
+	Result int32 `json:"result,omitempty"`
 	// 创建时间
 	CreateTime time.Time `json:"create_time,omitempty"`
 	// 是否删除,0:未删除,1:已删除
@@ -90,7 +90,7 @@ func (il *IdentityLink) assignValues(columns []string, values []interface{}) err
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field step", values[i])
 			} else if value.Valid {
-				il.Step = int(value.Int64)
+				il.Step = int32(value.Int64)
 			}
 		case identitylink.FieldProcInstID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -120,7 +120,7 @@ func (il *IdentityLink) assignValues(columns []string, values []interface{}) err
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field result", values[i])
 			} else if value.Valid {
-				il.Result = int(value.Int64)
+				il.Result = int32(value.Int64)
 			}
 		case identitylink.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
