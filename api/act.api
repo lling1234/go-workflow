@@ -21,7 +21,7 @@ type (
 		DataId int64  `json:"dataId"`
 	}
 
-	CompeleteTask {
+	CompleteTask {
 		DataId  int64  `json:"dataId"`
 		Result  int    `json:"result"`
 		Comment string `json:"comment"`
@@ -105,9 +105,9 @@ service act-api {
 	
 	@server(
 		group: act
-		handler: compeleteTask
+		handler: completeTask
 	)
-	post /act/procinst/compelete (CompeleteTask) returns (CommonResponse)
+	post /act/procinst/complete (CompleteTask) returns (CommonResponse)
 	
 	@server(
 		group: act

@@ -105,7 +105,6 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 		DataId: req.DataId,
 		Step:   2,
 	})
-	log.Printf("newTaskReply:%d,firstNode:%s", newTaskReply.Id, firstNode.NodeID)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}

@@ -1,6 +1,7 @@
 package act
 
 import (
+	"act/rpc/actclient"
 	"context"
 
 	"act/api/internal/svc"
@@ -24,7 +25,9 @@ func NewCompeleteTaskLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Com
 }
 
 func (l *CompeleteTaskLogic) CompeleteTask(req *types.CompeleteTask) (resp *types.CommonResponse, err error) {
-	// todo: add your logic here and delete this line
+	taskId, err := l.svcCtx.Rpc.FindLatestTaskId(l.ctx, &actclient.DataIdReq{
+		DataId: req.DataId,
+	})
 
-	return
+	return types.GetCommonResponse(err, taskId)
 }
