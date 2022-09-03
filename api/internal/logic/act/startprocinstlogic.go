@@ -82,7 +82,6 @@ func (l *StartProcinstLogic) StartProcinst(req *types.StartProcinst) (resp *type
 	// 获取执行流信息
 	var nodeInfos []*flow.NodeInfo
 	util.Str2Struct(exec.NodeInfos, &nodeInfos)
-	log.Printf("11111,nodeInfos.id:%s,nodeInfos.name:%s,nodeInfos.mode:%s", nodeInfos[1].ApproverIds, nodeInfos[1].ApproverNames, nodeInfos[1].Mode)
 	// -----------------生成新任务-------------
 	firstNode := nodeInfos[1]
 	if firstNode.Mode == "AND" {
@@ -90,29 +89,24 @@ func (l *StartProcinstLogic) StartProcinst(req *types.StartProcinst) (resp *type
 	}
 	task.NodeId = firstNode.NodeID
 	//task.AgreeNum = 0
-	task.IsFinished = 2
-	task.Level = 1
-	task.Step = 1
+	task.IsFinished = 0
+	task.Level = 2
+	task.Step = 2
 	task.Mode = firstNode.Mode
-	log.Println("task", task.Mode)
 	newTask, err := l.svcCtx.Rpc.SaveTask(l.ctx, &task)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
-	log.Println(22222, newTask.Id)
 	userId, _ := strconv.ParseInt(firstNode.ApproverIds, 10, 64)
-	log.Println(33333, userId)
 	identityLink := actclient.IdentityLinkReq{
 		ProcInstId: inst.Id,
 		TaskId:     newTask.Id,
 		UserId:     userId,
 		UserName:   firstNode.ApproverNames,
-		Comment:    "",
-		Result:     1,
+		//Comment:    "",
+		//Result:     1,
 	}
-	log.Println(333333)
 	_, err = l.svcCtx.Rpc.SaveIdentityLink(l.ctx, &identityLink)
-	log.Println(44444)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
@@ -123,11 +117,13 @@ func GenerateExec(list *list.List) (string, error) {
 	list.PushBack(flow.NodeInfo{
 		Level:  list.Len() + 1,
 		NodeID: "结束",
+		Mode:   "or",
 	})
 	list.PushFront(flow.NodeInfo{
 		Level:  1,
 		NodeID: "开始",
 		Type:   "starter",
+		Mode:   "or",
 	})
 	arr := util.List2Array(list)
 	listStr, err := util.ToJSONStr(arr)

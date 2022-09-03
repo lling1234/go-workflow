@@ -84,9 +84,9 @@ func (n *Node) add2ExecutionList(list *list.List) {
 	switch n.Type {
 	case NodeTypes[APPROVAL], NodeTypes[NOTIFIER]:
 		list.PushBack(NodeInfo{
-			NodeID: n.NodeID,
-			Type:   n.Type,
-			//Level:         n.Props.ActionerRules[0].Level,
+			NodeID:       n.NodeID,
+			Type:         n.Type,
+			Level:        list.Len() + 1,
 			AssignedType: n.Props.AssignedType,
 			//MemberCount:   n.Props.getMemberCount(),
 			Mode:          n.Props.Mode,
@@ -108,7 +108,7 @@ func (n *NodeProps) getApproverIds() string {
 	return ""
 }
 func (n *NodeProps) getApproverNames() string {
-	if n.AssignedType == "user" {
+	if n.AssignedType == "user" || n.AssignedType == "ASSIGN_USER" {
 		str := ""
 		for _, v := range n.AssignedUser {
 			str += v.Name + ","

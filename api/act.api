@@ -1,7 +1,7 @@
 syntax = "v1"
 
 type (
-	SaveProcdef {
+	SaveProcDef {
 		Name        string `json:"name"`
 		Code        string `json:"code"`
 		FormId      string `json:"formId"`
@@ -15,7 +15,7 @@ type (
 		Version int32  `json:"version"`
 	}
 
-	StartProcinst {
+	StartProcInst {
 		Title  string `json:"title"`
 		FormId string `json:"formId"`
 		DataId int64  `json:"dataId"`
@@ -63,19 +63,19 @@ type (
 service act-api {
 	@server(
 		group: act
-		handler: addProcdef
+		handler: addProcDef
 	)
-	post /act/procdef/add (SaveProcdef) returns (CommonResponse)
+	post /act/procdef/add (SaveProcDef) returns (CommonResponse)
 	
 	@server(
 		group: act
-		handler: findOneProcdef
+		handler: findOneProcDef
 	)
 	post /act/procdef/findoneprocdef (FormIdReq) returns (CommonResponse)
 	
 	@server(
 		group: act
-		handler: findAllProcdef
+		handler: findAllProcDef
 	)
 	post /act/procdef/findallprocdef (FormIdReq) returns (CommonResponse)
 	
@@ -87,15 +87,15 @@ service act-api {
 	
 	@server(
 		group: act
-		handler: delProcdef
+		handler: delProcDef
 	)
 	post /act/procdef/del (FormIdReq) returns (CommonResponse)
 	
 	@server(
 		group: act
-		handler: startProcinst
+		handler: startProcInst
 	)
-	post /act/procinst/start (StartProcinst) returns (CommonResponse)
+	post /act/procinst/start (StartProcInst) returns (CommonResponse)
 	
 	@server(
 		group: act
@@ -117,7 +117,7 @@ service act-api {
 	
 	@server(
 		group: act
-		handler: delProcinst
+		handler: delProcInst
 	)
 	post /act/procinst/del (DataIdReq) returns (CommonResponse)
 	

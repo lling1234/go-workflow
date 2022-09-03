@@ -1,7 +1,7 @@
 syntax = "v1"
 
 type (
-	SaveProcProdef {
+	SaveProcDef {
 		Name        string `json:"name"`
 		Code        string `json:"code"`
 		FormId      string `json:"formId"`
@@ -9,8 +9,14 @@ type (
 		RemainHours int32  `json:"remainHours"`
 		Resource    string `json:"resource"`
 	}
-	StartProcess {
-		Title  string `json:"name"`
+
+	FormIdReq {
+		FormId  string `json:"formId"`
+		Version int32  `json:"version"`
+	}
+
+	StartProcInst {
+		Title  string `json:"title"`
 		FormId string `json:"formId"`
 		DataId int64  `json:"dataId"`
 	}
@@ -20,20 +26,29 @@ type (
 		Result  int    `json:"result"`
 		Comment string `json:"comment"`
 	}
-	Withdraw {
+	DataIdReq {
 		DataId int64 `json:"dataId"`
 	}
 
-	FindByTargetId {
-		TargetId int64 `json:"targetId"`
+	SearchProcess {
+		Starter   string `json:"starter"`
+		Title     string `json:"title"`
+		Code      string `json:"code"`
+		State     int32  `json:"state"`
+		PageSize  int32  `json:"pageSize"`
+		PageIndex int32  `json:"pageIndex"`
 	}
-	FindMyStartProcess {
-		UserId   int64  `json:"userId"`
-		UserName string `json:"userName"`
+
+	PageReq {
+		PageSize  int32 `json:"pageSize"`
+		PageIndex int32 `json:"pageIndex"`
 	}
-	FindMyApproveProcess {
-		UserId   int64  `json:"userId"`
-		UserName string `json:"userName"`
+
+	UserReq {
+		UserId    int64  `json:"userId"`
+		UserName  string `json:"userName"`
+		PageSize  int32  `json:"pageSize"`
+		PageIndex int32  `json:"pageIndex"`
 	}
 )
 
@@ -50,41 +65,107 @@ service act-api {
 		group: act
 		handler: addProcDef
 	)
-	post /procdef/add (SaveProcProdef) returns (CommonResponse)
+	post /act/procdef/add (SaveProcDef) returns (CommonResponse)
 	
 	@server(
 		group: act
-		handler: startProcess
+		handler: findOneProcDef
 	)
-	post /process/start (StartProcess) returns (CommonResponse)
+	post /act/procdef/findoneprocdef (FormIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findAllProcDef
+	)
+	post /act/procdef/findallprocdef (FormIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: setActive
+	)
+	post /act/procdef/setactive (FormIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: delProcDef
+	)
+	post /act/procdef/del (FormIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: startProcInst
+	)
+	post /act/procinst/start (StartProcInst) returns (CommonResponse)
 	
 	@server(
 		group: act
 		handler: compeleteTask
 	)
-	post /task/compelete (CompeleteTask) returns (CommonResponse)
+	post /act/procinst/compelete (CompeleteTask) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findByDataId
+	)
+	post /act/procinst/findbydataid (DataIdReq) returns (CommonResponse)
 	
 	@server(
 		group: act
 		handler: withdraw
 	)
-	post /task/withdraw (Withdraw) returns (CommonResponse)
+	post /act/procinst/withdraw (DataIdReq) returns (CommonResponse)
 	
 	@server(
 		group: act
-		handler: findByTargetId
+		handler: delProcInst
 	)
-	post /process/findbytargetid (FindByTargetId) returns (CommonResponse)
+	post /act/procinst/del (DataIdReq) returns (CommonResponse)
 	
 	@server(
 		group: act
-		handler: findMyStartProcess
+		handler: findAllProcess
 	)
-	post /process/findmystartprocess (FindMyStartProcess) returns (CommonResponse)
+	post /act/process/findallprocess (SearchProcess) returns (CommonResponse)
 	
 	@server(
 		group: act
-		handler: findMyApproveProcess
+		handler: findMyStart
 	)
-	post /process/findmyapproveprocess (FindMyApproveProcess) returns (CommonResponse)
+	post /act/process/findmystart (PageReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findMyUnFinish
+	)
+	post /act/process/findmyunfinish (PageReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findMyFinish
+	)
+	post /act/process/findmyfinish (PageReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findMyPending
+	)
+	post /act/process/findmypending (PageReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findMyApproved
+	)
+	post /act/process/findmyapproved (PageReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findElapsedTime
+	)
+	post /act/process/findelapsedtime (UserReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findOverTime
+	)
+	post /act/process/findovertime (UserReq) returns (CommonResponse)
 }
