@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"act/common/act/procinst"
 	"context"
 
 	"act/rpc/internal/svc"
@@ -24,7 +25,12 @@ func NewUpdateProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Up
 }
 
 func (l *UpdateProcInstLogic) UpdateProcInst(in *act.ProcInstReq) (*act.ProcInstReply, error) {
-	// todo: add your logic here and delete this line
+	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	tx.ProcInst.Update().Where(procinst.ProcDefIDEQ(in.ProcDefId), procinst.StateNotIn(4, 7), procinst.IsDelEQ(0)).
+		SetNodeID(in.NodeId).SetIsFinished(1).SetTaskID(in.TaskId)
 
 	return &act.ProcInstReply{}, nil
 }

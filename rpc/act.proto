@@ -54,8 +54,19 @@ message ProcInstReq {
   int64 targetId = 7;
   int32 remainHours = 8;
   int32 state = 9;
-  string nodeId = 10;
-  int64 taskId = 11;
+}
+
+message UpdateProcInstReq {
+  int64 procDefId = 1;
+  int64 dataId = 2;
+  string formId = 3;
+  int64 targetId = 4;
+  int32 remainHours = 5;
+  int32 state = 6;
+  string nodeId = 7;
+  int64 taskId = 8;
+  int32 isFinish = 9;
+  string endTime = 10;
 }
 
 message ProcInstReply {
@@ -203,7 +214,7 @@ service act {
   rpc saveTask(TaskReq) returns(TaskReply);
   rpc saveIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
   rpc findLatestTaskId(DataIdReq) returns(TaskIdReply);
-  rpc updateProcInst(ProcInstReq) returns(ProcInstReply);
+  rpc updateProcInst(UpdateProcInstReq) returns(ProcInstReply);
   rpc updateTask(TaskReq) returns(TaskReply);
   rpc updateIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
   rpc delProcInst(DataIdReq) returns(Nil);

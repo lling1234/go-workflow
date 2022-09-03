@@ -100,8 +100,12 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
-
-	RPC.UpdateProcInst(l.ctx, instReq)
+	instReq.TaskId = newTask.Id
+	instReq.NodeId = firstNode.NodeID
+	_, err = RPC.UpdateProcInst(l.ctx, instReq)
+	if err != nil {
+		return types.GetErrorCommonResponse(err.Error())
+	}
 	userId, _ := strconv.ParseInt(firstNode.ApproverIds, 10, 64)
 	identityLink := actclient.IdentityLinkReq{
 		ProcInstId: inst.Id,
