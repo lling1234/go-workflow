@@ -208,6 +208,7 @@ service act {
   rpc saveProcDef(SaveProcDefReq) returns(ProcDefReply);
   rpc findDefByFormId(FindProcDefReq) returns(ProcDefReply);
   rpc updateProcDef(FindProcDefReq) returns(ProcDefReply);
+  rpc setProcDefActive(FindProcDefReq) returns(Nil);
   rpc delProcDef(FindProcDefReq) returns(Nil);
 
   rpc saveProcInst(ProcInstReq) returns(ProcInstReply);

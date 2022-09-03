@@ -1,6 +1,7 @@
 package act
 
 import (
+	"act/rpc/types/act"
 	"context"
 
 	"act/api/internal/svc"
@@ -24,7 +25,9 @@ func NewDelProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelPr
 }
 
 func (l *DelProcInstLogic) DelProcInst(req *types.DataIdReq) (resp *types.CommonResponse, err error) {
-	// todo: add your logic here and delete this line
+	_, err = l.svcCtx.Rpc.DelProcInst(l.ctx, &act.DataIdReq{
+		DataId: req.DataId,
+	})
 
-	return
+	return types.GetCommonResponse(err, "ok")
 }

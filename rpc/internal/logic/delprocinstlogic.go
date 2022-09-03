@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"act/common/act/procinst"
 	"context"
 
 	"act/rpc/internal/svc"
@@ -24,7 +25,14 @@ func NewDelProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelPr
 }
 
 func (l *DelProcInstLogic) DelProcInst(in *act.DataIdReq) (*act.Nil, error) {
-	// todo: add your logic here and delete this line
-
+	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	err = tx.ProcInst.Update().Where(procinst.DataIDEQ(in.DataId)).SetIsDel(1).Exec(l.ctx)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
 	return &act.Nil{}, nil
 }

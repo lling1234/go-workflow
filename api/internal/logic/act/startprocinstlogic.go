@@ -8,6 +8,7 @@ import (
 	"github.com/mumushuiding/util"
 	"log"
 	"strconv"
+	"strings"
 
 	"act/api/internal/svc"
 	"act/api/internal/types"
@@ -121,14 +122,17 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
-	userId, _ := strconv.ParseInt(firstNode.ApproverIds, 10, 64)
-	identityLink := actclient.IdentityLinkReq{
-		ProcInstId: inst.Id,
-		TaskId:     newTaskReply.Id,
-		UserId:     userId,
-		UserName:   firstNode.ApproverNames,
+	userIds := strings.Split(firstNode.ApproverIds, ",")
+	for _, v := range userIds {
+		userId, _ := strconv.ParseInt(v, 10, 64)
+		identityLink := actclient.IdentityLinkReq{
+			ProcInstId: inst.Id,
+			TaskId:     newTaskReply.Id,
+			UserId:     userId,
+			UserName:   firstNode.ApproverNames,
+		}
+		_, err = RPC.SaveIdentityLink(l.ctx, &identityLink)
 	}
-	_, err = RPC.SaveIdentityLink(l.ctx, &identityLink)
 
 	return types.GetCommonResponse(err, inst)
 }
