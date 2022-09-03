@@ -3,10 +3,11 @@ package logic
 import (
 	act2 "act/common/act"
 	"act/common/act/task"
-	"act/rpc/internal/svc"
-	"act/rpc/types/act"
 	"context"
 	"log"
+
+	"act/rpc/internal/svc"
+	"act/rpc/types/act"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,7 +26,7 @@ func NewFindLatestTaskIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *FindLatestTaskIdLogic) FindLatestTaskId(in *act.DataIdReq) (*act.TaskIdReply, error) {
+func (l *FindLatestTaskIdLogic) FindLatestTaskId(in *act.DataIdReq) (*act.TaskIdArg, error) {
 	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
 	if err != nil {
 		return nil, err
@@ -41,7 +42,7 @@ func (l *FindLatestTaskIdLogic) FindLatestTaskId(in *act.DataIdReq) (*act.TaskId
 	if err != nil {
 		return nil, err
 	}
-	return &act.TaskIdReply{
+	return &act.TaskIdArg{
 		Id: t.ID,
 	}, nil
 }

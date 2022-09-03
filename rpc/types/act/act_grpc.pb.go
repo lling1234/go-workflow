@@ -31,11 +31,12 @@ type ActClient interface {
 	SaveExecution(ctx context.Context, in *ExecutionReq, opts ...grpc.CallOption) (*ExecutionReply, error)
 	SaveTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error)
 	SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
-	FindLatestTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdReply, error)
+	FindLatestTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdArg, error)
 	UpdateProcInst(ctx context.Context, in *UpdateProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	UpdateTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error)
 	UpdateIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
 	DelProcInst(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error)
+	FindIdentityLinkByTaskId(ctx context.Context, in *TaskIdArg, opts ...grpc.CallOption) (*IdentityLinkReply, error)
 	FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	FindMyProcInst(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	FindMyApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
@@ -132,8 +133,8 @@ func (c *actClient) SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, o
 	return out, nil
 }
 
-func (c *actClient) FindLatestTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdReply, error) {
-	out := new(TaskIdReply)
+func (c *actClient) FindLatestTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdArg, error) {
+	out := new(TaskIdArg)
 	err := c.cc.Invoke(ctx, "/act.act/findLatestTaskId", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -171,6 +172,15 @@ func (c *actClient) UpdateIdentityLink(ctx context.Context, in *IdentityLinkReq,
 func (c *actClient) DelProcInst(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error) {
 	out := new(Nil)
 	err := c.cc.Invoke(ctx, "/act.act/delProcInst", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *actClient) FindIdentityLinkByTaskId(ctx context.Context, in *TaskIdArg, opts ...grpc.CallOption) (*IdentityLinkReply, error) {
+	out := new(IdentityLinkReply)
+	err := c.cc.Invoke(ctx, "/act.act/findIdentityLinkByTaskId", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -235,11 +245,12 @@ type ActServer interface {
 	SaveExecution(context.Context, *ExecutionReq) (*ExecutionReply, error)
 	SaveTask(context.Context, *TaskReq) (*TaskReply, error)
 	SaveIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error)
-	FindLatestTaskId(context.Context, *DataIdReq) (*TaskIdReply, error)
+	FindLatestTaskId(context.Context, *DataIdReq) (*TaskIdArg, error)
 	UpdateProcInst(context.Context, *UpdateProcInstReq) (*ProcInstReply, error)
 	UpdateTask(context.Context, *TaskReq) (*TaskReply, error)
 	UpdateIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error)
 	DelProcInst(context.Context, *DataIdReq) (*Nil, error)
+	FindIdentityLinkByTaskId(context.Context, *TaskIdArg) (*IdentityLinkReply, error)
 	FindAllProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error)
 	FindMyProcInst(context.Context, *MyProcInstReq) (*ProcInstReply, error)
 	FindMyApproval(context.Context, *MyProcInstReq) (*ProcInstReply, error)
@@ -279,7 +290,7 @@ func (UnimplementedActServer) SaveTask(context.Context, *TaskReq) (*TaskReply, e
 func (UnimplementedActServer) SaveIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveIdentityLink not implemented")
 }
-func (UnimplementedActServer) FindLatestTaskId(context.Context, *DataIdReq) (*TaskIdReply, error) {
+func (UnimplementedActServer) FindLatestTaskId(context.Context, *DataIdReq) (*TaskIdArg, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindLatestTaskId not implemented")
 }
 func (UnimplementedActServer) UpdateProcInst(context.Context, *UpdateProcInstReq) (*ProcInstReply, error) {
@@ -293,6 +304,9 @@ func (UnimplementedActServer) UpdateIdentityLink(context.Context, *IdentityLinkR
 }
 func (UnimplementedActServer) DelProcInst(context.Context, *DataIdReq) (*Nil, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelProcInst not implemented")
+}
+func (UnimplementedActServer) FindIdentityLinkByTaskId(context.Context, *TaskIdArg) (*IdentityLinkReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindIdentityLinkByTaskId not implemented")
 }
 func (UnimplementedActServer) FindAllProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindAllProcInst not implemented")
@@ -574,6 +588,24 @@ func _Act_DelProcInst_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Act_FindIdentityLinkByTaskId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskIdArg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActServer).FindIdentityLinkByTaskId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/act.act/findIdentityLinkByTaskId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActServer).FindIdentityLinkByTaskId(ctx, req.(*TaskIdArg))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Act_FindAllProcInst_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProcInstReq)
 	if err := dec(in); err != nil {
@@ -726,6 +758,10 @@ var Act_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "delProcInst",
 			Handler:    _Act_DelProcInst_Handler,
+		},
+		{
+			MethodName: "findIdentityLinkByTaskId",
+			Handler:    _Act_FindIdentityLinkByTaskId_Handler,
 		},
 		{
 			MethodName: "findAllProcInst",

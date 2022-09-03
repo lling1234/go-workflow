@@ -2,6 +2,7 @@ package logic
 
 import (
 	"act/common/act/procdef"
+	"act/rpc/general"
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
 	"context"
@@ -30,7 +31,7 @@ func (l *UpdateProcDefLogic) UpdateProcDef(in *act.FindProcDefReq) (*act.ProcDef
 		return nil, err
 	}
 
-	err = tx.ProcDef.Update().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(1727882), procdef.VersionEQ(version)).SetResource(in.Resource).
+	err = tx.ProcDef.Update().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(general.TargetId), procdef.VersionEQ(version)).SetResource(in.Resource).
 		SetRemainHours(in.RemainHours).SetName(in.Name).SetCode(in.Code).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()

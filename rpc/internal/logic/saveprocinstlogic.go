@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"act/rpc/general"
 	"context"
 	"time"
 
@@ -29,8 +30,8 @@ func (l *SaveProcInstLogic) SaveProcInst(in *act.ProcInstReq) (*act.ProcInstRepl
 	if err != nil {
 		return nil, err
 	}
-	inst, err := tx.ProcInst.Create().SetProcDefID(in.ProcDefId).SetDataID(in.DataId).SetTargetID(1727882).SetStartTime(time.Now()).
-		SetTitle(in.Title).SetIsFinished(0).SetRemainHours(in.RemainHours).SetStartUserID(11025).SetStartUserName("xiaoming").
+	inst, err := tx.ProcInst.Create().SetProcDefID(in.ProcDefId).SetDataID(in.DataId).SetTargetID(general.TargetId).SetStartTime(time.Now()).
+		SetTitle(in.Title).SetIsFinished(0).SetRemainHours(in.RemainHours).SetStartUserID(general.UserId3).SetStartUserName(general.UserName3).
 		SetState(1).Save(l.ctx)
 	if err != nil {
 		tx.Rollback()

@@ -6,7 +6,6 @@ import (
 	"container/list"
 	"context"
 	"github.com/mumushuiding/util"
-	"log"
 	"strconv"
 	"strings"
 
@@ -51,13 +50,14 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
+	var STEP int32 = 1
 	task := actclient.TaskReq{
 		NodeId:     "开始",
 		ProcInstId: inst.Id,
 		DataId:     req.DataId,
-		Level:      1,
+		Level:      STEP,
 		IsFinished: 1,
-		Step:       1,
+		Step:       STEP,
 		//MemberCount:   1,
 		Mode: "or",
 	}
@@ -78,7 +78,6 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 		NodeInfos:  listStr,
 	}
 	_, err = RPC.SaveExecution(l.ctx, exec)
-	log.Println(1111111)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
@@ -91,10 +90,11 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 		//task.MemberCount = int32(firstNode.MemberCount)
 	}
 	task.NodeId = firstNode.NodeID
+	STEP = 2
 	//task.AgreeNum = 0
-	task.IsFinished = 0
-	task.Level = 2
-	task.Step = 2
+	//task.IsFinished = 0
+	task.Level = STEP
+	task.Step = STEP
 	task.Mode = firstNode.Mode
 	task.MemberApprover = firstNode.ApproverIds
 	_, err = RPC.SaveTask(l.ctx, &task)
@@ -103,7 +103,7 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 	}
 	newTaskReply, err := RPC.FindLatestTaskId(l.ctx, &actclient.DataIdReq{
 		DataId: req.DataId,
-		Step:   2,
+		Step:   STEP,
 	})
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
@@ -129,6 +129,7 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 			TaskId:     newTaskReply.Id,
 			UserId:     userId,
 			UserName:   firstNode.ApproverNames,
+			Step:       STEP,
 		}
 		_, err = RPC.SaveIdentityLink(l.ctx, &identityLink)
 	}

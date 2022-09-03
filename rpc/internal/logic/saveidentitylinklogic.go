@@ -28,7 +28,7 @@ func (l *SaveIdentityLinkLogic) SaveIdentityLink(in *act.IdentityLinkReq) (*act.
 		return nil, err
 	}
 	_, err = tx.IdentityLink.Create().SetProcInstID(in.ProcInstId).SetTaskID(in.TaskId).SetTargetID(123).
-		SetIsDeal(0).SetStep(1).SetUserID(in.UserId).SetUserName(in.UserName).Save(l.ctx)
+		SetIsDeal(0).SetStep(in.Step).SetUserID(in.UserId).SetUserName(in.UserName).Save(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err

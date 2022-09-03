@@ -1,7 +1,10 @@
 package logic
 
 import (
+	"act/common/act/identitylink"
+	"act/rpc/general"
 	"context"
+	"time"
 
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
@@ -24,7 +27,17 @@ func NewUpdateIdentityLinkLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 }
 
 func (l *UpdateIdentityLinkLogic) UpdateIdentityLink(in *act.IdentityLinkReq) (*act.IdentityLinkReply, error) {
-	// todo: add your logic here and delete this line
+	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
+	if err != nil {
+		return nil, err
+	}
 
+	err = tx.IdentityLink.Update().Where(identitylink.TaskIDEQ(in.TaskId), identitylink.UserIDEQ(general.UserId1), identitylink.IsDelEQ(0), identitylink.IsDealEQ(0)).
+		SetUpdateTime(time.Now()).SetComment(in.Comment).SetResult(in.Result).Exec(l.ctx)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	tx.Commit()
 	return &act.IdentityLinkReply{}, nil
 }

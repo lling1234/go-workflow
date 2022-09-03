@@ -2,6 +2,7 @@ package logic
 
 import (
 	"act/common/act/procdef"
+	"act/rpc/general"
 	"context"
 
 	"act/rpc/internal/svc"
@@ -29,7 +30,7 @@ func (l *DelProcDefLogic) DelProcDef(in *act.FindProcDefReq) (*act.Nil, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = tx.ProcDef.Update().Where(procdef.FormIDEQ(in.FormId), procdef.TargetIDEQ(1727882), procdef.VersionEQ(in.Version)).SetIsDel(1).Exec(l.ctx)
+	err = tx.ProcDef.Update().Where(procdef.FormIDEQ(in.FormId), procdef.TargetIDEQ(general.TargetId), procdef.VersionEQ(in.Version)).SetIsDel(1).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
