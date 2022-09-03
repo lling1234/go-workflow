@@ -9,7 +9,7 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func FindAllProcdefHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func FindAllProcDefHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.FormIdReq
 		if err := httpx.Parse(r, &req); err != nil {
@@ -17,8 +17,8 @@ func FindAllProcdefHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := act.NewFindAllProcdefLogic(r.Context(), svcCtx)
-		resp, err := l.FindAllProcdef(&req)
+		l := act.NewFindAllProcDefLogic(r.Context(), svcCtx)
+		resp, err := l.FindAllProcDef(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

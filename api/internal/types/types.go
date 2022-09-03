@@ -3,7 +3,7 @@ package types
 
 import "act/api/flow"
 
-type SaveProcdef struct {
+type SaveProcDef struct {
 	Name        string     `json:"name"`
 	Code        string     `json:"code"`
 	FormId      string     `json:"formId"`
@@ -17,7 +17,7 @@ type FormIdReq struct {
 	Version int32  `json:"version"`
 }
 
-type StartProcinst struct {
+type StartProcInst struct {
 	Title  string `json:"title"`
 	FormId string `json:"formId"`
 	DataId int64  `json:"dataId"`

@@ -9,16 +9,16 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func AddProcdefHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func AddProcDefHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.SaveProcdef
+		var req types.SaveProcDef
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
-		l := act.NewAddProcdefLogic(r.Context(), svcCtx)
-		resp, err := l.AddProcdef(&req)
+		l := act.NewAddProcDefLogic(r.Context(), svcCtx)
+		resp, err := l.AddProcDef(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

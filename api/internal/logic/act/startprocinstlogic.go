@@ -15,22 +15,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type StartProcinstLogic struct {
+type StartProcInstLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewStartProcinstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *StartProcinstLogic {
-	return &StartProcinstLogic{
+func NewStartProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *StartProcInstLogic {
+	return &StartProcInstLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *StartProcinstLogic) StartProcinst(req *types.StartProcinst) (resp *types.CommonResponse, err error) {
-	def, err := l.svcCtx.Rpc.FindDefByFormId(l.ctx, &actclient.FindProcdefReq{
+func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *types.CommonResponse, err error) {
+	def, err := l.svcCtx.Rpc.FindDefByFormId(l.ctx, &actclient.FindProcDefReq{
 		FormId: req.FormId,
 	})
 	if err != nil {
@@ -93,6 +93,7 @@ func (l *StartProcinstLogic) StartProcinst(req *types.StartProcinst) (resp *type
 	task.Level = 2
 	task.Step = 2
 	task.Mode = firstNode.Mode
+	task.MemberApprover = firstNode.ApproverIds
 	newTask, err := l.svcCtx.Rpc.SaveTask(l.ctx, &task)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
@@ -115,9 +116,8 @@ func (l *StartProcinstLogic) StartProcinst(req *types.StartProcinst) (resp *type
 
 func GenerateExec(list *list.List) (string, error) {
 	list.PushBack(flow.NodeInfo{
-		Level:  list.Len() + 1,
+		Level:  list.Len() + 2,
 		NodeID: "结束",
-		Mode:   "or",
 	})
 	list.PushFront(flow.NodeInfo{
 		Level:  1,

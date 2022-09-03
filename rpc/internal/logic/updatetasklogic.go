@@ -9,22 +9,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type DelProcInstLogic struct {
+type UpdateTaskLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewDelProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelProcInstLogic {
-	return &DelProcInstLogic{
+func NewUpdateTaskLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpdateTaskLogic {
+	return &UpdateTaskLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *DelProcInstLogic) DelProcInst(in *act.DataIdReq) (*act.Nil, error) {
+func (l *UpdateTaskLogic) UpdateTask(in *act.TaskReq) (*act.TaskReply, error) {
 	// todo: add your logic here and delete this line
 
-	return &act.Nil{}, nil
+	return &act.TaskReply{}, nil
 }

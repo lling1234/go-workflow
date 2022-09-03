@@ -11,31 +11,30 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type FindLeastTaskIdLogic struct {
+type FindLatestTaskIdLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewFindLeastTaskIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindLeastTaskIdLogic {
-	return &FindLeastTaskIdLogic{
+func NewFindLatestTaskIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindLatestTaskIdLogic {
+	return &FindLatestTaskIdLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *FindLeastTaskIdLogic) FindLeastTaskId(in *act.DataIdReq) (*act.TaskIdReply, error) {
+func (l *FindLatestTaskIdLogic) FindLatestTaskId(in *act.DataIdReq) (*act.TaskIdReply, error) {
 	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
 	if err != nil {
 		return nil, err
 	}
-	t := tx.Task.Query().Where(task.DataID(in.DataId)).Order(act2.Desc(task.FieldCreateTime))
-	ds, err := t.IDs(l.ctx)
+	t, err := tx.Task.Query().Where(task.DataID(in.DataId)).Order(act2.Desc(task.FieldCreateTime)).First(l.ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &act.TaskIdReply{
-		Id: ds[0],
+		Id: t.ID,
 	}, nil
 }

@@ -69,6 +69,12 @@ service act-api {
 	
 	@server(
 		group: act
+		handler: updateProcDef
+	)
+	post /act/procdef/update (SaveProcDef) returns (CommonResponse)
+	
+	@server(
+		group: act
 		handler: findOneProcDef
 	)
 	post /act/procdef/findoneprocdef (FormIdReq) returns (CommonResponse)

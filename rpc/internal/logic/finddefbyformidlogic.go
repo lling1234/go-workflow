@@ -26,7 +26,7 @@ func NewFindDefByFormIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *F
 	}
 }
 
-func (l *FindDefByFormIdLogic) FindDefByFormId(in *act.FindProcdefReq) (*act.ProcDefReply, error) {
+func (l *FindDefByFormIdLogic) FindDefByFormId(in *act.FindProcDefReq) (*act.ProcDefReply, error) {
 	formId := in.GetFormId()
 	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
 	if err != nil {

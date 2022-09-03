@@ -23,7 +23,7 @@ func NewDelProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelPro
 	}
 }
 
-func (l *DelProcDefLogic) DelProcDef(in *act.FindProcdefReq) (*act.Nil, error) {
+func (l *DelProcDefLogic) DelProcDef(in *act.FindProcDefReq) (*act.Nil, error) {
 	// todo: add your logic here and delete this line
 
 	return &act.Nil{}, nil

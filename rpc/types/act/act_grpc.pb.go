@@ -22,16 +22,19 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ActClient interface {
-	SaveProcDef(ctx context.Context, in *ProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error)
-	FindDefByFormId(ctx context.Context, in *FindProcdefReq, opts ...grpc.CallOption) (*ProcDefReply, error)
-	SetProcDefActive(ctx context.Context, in *FindProcdefReq, opts ...grpc.CallOption) (*ProcDefReply, error)
-	DelProcDef(ctx context.Context, in *FindProcdefReq, opts ...grpc.CallOption) (*Nil, error)
+	SaveProcDef(ctx context.Context, in *SaveProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error)
+	FindDefByFormId(ctx context.Context, in *FindProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error)
+	UpdateProcDef(ctx context.Context, in *FindProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error)
+	DelProcDef(ctx context.Context, in *FindProcDefReq, opts ...grpc.CallOption) (*Nil, error)
 	SaveProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	SaveExecution(ctx context.Context, in *ExecutionReq, opts ...grpc.CallOption) (*ExecutionReply, error)
 	SaveTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error)
 	SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
-	FindLeastTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdReply, error)
-	DelProcInst(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*ProcInstReply, error)
+	FindLatestTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdReply, error)
+	UpdateProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
+	UpdateTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error)
+	UpdateIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
+	DelProcInst(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error)
 	FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	FindMyProcInst(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	FindMyApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
@@ -47,7 +50,7 @@ func NewActClient(cc grpc.ClientConnInterface) ActClient {
 	return &actClient{cc}
 }
 
-func (c *actClient) SaveProcDef(ctx context.Context, in *ProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
+func (c *actClient) SaveProcDef(ctx context.Context, in *SaveProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
 	out := new(ProcDefReply)
 	err := c.cc.Invoke(ctx, "/act.act/saveProcDef", in, out, opts...)
 	if err != nil {
@@ -56,7 +59,7 @@ func (c *actClient) SaveProcDef(ctx context.Context, in *ProcDefReq, opts ...grp
 	return out, nil
 }
 
-func (c *actClient) FindDefByFormId(ctx context.Context, in *FindProcdefReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
+func (c *actClient) FindDefByFormId(ctx context.Context, in *FindProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
 	out := new(ProcDefReply)
 	err := c.cc.Invoke(ctx, "/act.act/findDefByFormId", in, out, opts...)
 	if err != nil {
@@ -65,16 +68,16 @@ func (c *actClient) FindDefByFormId(ctx context.Context, in *FindProcdefReq, opt
 	return out, nil
 }
 
-func (c *actClient) SetProcDefActive(ctx context.Context, in *FindProcdefReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
+func (c *actClient) UpdateProcDef(ctx context.Context, in *FindProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
 	out := new(ProcDefReply)
-	err := c.cc.Invoke(ctx, "/act.act/setProcDefActive", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/act.act/updateProcDef", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *actClient) DelProcDef(ctx context.Context, in *FindProcdefReq, opts ...grpc.CallOption) (*Nil, error) {
+func (c *actClient) DelProcDef(ctx context.Context, in *FindProcDefReq, opts ...grpc.CallOption) (*Nil, error) {
 	out := new(Nil)
 	err := c.cc.Invoke(ctx, "/act.act/delProcDef", in, out, opts...)
 	if err != nil {
@@ -119,17 +122,44 @@ func (c *actClient) SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, o
 	return out, nil
 }
 
-func (c *actClient) FindLeastTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdReply, error) {
+func (c *actClient) FindLatestTaskId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskIdReply, error) {
 	out := new(TaskIdReply)
-	err := c.cc.Invoke(ctx, "/act.act/findLeastTaskId", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/act.act/findLatestTaskId", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *actClient) DelProcInst(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
+func (c *actClient) UpdateProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
 	out := new(ProcInstReply)
+	err := c.cc.Invoke(ctx, "/act.act/updateProcInst", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *actClient) UpdateTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error) {
+	out := new(TaskReply)
+	err := c.cc.Invoke(ctx, "/act.act/updateTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *actClient) UpdateIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error) {
+	out := new(IdentityLinkReply)
+	err := c.cc.Invoke(ctx, "/act.act/updateIdentityLink", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *actClient) DelProcInst(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error) {
+	out := new(Nil)
 	err := c.cc.Invoke(ctx, "/act.act/delProcInst", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -186,16 +216,19 @@ func (c *actClient) FindElapsedTime(ctx context.Context, in *UserReq, opts ...gr
 // All implementations must embed UnimplementedActServer
 // for forward compatibility
 type ActServer interface {
-	SaveProcDef(context.Context, *ProcDefReq) (*ProcDefReply, error)
-	FindDefByFormId(context.Context, *FindProcdefReq) (*ProcDefReply, error)
-	SetProcDefActive(context.Context, *FindProcdefReq) (*ProcDefReply, error)
-	DelProcDef(context.Context, *FindProcdefReq) (*Nil, error)
+	SaveProcDef(context.Context, *SaveProcDefReq) (*ProcDefReply, error)
+	FindDefByFormId(context.Context, *FindProcDefReq) (*ProcDefReply, error)
+	UpdateProcDef(context.Context, *FindProcDefReq) (*ProcDefReply, error)
+	DelProcDef(context.Context, *FindProcDefReq) (*Nil, error)
 	SaveProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error)
 	SaveExecution(context.Context, *ExecutionReq) (*ExecutionReply, error)
 	SaveTask(context.Context, *TaskReq) (*TaskReply, error)
 	SaveIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error)
-	FindLeastTaskId(context.Context, *DataIdReq) (*TaskIdReply, error)
-	DelProcInst(context.Context, *DataIdReq) (*ProcInstReply, error)
+	FindLatestTaskId(context.Context, *DataIdReq) (*TaskIdReply, error)
+	UpdateProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error)
+	UpdateTask(context.Context, *TaskReq) (*TaskReply, error)
+	UpdateIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error)
+	DelProcInst(context.Context, *DataIdReq) (*Nil, error)
 	FindAllProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error)
 	FindMyProcInst(context.Context, *MyProcInstReq) (*ProcInstReply, error)
 	FindMyApproval(context.Context, *MyProcInstReq) (*ProcInstReply, error)
@@ -208,16 +241,16 @@ type ActServer interface {
 type UnimplementedActServer struct {
 }
 
-func (UnimplementedActServer) SaveProcDef(context.Context, *ProcDefReq) (*ProcDefReply, error) {
+func (UnimplementedActServer) SaveProcDef(context.Context, *SaveProcDefReq) (*ProcDefReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveProcDef not implemented")
 }
-func (UnimplementedActServer) FindDefByFormId(context.Context, *FindProcdefReq) (*ProcDefReply, error) {
+func (UnimplementedActServer) FindDefByFormId(context.Context, *FindProcDefReq) (*ProcDefReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindDefByFormId not implemented")
 }
-func (UnimplementedActServer) SetProcDefActive(context.Context, *FindProcdefReq) (*ProcDefReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetProcDefActive not implemented")
+func (UnimplementedActServer) UpdateProcDef(context.Context, *FindProcDefReq) (*ProcDefReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateProcDef not implemented")
 }
-func (UnimplementedActServer) DelProcDef(context.Context, *FindProcdefReq) (*Nil, error) {
+func (UnimplementedActServer) DelProcDef(context.Context, *FindProcDefReq) (*Nil, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelProcDef not implemented")
 }
 func (UnimplementedActServer) SaveProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error) {
@@ -232,10 +265,19 @@ func (UnimplementedActServer) SaveTask(context.Context, *TaskReq) (*TaskReply, e
 func (UnimplementedActServer) SaveIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveIdentityLink not implemented")
 }
-func (UnimplementedActServer) FindLeastTaskId(context.Context, *DataIdReq) (*TaskIdReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindLeastTaskId not implemented")
+func (UnimplementedActServer) FindLatestTaskId(context.Context, *DataIdReq) (*TaskIdReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindLatestTaskId not implemented")
 }
-func (UnimplementedActServer) DelProcInst(context.Context, *DataIdReq) (*ProcInstReply, error) {
+func (UnimplementedActServer) UpdateProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateProcInst not implemented")
+}
+func (UnimplementedActServer) UpdateTask(context.Context, *TaskReq) (*TaskReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
+}
+func (UnimplementedActServer) UpdateIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateIdentityLink not implemented")
+}
+func (UnimplementedActServer) DelProcInst(context.Context, *DataIdReq) (*Nil, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelProcInst not implemented")
 }
 func (UnimplementedActServer) FindAllProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error) {
@@ -267,7 +309,7 @@ func RegisterActServer(s grpc.ServiceRegistrar, srv ActServer) {
 }
 
 func _Act_SaveProcDef_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ProcDefReq)
+	in := new(SaveProcDefReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -279,13 +321,13 @@ func _Act_SaveProcDef_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: "/act.act/saveProcDef",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActServer).SaveProcDef(ctx, req.(*ProcDefReq))
+		return srv.(ActServer).SaveProcDef(ctx, req.(*SaveProcDefReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Act_FindDefByFormId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindProcdefReq)
+	in := new(FindProcDefReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -297,31 +339,31 @@ func _Act_FindDefByFormId_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/act.act/findDefByFormId",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActServer).FindDefByFormId(ctx, req.(*FindProcdefReq))
+		return srv.(ActServer).FindDefByFormId(ctx, req.(*FindProcDefReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Act_SetProcDefActive_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindProcdefReq)
+func _Act_UpdateProcDef_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindProcDefReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ActServer).SetProcDefActive(ctx, in)
+		return srv.(ActServer).UpdateProcDef(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/act.act/setProcDefActive",
+		FullMethod: "/act.act/updateProcDef",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActServer).SetProcDefActive(ctx, req.(*FindProcdefReq))
+		return srv.(ActServer).UpdateProcDef(ctx, req.(*FindProcDefReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Act_DelProcDef_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindProcdefReq)
+	in := new(FindProcDefReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -333,7 +375,7 @@ func _Act_DelProcDef_Handler(srv interface{}, ctx context.Context, dec func(inte
 		FullMethod: "/act.act/delProcDef",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActServer).DelProcDef(ctx, req.(*FindProcdefReq))
+		return srv.(ActServer).DelProcDef(ctx, req.(*FindProcDefReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -410,20 +452,74 @@ func _Act_SaveIdentityLink_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Act_FindLeastTaskId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Act_FindLatestTaskId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DataIdReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ActServer).FindLeastTaskId(ctx, in)
+		return srv.(ActServer).FindLatestTaskId(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/act.act/findLeastTaskId",
+		FullMethod: "/act.act/findLatestTaskId",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActServer).FindLeastTaskId(ctx, req.(*DataIdReq))
+		return srv.(ActServer).FindLatestTaskId(ctx, req.(*DataIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Act_UpdateProcInst_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProcInstReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActServer).UpdateProcInst(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/act.act/updateProcInst",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActServer).UpdateProcInst(ctx, req.(*ProcInstReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Act_UpdateTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActServer).UpdateTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/act.act/updateTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActServer).UpdateTask(ctx, req.(*TaskReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Act_UpdateIdentityLink_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IdentityLinkReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActServer).UpdateIdentityLink(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/act.act/updateIdentityLink",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActServer).UpdateIdentityLink(ctx, req.(*IdentityLinkReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -552,8 +648,8 @@ var Act_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Act_FindDefByFormId_Handler,
 		},
 		{
-			MethodName: "setProcDefActive",
-			Handler:    _Act_SetProcDefActive_Handler,
+			MethodName: "updateProcDef",
+			Handler:    _Act_UpdateProcDef_Handler,
 		},
 		{
 			MethodName: "delProcDef",
@@ -576,8 +672,20 @@ var Act_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Act_SaveIdentityLink_Handler,
 		},
 		{
-			MethodName: "findLeastTaskId",
-			Handler:    _Act_FindLeastTaskId_Handler,
+			MethodName: "findLatestTaskId",
+			Handler:    _Act_FindLatestTaskId_Handler,
+		},
+		{
+			MethodName: "updateProcInst",
+			Handler:    _Act_UpdateProcInst_Handler,
+		},
+		{
+			MethodName: "updateTask",
+			Handler:    _Act_UpdateTask_Handler,
+		},
+		{
+			MethodName: "updateIdentityLink",
+			Handler:    _Act_UpdateIdentityLink_Handler,
 		},
 		{
 			MethodName: "delProcInst",

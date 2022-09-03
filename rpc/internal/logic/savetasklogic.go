@@ -35,8 +35,8 @@ func (l *SaveTaskLogic) SaveTask(in *act.TaskReq) (*act.TaskReply, error) {
 	} else if "and" == in.Mode {
 		mode = task.ModeAnd
 	}
-	_, err = tx.Task.Create().SetDataID(in.DataId).SetProcInstID(in.ProcInstId).SetCreateTime(time.Now()).SetClaimTime(time.Now()).SetLevel(in.Level).
-		SetStep(in.Step).SetMode(mode).Save(l.ctx)
+	_, err = tx.Task.Create().SetDataID(in.DataId).SetNodeID(in.NodeId).SetProcInstID(in.ProcInstId).SetIsFinished(int8(in.IsFinished)).SetClaimTime(time.Now()).SetLevel(in.Level).
+		SetMemberApprover(in.MemberApprover).SetStep(in.Step).SetMode(mode).Save(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err

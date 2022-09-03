@@ -86,7 +86,7 @@ func (n *Node) add2ExecutionList(list *list.List) {
 		list.PushBack(NodeInfo{
 			NodeID:       n.NodeID,
 			Type:         n.Type,
-			Level:        list.Len() + 1,
+			Level:        list.Len() + 2,
 			AssignedType: n.Props.AssignedType,
 			//MemberCount:   n.Props.getMemberCount(),
 			Mode:          n.Props.Mode,

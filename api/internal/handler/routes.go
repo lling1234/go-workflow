@@ -16,17 +16,22 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodPost,
 				Path:    "/act/procdef/add",
-				Handler: act.AddProcdefHandler(serverCtx),
+				Handler: act.AddProcDefHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/act/procdef/update",
+				Handler: act.UpdateProcDefHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/act/procdef/findoneprocdef",
-				Handler: act.FindOneProcdefHandler(serverCtx),
+				Handler: act.FindOneProcDefHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/act/procdef/findallprocdef",
-				Handler: act.FindAllProcdefHandler(serverCtx),
+				Handler: act.FindAllProcDefHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
@@ -36,12 +41,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodPost,
 				Path:    "/act/procdef/del",
-				Handler: act.DelProcdefHandler(serverCtx),
+				Handler: act.DelProcDefHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/act/procinst/start",
-				Handler: act.StartProcinstHandler(serverCtx),
+				Handler: act.StartProcInstHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
@@ -61,7 +66,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodPost,
 				Path:    "/act/procinst/del",
-				Handler: act.DelProcinstHandler(serverCtx),
+				Handler: act.DelProcInstHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,

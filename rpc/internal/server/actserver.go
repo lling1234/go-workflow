@@ -22,22 +22,22 @@ func NewActServer(svcCtx *svc.ServiceContext) *ActServer {
 	}
 }
 
-func (s *ActServer) SaveProcDef(ctx context.Context, in *act.ProcDefReq) (*act.ProcDefReply, error) {
+func (s *ActServer) SaveProcDef(ctx context.Context, in *act.SaveProcDefReq) (*act.ProcDefReply, error) {
 	l := logic.NewSaveProcDefLogic(ctx, s.svcCtx)
 	return l.SaveProcDef(in)
 }
 
-func (s *ActServer) FindDefByFormId(ctx context.Context, in *act.FindProcdefReq) (*act.ProcDefReply, error) {
+func (s *ActServer) FindDefByFormId(ctx context.Context, in *act.FindProcDefReq) (*act.ProcDefReply, error) {
 	l := logic.NewFindDefByFormIdLogic(ctx, s.svcCtx)
 	return l.FindDefByFormId(in)
 }
 
-func (s *ActServer) SetProcDefActive(ctx context.Context, in *act.FindProcdefReq) (*act.ProcDefReply, error) {
-	l := logic.NewSetProcDefActiveLogic(ctx, s.svcCtx)
-	return l.SetProcDefActive(in)
+func (s *ActServer) UpdateProcDef(ctx context.Context, in *act.FindProcDefReq) (*act.ProcDefReply, error) {
+	l := logic.NewUpdateProcDefLogic(ctx, s.svcCtx)
+	return l.UpdateProcDef(in)
 }
 
-func (s *ActServer) DelProcDef(ctx context.Context, in *act.FindProcdefReq) (*act.Nil, error) {
+func (s *ActServer) DelProcDef(ctx context.Context, in *act.FindProcDefReq) (*act.Nil, error) {
 	l := logic.NewDelProcDefLogic(ctx, s.svcCtx)
 	return l.DelProcDef(in)
 }
@@ -62,12 +62,27 @@ func (s *ActServer) SaveIdentityLink(ctx context.Context, in *act.IdentityLinkRe
 	return l.SaveIdentityLink(in)
 }
 
-func (s *ActServer) FindLeastTaskId(ctx context.Context, in *act.DataIdReq) (*act.TaskIdReply, error) {
-	l := logic.NewFindLeastTaskIdLogic(ctx, s.svcCtx)
-	return l.FindLeastTaskId(in)
+func (s *ActServer) FindLatestTaskId(ctx context.Context, in *act.DataIdReq) (*act.TaskIdReply, error) {
+	l := logic.NewFindLatestTaskIdLogic(ctx, s.svcCtx)
+	return l.FindLatestTaskId(in)
 }
 
-func (s *ActServer) DelProcInst(ctx context.Context, in *act.DataIdReq) (*act.ProcInstReply, error) {
+func (s *ActServer) UpdateProcInst(ctx context.Context, in *act.ProcInstReq) (*act.ProcInstReply, error) {
+	l := logic.NewUpdateProcInstLogic(ctx, s.svcCtx)
+	return l.UpdateProcInst(in)
+}
+
+func (s *ActServer) UpdateTask(ctx context.Context, in *act.TaskReq) (*act.TaskReply, error) {
+	l := logic.NewUpdateTaskLogic(ctx, s.svcCtx)
+	return l.UpdateTask(in)
+}
+
+func (s *ActServer) UpdateIdentityLink(ctx context.Context, in *act.IdentityLinkReq) (*act.IdentityLinkReply, error) {
+	l := logic.NewUpdateIdentityLinkLogic(ctx, s.svcCtx)
+	return l.UpdateIdentityLink(in)
+}
+
+func (s *ActServer) DelProcInst(ctx context.Context, in *act.DataIdReq) (*act.Nil, error) {
 	l := logic.NewDelProcInstLogic(ctx, s.svcCtx)
 	return l.DelProcInst(in)
 }

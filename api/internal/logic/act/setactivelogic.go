@@ -25,7 +25,7 @@ func NewSetActiveLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SetActi
 }
 
 func (l *SetActiveLogic) SetActive(req *types.FormIdReq) (resp *types.CommonResponse, err error) {
-	reply, err := l.svcCtx.Rpc.SetProcDefActive(l.ctx, &act.FindProcdefReq{
+	reply, err := l.svcCtx.Rpc.UpdateProcDef(l.ctx, &act.FindProcDefReq{
 		FormId:  req.FormId,
 		Version: req.Version,
 	})

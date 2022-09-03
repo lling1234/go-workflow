@@ -26,7 +26,7 @@ func NewSaveProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SaveP
 	}
 }
 
-func (l *SaveProcDefLogic) SaveProcDef(in *act.ProcDefReq) (*act.ProcDefReply, error) {
+func (l *SaveProcDefLogic) SaveProcDef(in *act.SaveProcDefReq) (*act.ProcDefReply, error) {
 	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
 	if err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func (l *SaveProcDefLogic) SaveProcDef(in *act.ProcDefReq) (*act.ProcDefReply, e
 	return reply, nil
 }
 
-func (l *SaveProcDefLogic) convert(in *act.ProcDefReq, version int32) *act.ProcDefReply {
+func (l *SaveProcDefLogic) convert(in *act.SaveProcDefReq, version int32) *act.ProcDefReply {
 	return &act.ProcDefReply{
 		Name:        in.Name,
 		Code:        in.Code,

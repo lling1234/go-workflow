@@ -9,21 +9,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type DelProcinstLogic struct {
+type DelProcInstLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewDelProcinstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelProcinstLogic {
-	return &DelProcinstLogic{
+func NewDelProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelProcInstLogic {
+	return &DelProcInstLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *DelProcinstLogic) DelProcinst(req *types.DataIdReq) (resp *types.CommonResponse, err error) {
+func (l *DelProcInstLogic) DelProcInst(req *types.DataIdReq) (resp *types.CommonResponse, err error) {
 	// todo: add your logic here and delete this line
 
 	return
