@@ -1,12 +1,12 @@
 package logic
 
 import (
+	act2 "act/common/act"
 	"act/common/act/task"
-	"context"
-	"log"
-
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
+	"context"
+	"log"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -30,9 +30,14 @@ func (l *FindLatestTaskIdLogic) FindLatestTaskId(in *act.DataIdReq) (*act.TaskId
 	if err != nil {
 		return nil, err
 	}
-	log.Println(1111122222)
-	t, err := tx.Task.Query().Where(task.DataID(in.DataId), task.IsDelEQ(0), task.StepEQ(in.Step)).First(l.ctx)
-	log.Println(222221111)
+	var t *act2.Task
+	if in.Step != 0 {
+		log.Printf("step1:%d", in.Step)
+		t, err = tx.Task.Query().Where(task.DataID(in.DataId), task.IsDelEQ(0), task.StepEQ(in.Step)).First(l.ctx)
+	} else {
+		log.Printf("step2:%d", in.Step)
+		t, err = tx.Task.Query().Where(task.DataID(in.DataId), task.IsDelEQ(0)).Order(act2.Desc(task.FieldStep)).First(l.ctx)
+	}
 	if err != nil {
 		return nil, err
 	}

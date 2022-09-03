@@ -50,8 +50,8 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/act/procinst/compelete",
-				Handler: act.CompeleteTaskHandler(serverCtx),
+				Path:    "/act/procinst/complete",
+				Handler: act.CompleteTaskHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,

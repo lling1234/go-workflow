@@ -23,7 +23,7 @@ type StartProcInst struct {
 	DataId int64  `json:"dataId"`
 }
 
-type CompeleteTask struct {
+type CompleteTask struct {
 	DataId  int64  `json:"dataId"`
 	Result  int    `json:"result"`
 	Comment string `json:"comment"`

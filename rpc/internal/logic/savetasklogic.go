@@ -5,8 +5,6 @@ import (
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
 	"context"
-	"time"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -35,7 +33,7 @@ func (l *SaveTaskLogic) SaveTask(in *act.TaskReq) (*act.TaskReply, error) {
 	} else if "and" == in.Mode {
 		mode = task.ModeAnd
 	}
-	_, err = tx.Task.Create().SetDataID(in.DataId).SetNodeID(in.NodeId).SetProcInstID(in.ProcInstId).SetIsFinished(int8(in.IsFinished)).SetClaimTime(time.Now()).SetLevel(in.Level).
+	_, err = tx.Task.Create().SetDataID(in.DataId).SetNodeID(in.NodeId).SetProcInstID(in.ProcInstId).SetIsFinished(int8(in.IsFinished)).SetLevel(in.Level).
 		SetMemberApprover(in.MemberApprover).SetStep(in.Step).SetMode(mode).Save(l.ctx)
 	if err != nil {
 		tx.Rollback()

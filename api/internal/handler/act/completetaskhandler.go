@@ -9,16 +9,16 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func CompeleteTaskHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func CompleteTaskHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.CompeleteTask
+		var req types.CompleteTask
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
-		l := act.NewCompeleteTaskLogic(r.Context(), svcCtx)
-		resp, err := l.CompeleteTask(&req)
+		l := act.NewCompleteTaskLogic(r.Context(), svcCtx)
+		resp, err := l.CompleteTask(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
