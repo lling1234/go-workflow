@@ -45,8 +45,5 @@ func (l *AddProcDefLogic) AddProcDef(req *types.SaveProcDef) (resp *types.Common
 		Resource:    string(resource),
 		RemainHours: req.RemainHours,
 	})
-	if err != nil {
-		return types.GetErrorCommonResponse(err.Error())
-	}
 	return types.GetCommonResponse(err, reply)
 }

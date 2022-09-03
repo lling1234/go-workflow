@@ -30,6 +30,7 @@ func NewStartProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Sta
 }
 
 func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *types.CommonResponse, err error) {
+	RPC := l.svcCtx.Rpc
 	def, err := l.svcCtx.Rpc.FindDefByFormId(l.ctx, &actclient.FindProcDefReq{
 		FormId: req.FormId,
 	})
@@ -37,14 +38,15 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 		return types.GetErrorCommonResponse(err.Error())
 	}
 	resource := def.Resource
-	inst, err := l.svcCtx.Rpc.SaveProcInst(l.ctx, &actclient.ProcInstReq{
+	instReq := &actclient.ProcInstReq{
 		ProcDefId:   def.Id,
 		Title:       req.Title,
 		FormId:      req.FormId,
 		DataId:      req.DataId,
 		RemainHours: def.RemainHours,
 		State:       flow.PENDING,
-	})
+	}
+	inst, err := RPC.SaveProcInst(l.ctx, instReq)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
@@ -58,7 +60,7 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 		//MemberCount:   1,
 		Mode: "or",
 	}
-	_, err = l.svcCtx.Rpc.SaveTask(l.ctx, &task)
+	_, err = RPC.SaveTask(l.ctx, &task)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
@@ -75,7 +77,7 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 		ProcInstId: inst.Id,
 		NodeInfos:  listStr,
 	}
-	_, err = l.svcCtx.Rpc.SaveExecution(l.ctx, exec)
+	_, err = RPC.SaveExecution(l.ctx, exec)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
@@ -94,10 +96,12 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 	task.Step = 2
 	task.Mode = firstNode.Mode
 	task.MemberApprover = firstNode.ApproverIds
-	newTask, err := l.svcCtx.Rpc.SaveTask(l.ctx, &task)
+	newTask, err := RPC.SaveTask(l.ctx, &task)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
+
+	RPC.UpdateProcInst(l.ctx, instReq)
 	userId, _ := strconv.ParseInt(firstNode.ApproverIds, 10, 64)
 	identityLink := actclient.IdentityLinkReq{
 		ProcInstId: inst.Id,
@@ -107,11 +111,9 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 		//Comment:    "",
 		//Result:     1,
 	}
-	_, err = l.svcCtx.Rpc.SaveIdentityLink(l.ctx, &identityLink)
-	if err != nil {
-		return types.GetErrorCommonResponse(err.Error())
-	}
-	return types.GetCommonResponse(nil, inst)
+	_, err = RPC.SaveIdentityLink(l.ctx, &identityLink)
+
+	return types.GetCommonResponse(err, inst)
 }
 
 func GenerateExec(list *list.List) (string, error) {

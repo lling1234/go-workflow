@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"act/common/act/procdef"
 	"context"
 
 	"act/rpc/internal/svc"
@@ -24,7 +25,14 @@ func NewDelProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelPro
 }
 
 func (l *DelProcDefLogic) DelProcDef(in *act.FindProcDefReq) (*act.Nil, error) {
-	// todo: add your logic here and delete this line
-
+	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	err = tx.ProcDef.Update().Where(procdef.FormIDEQ(in.FormId), procdef.TargetIDEQ(1727882), procdef.VersionEQ(in.Version)).SetIsDel(1).Exec(l.ctx)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
 	return &act.Nil{}, nil
 }

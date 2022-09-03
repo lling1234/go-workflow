@@ -54,6 +54,8 @@ message ProcInstReq {
   int64 targetId = 7;
   int32 remainHours = 8;
   int32 state = 9;
+  string nodeId = 10;
+  int64 taskId = 11;
 }
 
 message ProcInstReply {

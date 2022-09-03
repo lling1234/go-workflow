@@ -1,6 +1,7 @@
 package act
 
 import (
+	"act/rpc/types/act"
 	"context"
 
 	"act/api/internal/svc"
@@ -24,7 +25,10 @@ func NewDelProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelPro
 }
 
 func (l *DelProcDefLogic) DelProcDef(req *types.FormIdReq) (resp *types.CommonResponse, err error) {
-	// todo: add your logic here and delete this line
+	_, err = l.svcCtx.Rpc.DelProcDef(l.ctx, &act.FindProcDefReq{
+		FormId:  req.FormId,
+		Version: req.Version,
+	})
 
-	return
+	return types.GetCommonResponse(err, "ok")
 }

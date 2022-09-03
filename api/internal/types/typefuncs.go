@@ -25,3 +25,11 @@ func GetErrorCommonResponse(msg string) (*CommonResponse, error) {
 		Success: false,
 	}, errors.New(msg)
 }
+
+func GetSuccessCommonResponse(T any) (*CommonResponse, error) {
+	return &CommonResponse{
+		Code:    200,
+		Data:    T,
+		Success: true,
+	}, nil
+}
