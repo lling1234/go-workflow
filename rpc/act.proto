@@ -172,6 +172,11 @@ message DataIdReq {
 message TaskIdArg {
   int64 id = 1;
 }
+
+message ProcInstIdArg {
+  int64 id = 1;
+}
+
 message Nil{
 }
 
@@ -217,12 +222,13 @@ service act {
   rpc saveExecution(ExecutionReq) returns(ExecutionReply);
   rpc saveTask(TaskReq) returns(TaskReply);
   rpc saveIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
-  rpc findLatestTaskId(DataIdReq) returns(TaskIdArg);
+  rpc findLatestTask(DataIdReq) returns(TaskReply);
   rpc updateProcInst(UpdateProcInstReq) returns(ProcInstReply);
   rpc updateTask(TaskReq) returns(TaskReply);
   rpc updateIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
   rpc delProcInst(DataIdReq) returns(Nil);
   rpc findIdentityLinkByTaskId(TaskIdArg) returns(IdentityLinkReply);
+  rpc findExecutionByInstId(ProcInstIdArg) returns(ExecutionReq);
 
   rpc findAllProcInst(ProcInstReq) returns(ProcInstReply);
   rpc findMyProcInst(MyProcInstReq) returns(ProcInstReply);

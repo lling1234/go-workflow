@@ -101,7 +101,7 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
-	newTaskReply, err := RPC.FindLatestTaskId(l.ctx, &actclient.DataIdReq{
+	newTaskReply, err := RPC.FindLatestTask(l.ctx, &actclient.DataIdReq{
 		DataId: req.DataId,
 		Step:   STEP,
 	})
@@ -122,13 +122,14 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 		return types.GetErrorCommonResponse(err.Error())
 	}
 	userIds := strings.Split(firstNode.ApproverIds, ",")
-	for _, v := range userIds {
+	userNames := strings.Split(firstNode.ApproverNames, ",")
+	for k, v := range userIds {
 		userId, _ := strconv.ParseInt(v, 10, 64)
 		identityLink := actclient.IdentityLinkReq{
 			ProcInstId: inst.Id,
 			TaskId:     newTaskReply.Id,
 			UserId:     userId,
-			UserName:   firstNode.ApproverNames,
+			UserName:   userNames[k],
 			Step:       STEP,
 		}
 		_, err = RPC.SaveIdentityLink(l.ctx, &identityLink)
