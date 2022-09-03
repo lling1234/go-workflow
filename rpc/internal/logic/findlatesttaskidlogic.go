@@ -1,9 +1,9 @@
 package logic
 
 import (
-	act2 "act/common/act"
 	"act/common/act/task"
 	"context"
+	"log"
 
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
@@ -30,7 +30,9 @@ func (l *FindLatestTaskIdLogic) FindLatestTaskId(in *act.DataIdReq) (*act.TaskId
 	if err != nil {
 		return nil, err
 	}
-	t, err := tx.Task.Query().Where(task.DataID(in.DataId)).Order(act2.Desc(task.FieldCreateTime)).First(l.ctx)
+	log.Println(1111122222)
+	t, err := tx.Task.Query().Where(task.DataID(in.DataId), task.IsDelEQ(0), task.StepEQ(in.Step)).First(l.ctx)
+	log.Println(222221111)
 	if err != nil {
 		return nil, err
 	}

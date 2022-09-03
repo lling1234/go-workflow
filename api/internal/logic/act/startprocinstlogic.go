@@ -71,13 +71,13 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 	}
 	list, err := flow.ParseProcessConfig(node)
 	listStr, err := GenerateExec(list)
-	log.Printf("listStr:%s", listStr)
 	exec := &actclient.ExecutionReq{
 		ProcDefId:  def.Id,
 		ProcInstId: inst.Id,
 		NodeInfos:  listStr,
 	}
 	_, err = RPC.SaveExecution(l.ctx, exec)
+	log.Println(1111111)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
@@ -96,24 +96,37 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 	task.Step = 2
 	task.Mode = firstNode.Mode
 	task.MemberApprover = firstNode.ApproverIds
-	newTask, err := RPC.SaveTask(l.ctx, &task)
+	_, err = RPC.SaveTask(l.ctx, &task)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
-	instReq.TaskId = newTask.Id
-	instReq.NodeId = firstNode.NodeID
-	_, err = RPC.UpdateProcInst(l.ctx, instReq)
+	newTaskReply, err := RPC.FindLatestTaskId(l.ctx, &actclient.DataIdReq{
+		DataId: req.DataId,
+		Step:   2,
+	})
+	log.Printf("newTaskReply:%d,firstNode:%s", newTaskReply.Id, firstNode.NodeID)
+	if err != nil {
+		return types.GetErrorCommonResponse(err.Error())
+	}
+	updateInst := &actclient.UpdateProcInstReq{
+		ProcDefId:   def.Id,
+		FormId:      req.FormId,
+		DataId:      req.DataId,
+		RemainHours: def.RemainHours,
+		State:       flow.PENDING,
+		TaskId:      newTaskReply.Id,
+		NodeId:      firstNode.NodeID,
+	}
+	_, err = RPC.UpdateProcInst(l.ctx, updateInst)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
 	userId, _ := strconv.ParseInt(firstNode.ApproverIds, 10, 64)
 	identityLink := actclient.IdentityLinkReq{
 		ProcInstId: inst.Id,
-		TaskId:     newTask.Id,
+		TaskId:     newTaskReply.Id,
 		UserId:     userId,
 		UserName:   firstNode.ApproverNames,
-		//Comment:    "",
-		//Result:     1,
 	}
 	_, err = RPC.SaveIdentityLink(l.ctx, &identityLink)
 

@@ -36,10 +36,10 @@ func (l *FindDefByFormIdLogic) FindDefByFormId(in *act.FindProcDefReq) (*act.Pro
 	if err != nil {
 		return nil, err
 	}
-	return convert(def), nil
+	return l.convert(def), nil
 }
 
-func convert(actpd *act2.ProcDef) *act.ProcDefReply {
+func (l *FindDefByFormIdLogic) convert(actpd *act2.ProcDef) *act.ProcDefReply {
 	return &act.ProcDefReply{
 		Id:             actpd.ID,
 		Name:           actpd.Name,

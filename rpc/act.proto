@@ -164,6 +164,7 @@ message IdentityLinkReply {
 
 message DataIdReq {
   int64 dataId = 1;
+  int32 step = 2;
 }
 
 message TaskIdReply {

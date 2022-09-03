@@ -47,3 +47,11 @@ func (t *DateTime) UnmarshalJSON(data []byte) (err error) {
 func (t DateTime) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf(`"%s"`, t.String())), nil
 }
+
+//func StrToTime(str string) (*time.Time, error) {
+//	t, err := time.Parse("2006-01-02 15:04:05", str)
+//	if err != nil {
+//		return nil, err
+//	}
+//	return &t, nil
+//}
