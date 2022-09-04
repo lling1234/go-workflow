@@ -128,7 +128,7 @@ func (l *SaveIdentityLinkLogic) Complete(taskID int64, userID int64, username st
 		return errors.New("任务【" + fmt.Sprintf("%d", taskQuery.ID) + "】不存在")
 	}
 	// 1.2判断是否已经结束
-	if taskQuery.IsFinished == const2.IsFinishYes {
+	if taskQuery.IsFinished == int8(const2.IsFinishYes) {
 		if taskQuery.NodeID == "结束" {
 			return errors.New("流程已经结束")
 		}
@@ -142,7 +142,7 @@ func (l *SaveIdentityLinkLogic) Complete(taskID int64, userID int64, username st
 	taskQuery.UnCompleteNum--
 	// 判断是否结束
 	if taskQuery.UnCompleteNum == 0 {
-		taskQuery.IsFinished = const2.IsFinishYes
+		taskQuery.IsFinished = int8(const2.IsFinishYes)
 	}
 
 	/*

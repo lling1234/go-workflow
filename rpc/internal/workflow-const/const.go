@@ -7,6 +7,6 @@ var (
 	IsDelYes = 1
 	IsDelNo  = 0
 
-	IsFinishYes int8 = 1
+	IsFinishYes  = 1
 	IsFinishNo  = 2
 )
