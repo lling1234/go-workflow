@@ -33,9 +33,17 @@ func (l *UpdateProcInstLogic) UpdateProcInst(in *act.UpdateProcInstReq) (*act.Pr
 	}
 	var endTime time.Time
 	util.Str2Struct(in.EndTime, endTime)
-	procInstUpdate := tx.ProcInst.Update().Where(procinst.ProcDefIDEQ(in.ProcDefId), procinst.StateNotIn(flow.WITHDRAW, flow.DISCARD), procinst.IsDelEQ(0)).
-		SetNodeID(in.NodeId).SetTaskID(in.TaskId)
+	//procInstUpdate := tx.ProcInst.Update().Where(procinst.ProcDefIDEQ(in.ProcDefId), procinst.StateNotIn(flow.WITHDRAW, flow.DISCARD), procinst.IsDelEQ(0)).
+	//	SetNodeID(in.NodeId).SetTaskID(in.TaskId)
 
+	procInstUpdate := tx.ProcInst.Update().Where(procinst.DataIDEQ(in.DataId), procinst.StateNotIn(flow.WITHDRAW, flow.DISCARD), procinst.IsDelEQ(0))
+
+	if in.TaskId != 0 {
+		procInstUpdate.SetNodeID(in.NodeId).SetTaskID(in.TaskId)
+	}
+	if in.State != 0 {
+		procInstUpdate.SetState(in.State)
+	}
 	if in.IsFinish == 1 {
 		procInstUpdate.SetIsFinished(1).SetEndTime(time.Now())
 	}

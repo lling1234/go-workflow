@@ -29,8 +29,12 @@ func (l *FindExecutionByInstIdLogic) FindExecutionByInstId(in *act.ProcInstIdArg
 	if err != nil {
 		return nil, err
 	}
-	exec, err := tx.Execution.Query().Where(execution.ProcInstID(in.Id)).Only(l.ctx)
+	exec, err := tx.Execution.Query().Where(execution.ProcInstID(in.Id), execution.IsDelEQ(0)).First(l.ctx)
+	if err != nil {
+		return nil, err
+	}
 	return &act.ExecutionReq{
-		NodeInfos: exec.NodeInfos,
+		NodeInfos:  exec.NodeInfos,
+		ProcInstId: in.Id,
 	}, nil
 }
