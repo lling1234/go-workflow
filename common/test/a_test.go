@@ -19,11 +19,7 @@ func TestActDbCreate(t *testing.T) {
 		Mode:         "dev",
 		DataCenterId: 1,
 		WorkerId:     1,
-		DataSource:   "root:123456@(127.0.0.1:3306)/wflow?charset=utf8&parseTime=true&loc=Local",
-		//Cache: cache.CacheConfig{
-		//	Addr:     "qkbyte.orginone.cn:6002",
-		//	Password: "orginone",
-		//},
+		DataSource:   "root:ye199169@(127.0.0.1:3306)/act?charset=utf8&parseTime=true&loc=Local",
 	})
 	defer store.Close()
 	ctx := context.Background()
@@ -39,7 +35,7 @@ func TestActDbCreate(t *testing.T) {
 }
 
 func TestAmain(t *testing.T) {
-	client, err := ent.Open("mysql", "root:ye199169@tcp(127.0.0.1:3306)/wflow?parseTime=True&loc=Local")
+	client, err := ent.Open("mysql", "root:ye199169@tcp(127.0.0.1:3306)/act?parseTime=True&loc=Local")
 	if err != nil {
 		log.Fatal(err)
 	}

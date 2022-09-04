@@ -32,8 +32,8 @@ func (l *UpdateIdentityLinkLogic) UpdateIdentityLink(in *act.IdentityLinkReq) (*
 		return nil, err
 	}
 
-	err = tx.IdentityLink.Update().Where(identitylink.TaskIDEQ(in.TaskId), identitylink.UserIDEQ(general.UserId1), identitylink.IsDelEQ(0), identitylink.IsDealEQ(0)).
-		SetUpdateTime(time.Now()).SetComment(in.Comment).SetResult(in.Result).Exec(l.ctx)
+	err = tx.IdentityLink.Update().Where(identitylink.TaskIDEQ(in.TaskId), identitylink.UserIDEQ(general.MyUserId), identitylink.IsDelEQ(0), identitylink.IsDealEQ(0)).
+		SetUpdateTime(time.Now()).SetComment(in.Comment).SetResult(in.Result).SetIsDeal(1).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err

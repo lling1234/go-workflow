@@ -10,4 +10,6 @@ var (
 	UserId3   int64 = 11025
 	UserName3       = "xiaoming"
 	TargetId  int64 = 1727882
+
+	MyUserId = UserId2
 )

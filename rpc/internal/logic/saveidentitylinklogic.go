@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"act/rpc/general"
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
 	"context"
@@ -27,7 +28,7 @@ func (l *SaveIdentityLinkLogic) SaveIdentityLink(in *act.IdentityLinkReq) (*act.
 	if err != nil {
 		return nil, err
 	}
-	_, err = tx.IdentityLink.Create().SetProcInstID(in.ProcInstId).SetTaskID(in.TaskId).SetTargetID(123).
+	_, err = tx.IdentityLink.Create().SetProcInstID(in.ProcInstId).SetTaskID(in.TaskId).SetTargetID(general.TargetId).
 		SetIsDeal(0).SetStep(in.Step).SetUserID(in.UserId).SetUserName(in.UserName).Save(l.ctx)
 	if err != nil {
 		tx.Rollback()

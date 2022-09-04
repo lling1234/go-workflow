@@ -92,29 +92,29 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 	task.NodeId = firstNode.NodeID
 	STEP = 2
 	//task.AgreeNum = 0
-	//task.IsFinished = 0
+	task.IsFinished = 0
 	task.Level = STEP
 	task.Step = STEP
 	task.Mode = firstNode.Mode
 	task.MemberApprover = firstNode.ApproverIds
-	_, err = RPC.SaveTask(l.ctx, &task)
+	newTask, err := RPC.SaveTask(l.ctx, &task)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
-	newTaskReply, err := RPC.FindLatestTask(l.ctx, &actclient.DataIdReq{
-		DataId: req.DataId,
-		Step:   STEP,
-	})
-	if err != nil {
-		return types.GetErrorCommonResponse(err.Error())
-	}
+	//newTaskReply, err := RPC.FindLatestTask(l.ctx, &actclient.DataIdReq{
+	//	DataId: req.DataId,
+	//	Step:   STEP,
+	//})
+	//if err != nil {
+	//	return types.GetErrorCommonResponse(err.Error())
+	//}
 	updateInst := &actclient.UpdateProcInstReq{
 		ProcDefId:   def.Id,
 		FormId:      req.FormId,
 		DataId:      req.DataId,
 		RemainHours: def.RemainHours,
 		State:       flow.PENDING,
-		TaskId:      newTaskReply.Id,
+		TaskId:      newTask.Id,
 		NodeId:      firstNode.NodeID,
 	}
 	_, err = RPC.UpdateProcInst(l.ctx, updateInst)
@@ -127,7 +127,7 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 		userId, _ := strconv.ParseInt(v, 10, 64)
 		identityLink := actclient.IdentityLinkReq{
 			ProcInstId: inst.Id,
-			TaskId:     newTaskReply.Id,
+			TaskId:     newTask.Id,
 			UserId:     userId,
 			UserName:   userNames[k],
 			Step:       STEP,

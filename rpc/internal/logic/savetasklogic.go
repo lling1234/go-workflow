@@ -27,18 +27,32 @@ func (l *SaveTaskLogic) SaveTask(in *act.TaskReq) (*act.TaskReply, error) {
 	if err != nil {
 		return nil, err
 	}
-	var mode task.Mode
-	if "or" == in.Mode {
-		mode = task.ModeOr
-	} else if "and" == in.Mode {
-		mode = task.ModeAnd
+	//a, err = tx.Task.Create().SetDataID(in.DataId).SetNodeID(in.NodeId).SetProcInstID(in.ProcInstId).SetIsFinished(int8(in.IsFinished)).SetLevel(in.Level).
+	//	SetMemberApprover(in.MemberApprover).SetStep(in.Step).SetMode(mode).Save(l.ctx)
+	//
+	//t, err := tx.Task.Create().SetDataID(in.DataId).SetNodeID(in.NodeId).SetProcInstID(in.ProcInstId).SetIsFinished(int8(in.IsFinished)).SetLevel(in.Level).
+	//	SetMemberApprover(in.MemberApprover).SetStep(in.Step).SetMode(mode).Save(l.ctx)
+	taskCreate := tx.Task.Create().SetDataID(in.DataId).SetNodeID(in.NodeId).SetProcInstID(in.ProcInstId).SetIsFinished(int8(in.IsFinished)).SetLevel(in.Level).
+		SetMemberApprover(in.MemberApprover).SetStep(in.Step)
+	if in.Mode != "" {
+		var mode task.Mode
+		if "or" == in.Mode {
+			mode = task.ModeOr
+		} else if "and" == in.Mode {
+			mode = task.ModeAnd
+		}
+		taskCreate.SetMode(mode)
 	}
-	_, err = tx.Task.Create().SetDataID(in.DataId).SetNodeID(in.NodeId).SetProcInstID(in.ProcInstId).SetIsFinished(int8(in.IsFinished)).SetLevel(in.Level).
-		SetMemberApprover(in.MemberApprover).SetStep(in.Step).SetMode(mode).Save(l.ctx)
+	t, err := taskCreate.Save(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
 	tx.Commit()
-	return &act.TaskReply{}, nil
+	return &act.TaskReply{
+		Id:     t.ID,
+		NodeId: t.NodeID,
+		Level:  t.Level,
+		Step:   t.Step,
+	}, nil
 }

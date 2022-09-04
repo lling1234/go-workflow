@@ -24,6 +24,7 @@ func NewDelProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelPr
 	}
 }
 
+//TODO 流程删除应该删除 流程实例、执行流程、节点任务、审批人
 func (l *DelProcInstLogic) DelProcInst(req *types.DataIdReq) (resp *types.CommonResponse, err error) {
 	_, err = l.svcCtx.Rpc.DelProcInst(l.ctx, &act.DataIdReq{
 		DataId: req.DataId,

@@ -2,7 +2,9 @@ package logic
 
 import (
 	"act/common/act/task"
+	"act/rpc/general"
 	"context"
+	"strconv"
 	"time"
 
 	"act/rpc/internal/svc"
@@ -30,10 +32,21 @@ func (l *UpdateTaskLogic) UpdateTask(in *act.TaskReq) (*act.TaskReply, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = tx.Task.Update().Where(task.IDEQ(in.Id)).SetUpdateTime(time.Now()).SetIsFinished(int8(in.IsFinished)).SetClaimTime(time.Now()).Exec(l.ctx)
+	oldTask, err := tx.Task.Query().Where(task.IDEQ(in.Id)).First(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	agreers := ""
+	if oldTask.AgreeApprover == "" {
+		agreers = strconv.FormatInt(general.MyUserId, 10)
+	} else {
+		agreers = oldTask.AgreeApprover + "," + strconv.FormatInt(general.MyUserId, 10)
+	}
+	err = tx.Task.Update().Where(task.IDEQ(in.Id)).SetUpdateTime(time.Now()).SetIsFinished(int8(in.IsFinished)).SetAgreeApprover(agreers).SetClaimTime(time.Now()).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
+	tx.Commit()
 	return &act.TaskReply{}, nil
 }

@@ -6,7 +6,7 @@ import (
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
 	"context"
-	"github.com/mumushuiding/util"
+	"log"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -31,8 +31,6 @@ func (l *UpdateProcInstLogic) UpdateProcInst(in *act.UpdateProcInstReq) (*act.Pr
 	if err != nil {
 		return nil, err
 	}
-	var endTime time.Time
-	util.Str2Struct(in.EndTime, endTime)
 	//procInstUpdate := tx.ProcInst.Update().Where(procinst.ProcDefIDEQ(in.ProcDefId), procinst.StateNotIn(flow.WITHDRAW, flow.DISCARD), procinst.IsDelEQ(0)).
 	//	SetNodeID(in.NodeId).SetTaskID(in.TaskId)
 
@@ -44,6 +42,7 @@ func (l *UpdateProcInstLogic) UpdateProcInst(in *act.UpdateProcInstReq) (*act.Pr
 	if in.State != 0 {
 		procInstUpdate.SetState(in.State)
 	}
+	log.Printf("procinst State:%d", in.State)
 	if in.IsFinish == 1 {
 		procInstUpdate.SetIsFinished(1).SetEndTime(time.Now())
 	}

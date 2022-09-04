@@ -4,6 +4,7 @@ import (
 	act2 "act/common/act"
 	"act/common/act/procdef"
 	"act/common/tools/date"
+	"act/rpc/general"
 	"context"
 
 	"act/rpc/internal/svc"
@@ -32,7 +33,7 @@ func (l *FindDefByFormIdLogic) FindDefByFormId(in *act.FindProcDefReq) (*act.Pro
 	if err != nil {
 		return nil, err
 	}
-	def, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(1727882), procdef.IsActiveEQ(1)).First(l.ctx)
+	def, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(general.TargetId), procdef.IsActiveEQ(1)).First(l.ctx)
 	if err != nil {
 		return nil, err
 	}
