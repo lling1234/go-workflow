@@ -102,6 +102,11 @@ func (s *ActServer) FindExecutionByInstId(ctx context.Context, in *act.ProcInstI
 	return l.FindExecutionByInstId(in)
 }
 
+func (s *ActServer) DelIdentityLink(ctx context.Context, in *act.ProcInstIdArg) (*act.Nil, error) {
+	l := logic.NewDelIdentityLinkLogic(ctx, s.svcCtx)
+	return l.DelIdentityLink(in)
+}
+
 func (s *ActServer) FindAllProcInst(ctx context.Context, in *act.ProcInstReq) (*act.ProcInstReply, error) {
 	l := logic.NewFindAllProcInstLogic(ctx, s.svcCtx)
 	return l.FindAllProcInst(in)

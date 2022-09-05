@@ -38,6 +38,7 @@ type ActClient interface {
 	DelProcInst(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error)
 	FindIdentityLinkByTaskId(ctx context.Context, in *TaskIdArg, opts ...grpc.CallOption) (*IdentityLinkReply, error)
 	FindExecutionByInstId(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*ExecutionReq, error)
+	DelIdentityLink(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*Nil, error)
 	FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	FindMyProcInst(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	FindMyApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
@@ -197,6 +198,15 @@ func (c *actClient) FindExecutionByInstId(ctx context.Context, in *ProcInstIdArg
 	return out, nil
 }
 
+func (c *actClient) DelIdentityLink(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*Nil, error) {
+	out := new(Nil)
+	err := c.cc.Invoke(ctx, "/act.act/delIdentityLink", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *actClient) FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
 	out := new(ProcInstReply)
 	err := c.cc.Invoke(ctx, "/act.act/findAllProcInst", in, out, opts...)
@@ -262,6 +272,7 @@ type ActServer interface {
 	DelProcInst(context.Context, *DataIdReq) (*Nil, error)
 	FindIdentityLinkByTaskId(context.Context, *TaskIdArg) (*IdentityLinkReply, error)
 	FindExecutionByInstId(context.Context, *ProcInstIdArg) (*ExecutionReq, error)
+	DelIdentityLink(context.Context, *ProcInstIdArg) (*Nil, error)
 	FindAllProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error)
 	FindMyProcInst(context.Context, *MyProcInstReq) (*ProcInstReply, error)
 	FindMyApproval(context.Context, *MyProcInstReq) (*ProcInstReply, error)
@@ -321,6 +332,9 @@ func (UnimplementedActServer) FindIdentityLinkByTaskId(context.Context, *TaskIdA
 }
 func (UnimplementedActServer) FindExecutionByInstId(context.Context, *ProcInstIdArg) (*ExecutionReq, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindExecutionByInstId not implemented")
+}
+func (UnimplementedActServer) DelIdentityLink(context.Context, *ProcInstIdArg) (*Nil, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelIdentityLink not implemented")
 }
 func (UnimplementedActServer) FindAllProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindAllProcInst not implemented")
@@ -638,6 +652,24 @@ func _Act_FindExecutionByInstId_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Act_DelIdentityLink_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProcInstIdArg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActServer).DelIdentityLink(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/act.act/delIdentityLink",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActServer).DelIdentityLink(ctx, req.(*ProcInstIdArg))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Act_FindAllProcInst_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProcInstReq)
 	if err := dec(in); err != nil {
@@ -798,6 +830,10 @@ var Act_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "findExecutionByInstId",
 			Handler:    _Act_FindExecutionByInstId_Handler,
+		},
+		{
+			MethodName: "delIdentityLink",
+			Handler:    _Act_DelIdentityLink_Handler,
 		},
 		{
 			MethodName: "findAllProcInst",

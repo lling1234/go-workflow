@@ -12,6 +12,7 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type CompleteTaskLogic struct {
@@ -100,7 +101,7 @@ func (l *CompleteTaskLogic) Complete(req *types.CompleteTask, RPC actclient.Act)
 			if task.Level == int32(len(nodeInfos)-1) {
 				isInstFinish = 1
 				approvalState = flow.HAVEPASS
-				err = l.finishTask(RPC, task.ProcInstId, task.Level+1, req.DataId)
+				taskId, err = l.finishTask(RPC, task.ProcInstId, task.Level+1, req.DataId)
 				if err != nil {
 					return err
 				}
@@ -122,20 +123,24 @@ func (l *CompleteTaskLogic) Complete(req *types.CompleteTask, RPC actclient.Act)
 		approvalState = flow.REJECT
 	}
 
-	log.Println("approvalState", approvalState)
-	//var flowCode string
-	//if approvalState == flow.HAVEPASS{
-	//	flowCode = time.Now().Format("2006-01-02")
-	//}
+	//log.Println("approvalState", approvalState)
+	var flowCode string
+	if approvalState == flow.HAVEPASS {
+		flowCode = l.generateCode()
+	}
 	//8.反向更新流程实例表
 	_, err = RPC.UpdateProcInst(l.ctx, &actclient.UpdateProcInstReq{
 		DataId:   req.DataId,
 		State:    approvalState,
 		IsFinish: isInstFinish,
+		Code:     flowCode,
+		TaskId:   taskId,
 	})
 	return nil
 }
-
+func (l *CompleteTaskLogic) generateCode() string {
+	return "ORGINONE" + time.Now().Format("20060102")
+}
 func (l *CompleteTaskLogic) findNodeInfosByInstId(RPC actclient.Act, instId int64) ([]*flow.NodeInfo, error) {
 	exec, err := RPC.FindExecutionByInstId(l.ctx, &actclient.ProcInstIdArg{
 		Id: instId,
@@ -183,8 +188,8 @@ func (l *CompleteTaskLogic) moveNextStage(RPC actclient.Act, instId int64, level
 
 	return nil
 }
-func (l *CompleteTaskLogic) finishTask(RPC actclient.Act, instId int64, level int32, dataId int64) error {
-	newTask := actclient.TaskReq{
+func (l *CompleteTaskLogic) finishTask(RPC actclient.Act, instId int64, level int32, dataId int64) (int64, error) {
+	task := actclient.TaskReq{
 		NodeId:     "结束",
 		ProcInstId: instId,
 		DataId:     dataId,
@@ -193,7 +198,10 @@ func (l *CompleteTaskLogic) finishTask(RPC actclient.Act, instId int64, level in
 		Step:       level,
 	}
 	log.Println(666666)
-	_, err := RPC.SaveTask(l.ctx, &newTask)
+	newTask, err := RPC.SaveTask(l.ctx, &task)
 	log.Println(7777777)
-	return err
+	if newTask == nil {
+		return 0, err
+	}
+	return newTask.Id, err
 }
