@@ -51,7 +51,7 @@ func (l *UpdateProcInstLogic) UpdateProcInst(in *act.UpdateProcInstReq) (*act.Pr
 	err = procInstUpdate.Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
-		return nil, err
+		return &act.ProcInstReply{}, err
 	}
 	tx.Commit()
 	return &act.ProcInstReply{}, nil
