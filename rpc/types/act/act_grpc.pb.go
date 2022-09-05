@@ -39,6 +39,7 @@ type ActClient interface {
 	FindIdentityLinkByTaskId(ctx context.Context, in *TaskIdArg, opts ...grpc.CallOption) (*IdentityLinkReply, error)
 	FindExecutionByInstId(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*ExecutionReq, error)
 	DelIdentityLink(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*Nil, error)
+	Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error)
 	FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	FindMyProcInst(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	FindMyApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
@@ -207,6 +208,15 @@ func (c *actClient) DelIdentityLink(ctx context.Context, in *ProcInstIdArg, opts
 	return out, nil
 }
 
+func (c *actClient) Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error) {
+	out := new(Nil)
+	err := c.cc.Invoke(ctx, "/act.act/withdraw", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *actClient) FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
 	out := new(ProcInstReply)
 	err := c.cc.Invoke(ctx, "/act.act/findAllProcInst", in, out, opts...)
@@ -273,6 +283,7 @@ type ActServer interface {
 	FindIdentityLinkByTaskId(context.Context, *TaskIdArg) (*IdentityLinkReply, error)
 	FindExecutionByInstId(context.Context, *ProcInstIdArg) (*ExecutionReq, error)
 	DelIdentityLink(context.Context, *ProcInstIdArg) (*Nil, error)
+	Withdraw(context.Context, *DataIdReq) (*Nil, error)
 	FindAllProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error)
 	FindMyProcInst(context.Context, *MyProcInstReq) (*ProcInstReply, error)
 	FindMyApproval(context.Context, *MyProcInstReq) (*ProcInstReply, error)
@@ -335,6 +346,9 @@ func (UnimplementedActServer) FindExecutionByInstId(context.Context, *ProcInstId
 }
 func (UnimplementedActServer) DelIdentityLink(context.Context, *ProcInstIdArg) (*Nil, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelIdentityLink not implemented")
+}
+func (UnimplementedActServer) Withdraw(context.Context, *DataIdReq) (*Nil, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Withdraw not implemented")
 }
 func (UnimplementedActServer) FindAllProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindAllProcInst not implemented")
@@ -670,6 +684,24 @@ func _Act_DelIdentityLink_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Act_Withdraw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DataIdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActServer).Withdraw(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/act.act/withdraw",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActServer).Withdraw(ctx, req.(*DataIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Act_FindAllProcInst_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProcInstReq)
 	if err := dec(in); err != nil {
@@ -834,6 +866,10 @@ var Act_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "delIdentityLink",
 			Handler:    _Act_DelIdentityLink_Handler,
+		},
+		{
+			MethodName: "withdraw",
+			Handler:    _Act_Withdraw_Handler,
 		},
 		{
 			MethodName: "findAllProcInst",

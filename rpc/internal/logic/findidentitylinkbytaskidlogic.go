@@ -30,7 +30,10 @@ func (l *FindIdentityLinkByTaskIdLogic) FindIdentityLinkByTaskId(in *act.TaskIdA
 	if err != nil {
 		return nil, err
 	}
-	ils, err := tx.IdentityLink.Query().Where(identitylink.TaskIDEQ(in.Id), identitylink.UserIDEQ(general.MyUserId), identitylink.IsDelEQ(0), identitylink.IsDealEQ(0)).All(l.ctx)
+	ils, err := tx.IdentityLink.Query().
+		Where(identitylink.TaskIDEQ(in.Id), identitylink.UserIDEQ(general.MyUserId), identitylink.IsDelEQ(0), identitylink.IsDealEQ(0)).
+		Select(identitylink.FieldID, identitylink.FieldUserID, identitylink.FieldUserName, identitylink.FieldStep, identitylink.FieldProcInstID, identitylink.FieldTaskID, identitylink.FieldTargetID).
+		All(l.ctx)
 	if err != nil {
 		return nil, err
 	}

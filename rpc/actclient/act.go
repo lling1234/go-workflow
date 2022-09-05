@@ -53,6 +53,7 @@ type (
 		FindIdentityLinkByTaskId(ctx context.Context, in *TaskIdArg, opts ...grpc.CallOption) (*IdentityLinkReply, error)
 		FindExecutionByInstId(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*ExecutionReq, error)
 		DelIdentityLink(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*Nil, error)
+		Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error)
 		FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 		FindMyProcInst(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 		FindMyApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
@@ -154,6 +155,11 @@ func (m *defaultAct) FindExecutionByInstId(ctx context.Context, in *ProcInstIdAr
 func (m *defaultAct) DelIdentityLink(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*Nil, error) {
 	client := act.NewActClient(m.cli.Conn())
 	return client.DelIdentityLink(ctx, in, opts...)
+}
+
+func (m *defaultAct) Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error) {
+	client := act.NewActClient(m.cli.Conn())
+	return client.Withdraw(ctx, in, opts...)
 }
 
 func (m *defaultAct) FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {

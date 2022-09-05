@@ -107,6 +107,11 @@ func (s *ActServer) DelIdentityLink(ctx context.Context, in *act.ProcInstIdArg) 
 	return l.DelIdentityLink(in)
 }
 
+func (s *ActServer) Withdraw(ctx context.Context, in *act.DataIdReq) (*act.Nil, error) {
+	l := logic.NewWithdrawLogic(ctx, s.svcCtx)
+	return l.Withdraw(in)
+}
+
 func (s *ActServer) FindAllProcInst(ctx context.Context, in *act.ProcInstReq) (*act.ProcInstReply, error) {
 	l := logic.NewFindAllProcInstLogic(ctx, s.svcCtx)
 	return l.FindAllProcInst(in)

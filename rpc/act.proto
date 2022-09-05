@@ -232,6 +232,7 @@ service act {
   rpc findIdentityLinkByTaskId(TaskIdArg) returns(IdentityLinkReply);
   rpc findExecutionByInstId(ProcInstIdArg) returns(ExecutionReq);
   rpc delIdentityLink(ProcInstIdArg) returns(Nil);
+  rpc withdraw(DataIdReq) returns(Nil);
 
   rpc findAllProcInst(ProcInstReq) returns(ProcInstReply);
   rpc findMyProcInst(MyProcInstReq) returns(ProcInstReply);
