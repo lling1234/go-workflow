@@ -5,6 +5,7 @@ package act
 import (
 	"act/common/act/identitylink"
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -48,13 +49,13 @@ func (ilc *IdentityLinkCreate) SetNillableUserName(s *string) *IdentityLinkCreat
 }
 
 // SetStep sets the "step" field.
-func (ilc *IdentityLinkCreate) SetStep(i int) *IdentityLinkCreate {
+func (ilc *IdentityLinkCreate) SetStep(i int32) *IdentityLinkCreate {
 	ilc.mutation.SetStep(i)
 	return ilc
 }
 
 // SetNillableStep sets the "step" field if the given value is not nil.
-func (ilc *IdentityLinkCreate) SetNillableStep(i *int) *IdentityLinkCreate {
+func (ilc *IdentityLinkCreate) SetNillableStep(i *int32) *IdentityLinkCreate {
 	if i != nil {
 		ilc.SetStep(*i)
 	}
@@ -64,14 +65,6 @@ func (ilc *IdentityLinkCreate) SetNillableStep(i *int) *IdentityLinkCreate {
 // SetProcInstID sets the "proc_inst_id" field.
 func (ilc *IdentityLinkCreate) SetProcInstID(i int64) *IdentityLinkCreate {
 	ilc.mutation.SetProcInstID(i)
-	return ilc
-}
-
-// SetNillableProcInstID sets the "proc_inst_id" field if the given value is not nil.
-func (ilc *IdentityLinkCreate) SetNillableProcInstID(i *int64) *IdentityLinkCreate {
-	if i != nil {
-		ilc.SetProcInstID(*i)
-	}
 	return ilc
 }
 
@@ -109,22 +102,14 @@ func (ilc *IdentityLinkCreate) SetTaskID(i int64) *IdentityLinkCreate {
 	return ilc
 }
 
-// SetNillableTaskID sets the "task_id" field if the given value is not nil.
-func (ilc *IdentityLinkCreate) SetNillableTaskID(i *int64) *IdentityLinkCreate {
-	if i != nil {
-		ilc.SetTaskID(*i)
-	}
-	return ilc
-}
-
 // SetResult sets the "result" field.
-func (ilc *IdentityLinkCreate) SetResult(i int) *IdentityLinkCreate {
+func (ilc *IdentityLinkCreate) SetResult(i int32) *IdentityLinkCreate {
 	ilc.mutation.SetResult(i)
 	return ilc
 }
 
 // SetNillableResult sets the "result" field if the given value is not nil.
-func (ilc *IdentityLinkCreate) SetNillableResult(i *int) *IdentityLinkCreate {
+func (ilc *IdentityLinkCreate) SetNillableResult(i *int32) *IdentityLinkCreate {
 	if i != nil {
 		ilc.SetResult(*i)
 	}
@@ -169,6 +154,20 @@ func (ilc *IdentityLinkCreate) SetIsDeal(i int8) *IdentityLinkCreate {
 func (ilc *IdentityLinkCreate) SetNillableIsDeal(i *int8) *IdentityLinkCreate {
 	if i != nil {
 		ilc.SetIsDeal(*i)
+	}
+	return ilc
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (ilc *IdentityLinkCreate) SetUpdateTime(t time.Time) *IdentityLinkCreate {
+	ilc.mutation.SetUpdateTime(t)
+	return ilc
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (ilc *IdentityLinkCreate) SetNillableUpdateTime(t *time.Time) *IdentityLinkCreate {
+	if t != nil {
+		ilc.SetUpdateTime(*t)
 	}
 	return ilc
 }
@@ -262,6 +261,10 @@ func (ilc *IdentityLinkCreate) defaults() {
 		v := identitylink.DefaultIsDeal
 		ilc.mutation.SetIsDeal(v)
 	}
+	if _, ok := ilc.mutation.UpdateTime(); !ok {
+		v := identitylink.DefaultUpdateTime
+		ilc.mutation.SetUpdateTime(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -271,10 +274,16 @@ func (ilc *IdentityLinkCreate) check() error {
 			return &ValidationError{Name: "user_name", err: fmt.Errorf(`act: validator failed for field "IdentityLink.user_name": %w`, err)}
 		}
 	}
+	if _, ok := ilc.mutation.ProcInstID(); !ok {
+		return &ValidationError{Name: "proc_inst_id", err: errors.New(`act: missing required field "IdentityLink.proc_inst_id"`)}
+	}
 	if v, ok := ilc.mutation.Comment(); ok {
 		if err := identitylink.CommentValidator(v); err != nil {
 			return &ValidationError{Name: "comment", err: fmt.Errorf(`act: validator failed for field "IdentityLink.comment": %w`, err)}
 		}
+	}
+	if _, ok := ilc.mutation.TaskID(); !ok {
+		return &ValidationError{Name: "task_id", err: errors.New(`act: missing required field "IdentityLink.task_id"`)}
 	}
 	return nil
 }
@@ -288,7 +297,7 @@ func (ilc *IdentityLinkCreate) sqlSave(ctx context.Context) (*IdentityLink, erro
 		return nil, err
 	}
 	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	_node.ID = id
 	return _node, nil
 }
 
@@ -321,7 +330,7 @@ func (ilc *IdentityLinkCreate) createSpec() (*IdentityLink, *sqlgraph.CreateSpec
 	}
 	if value, ok := ilc.mutation.Step(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldStep,
 		})
@@ -361,7 +370,7 @@ func (ilc *IdentityLinkCreate) createSpec() (*IdentityLink, *sqlgraph.CreateSpec
 	}
 	if value, ok := ilc.mutation.Result(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldResult,
 		})
@@ -390,6 +399,14 @@ func (ilc *IdentityLinkCreate) createSpec() (*IdentityLink, *sqlgraph.CreateSpec
 			Column: identitylink.FieldIsDeal,
 		})
 		_node.IsDeal = value
+	}
+	if value, ok := ilc.mutation.UpdateTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: identitylink.FieldUpdateTime,
+		})
+		_node.UpdateTime = value
 	}
 	return _node, _spec
 }
@@ -437,7 +454,7 @@ func (ilcb *IdentityLinkCreateBulk) Save(ctx context.Context) ([]*IdentityLink, 
 				mutation.id = &nodes[i].ID
 				if specs[i].ID.Value != nil {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = id
 				}
 				mutation.done = true
 				return nodes[i], nil

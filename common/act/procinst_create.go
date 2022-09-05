@@ -5,6 +5,7 @@ package act
 import (
 	"act/common/act/procinst"
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -22,14 +23,6 @@ type ProcInstCreate struct {
 // SetProcDefID sets the "proc_def_id" field.
 func (pic *ProcInstCreate) SetProcDefID(i int64) *ProcInstCreate {
 	pic.mutation.SetProcDefID(i)
-	return pic
-}
-
-// SetNillableProcDefID sets the "proc_def_id" field if the given value is not nil.
-func (pic *ProcInstCreate) SetNillableProcDefID(i *int64) *ProcInstCreate {
-	if i != nil {
-		pic.SetProcDefID(*i)
-	}
 	return pic
 }
 
@@ -174,13 +167,13 @@ func (pic *ProcInstCreate) SetNillableIsFinished(i *int8) *ProcInstCreate {
 }
 
 // SetState sets the "state" field.
-func (pic *ProcInstCreate) SetState(i int) *ProcInstCreate {
+func (pic *ProcInstCreate) SetState(i int32) *ProcInstCreate {
 	pic.mutation.SetState(i)
 	return pic
 }
 
 // SetNillableState sets the "state" field if the given value is not nil.
-func (pic *ProcInstCreate) SetNillableState(i *int) *ProcInstCreate {
+func (pic *ProcInstCreate) SetNillableState(i *int32) *ProcInstCreate {
 	if i != nil {
 		pic.SetState(*i)
 	}
@@ -202,13 +195,13 @@ func (pic *ProcInstCreate) SetNillableDataID(i *int64) *ProcInstCreate {
 }
 
 // SetIsDel sets the "is_del" field.
-func (pic *ProcInstCreate) SetIsDel(i int) *ProcInstCreate {
+func (pic *ProcInstCreate) SetIsDel(i int8) *ProcInstCreate {
 	pic.mutation.SetIsDel(i)
 	return pic
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (pic *ProcInstCreate) SetNillableIsDel(i *int) *ProcInstCreate {
+func (pic *ProcInstCreate) SetNillableIsDel(i *int8) *ProcInstCreate {
 	if i != nil {
 		pic.SetIsDel(*i)
 	}
@@ -229,6 +222,20 @@ func (pic *ProcInstCreate) SetNillableCreateTime(t *time.Time) *ProcInstCreate {
 	return pic
 }
 
+// SetRemainHours sets the "remain_hours" field.
+func (pic *ProcInstCreate) SetRemainHours(i int32) *ProcInstCreate {
+	pic.mutation.SetRemainHours(i)
+	return pic
+}
+
+// SetNillableRemainHours sets the "remain_hours" field if the given value is not nil.
+func (pic *ProcInstCreate) SetNillableRemainHours(i *int32) *ProcInstCreate {
+	if i != nil {
+		pic.SetRemainHours(*i)
+	}
+	return pic
+}
+
 // SetUpdateTime sets the "update_time" field.
 func (pic *ProcInstCreate) SetUpdateTime(t time.Time) *ProcInstCreate {
 	pic.mutation.SetUpdateTime(t)
@@ -239,20 +246,6 @@ func (pic *ProcInstCreate) SetUpdateTime(t time.Time) *ProcInstCreate {
 func (pic *ProcInstCreate) SetNillableUpdateTime(t *time.Time) *ProcInstCreate {
 	if t != nil {
 		pic.SetUpdateTime(*t)
-	}
-	return pic
-}
-
-// SetRemainHours sets the "remain_hours" field.
-func (pic *ProcInstCreate) SetRemainHours(i int64) *ProcInstCreate {
-	pic.mutation.SetRemainHours(i)
-	return pic
-}
-
-// SetNillableRemainHours sets the "remain_hours" field if the given value is not nil.
-func (pic *ProcInstCreate) SetNillableRemainHours(i *int64) *ProcInstCreate {
-	if i != nil {
-		pic.SetRemainHours(*i)
 	}
 	return pic
 }
@@ -358,6 +351,9 @@ func (pic *ProcInstCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (pic *ProcInstCreate) check() error {
+	if _, ok := pic.mutation.ProcDefID(); !ok {
+		return &ValidationError{Name: "proc_def_id", err: errors.New(`act: missing required field "ProcInst.proc_def_id"`)}
+	}
 	if v, ok := pic.mutation.Title(); ok {
 		if err := procinst.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`act: validator failed for field "ProcInst.title": %w`, err)}
@@ -390,7 +386,7 @@ func (pic *ProcInstCreate) sqlSave(ctx context.Context) (*ProcInst, error) {
 		return nil, err
 	}
 	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	_node.ID = id
 	return _node, nil
 }
 
@@ -495,7 +491,7 @@ func (pic *ProcInstCreate) createSpec() (*ProcInst, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pic.mutation.State(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldState,
 		})
@@ -511,7 +507,7 @@ func (pic *ProcInstCreate) createSpec() (*ProcInst, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pic.mutation.IsDel(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Value:  value,
 			Column: procinst.FieldIsDel,
 		})
@@ -525,6 +521,14 @@ func (pic *ProcInstCreate) createSpec() (*ProcInst, *sqlgraph.CreateSpec) {
 		})
 		_node.CreateTime = value
 	}
+	if value, ok := pic.mutation.RemainHours(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
+			Value:  value,
+			Column: procinst.FieldRemainHours,
+		})
+		_node.RemainHours = value
+	}
 	if value, ok := pic.mutation.UpdateTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -532,14 +536,6 @@ func (pic *ProcInstCreate) createSpec() (*ProcInst, *sqlgraph.CreateSpec) {
 			Column: procinst.FieldUpdateTime,
 		})
 		_node.UpdateTime = value
-	}
-	if value, ok := pic.mutation.RemainHours(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: procinst.FieldRemainHours,
-		})
-		_node.RemainHours = value
 	}
 	return _node, _spec
 }
@@ -587,7 +583,7 @@ func (picb *ProcInstCreateBulk) Save(ctx context.Context) ([]*ProcInst, error) {
 				mutation.id = &nodes[i].ID
 				if specs[i].ID.Value != nil {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = id
 				}
 				mutation.done = true
 				return nodes[i], nil

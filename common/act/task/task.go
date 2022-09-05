@@ -24,22 +24,22 @@ const (
 	FieldCreateTime = "create_time"
 	// FieldClaimTime holds the string denoting the claim_time field in the database.
 	FieldClaimTime = "claim_time"
-	// FieldMemberCount holds the string denoting the member_count field in the database.
-	FieldMemberCount = "member_count"
-	// FieldUnCompleteNum holds the string denoting the un_complete_num field in the database.
-	FieldUnCompleteNum = "un_complete_num"
-	// FieldAgreeNum holds the string denoting the agree_num field in the database.
-	FieldAgreeNum = "agree_num"
+	// FieldMemberApprover holds the string denoting the member_approver field in the database.
+	FieldMemberApprover = "member_approver"
+	// FieldAgreeApprover holds the string denoting the agree_approver field in the database.
+	FieldAgreeApprover = "agree_approver"
 	// FieldIsFinished holds the string denoting the is_finished field in the database.
 	FieldIsFinished = "is_finished"
-	// FieldActType holds the string denoting the act_type field in the database.
-	FieldActType = "act_type"
+	// FieldMode holds the string denoting the mode field in the database.
+	FieldMode = "mode"
 	// FieldDataID holds the string denoting the data_id field in the database.
 	FieldDataID = "data_id"
 	// FieldIsDel holds the string denoting the is_del field in the database.
 	FieldIsDel = "is_del"
+	// FieldUpdateTime holds the string denoting the update_time field in the database.
+	FieldUpdateTime = "update_time"
 	// Table holds the table name of the task in the database.
-	Table = "tasks"
+	Table = "act_task"
 )
 
 // Columns holds all SQL columns for task fields.
@@ -51,13 +51,13 @@ var Columns = []string{
 	FieldProcInstID,
 	FieldCreateTime,
 	FieldClaimTime,
-	FieldMemberCount,
-	FieldUnCompleteNum,
-	FieldAgreeNum,
+	FieldMemberApprover,
+	FieldAgreeApprover,
 	FieldIsFinished,
-	FieldActType,
+	FieldMode,
 	FieldDataID,
 	FieldIsDel,
+	FieldUpdateTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -77,34 +77,40 @@ var (
 	DefaultCreateTime time.Time
 	// DefaultClaimTime holds the default value on creation for the "claim_time" field.
 	DefaultClaimTime time.Time
+	// MemberApproverValidator is a validator for the "member_approver" field. It is called by the builders before save.
+	MemberApproverValidator func(string) error
+	// AgreeApproverValidator is a validator for the "agree_approver" field. It is called by the builders before save.
+	AgreeApproverValidator func(string) error
 	// DefaultIsFinished holds the default value on creation for the "is_finished" field.
 	DefaultIsFinished int8
 	// DefaultIsDel holds the default value on creation for the "is_del" field.
-	DefaultIsDel int
+	DefaultIsDel int8
+	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
+	DefaultUpdateTime time.Time
 )
 
-// ActType defines the type for the "act_type" enum field.
-type ActType string
+// Mode defines the type for the "mode" enum field.
+type Mode string
 
-// ActTypeOr is the default value of the ActType enum.
-const DefaultActType = ActTypeOr
+// ModeOr is the default value of the Mode enum.
+const DefaultMode = ModeOr
 
-// ActType values.
+// Mode values.
 const (
-	ActTypeAnd ActType = "and"
-	ActTypeOr  ActType = "or"
+	ModeAnd Mode = "and"
+	ModeOr  Mode = "or"
 )
 
-func (at ActType) String() string {
-	return string(at)
+func (m Mode) String() string {
+	return string(m)
 }
 
-// ActTypeValidator is a validator for the "act_type" field enum values. It is called by the builders before save.
-func ActTypeValidator(at ActType) error {
-	switch at {
-	case ActTypeAnd, ActTypeOr:
+// ModeValidator is a validator for the "mode" field enum values. It is called by the builders before save.
+func ModeValidator(m Mode) error {
+	switch m {
+	case ModeAnd, ModeOr:
 		return nil
 	default:
-		return fmt.Errorf("task: invalid enum value for act_type field: %q", at)
+		return fmt.Errorf("task: invalid enum value for mode field: %q", m)
 	}
 }

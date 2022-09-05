@@ -15,33 +15,33 @@ import (
 type Task struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 节点id
 	NodeID string `json:"node_id,omitempty"`
 	// 流程层级
-	Level int `json:"level,omitempty"`
+	Level int32 `json:"level,omitempty"`
 	// 流程步数
-	Step int `json:"step,omitempty"`
+	Step int32 `json:"step,omitempty"`
 	// 流程实例id
 	ProcInstID int64 `json:"proc_inst_id,omitempty"`
 	// 任务创建时间
 	CreateTime time.Time `json:"create_time,omitempty"`
 	// 节点最新审批时间
 	ClaimTime time.Time `json:"claim_time,omitempty"`
-	// 需审批人数
-	MemberCount int `json:"member_count,omitempty"`
-	// 未审批人数
-	UnCompleteNum int `json:"un_complete_num,omitempty"`
-	// 已通过人数
-	AgreeNum int `json:"agree_num,omitempty"`
+	// 可审批用户
+	MemberApprover string `json:"member_approver,omitempty"`
+	// 已审批用户
+	AgreeApprover string `json:"agree_approver,omitempty"`
 	// 任务是否完成 2:未结束 1:已完成
 	IsFinished int8 `json:"is_finished,omitempty"`
 	// 会签or或签
-	ActType task.ActType `json:"act_type,omitempty"`
+	Mode task.Mode `json:"mode,omitempty"`
 	// 流程绑定数据ID
 	DataID int64 `json:"data_id,omitempty"`
 	// 是否删除
-	IsDel int `json:"is_del,omitempty"`
+	IsDel int8 `json:"is_del,omitempty"`
+	// 流程修改时间
+	UpdateTime time.Time `json:"update_time,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -49,11 +49,11 @@ func (*Task) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case task.FieldID, task.FieldLevel, task.FieldStep, task.FieldProcInstID, task.FieldMemberCount, task.FieldUnCompleteNum, task.FieldAgreeNum, task.FieldIsFinished, task.FieldDataID, task.FieldIsDel:
+		case task.FieldID, task.FieldLevel, task.FieldStep, task.FieldProcInstID, task.FieldIsFinished, task.FieldDataID, task.FieldIsDel:
 			values[i] = new(sql.NullInt64)
-		case task.FieldNodeID, task.FieldActType:
+		case task.FieldNodeID, task.FieldMemberApprover, task.FieldAgreeApprover, task.FieldMode:
 			values[i] = new(sql.NullString)
-		case task.FieldCreateTime, task.FieldClaimTime:
+		case task.FieldCreateTime, task.FieldClaimTime, task.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Task", columns[i])
@@ -75,7 +75,7 @@ func (t *Task) assignValues(columns []string, values []interface{}) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			t.ID = int(value.Int64)
+			t.ID = value.Int64
 		case task.FieldNodeID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field node_id", values[i])
@@ -86,13 +86,13 @@ func (t *Task) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field level", values[i])
 			} else if value.Valid {
-				t.Level = int(value.Int64)
+				t.Level = int32(value.Int64)
 			}
 		case task.FieldStep:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field step", values[i])
 			} else if value.Valid {
-				t.Step = int(value.Int64)
+				t.Step = int32(value.Int64)
 			}
 		case task.FieldProcInstID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -112,23 +112,17 @@ func (t *Task) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				t.ClaimTime = value.Time
 			}
-		case task.FieldMemberCount:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field member_count", values[i])
+		case task.FieldMemberApprover:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field member_approver", values[i])
 			} else if value.Valid {
-				t.MemberCount = int(value.Int64)
+				t.MemberApprover = value.String
 			}
-		case task.FieldUnCompleteNum:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field un_complete_num", values[i])
+		case task.FieldAgreeApprover:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field agree_approver", values[i])
 			} else if value.Valid {
-				t.UnCompleteNum = int(value.Int64)
-			}
-		case task.FieldAgreeNum:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field agree_num", values[i])
-			} else if value.Valid {
-				t.AgreeNum = int(value.Int64)
+				t.AgreeApprover = value.String
 			}
 		case task.FieldIsFinished:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -136,11 +130,11 @@ func (t *Task) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				t.IsFinished = int8(value.Int64)
 			}
-		case task.FieldActType:
+		case task.FieldMode:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field act_type", values[i])
+				return fmt.Errorf("unexpected type %T for field mode", values[i])
 			} else if value.Valid {
-				t.ActType = task.ActType(value.String)
+				t.Mode = task.Mode(value.String)
 			}
 		case task.FieldDataID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -152,7 +146,13 @@ func (t *Task) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field is_del", values[i])
 			} else if value.Valid {
-				t.IsDel = int(value.Int64)
+				t.IsDel = int8(value.Int64)
+			}
+		case task.FieldUpdateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
+			} else if value.Valid {
+				t.UpdateTime = value.Time
 			}
 		}
 	}
@@ -200,26 +200,26 @@ func (t *Task) String() string {
 	builder.WriteString("claim_time=")
 	builder.WriteString(t.ClaimTime.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("member_count=")
-	builder.WriteString(fmt.Sprintf("%v", t.MemberCount))
+	builder.WriteString("member_approver=")
+	builder.WriteString(t.MemberApprover)
 	builder.WriteString(", ")
-	builder.WriteString("un_complete_num=")
-	builder.WriteString(fmt.Sprintf("%v", t.UnCompleteNum))
-	builder.WriteString(", ")
-	builder.WriteString("agree_num=")
-	builder.WriteString(fmt.Sprintf("%v", t.AgreeNum))
+	builder.WriteString("agree_approver=")
+	builder.WriteString(t.AgreeApprover)
 	builder.WriteString(", ")
 	builder.WriteString("is_finished=")
 	builder.WriteString(fmt.Sprintf("%v", t.IsFinished))
 	builder.WriteString(", ")
-	builder.WriteString("act_type=")
-	builder.WriteString(fmt.Sprintf("%v", t.ActType))
+	builder.WriteString("mode=")
+	builder.WriteString(fmt.Sprintf("%v", t.Mode))
 	builder.WriteString(", ")
 	builder.WriteString("data_id=")
 	builder.WriteString(fmt.Sprintf("%v", t.DataID))
 	builder.WriteString(", ")
 	builder.WriteString("is_del=")
 	builder.WriteString(fmt.Sprintf("%v", t.IsDel))
+	builder.WriteString(", ")
+	builder.WriteString("update_time=")
+	builder.WriteString(t.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

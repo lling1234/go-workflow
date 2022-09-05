@@ -15,21 +15,21 @@ import (
 type Execution struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 流程实例id
 	ProcInstID int64 `json:"proc_inst_id,omitempty"`
 	// 流程定义id
 	ProcDefID int64 `json:"proc_def_id,omitempty"`
 	// 节点审批执行顺序
 	NodeInfos string `json:"node_infos,omitempty"`
-	// 是否审批中
-	IsActive int8 `json:"is_active,omitempty"`
 	// 开始时间
 	StartTime time.Time `json:"start_time,omitempty"`
 	// 是否删除,0:未删除,1:已删除
 	IsDel int8 `json:"is_del,omitempty"`
 	// 创建时间
 	CreateTime time.Time `json:"create_time,omitempty"`
+	// 流程修改时间
+	UpdateTime time.Time `json:"update_time,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -37,11 +37,11 @@ func (*Execution) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case execution.FieldID, execution.FieldProcInstID, execution.FieldProcDefID, execution.FieldIsActive, execution.FieldIsDel:
+		case execution.FieldID, execution.FieldProcInstID, execution.FieldProcDefID, execution.FieldIsDel:
 			values[i] = new(sql.NullInt64)
 		case execution.FieldNodeInfos:
 			values[i] = new(sql.NullString)
-		case execution.FieldStartTime, execution.FieldCreateTime:
+		case execution.FieldStartTime, execution.FieldCreateTime, execution.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Execution", columns[i])
@@ -63,7 +63,7 @@ func (e *Execution) assignValues(columns []string, values []interface{}) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			e.ID = int(value.Int64)
+			e.ID = value.Int64
 		case execution.FieldProcInstID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field proc_inst_id", values[i])
@@ -82,12 +82,6 @@ func (e *Execution) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				e.NodeInfos = value.String
 			}
-		case execution.FieldIsActive:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field is_active", values[i])
-			} else if value.Valid {
-				e.IsActive = int8(value.Int64)
-			}
 		case execution.FieldStartTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field start_time", values[i])
@@ -105,6 +99,12 @@ func (e *Execution) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
 				e.CreateTime = value.Time
+			}
+		case execution.FieldUpdateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
+			} else if value.Valid {
+				e.UpdateTime = value.Time
 			}
 		}
 	}
@@ -143,9 +143,6 @@ func (e *Execution) String() string {
 	builder.WriteString("node_infos=")
 	builder.WriteString(e.NodeInfos)
 	builder.WriteString(", ")
-	builder.WriteString("is_active=")
-	builder.WriteString(fmt.Sprintf("%v", e.IsActive))
-	builder.WriteString(", ")
 	builder.WriteString("start_time=")
 	builder.WriteString(e.StartTime.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -154,6 +151,9 @@ func (e *Execution) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
 	builder.WriteString(e.CreateTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("update_time=")
+	builder.WriteString(e.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

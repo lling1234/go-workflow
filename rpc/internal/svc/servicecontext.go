@@ -6,13 +6,13 @@ import (
 )
 
 type ServiceContext struct {
-	Config   config.Config
-	ActStore store.ActStore
+	Config      config.Config
+	CommonStore store.CommonStore
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
-		Config:   c,
-		ActStore: *store.NewActrStore(c.Store),
+		Config:      c,
+		CommonStore: *store.NewCommonStore(c.Store),
 	}
 }

@@ -1,17 +1,12 @@
-# act
+# go-workflow
+奥集能平台工作流
+## 目录介绍
 
-# 介绍
-
-待办3.0
-
-1.  https://gitee.com/gitee-stars/)
-
-# 目录介绍
+```
 
 
-
-# git规范
-
+```
+## git规范
 ● add/feat：新功能
 ● fix：bug修复
 ● update：更新

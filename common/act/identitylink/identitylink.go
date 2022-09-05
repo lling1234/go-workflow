@@ -33,8 +33,10 @@ const (
 	FieldIsDel = "is_del"
 	// FieldIsDeal holds the string denoting the is_deal field in the database.
 	FieldIsDeal = "is_deal"
+	// FieldUpdateTime holds the string denoting the update_time field in the database.
+	FieldUpdateTime = "update_time"
 	// Table holds the table name of the identitylink in the database.
-	Table = "identity_links"
+	Table = "act_identity_link"
 )
 
 // Columns holds all SQL columns for identitylink fields.
@@ -51,6 +53,7 @@ var Columns = []string{
 	FieldCreateTime,
 	FieldIsDel,
 	FieldIsDeal,
+	FieldUpdateTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -74,4 +77,6 @@ var (
 	DefaultIsDel int8
 	// DefaultIsDeal holds the default value on creation for the "is_deal" field.
 	DefaultIsDeal int8
+	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
+	DefaultUpdateTime time.Time
 )

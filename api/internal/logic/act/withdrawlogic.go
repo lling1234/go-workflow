@@ -23,7 +23,7 @@ func NewWithdrawLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Withdraw
 	}
 }
 
-func (l *WithdrawLogic) Withdraw(req *types.Withdraw) (resp *types.CommonResponse, err error) {
+func (l *WithdrawLogic) Withdraw(req *types.DataIdReq) (resp *types.CommonResponse, err error) {
 	// todo: add your logic here and delete this line
 
 	return

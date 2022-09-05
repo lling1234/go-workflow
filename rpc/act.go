@@ -7,7 +7,7 @@ import (
 	"act/rpc/internal/config"
 	"act/rpc/internal/server"
 	"act/rpc/internal/svc"
-	"act/rpc/ms"
+	"act/rpc/types/act"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -26,7 +26,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		ms.RegisterActServer(grpcServer, server.NewActServer(ctx))
+		act.RegisterActServer(grpcServer, server.NewActServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

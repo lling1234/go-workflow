@@ -15,15 +15,13 @@ func Now() DateTime {
 	return DateTime(time.Now())
 }
 
-func Love() DateTime {
-	t, _ := time.Parse("2006-01-02", "20200520")
-	return DateTime(t)
-}
-
 func (t DateTime) String() string {
 	return time.Time(t).Format("2006-01-02 15:04:05")
 }
 
+func NowStr() string {
+	return Now().String()
+}
 func (t DateTime) ConvertValue(v any) (driver.Value, error) {
 	switch v.(type) {
 	case time.Time:
@@ -49,3 +47,11 @@ func (t *DateTime) UnmarshalJSON(data []byte) (err error) {
 func (t DateTime) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf(`"%s"`, t.String())), nil
 }
+
+//func StrToTime(str string) (*time.Time, error) {
+//	t, err := time.Parse("2006-01-02 15:04:05", str)
+//	if err != nil {
+//		return nil, err
+//	}
+//	return &t, nil
+//}

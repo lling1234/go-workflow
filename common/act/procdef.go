@@ -15,13 +15,13 @@ import (
 type ProcDef struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 流程名称
 	Name string `json:"name,omitempty"`
 	// 流程编码
 	Code string `json:"code,omitempty"`
 	// 版本
-	Version int `json:"version,omitempty"`
+	Version int32 `json:"version,omitempty"`
 	// 流程图数据
 	Resource string `json:"resource,omitempty"`
 	// 创建人id
@@ -33,15 +33,17 @@ type ProcDef struct {
 	// 组织ID
 	TargetID int64 `json:"target_id,omitempty"`
 	// 业务表单ID
-	YewuFormID string `json:"yewu_form_id,omitempty"`
+	FormID string `json:"form_id,omitempty"`
 	// 业务表单名称
-	YewuName string `json:"yewu_name,omitempty"`
+	FormName string `json:"form_name,omitempty"`
 	// 审批限定时间
-	RemainHours int `json:"remain_hours,omitempty"`
+	RemainHours int32 `json:"remain_hours,omitempty"`
 	// 是否删除,0:未删除,1:已删除
 	IsDel int8 `json:"is_del,omitempty"`
 	// 流程是否生效,0:否,1:是
 	IsActive int8 `json:"is_active,omitempty"`
+	// 流程修改时间
+	UpdateTime time.Time `json:"update_time,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -51,9 +53,9 @@ func (*ProcDef) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case procdef.FieldID, procdef.FieldVersion, procdef.FieldCreateUserID, procdef.FieldTargetID, procdef.FieldRemainHours, procdef.FieldIsDel, procdef.FieldIsActive:
 			values[i] = new(sql.NullInt64)
-		case procdef.FieldName, procdef.FieldCode, procdef.FieldResource, procdef.FieldCreateUserName, procdef.FieldYewuFormID, procdef.FieldYewuName:
+		case procdef.FieldName, procdef.FieldCode, procdef.FieldResource, procdef.FieldCreateUserName, procdef.FieldFormID, procdef.FieldFormName:
 			values[i] = new(sql.NullString)
-		case procdef.FieldCreateTime:
+		case procdef.FieldCreateTime, procdef.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type ProcDef", columns[i])
@@ -75,7 +77,7 @@ func (pd *ProcDef) assignValues(columns []string, values []interface{}) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			pd.ID = int(value.Int64)
+			pd.ID = value.Int64
 		case procdef.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -92,7 +94,7 @@ func (pd *ProcDef) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
 			} else if value.Valid {
-				pd.Version = int(value.Int64)
+				pd.Version = int32(value.Int64)
 			}
 		case procdef.FieldResource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -124,23 +126,23 @@ func (pd *ProcDef) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				pd.TargetID = value.Int64
 			}
-		case procdef.FieldYewuFormID:
+		case procdef.FieldFormID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field yewu_form_id", values[i])
+				return fmt.Errorf("unexpected type %T for field form_id", values[i])
 			} else if value.Valid {
-				pd.YewuFormID = value.String
+				pd.FormID = value.String
 			}
-		case procdef.FieldYewuName:
+		case procdef.FieldFormName:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field yewu_name", values[i])
+				return fmt.Errorf("unexpected type %T for field form_name", values[i])
 			} else if value.Valid {
-				pd.YewuName = value.String
+				pd.FormName = value.String
 			}
 		case procdef.FieldRemainHours:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field remain_hours", values[i])
 			} else if value.Valid {
-				pd.RemainHours = int(value.Int64)
+				pd.RemainHours = int32(value.Int64)
 			}
 		case procdef.FieldIsDel:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -153,6 +155,12 @@ func (pd *ProcDef) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field is_active", values[i])
 			} else if value.Valid {
 				pd.IsActive = int8(value.Int64)
+			}
+		case procdef.FieldUpdateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
+			} else if value.Valid {
+				pd.UpdateTime = value.Time
 			}
 		}
 	}
@@ -206,11 +214,11 @@ func (pd *ProcDef) String() string {
 	builder.WriteString("target_id=")
 	builder.WriteString(fmt.Sprintf("%v", pd.TargetID))
 	builder.WriteString(", ")
-	builder.WriteString("yewu_form_id=")
-	builder.WriteString(pd.YewuFormID)
+	builder.WriteString("form_id=")
+	builder.WriteString(pd.FormID)
 	builder.WriteString(", ")
-	builder.WriteString("yewu_name=")
-	builder.WriteString(pd.YewuName)
+	builder.WriteString("form_name=")
+	builder.WriteString(pd.FormName)
 	builder.WriteString(", ")
 	builder.WriteString("remain_hours=")
 	builder.WriteString(fmt.Sprintf("%v", pd.RemainHours))
@@ -220,6 +228,9 @@ func (pd *ProcDef) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_active=")
 	builder.WriteString(fmt.Sprintf("%v", pd.IsActive))
+	builder.WriteString(", ")
+	builder.WriteString("update_time=")
+	builder.WriteString(pd.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

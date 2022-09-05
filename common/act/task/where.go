@@ -10,28 +10,28 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Task {
+func ID(id int64) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldID), id))
 	})
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Task {
+func IDEQ(id int64) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldID), id))
 	})
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Task {
+func IDNEQ(id int64) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldID), id))
 	})
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Task {
+func IDIn(ids ...int64) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		v := make([]interface{}, len(ids))
 		for i := range v {
@@ -42,7 +42,7 @@ func IDIn(ids ...int) predicate.Task {
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Task {
+func IDNotIn(ids ...int64) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		v := make([]interface{}, len(ids))
 		for i := range v {
@@ -53,28 +53,28 @@ func IDNotIn(ids ...int) predicate.Task {
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Task {
+func IDGT(id int64) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldID), id))
 	})
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Task {
+func IDGTE(id int64) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldID), id))
 	})
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Task {
+func IDLT(id int64) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldID), id))
 	})
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Task {
+func IDLTE(id int64) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldID), id))
 	})
@@ -88,14 +88,14 @@ func NodeID(v string) predicate.Task {
 }
 
 // Level applies equality check predicate on the "level" field. It's identical to LevelEQ.
-func Level(v int) predicate.Task {
+func Level(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldLevel), v))
 	})
 }
 
 // Step applies equality check predicate on the "step" field. It's identical to StepEQ.
-func Step(v int) predicate.Task {
+func Step(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldStep), v))
 	})
@@ -122,24 +122,17 @@ func ClaimTime(v time.Time) predicate.Task {
 	})
 }
 
-// MemberCount applies equality check predicate on the "member_count" field. It's identical to MemberCountEQ.
-func MemberCount(v int) predicate.Task {
+// MemberApprover applies equality check predicate on the "member_approver" field. It's identical to MemberApproverEQ.
+func MemberApprover(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldMemberCount), v))
+		s.Where(sql.EQ(s.C(FieldMemberApprover), v))
 	})
 }
 
-// UnCompleteNum applies equality check predicate on the "un_complete_num" field. It's identical to UnCompleteNumEQ.
-func UnCompleteNum(v int) predicate.Task {
+// AgreeApprover applies equality check predicate on the "agree_approver" field. It's identical to AgreeApproverEQ.
+func AgreeApprover(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldUnCompleteNum), v))
-	})
-}
-
-// AgreeNum applies equality check predicate on the "agree_num" field. It's identical to AgreeNumEQ.
-func AgreeNum(v int) predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldAgreeNum), v))
+		s.Where(sql.EQ(s.C(FieldAgreeApprover), v))
 	})
 }
 
@@ -158,9 +151,16 @@ func DataID(v int64) predicate.Task {
 }
 
 // IsDel applies equality check predicate on the "is_del" field. It's identical to IsDelEQ.
-func IsDel(v int) predicate.Task {
+func IsDel(v int8) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDel), v))
+	})
+}
+
+// UpdateTime applies equality check predicate on the "update_time" field. It's identical to UpdateTimeEQ.
+func UpdateTime(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdateTime), v))
 	})
 }
 
@@ -278,21 +278,21 @@ func NodeIDContainsFold(v string) predicate.Task {
 }
 
 // LevelEQ applies the EQ predicate on the "level" field.
-func LevelEQ(v int) predicate.Task {
+func LevelEQ(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldLevel), v))
 	})
 }
 
 // LevelNEQ applies the NEQ predicate on the "level" field.
-func LevelNEQ(v int) predicate.Task {
+func LevelNEQ(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldLevel), v))
 	})
 }
 
 // LevelIn applies the In predicate on the "level" field.
-func LevelIn(vs ...int) predicate.Task {
+func LevelIn(vs ...int32) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -303,7 +303,7 @@ func LevelIn(vs ...int) predicate.Task {
 }
 
 // LevelNotIn applies the NotIn predicate on the "level" field.
-func LevelNotIn(vs ...int) predicate.Task {
+func LevelNotIn(vs ...int32) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -314,28 +314,28 @@ func LevelNotIn(vs ...int) predicate.Task {
 }
 
 // LevelGT applies the GT predicate on the "level" field.
-func LevelGT(v int) predicate.Task {
+func LevelGT(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldLevel), v))
 	})
 }
 
 // LevelGTE applies the GTE predicate on the "level" field.
-func LevelGTE(v int) predicate.Task {
+func LevelGTE(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldLevel), v))
 	})
 }
 
 // LevelLT applies the LT predicate on the "level" field.
-func LevelLT(v int) predicate.Task {
+func LevelLT(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldLevel), v))
 	})
 }
 
 // LevelLTE applies the LTE predicate on the "level" field.
-func LevelLTE(v int) predicate.Task {
+func LevelLTE(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldLevel), v))
 	})
@@ -356,21 +356,21 @@ func LevelNotNil() predicate.Task {
 }
 
 // StepEQ applies the EQ predicate on the "step" field.
-func StepEQ(v int) predicate.Task {
+func StepEQ(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldStep), v))
 	})
 }
 
 // StepNEQ applies the NEQ predicate on the "step" field.
-func StepNEQ(v int) predicate.Task {
+func StepNEQ(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldStep), v))
 	})
 }
 
 // StepIn applies the In predicate on the "step" field.
-func StepIn(vs ...int) predicate.Task {
+func StepIn(vs ...int32) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -381,7 +381,7 @@ func StepIn(vs ...int) predicate.Task {
 }
 
 // StepNotIn applies the NotIn predicate on the "step" field.
-func StepNotIn(vs ...int) predicate.Task {
+func StepNotIn(vs ...int32) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -392,28 +392,28 @@ func StepNotIn(vs ...int) predicate.Task {
 }
 
 // StepGT applies the GT predicate on the "step" field.
-func StepGT(v int) predicate.Task {
+func StepGT(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldStep), v))
 	})
 }
 
 // StepGTE applies the GTE predicate on the "step" field.
-func StepGTE(v int) predicate.Task {
+func StepGTE(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldStep), v))
 	})
 }
 
 // StepLT applies the LT predicate on the "step" field.
-func StepLT(v int) predicate.Task {
+func StepLT(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldStep), v))
 	})
 }
 
 // StepLTE applies the LTE predicate on the "step" field.
-func StepLTE(v int) predicate.Task {
+func StepLTE(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldStep), v))
 	})
@@ -494,20 +494,6 @@ func ProcInstIDLT(v int64) predicate.Task {
 func ProcInstIDLTE(v int64) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldProcInstID), v))
-	})
-}
-
-// ProcInstIDIsNil applies the IsNil predicate on the "proc_inst_id" field.
-func ProcInstIDIsNil() predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldProcInstID)))
-	})
-}
-
-// ProcInstIDNotNil applies the NotNil predicate on the "proc_inst_id" field.
-func ProcInstIDNotNil() predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldProcInstID)))
 	})
 }
 
@@ -667,237 +653,229 @@ func ClaimTimeNotNil() predicate.Task {
 	})
 }
 
-// MemberCountEQ applies the EQ predicate on the "member_count" field.
-func MemberCountEQ(v int) predicate.Task {
+// MemberApproverEQ applies the EQ predicate on the "member_approver" field.
+func MemberApproverEQ(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldMemberCount), v))
+		s.Where(sql.EQ(s.C(FieldMemberApprover), v))
 	})
 }
 
-// MemberCountNEQ applies the NEQ predicate on the "member_count" field.
-func MemberCountNEQ(v int) predicate.Task {
+// MemberApproverNEQ applies the NEQ predicate on the "member_approver" field.
+func MemberApproverNEQ(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldMemberCount), v))
+		s.Where(sql.NEQ(s.C(FieldMemberApprover), v))
 	})
 }
 
-// MemberCountIn applies the In predicate on the "member_count" field.
-func MemberCountIn(vs ...int) predicate.Task {
+// MemberApproverIn applies the In predicate on the "member_approver" field.
+func MemberApproverIn(vs ...string) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldMemberCount), v...))
+		s.Where(sql.In(s.C(FieldMemberApprover), v...))
 	})
 }
 
-// MemberCountNotIn applies the NotIn predicate on the "member_count" field.
-func MemberCountNotIn(vs ...int) predicate.Task {
+// MemberApproverNotIn applies the NotIn predicate on the "member_approver" field.
+func MemberApproverNotIn(vs ...string) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldMemberCount), v...))
+		s.Where(sql.NotIn(s.C(FieldMemberApprover), v...))
 	})
 }
 
-// MemberCountGT applies the GT predicate on the "member_count" field.
-func MemberCountGT(v int) predicate.Task {
+// MemberApproverGT applies the GT predicate on the "member_approver" field.
+func MemberApproverGT(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldMemberCount), v))
+		s.Where(sql.GT(s.C(FieldMemberApprover), v))
 	})
 }
 
-// MemberCountGTE applies the GTE predicate on the "member_count" field.
-func MemberCountGTE(v int) predicate.Task {
+// MemberApproverGTE applies the GTE predicate on the "member_approver" field.
+func MemberApproverGTE(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldMemberCount), v))
+		s.Where(sql.GTE(s.C(FieldMemberApprover), v))
 	})
 }
 
-// MemberCountLT applies the LT predicate on the "member_count" field.
-func MemberCountLT(v int) predicate.Task {
+// MemberApproverLT applies the LT predicate on the "member_approver" field.
+func MemberApproverLT(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldMemberCount), v))
+		s.Where(sql.LT(s.C(FieldMemberApprover), v))
 	})
 }
 
-// MemberCountLTE applies the LTE predicate on the "member_count" field.
-func MemberCountLTE(v int) predicate.Task {
+// MemberApproverLTE applies the LTE predicate on the "member_approver" field.
+func MemberApproverLTE(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldMemberCount), v))
+		s.Where(sql.LTE(s.C(FieldMemberApprover), v))
 	})
 }
 
-// MemberCountIsNil applies the IsNil predicate on the "member_count" field.
-func MemberCountIsNil() predicate.Task {
+// MemberApproverContains applies the Contains predicate on the "member_approver" field.
+func MemberApproverContains(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldMemberCount)))
+		s.Where(sql.Contains(s.C(FieldMemberApprover), v))
 	})
 }
 
-// MemberCountNotNil applies the NotNil predicate on the "member_count" field.
-func MemberCountNotNil() predicate.Task {
+// MemberApproverHasPrefix applies the HasPrefix predicate on the "member_approver" field.
+func MemberApproverHasPrefix(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldMemberCount)))
+		s.Where(sql.HasPrefix(s.C(FieldMemberApprover), v))
 	})
 }
 
-// UnCompleteNumEQ applies the EQ predicate on the "un_complete_num" field.
-func UnCompleteNumEQ(v int) predicate.Task {
+// MemberApproverHasSuffix applies the HasSuffix predicate on the "member_approver" field.
+func MemberApproverHasSuffix(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldUnCompleteNum), v))
+		s.Where(sql.HasSuffix(s.C(FieldMemberApprover), v))
 	})
 }
 
-// UnCompleteNumNEQ applies the NEQ predicate on the "un_complete_num" field.
-func UnCompleteNumNEQ(v int) predicate.Task {
+// MemberApproverIsNil applies the IsNil predicate on the "member_approver" field.
+func MemberApproverIsNil() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldUnCompleteNum), v))
+		s.Where(sql.IsNull(s.C(FieldMemberApprover)))
 	})
 }
 
-// UnCompleteNumIn applies the In predicate on the "un_complete_num" field.
-func UnCompleteNumIn(vs ...int) predicate.Task {
+// MemberApproverNotNil applies the NotNil predicate on the "member_approver" field.
+func MemberApproverNotNil() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldMemberApprover)))
+	})
+}
+
+// MemberApproverEqualFold applies the EqualFold predicate on the "member_approver" field.
+func MemberApproverEqualFold(v string) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldMemberApprover), v))
+	})
+}
+
+// MemberApproverContainsFold applies the ContainsFold predicate on the "member_approver" field.
+func MemberApproverContainsFold(v string) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldMemberApprover), v))
+	})
+}
+
+// AgreeApproverEQ applies the EQ predicate on the "agree_approver" field.
+func AgreeApproverEQ(v string) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAgreeApprover), v))
+	})
+}
+
+// AgreeApproverNEQ applies the NEQ predicate on the "agree_approver" field.
+func AgreeApproverNEQ(v string) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldAgreeApprover), v))
+	})
+}
+
+// AgreeApproverIn applies the In predicate on the "agree_approver" field.
+func AgreeApproverIn(vs ...string) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldUnCompleteNum), v...))
+		s.Where(sql.In(s.C(FieldAgreeApprover), v...))
 	})
 }
 
-// UnCompleteNumNotIn applies the NotIn predicate on the "un_complete_num" field.
-func UnCompleteNumNotIn(vs ...int) predicate.Task {
+// AgreeApproverNotIn applies the NotIn predicate on the "agree_approver" field.
+func AgreeApproverNotIn(vs ...string) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldUnCompleteNum), v...))
+		s.Where(sql.NotIn(s.C(FieldAgreeApprover), v...))
 	})
 }
 
-// UnCompleteNumGT applies the GT predicate on the "un_complete_num" field.
-func UnCompleteNumGT(v int) predicate.Task {
+// AgreeApproverGT applies the GT predicate on the "agree_approver" field.
+func AgreeApproverGT(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldUnCompleteNum), v))
+		s.Where(sql.GT(s.C(FieldAgreeApprover), v))
 	})
 }
 
-// UnCompleteNumGTE applies the GTE predicate on the "un_complete_num" field.
-func UnCompleteNumGTE(v int) predicate.Task {
+// AgreeApproverGTE applies the GTE predicate on the "agree_approver" field.
+func AgreeApproverGTE(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldUnCompleteNum), v))
+		s.Where(sql.GTE(s.C(FieldAgreeApprover), v))
 	})
 }
 
-// UnCompleteNumLT applies the LT predicate on the "un_complete_num" field.
-func UnCompleteNumLT(v int) predicate.Task {
+// AgreeApproverLT applies the LT predicate on the "agree_approver" field.
+func AgreeApproverLT(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldUnCompleteNum), v))
+		s.Where(sql.LT(s.C(FieldAgreeApprover), v))
 	})
 }
 
-// UnCompleteNumLTE applies the LTE predicate on the "un_complete_num" field.
-func UnCompleteNumLTE(v int) predicate.Task {
+// AgreeApproverLTE applies the LTE predicate on the "agree_approver" field.
+func AgreeApproverLTE(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldUnCompleteNum), v))
+		s.Where(sql.LTE(s.C(FieldAgreeApprover), v))
 	})
 }
 
-// UnCompleteNumIsNil applies the IsNil predicate on the "un_complete_num" field.
-func UnCompleteNumIsNil() predicate.Task {
+// AgreeApproverContains applies the Contains predicate on the "agree_approver" field.
+func AgreeApproverContains(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldUnCompleteNum)))
+		s.Where(sql.Contains(s.C(FieldAgreeApprover), v))
 	})
 }
 
-// UnCompleteNumNotNil applies the NotNil predicate on the "un_complete_num" field.
-func UnCompleteNumNotNil() predicate.Task {
+// AgreeApproverHasPrefix applies the HasPrefix predicate on the "agree_approver" field.
+func AgreeApproverHasPrefix(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldUnCompleteNum)))
+		s.Where(sql.HasPrefix(s.C(FieldAgreeApprover), v))
 	})
 }
 
-// AgreeNumEQ applies the EQ predicate on the "agree_num" field.
-func AgreeNumEQ(v int) predicate.Task {
+// AgreeApproverHasSuffix applies the HasSuffix predicate on the "agree_approver" field.
+func AgreeApproverHasSuffix(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldAgreeNum), v))
+		s.Where(sql.HasSuffix(s.C(FieldAgreeApprover), v))
 	})
 }
 
-// AgreeNumNEQ applies the NEQ predicate on the "agree_num" field.
-func AgreeNumNEQ(v int) predicate.Task {
+// AgreeApproverIsNil applies the IsNil predicate on the "agree_approver" field.
+func AgreeApproverIsNil() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldAgreeNum), v))
+		s.Where(sql.IsNull(s.C(FieldAgreeApprover)))
 	})
 }
 
-// AgreeNumIn applies the In predicate on the "agree_num" field.
-func AgreeNumIn(vs ...int) predicate.Task {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
+// AgreeApproverNotNil applies the NotNil predicate on the "agree_approver" field.
+func AgreeApproverNotNil() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldAgreeNum), v...))
+		s.Where(sql.NotNull(s.C(FieldAgreeApprover)))
 	})
 }
 
-// AgreeNumNotIn applies the NotIn predicate on the "agree_num" field.
-func AgreeNumNotIn(vs ...int) predicate.Task {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
+// AgreeApproverEqualFold applies the EqualFold predicate on the "agree_approver" field.
+func AgreeApproverEqualFold(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldAgreeNum), v...))
+		s.Where(sql.EqualFold(s.C(FieldAgreeApprover), v))
 	})
 }
 
-// AgreeNumGT applies the GT predicate on the "agree_num" field.
-func AgreeNumGT(v int) predicate.Task {
+// AgreeApproverContainsFold applies the ContainsFold predicate on the "agree_approver" field.
+func AgreeApproverContainsFold(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldAgreeNum), v))
-	})
-}
-
-// AgreeNumGTE applies the GTE predicate on the "agree_num" field.
-func AgreeNumGTE(v int) predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldAgreeNum), v))
-	})
-}
-
-// AgreeNumLT applies the LT predicate on the "agree_num" field.
-func AgreeNumLT(v int) predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldAgreeNum), v))
-	})
-}
-
-// AgreeNumLTE applies the LTE predicate on the "agree_num" field.
-func AgreeNumLTE(v int) predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldAgreeNum), v))
-	})
-}
-
-// AgreeNumIsNil applies the IsNil predicate on the "agree_num" field.
-func AgreeNumIsNil() predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldAgreeNum)))
-	})
-}
-
-// AgreeNumNotNil applies the NotNil predicate on the "agree_num" field.
-func AgreeNumNotNil() predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldAgreeNum)))
+		s.Where(sql.ContainsFold(s.C(FieldAgreeApprover), v))
 	})
 }
 
@@ -979,53 +957,53 @@ func IsFinishedNotNil() predicate.Task {
 	})
 }
 
-// ActTypeEQ applies the EQ predicate on the "act_type" field.
-func ActTypeEQ(v ActType) predicate.Task {
+// ModeEQ applies the EQ predicate on the "mode" field.
+func ModeEQ(v Mode) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldActType), v))
+		s.Where(sql.EQ(s.C(FieldMode), v))
 	})
 }
 
-// ActTypeNEQ applies the NEQ predicate on the "act_type" field.
-func ActTypeNEQ(v ActType) predicate.Task {
+// ModeNEQ applies the NEQ predicate on the "mode" field.
+func ModeNEQ(v Mode) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldActType), v))
+		s.Where(sql.NEQ(s.C(FieldMode), v))
 	})
 }
 
-// ActTypeIn applies the In predicate on the "act_type" field.
-func ActTypeIn(vs ...ActType) predicate.Task {
+// ModeIn applies the In predicate on the "mode" field.
+func ModeIn(vs ...Mode) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldActType), v...))
+		s.Where(sql.In(s.C(FieldMode), v...))
 	})
 }
 
-// ActTypeNotIn applies the NotIn predicate on the "act_type" field.
-func ActTypeNotIn(vs ...ActType) predicate.Task {
+// ModeNotIn applies the NotIn predicate on the "mode" field.
+func ModeNotIn(vs ...Mode) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldActType), v...))
+		s.Where(sql.NotIn(s.C(FieldMode), v...))
 	})
 }
 
-// ActTypeIsNil applies the IsNil predicate on the "act_type" field.
-func ActTypeIsNil() predicate.Task {
+// ModeIsNil applies the IsNil predicate on the "mode" field.
+func ModeIsNil() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldActType)))
+		s.Where(sql.IsNull(s.C(FieldMode)))
 	})
 }
 
-// ActTypeNotNil applies the NotNil predicate on the "act_type" field.
-func ActTypeNotNil() predicate.Task {
+// ModeNotNil applies the NotNil predicate on the "mode" field.
+func ModeNotNil() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldActType)))
+		s.Where(sql.NotNull(s.C(FieldMode)))
 	})
 }
 
@@ -1108,21 +1086,21 @@ func DataIDNotNil() predicate.Task {
 }
 
 // IsDelEQ applies the EQ predicate on the "is_del" field.
-func IsDelEQ(v int) predicate.Task {
+func IsDelEQ(v int8) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelNEQ applies the NEQ predicate on the "is_del" field.
-func IsDelNEQ(v int) predicate.Task {
+func IsDelNEQ(v int8) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelIn applies the In predicate on the "is_del" field.
-func IsDelIn(vs ...int) predicate.Task {
+func IsDelIn(vs ...int8) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1133,7 +1111,7 @@ func IsDelIn(vs ...int) predicate.Task {
 }
 
 // IsDelNotIn applies the NotIn predicate on the "is_del" field.
-func IsDelNotIn(vs ...int) predicate.Task {
+func IsDelNotIn(vs ...int8) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1144,28 +1122,28 @@ func IsDelNotIn(vs ...int) predicate.Task {
 }
 
 // IsDelGT applies the GT predicate on the "is_del" field.
-func IsDelGT(v int) predicate.Task {
+func IsDelGT(v int8) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelGTE applies the GTE predicate on the "is_del" field.
-func IsDelGTE(v int) predicate.Task {
+func IsDelGTE(v int8) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelLT applies the LT predicate on the "is_del" field.
-func IsDelLT(v int) predicate.Task {
+func IsDelLT(v int8) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelLTE applies the LTE predicate on the "is_del" field.
-func IsDelLTE(v int) predicate.Task {
+func IsDelLTE(v int8) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldIsDel), v))
 	})
@@ -1182,6 +1160,84 @@ func IsDelIsNil() predicate.Task {
 func IsDelNotNil() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldIsDel)))
+	})
+}
+
+// UpdateTimeEQ applies the EQ predicate on the "update_time" field.
+func UpdateTimeEQ(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeNEQ applies the NEQ predicate on the "update_time" field.
+func UpdateTimeNEQ(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeIn applies the In predicate on the "update_time" field.
+func UpdateTimeIn(vs ...time.Time) predicate.Task {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldUpdateTime), v...))
+	})
+}
+
+// UpdateTimeNotIn applies the NotIn predicate on the "update_time" field.
+func UpdateTimeNotIn(vs ...time.Time) predicate.Task {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldUpdateTime), v...))
+	})
+}
+
+// UpdateTimeGT applies the GT predicate on the "update_time" field.
+func UpdateTimeGT(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeGTE applies the GTE predicate on the "update_time" field.
+func UpdateTimeGTE(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeLT applies the LT predicate on the "update_time" field.
+func UpdateTimeLT(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeLTE applies the LTE predicate on the "update_time" field.
+func UpdateTimeLTE(v time.Time) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeIsNil applies the IsNil predicate on the "update_time" field.
+func UpdateTimeIsNil() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldUpdateTime)))
+	})
+}
+
+// UpdateTimeNotNil applies the NotNil predicate on the "update_time" field.
+func UpdateTimeNotNil() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldUpdateTime)))
 	})
 }
 

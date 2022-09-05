@@ -5,8 +5,6 @@ import (
 	"act/common/cache"
 	"act/common/models"
 	"act/common/tools/snowflake"
-	"log"
-
 	_ "github.com/go-sql-driver/mysql"
 
 	"entgo.io/ent/dialect/sql"
@@ -18,7 +16,6 @@ type DbStore struct {
 }
 
 func NewDbStore(c models.DbStoreConfig) *DbStore {
-	log.Println("111", c)
 	_, err := snowflake.NewSnowflake(c.DataCenterId, c.WorkerId)
 	if err != nil {
 		panic("connect database error")

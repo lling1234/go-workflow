@@ -15,38 +15,98 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
-				Path:    "/procdef/add",
+				Path:    "/act/procdef/add",
 				Handler: act.AddProcDefHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/process/start",
-				Handler: act.StartProcessHandler(serverCtx),
+				Path:    "/act/procdef/update",
+				Handler: act.UpdateProcDefHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/task/compelete",
-				Handler: act.CompeleteTaskHandler(serverCtx),
+				Path:    "/act/procdef/findoneprocdef",
+				Handler: act.FindOneProcDefHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/task/withdraw",
+				Path:    "/act/procdef/findallprocdef",
+				Handler: act.FindAllProcDefHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/act/procdef/setactive",
+				Handler: act.SetActiveHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/act/procdef/del",
+				Handler: act.DelProcDefHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/act/procinst/start",
+				Handler: act.StartProcInstHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/act/procinst/complete",
+				Handler: act.CompleteTaskHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/act/procinst/findbydataid",
+				Handler: act.FindByDataIdHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/act/procinst/withdraw",
 				Handler: act.WithdrawHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/process/findbytargetid",
-				Handler: act.FindByTargetIdHandler(serverCtx),
+				Path:    "/act/procinst/del",
+				Handler: act.DelProcInstHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/process/findmystartprocess",
-				Handler: act.FindMyStartProcessHandler(serverCtx),
+				Path:    "/act/process/findallprocess",
+				Handler: act.FindAllProcessHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/process/findmyapproveprocess",
-				Handler: act.FindMyApproveProcessHandler(serverCtx),
+				Path:    "/act/process/findmystart",
+				Handler: act.FindMyStartHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/act/process/findmyunfinish",
+				Handler: act.FindMyUnFinishHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/act/process/findmyfinish",
+				Handler: act.FindMyFinishHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/act/process/findmypending",
+				Handler: act.FindMyPendingHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/act/process/findmyapproved",
+				Handler: act.FindMyApprovedHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/act/process/findelapsedtime",
+				Handler: act.FindElapsedTimeHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/act/process/findovertime",
+				Handler: act.FindOverTimeHandler(serverCtx),
 			},
 		},
 	)

@@ -10,28 +10,28 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.IdentityLink {
+func ID(id int64) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldID), id))
 	})
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.IdentityLink {
+func IDEQ(id int64) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldID), id))
 	})
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.IdentityLink {
+func IDNEQ(id int64) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldID), id))
 	})
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.IdentityLink {
+func IDIn(ids ...int64) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		v := make([]interface{}, len(ids))
 		for i := range v {
@@ -42,7 +42,7 @@ func IDIn(ids ...int) predicate.IdentityLink {
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.IdentityLink {
+func IDNotIn(ids ...int64) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		v := make([]interface{}, len(ids))
 		for i := range v {
@@ -53,28 +53,28 @@ func IDNotIn(ids ...int) predicate.IdentityLink {
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.IdentityLink {
+func IDGT(id int64) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldID), id))
 	})
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.IdentityLink {
+func IDGTE(id int64) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldID), id))
 	})
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.IdentityLink {
+func IDLT(id int64) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldID), id))
 	})
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.IdentityLink {
+func IDLTE(id int64) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldID), id))
 	})
@@ -95,7 +95,7 @@ func UserName(v string) predicate.IdentityLink {
 }
 
 // Step applies equality check predicate on the "step" field. It's identical to StepEQ.
-func Step(v int) predicate.IdentityLink {
+func Step(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldStep), v))
 	})
@@ -130,7 +130,7 @@ func TaskID(v int64) predicate.IdentityLink {
 }
 
 // Result applies equality check predicate on the "result" field. It's identical to ResultEQ.
-func Result(v int) predicate.IdentityLink {
+func Result(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldResult), v))
 	})
@@ -154,6 +154,13 @@ func IsDel(v int8) predicate.IdentityLink {
 func IsDeal(v int8) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDeal), v))
+	})
+}
+
+// UpdateTime applies equality check predicate on the "update_time" field. It's identical to UpdateTimeEQ.
+func UpdateTime(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdateTime), v))
 	})
 }
 
@@ -349,21 +356,21 @@ func UserNameContainsFold(v string) predicate.IdentityLink {
 }
 
 // StepEQ applies the EQ predicate on the "step" field.
-func StepEQ(v int) predicate.IdentityLink {
+func StepEQ(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldStep), v))
 	})
 }
 
 // StepNEQ applies the NEQ predicate on the "step" field.
-func StepNEQ(v int) predicate.IdentityLink {
+func StepNEQ(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldStep), v))
 	})
 }
 
 // StepIn applies the In predicate on the "step" field.
-func StepIn(vs ...int) predicate.IdentityLink {
+func StepIn(vs ...int32) predicate.IdentityLink {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -374,7 +381,7 @@ func StepIn(vs ...int) predicate.IdentityLink {
 }
 
 // StepNotIn applies the NotIn predicate on the "step" field.
-func StepNotIn(vs ...int) predicate.IdentityLink {
+func StepNotIn(vs ...int32) predicate.IdentityLink {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -385,28 +392,28 @@ func StepNotIn(vs ...int) predicate.IdentityLink {
 }
 
 // StepGT applies the GT predicate on the "step" field.
-func StepGT(v int) predicate.IdentityLink {
+func StepGT(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldStep), v))
 	})
 }
 
 // StepGTE applies the GTE predicate on the "step" field.
-func StepGTE(v int) predicate.IdentityLink {
+func StepGTE(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldStep), v))
 	})
 }
 
 // StepLT applies the LT predicate on the "step" field.
-func StepLT(v int) predicate.IdentityLink {
+func StepLT(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldStep), v))
 	})
 }
 
 // StepLTE applies the LTE predicate on the "step" field.
-func StepLTE(v int) predicate.IdentityLink {
+func StepLTE(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldStep), v))
 	})
@@ -487,20 +494,6 @@ func ProcInstIDLT(v int64) predicate.IdentityLink {
 func ProcInstIDLTE(v int64) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldProcInstID), v))
-	})
-}
-
-// ProcInstIDIsNil applies the IsNil predicate on the "proc_inst_id" field.
-func ProcInstIDIsNil() predicate.IdentityLink {
-	return predicate.IdentityLink(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldProcInstID)))
-	})
-}
-
-// ProcInstIDNotNil applies the NotNil predicate on the "proc_inst_id" field.
-func ProcInstIDNotNil() predicate.IdentityLink {
-	return predicate.IdentityLink(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldProcInstID)))
 	})
 }
 
@@ -759,36 +752,22 @@ func TaskIDLTE(v int64) predicate.IdentityLink {
 	})
 }
 
-// TaskIDIsNil applies the IsNil predicate on the "task_id" field.
-func TaskIDIsNil() predicate.IdentityLink {
-	return predicate.IdentityLink(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldTaskID)))
-	})
-}
-
-// TaskIDNotNil applies the NotNil predicate on the "task_id" field.
-func TaskIDNotNil() predicate.IdentityLink {
-	return predicate.IdentityLink(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldTaskID)))
-	})
-}
-
 // ResultEQ applies the EQ predicate on the "result" field.
-func ResultEQ(v int) predicate.IdentityLink {
+func ResultEQ(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldResult), v))
 	})
 }
 
 // ResultNEQ applies the NEQ predicate on the "result" field.
-func ResultNEQ(v int) predicate.IdentityLink {
+func ResultNEQ(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldResult), v))
 	})
 }
 
 // ResultIn applies the In predicate on the "result" field.
-func ResultIn(vs ...int) predicate.IdentityLink {
+func ResultIn(vs ...int32) predicate.IdentityLink {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -799,7 +778,7 @@ func ResultIn(vs ...int) predicate.IdentityLink {
 }
 
 // ResultNotIn applies the NotIn predicate on the "result" field.
-func ResultNotIn(vs ...int) predicate.IdentityLink {
+func ResultNotIn(vs ...int32) predicate.IdentityLink {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -810,28 +789,28 @@ func ResultNotIn(vs ...int) predicate.IdentityLink {
 }
 
 // ResultGT applies the GT predicate on the "result" field.
-func ResultGT(v int) predicate.IdentityLink {
+func ResultGT(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldResult), v))
 	})
 }
 
 // ResultGTE applies the GTE predicate on the "result" field.
-func ResultGTE(v int) predicate.IdentityLink {
+func ResultGTE(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldResult), v))
 	})
 }
 
 // ResultLT applies the LT predicate on the "result" field.
-func ResultLT(v int) predicate.IdentityLink {
+func ResultLT(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldResult), v))
 	})
 }
 
 // ResultLTE applies the LTE predicate on the "result" field.
-func ResultLTE(v int) predicate.IdentityLink {
+func ResultLTE(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldResult), v))
 	})
@@ -1082,6 +1061,84 @@ func IsDealIsNil() predicate.IdentityLink {
 func IsDealNotNil() predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldIsDeal)))
+	})
+}
+
+// UpdateTimeEQ applies the EQ predicate on the "update_time" field.
+func UpdateTimeEQ(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeNEQ applies the NEQ predicate on the "update_time" field.
+func UpdateTimeNEQ(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeIn applies the In predicate on the "update_time" field.
+func UpdateTimeIn(vs ...time.Time) predicate.IdentityLink {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldUpdateTime), v...))
+	})
+}
+
+// UpdateTimeNotIn applies the NotIn predicate on the "update_time" field.
+func UpdateTimeNotIn(vs ...time.Time) predicate.IdentityLink {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldUpdateTime), v...))
+	})
+}
+
+// UpdateTimeGT applies the GT predicate on the "update_time" field.
+func UpdateTimeGT(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeGTE applies the GTE predicate on the "update_time" field.
+func UpdateTimeGTE(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeLT applies the LT predicate on the "update_time" field.
+func UpdateTimeLT(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeLTE applies the LTE predicate on the "update_time" field.
+func UpdateTimeLTE(v time.Time) predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldUpdateTime), v))
+	})
+}
+
+// UpdateTimeIsNil applies the IsNil predicate on the "update_time" field.
+func UpdateTimeIsNil() predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldUpdateTime)))
+	})
+}
+
+// UpdateTimeNotNil applies the NotNil predicate on the "update_time" field.
+func UpdateTimeNotNil() predicate.IdentityLink {
+	return predicate.IdentityLink(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldUpdateTime)))
 	})
 }
 

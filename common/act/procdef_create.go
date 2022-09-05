@@ -5,6 +5,7 @@ package act
 import (
 	"act/common/act/procdef"
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -48,13 +49,13 @@ func (pdc *ProcDefCreate) SetNillableCode(s *string) *ProcDefCreate {
 }
 
 // SetVersion sets the "version" field.
-func (pdc *ProcDefCreate) SetVersion(i int) *ProcDefCreate {
+func (pdc *ProcDefCreate) SetVersion(i int32) *ProcDefCreate {
 	pdc.mutation.SetVersion(i)
 	return pdc
 }
 
 // SetNillableVersion sets the "version" field if the given value is not nil.
-func (pdc *ProcDefCreate) SetNillableVersion(i *int) *ProcDefCreate {
+func (pdc *ProcDefCreate) SetNillableVersion(i *int32) *ProcDefCreate {
 	if i != nil {
 		pdc.SetVersion(*i)
 	}
@@ -64,14 +65,6 @@ func (pdc *ProcDefCreate) SetNillableVersion(i *int) *ProcDefCreate {
 // SetResource sets the "resource" field.
 func (pdc *ProcDefCreate) SetResource(s string) *ProcDefCreate {
 	pdc.mutation.SetResource(s)
-	return pdc
-}
-
-// SetNillableResource sets the "resource" field if the given value is not nil.
-func (pdc *ProcDefCreate) SetNillableResource(s *string) *ProcDefCreate {
-	if s != nil {
-		pdc.SetResource(*s)
-	}
 	return pdc
 }
 
@@ -131,42 +124,42 @@ func (pdc *ProcDefCreate) SetNillableTargetID(i *int64) *ProcDefCreate {
 	return pdc
 }
 
-// SetYewuFormID sets the "yewu_form_id" field.
-func (pdc *ProcDefCreate) SetYewuFormID(s string) *ProcDefCreate {
-	pdc.mutation.SetYewuFormID(s)
+// SetFormID sets the "form_id" field.
+func (pdc *ProcDefCreate) SetFormID(s string) *ProcDefCreate {
+	pdc.mutation.SetFormID(s)
 	return pdc
 }
 
-// SetNillableYewuFormID sets the "yewu_form_id" field if the given value is not nil.
-func (pdc *ProcDefCreate) SetNillableYewuFormID(s *string) *ProcDefCreate {
+// SetNillableFormID sets the "form_id" field if the given value is not nil.
+func (pdc *ProcDefCreate) SetNillableFormID(s *string) *ProcDefCreate {
 	if s != nil {
-		pdc.SetYewuFormID(*s)
+		pdc.SetFormID(*s)
 	}
 	return pdc
 }
 
-// SetYewuName sets the "yewu_name" field.
-func (pdc *ProcDefCreate) SetYewuName(s string) *ProcDefCreate {
-	pdc.mutation.SetYewuName(s)
+// SetFormName sets the "form_name" field.
+func (pdc *ProcDefCreate) SetFormName(s string) *ProcDefCreate {
+	pdc.mutation.SetFormName(s)
 	return pdc
 }
 
-// SetNillableYewuName sets the "yewu_name" field if the given value is not nil.
-func (pdc *ProcDefCreate) SetNillableYewuName(s *string) *ProcDefCreate {
+// SetNillableFormName sets the "form_name" field if the given value is not nil.
+func (pdc *ProcDefCreate) SetNillableFormName(s *string) *ProcDefCreate {
 	if s != nil {
-		pdc.SetYewuName(*s)
+		pdc.SetFormName(*s)
 	}
 	return pdc
 }
 
 // SetRemainHours sets the "remain_hours" field.
-func (pdc *ProcDefCreate) SetRemainHours(i int) *ProcDefCreate {
+func (pdc *ProcDefCreate) SetRemainHours(i int32) *ProcDefCreate {
 	pdc.mutation.SetRemainHours(i)
 	return pdc
 }
 
 // SetNillableRemainHours sets the "remain_hours" field if the given value is not nil.
-func (pdc *ProcDefCreate) SetNillableRemainHours(i *int) *ProcDefCreate {
+func (pdc *ProcDefCreate) SetNillableRemainHours(i *int32) *ProcDefCreate {
 	if i != nil {
 		pdc.SetRemainHours(*i)
 	}
@@ -197,6 +190,20 @@ func (pdc *ProcDefCreate) SetIsActive(i int8) *ProcDefCreate {
 func (pdc *ProcDefCreate) SetNillableIsActive(i *int8) *ProcDefCreate {
 	if i != nil {
 		pdc.SetIsActive(*i)
+	}
+	return pdc
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (pdc *ProcDefCreate) SetUpdateTime(t time.Time) *ProcDefCreate {
+	pdc.mutation.SetUpdateTime(t)
+	return pdc
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (pdc *ProcDefCreate) SetNillableUpdateTime(t *time.Time) *ProcDefCreate {
+	if t != nil {
+		pdc.SetUpdateTime(*t)
 	}
 	return pdc
 }
@@ -278,10 +285,6 @@ func (pdc *ProcDefCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (pdc *ProcDefCreate) defaults() {
-	if _, ok := pdc.mutation.Version(); !ok {
-		v := procdef.DefaultVersion
-		pdc.mutation.SetVersion(v)
-	}
 	if _, ok := pdc.mutation.CreateTime(); !ok {
 		v := procdef.DefaultCreateTime
 		pdc.mutation.SetCreateTime(v)
@@ -298,6 +301,10 @@ func (pdc *ProcDefCreate) defaults() {
 		v := procdef.DefaultIsActive
 		pdc.mutation.SetIsActive(v)
 	}
+	if _, ok := pdc.mutation.UpdateTime(); !ok {
+		v := procdef.DefaultUpdateTime
+		pdc.mutation.SetUpdateTime(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -312,6 +319,9 @@ func (pdc *ProcDefCreate) check() error {
 			return &ValidationError{Name: "code", err: fmt.Errorf(`act: validator failed for field "ProcDef.code": %w`, err)}
 		}
 	}
+	if _, ok := pdc.mutation.Resource(); !ok {
+		return &ValidationError{Name: "resource", err: errors.New(`act: missing required field "ProcDef.resource"`)}
+	}
 	if v, ok := pdc.mutation.Resource(); ok {
 		if err := procdef.ResourceValidator(v); err != nil {
 			return &ValidationError{Name: "resource", err: fmt.Errorf(`act: validator failed for field "ProcDef.resource": %w`, err)}
@@ -322,14 +332,14 @@ func (pdc *ProcDefCreate) check() error {
 			return &ValidationError{Name: "create_user_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.create_user_name": %w`, err)}
 		}
 	}
-	if v, ok := pdc.mutation.YewuFormID(); ok {
-		if err := procdef.YewuFormIDValidator(v); err != nil {
-			return &ValidationError{Name: "yewu_form_id", err: fmt.Errorf(`act: validator failed for field "ProcDef.yewu_form_id": %w`, err)}
+	if v, ok := pdc.mutation.FormID(); ok {
+		if err := procdef.FormIDValidator(v); err != nil {
+			return &ValidationError{Name: "form_id", err: fmt.Errorf(`act: validator failed for field "ProcDef.form_id": %w`, err)}
 		}
 	}
-	if v, ok := pdc.mutation.YewuName(); ok {
-		if err := procdef.YewuNameValidator(v); err != nil {
-			return &ValidationError{Name: "yewu_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.yewu_name": %w`, err)}
+	if v, ok := pdc.mutation.FormName(); ok {
+		if err := procdef.FormNameValidator(v); err != nil {
+			return &ValidationError{Name: "form_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.form_name": %w`, err)}
 		}
 	}
 	return nil
@@ -344,7 +354,7 @@ func (pdc *ProcDefCreate) sqlSave(ctx context.Context) (*ProcDef, error) {
 		return nil, err
 	}
 	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	_node.ID = id
 	return _node, nil
 }
 
@@ -377,7 +387,7 @@ func (pdc *ProcDefCreate) createSpec() (*ProcDef, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pdc.mutation.Version(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldVersion,
 		})
@@ -423,25 +433,25 @@ func (pdc *ProcDefCreate) createSpec() (*ProcDef, *sqlgraph.CreateSpec) {
 		})
 		_node.TargetID = value
 	}
-	if value, ok := pdc.mutation.YewuFormID(); ok {
+	if value, ok := pdc.mutation.FormID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: procdef.FieldYewuFormID,
+			Column: procdef.FieldFormID,
 		})
-		_node.YewuFormID = value
+		_node.FormID = value
 	}
-	if value, ok := pdc.mutation.YewuName(); ok {
+	if value, ok := pdc.mutation.FormName(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: procdef.FieldYewuName,
+			Column: procdef.FieldFormName,
 		})
-		_node.YewuName = value
+		_node.FormName = value
 	}
 	if value, ok := pdc.mutation.RemainHours(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldRemainHours,
 		})
@@ -462,6 +472,14 @@ func (pdc *ProcDefCreate) createSpec() (*ProcDef, *sqlgraph.CreateSpec) {
 			Column: procdef.FieldIsActive,
 		})
 		_node.IsActive = value
+	}
+	if value, ok := pdc.mutation.UpdateTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: procdef.FieldUpdateTime,
+		})
+		_node.UpdateTime = value
 	}
 	return _node, _spec
 }
@@ -509,7 +527,7 @@ func (pdcb *ProcDefCreateBulk) Save(ctx context.Context) ([]*ProcDef, error) {
 				mutation.id = &nodes[i].ID
 				if specs[i].ID.Value != nil {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = id
 				}
 				mutation.done = true
 				return nodes[i], nil

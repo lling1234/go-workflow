@@ -15,13 +15,13 @@ import (
 type IdentityLink struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 审批人id
 	UserID int64 `json:"user_id,omitempty"`
 	// 审批人姓名
 	UserName string `json:"user_name,omitempty"`
 	// 审批步数
-	Step int `json:"step,omitempty"`
+	Step int32 `json:"step,omitempty"`
 	// 流程实例id
 	ProcInstID int64 `json:"proc_inst_id,omitempty"`
 	// 岗位id
@@ -30,14 +30,16 @@ type IdentityLink struct {
 	Comment string `json:"comment,omitempty"`
 	// 节点任务
 	TaskID int64 `json:"task_id,omitempty"`
-	// 审批结果
-	Result int `json:"result,omitempty"`
+	// 审批结果 3驳回、5未通过、6已通过
+	Result int32 `json:"result,omitempty"`
 	// 创建时间
 	CreateTime time.Time `json:"create_time,omitempty"`
 	// 是否删除,0:未删除,1:已删除
 	IsDel int8 `json:"is_del,omitempty"`
 	// 是否已审批 ,0:未审批,1:已审批
 	IsDeal int8 `json:"is_deal,omitempty"`
+	// 流程修改时间
+	UpdateTime time.Time `json:"update_time,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -49,7 +51,7 @@ func (*IdentityLink) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullInt64)
 		case identitylink.FieldUserName, identitylink.FieldComment:
 			values[i] = new(sql.NullString)
-		case identitylink.FieldCreateTime:
+		case identitylink.FieldCreateTime, identitylink.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type IdentityLink", columns[i])
@@ -71,7 +73,7 @@ func (il *IdentityLink) assignValues(columns []string, values []interface{}) err
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			il.ID = int(value.Int64)
+			il.ID = value.Int64
 		case identitylink.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
@@ -88,7 +90,7 @@ func (il *IdentityLink) assignValues(columns []string, values []interface{}) err
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field step", values[i])
 			} else if value.Valid {
-				il.Step = int(value.Int64)
+				il.Step = int32(value.Int64)
 			}
 		case identitylink.FieldProcInstID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -118,7 +120,7 @@ func (il *IdentityLink) assignValues(columns []string, values []interface{}) err
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field result", values[i])
 			} else if value.Valid {
-				il.Result = int(value.Int64)
+				il.Result = int32(value.Int64)
 			}
 		case identitylink.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -137,6 +139,12 @@ func (il *IdentityLink) assignValues(columns []string, values []interface{}) err
 				return fmt.Errorf("unexpected type %T for field is_deal", values[i])
 			} else if value.Valid {
 				il.IsDeal = int8(value.Int64)
+			}
+		case identitylink.FieldUpdateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
+			} else if value.Valid {
+				il.UpdateTime = value.Time
 			}
 		}
 	}
@@ -198,6 +206,9 @@ func (il *IdentityLink) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_deal=")
 	builder.WriteString(fmt.Sprintf("%v", il.IsDeal))
+	builder.WriteString(", ")
+	builder.WriteString("update_time=")
+	builder.WriteString(il.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

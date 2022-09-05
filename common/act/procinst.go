@@ -15,7 +15,7 @@ import (
 type ProcInst struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 流程定义id
 	ProcDefID int64 `json:"proc_def_id,omitempty"`
 	// 发起流程标题
@@ -36,20 +36,20 @@ type ProcInst struct {
 	StartUserID int64 `json:"start_user_id,omitempty"`
 	// 发起人姓名
 	StartUserName string `json:"start_user_name,omitempty"`
-	// 流程是否结束,2:未结束,1:已结束
+	// 流程是否结束,0:未结束,1:已结束
 	IsFinished int8 `json:"is_finished,omitempty"`
-	// 流程状态,类型为:1待处理、2处理中、3驳回至发起人、4驳回到上一级、5已撤回、6未通过、7已通过、8废弃
-	State int `json:"state,omitempty"`
+	// 流程状态,类型为:1待处理、2处理中、3驳回、4已撤回、5未通过、6已通过、7废弃
+	State int32 `json:"state,omitempty"`
 	// 流程绑定数据id
 	DataID int64 `json:"data_id,omitempty"`
 	// 是否删除
-	IsDel int `json:"is_del,omitempty"`
+	IsDel int8 `json:"is_del,omitempty"`
 	// 创建时间
 	CreateTime time.Time `json:"create_time,omitempty"`
-	// 更新时间
-	UpdateTime time.Time `json:"update_time,omitempty"`
 	// 审批限定时间
-	RemainHours int64 `json:"remain_hours,omitempty"`
+	RemainHours int32 `json:"remain_hours,omitempty"`
+	// 流程修改时间
+	UpdateTime time.Time `json:"update_time,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -83,7 +83,7 @@ func (pi *ProcInst) assignValues(columns []string, values []interface{}) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			pi.ID = int(value.Int64)
+			pi.ID = value.Int64
 		case procinst.FieldProcDefID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field proc_def_id", values[i])
@@ -154,7 +154,7 @@ func (pi *ProcInst) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field state", values[i])
 			} else if value.Valid {
-				pi.State = int(value.Int64)
+				pi.State = int32(value.Int64)
 			}
 		case procinst.FieldDataID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -166,7 +166,7 @@ func (pi *ProcInst) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field is_del", values[i])
 			} else if value.Valid {
-				pi.IsDel = int(value.Int64)
+				pi.IsDel = int8(value.Int64)
 			}
 		case procinst.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -174,17 +174,17 @@ func (pi *ProcInst) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				pi.CreateTime = value.Time
 			}
+		case procinst.FieldRemainHours:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field remain_hours", values[i])
+			} else if value.Valid {
+				pi.RemainHours = int32(value.Int64)
+			}
 		case procinst.FieldUpdateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field update_time", values[i])
 			} else if value.Valid {
 				pi.UpdateTime = value.Time
-			}
-		case procinst.FieldRemainHours:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field remain_hours", values[i])
-			} else if value.Valid {
-				pi.RemainHours = value.Int64
 			}
 		}
 	}
@@ -259,11 +259,11 @@ func (pi *ProcInst) String() string {
 	builder.WriteString("create_time=")
 	builder.WriteString(pi.CreateTime.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("update_time=")
-	builder.WriteString(pi.UpdateTime.Format(time.ANSIC))
-	builder.WriteString(", ")
 	builder.WriteString("remain_hours=")
 	builder.WriteString(fmt.Sprintf("%v", pi.RemainHours))
+	builder.WriteString(", ")
+	builder.WriteString("update_time=")
+	builder.WriteString(pi.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

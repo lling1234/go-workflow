@@ -8,72 +8,74 @@ import (
 )
 
 var (
-	// ExecutionsColumns holds the columns for the "executions" table.
+	// ExecutionsColumns holds the columns for the "act_execution" table.
 	ExecutionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "proc_inst_id", Type: field.TypeInt64, Nullable: true},
-		{Name: "proc_def_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "proc_inst_id", Type: field.TypeInt64},
+		{Name: "proc_def_id", Type: field.TypeInt64},
 		{Name: "node_infos", Type: field.TypeString, Nullable: true, Size: 5000},
-		{Name: "is_active", Type: field.TypeInt8, Nullable: true, Default: 1},
 		{Name: "start_time", Type: field.TypeTime, Nullable: true},
 		{Name: "is_del", Type: field.TypeInt8, Nullable: true, Default: 0},
 		{Name: "create_time", Type: field.TypeTime, Nullable: true},
+		{Name: "update_time", Type: field.TypeTime, Nullable: true},
 	}
-	// ExecutionsTable holds the schema information for the "executions" table.
+	// ExecutionsTable holds the schema information for the "act_execution" table.
 	ExecutionsTable = &schema.Table{
-		Name:       "executions",
+		Name:       "act_execution",
 		Columns:    ExecutionsColumns,
 		PrimaryKey: []*schema.Column{ExecutionsColumns[0]},
 	}
-	// IdentityLinksColumns holds the columns for the "identity_links" table.
+	// IdentityLinksColumns holds the columns for the "act_identity_link" table.
 	IdentityLinksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "user_id", Type: field.TypeInt64, Nullable: true},
 		{Name: "user_name", Type: field.TypeString, Nullable: true, Size: 50},
-		{Name: "step", Type: field.TypeInt, Nullable: true},
-		{Name: "proc_inst_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "step", Type: field.TypeInt32, Nullable: true},
+		{Name: "proc_inst_id", Type: field.TypeInt64},
 		{Name: "target_id", Type: field.TypeInt64, Nullable: true},
 		{Name: "comment", Type: field.TypeString, Nullable: true, Size: 500},
-		{Name: "task_id", Type: field.TypeInt64, Nullable: true},
-		{Name: "result", Type: field.TypeInt, Nullable: true},
+		{Name: "task_id", Type: field.TypeInt64},
+		{Name: "result", Type: field.TypeInt32, Nullable: true},
 		{Name: "create_time", Type: field.TypeTime, Nullable: true},
 		{Name: "is_del", Type: field.TypeInt8, Nullable: true, Default: 0},
 		{Name: "is_deal", Type: field.TypeInt8, Nullable: true, Default: 0},
+		{Name: "update_time", Type: field.TypeTime, Nullable: true},
 	}
-	// IdentityLinksTable holds the schema information for the "identity_links" table.
+	// IdentityLinksTable holds the schema information for the "act_identity_link" table.
 	IdentityLinksTable = &schema.Table{
-		Name:       "identity_links",
+		Name:       "act_identity_link",
 		Columns:    IdentityLinksColumns,
 		PrimaryKey: []*schema.Column{IdentityLinksColumns[0]},
 	}
-	// ProcDefsColumns holds the columns for the "proc_defs" table.
+	// ProcDefsColumns holds the columns for the "act_proc_def" table.
 	ProcDefsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString, Nullable: true, Size: 200},
 		{Name: "code", Type: field.TypeString, Nullable: true, Size: 100},
-		{Name: "version", Type: field.TypeInt, Nullable: true, Default: 1},
-		{Name: "resource", Type: field.TypeString, Nullable: true, Size: 10000},
+		{Name: "version", Type: field.TypeInt32, Nullable: true},
+		{Name: "resource", Type: field.TypeString, Size: 10000},
 		{Name: "create_user_id", Type: field.TypeInt64, Nullable: true},
 		{Name: "create_user_name", Type: field.TypeString, Nullable: true, Size: 50},
 		{Name: "create_time", Type: field.TypeTime, Nullable: true},
 		{Name: "target_id", Type: field.TypeInt64, Nullable: true},
-		{Name: "yewu_form_id", Type: field.TypeString, Nullable: true, Size: 50},
-		{Name: "yewu_name", Type: field.TypeString, Nullable: true, Size: 50},
-		{Name: "remain_hours", Type: field.TypeInt, Nullable: true, Default: 24},
+		{Name: "form_id", Type: field.TypeString, Nullable: true, Size: 50},
+		{Name: "form_name", Type: field.TypeString, Nullable: true, Size: 50},
+		{Name: "remain_hours", Type: field.TypeInt32, Nullable: true, Default: 0},
 		{Name: "is_del", Type: field.TypeInt8, Nullable: true, Default: 0},
 		{Name: "is_active", Type: field.TypeInt8, Nullable: true, Default: 0},
+		{Name: "update_time", Type: field.TypeTime, Nullable: true},
 	}
-	// ProcDefsTable holds the schema information for the "proc_defs" table.
+	// ProcDefsTable holds the schema information for the "act_proc_def" table.
 	ProcDefsTable = &schema.Table{
-		Name:       "proc_defs",
+		Name:       "act_proc_def",
 		Columns:    ProcDefsColumns,
 		PrimaryKey: []*schema.Column{ProcDefsColumns[0]},
 	}
-	// ProcInstsColumns holds the columns for the "proc_insts" table.
+	// ProcInstsColumns holds the columns for the "act_proc_inst" table.
 	ProcInstsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "proc_def_id", Type: field.TypeInt64, Nullable: true},
-		{Name: "title", Type: field.TypeString, Nullable: true, Size: 200},
+		{Name: "proc_def_id", Type: field.TypeInt64},
+		{Name: "title", Type: field.TypeString, Nullable: true, Size: 100},
 		{Name: "code", Type: field.TypeString, Nullable: true, Size: 100},
 		{Name: "target_id", Type: field.TypeInt64, Nullable: true},
 		{Name: "node_id", Type: field.TypeString, Nullable: true, Size: 50},
@@ -82,40 +84,40 @@ var (
 		{Name: "end_time", Type: field.TypeTime, Nullable: true},
 		{Name: "start_user_id", Type: field.TypeInt64, Nullable: true},
 		{Name: "start_user_name", Type: field.TypeString, Nullable: true, Size: 50},
-		{Name: "is_finished", Type: field.TypeInt8, Nullable: true, Default: 2},
-		{Name: "state", Type: field.TypeInt, Nullable: true},
+		{Name: "is_finished", Type: field.TypeInt8, Nullable: true, Default: 0},
+		{Name: "state", Type: field.TypeInt32, Nullable: true},
 		{Name: "data_id", Type: field.TypeInt64, Nullable: true},
-		{Name: "is_del", Type: field.TypeInt, Nullable: true, Default: 0},
+		{Name: "is_del", Type: field.TypeInt8, Nullable: true, Default: 0},
 		{Name: "create_time", Type: field.TypeTime, Nullable: true},
+		{Name: "remain_hours", Type: field.TypeInt32, Nullable: true},
 		{Name: "update_time", Type: field.TypeTime, Nullable: true},
-		{Name: "remain_hours", Type: field.TypeInt64, Nullable: true},
 	}
-	// ProcInstsTable holds the schema information for the "proc_insts" table.
+	// ProcInstsTable holds the schema information for the "act_proc_inst" table.
 	ProcInstsTable = &schema.Table{
-		Name:       "proc_insts",
+		Name:       "act_proc_inst",
 		Columns:    ProcInstsColumns,
 		PrimaryKey: []*schema.Column{ProcInstsColumns[0]},
 	}
-	// TasksColumns holds the columns for the "tasks" table.
+	// TasksColumns holds the columns for the "act_task" table.
 	TasksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "node_id", Type: field.TypeString, Nullable: true, Size: 50},
-		{Name: "level", Type: field.TypeInt, Nullable: true},
-		{Name: "step", Type: field.TypeInt, Nullable: true},
-		{Name: "proc_inst_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "level", Type: field.TypeInt32, Nullable: true},
+		{Name: "step", Type: field.TypeInt32, Nullable: true},
+		{Name: "proc_inst_id", Type: field.TypeInt64},
 		{Name: "create_time", Type: field.TypeTime, Nullable: true},
 		{Name: "claim_time", Type: field.TypeTime, Nullable: true},
-		{Name: "member_count", Type: field.TypeInt, Nullable: true},
-		{Name: "un_complete_num", Type: field.TypeInt, Nullable: true},
-		{Name: "agree_num", Type: field.TypeInt, Nullable: true},
-		{Name: "is_finished", Type: field.TypeInt8, Nullable: true, Default: 2},
-		{Name: "act_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"and", "or"}, Default: "or"},
+		{Name: "member_approver", Type: field.TypeString, Nullable: true, Size: 5000},
+		{Name: "agree_approver", Type: field.TypeString, Nullable: true, Size: 2000},
+		{Name: "is_finished", Type: field.TypeInt8, Nullable: true, Default: 0},
+		{Name: "mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"and", "or"}, Default: "or"},
 		{Name: "data_id", Type: field.TypeInt64, Nullable: true},
-		{Name: "is_del", Type: field.TypeInt, Nullable: true, Default: 0},
+		{Name: "is_del", Type: field.TypeInt8, Nullable: true, Default: 0},
+		{Name: "update_time", Type: field.TypeTime, Nullable: true},
 	}
-	// TasksTable holds the schema information for the "tasks" table.
+	// TasksTable holds the schema information for the "act_task" table.
 	TasksTable = &schema.Table{
-		Name:       "tasks",
+		Name:       "act_task",
 		Columns:    TasksColumns,
 		PrimaryKey: []*schema.Column{TasksColumns[0]},
 	}
