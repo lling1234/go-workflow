@@ -25,12 +25,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/act/procdef/findoneprocdef",
+				Path:    "/act/procdef/findone",
 				Handler: act.FindOneProcDefHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/act/procdef/findallprocdef",
+				Path:    "/act/procdef/findall",
 				Handler: act.FindAllProcDefHandler(serverCtx),
 			},
 			{
@@ -70,7 +70,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/act/process/findallprocess",
+				Path:    "/act/process/findall",
 				Handler: act.FindAllProcessHandler(serverCtx),
 			},
 			{

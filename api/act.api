@@ -77,13 +77,13 @@ service act-api {
 		group: act
 		handler: findOneProcDef
 	)
-	post /act/procdef/findoneprocdef (FormIdReq) returns (CommonResponse)
+	post /act/procdef/findone (FormIdReq) returns (CommonResponse)
 	
 	@server(
 		group: act
 		handler: findAllProcDef
 	)
-	post /act/procdef/findallprocdef (FormIdReq) returns (CommonResponse)
+	post /act/procdef/findall (FormIdReq) returns (CommonResponse)
 	
 	@server(
 		group: act
@@ -131,7 +131,7 @@ service act-api {
 		group: act
 		handler: findAllProcess
 	)
-	post /act/process/findallprocess (SearchProcess) returns (CommonResponse)
+	post /act/process/findall (SearchProcess) returns (CommonResponse)
 	
 	@server(
 		group: act

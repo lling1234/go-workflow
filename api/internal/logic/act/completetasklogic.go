@@ -8,11 +8,10 @@ import (
 	"context"
 	"errors"
 	"github.com/mumushuiding/util"
+	"github.com/zeromicro/go-zero/core/logx"
 	"log"
 	"strconv"
 	"strings"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type CompleteTaskLogic struct {
@@ -82,7 +81,8 @@ func (l *CompleteTaskLogic) Complete(req *types.CompleteTask, RPC actclient.Act)
 	//5.审批通过 生成新的流程节点和新的审批人表
 	var isInstFinish int32 = 0
 	var approvalState int32 = 0
-	if req.Result == flow.HAVEPASS {
+	switch req.Result {
+	case flow.HAVEPASS:
 		nodeInfos, err := l.findNodeInfosByInstId(RPC, task.ProcInstId)
 		log.Println(5555555)
 		if err != nil {
@@ -113,15 +113,20 @@ func (l *CompleteTaskLogic) Complete(req *types.CompleteTask, RPC actclient.Act)
 			}
 		}
 		//6、审批不通过 直接结束流程 更新流程实例 is_finished=1 state = 7
-	} else if req.Result == flow.DISCARD {
+	case flow.NOTPASS:
+		log.Println("req.Result", req.Result)
 		isInstFinish = 1
-		approvalState = flow.DISCARD
+		approvalState = flow.NOTPASS
 		//7.驳回  驳回到上一节点审批 驳回到指定节点审批 直接结束流程
-	} else if req.Result == flow.REJECT {
+	case flow.REJECT:
 		approvalState = flow.REJECT
 	}
-	//log.Println("isInstFinish", isInstFinish)
+
 	log.Println("approvalState", approvalState)
+	//var flowCode string
+	//if approvalState == flow.HAVEPASS{
+	//	flowCode = time.Now().Format("2006-01-02")
+	//}
 	//8.反向更新流程实例表
 	_, err = RPC.UpdateProcInst(l.ctx, &actclient.UpdateProcInstReq{
 		DataId:   req.DataId,
