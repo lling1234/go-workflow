@@ -11,5 +11,5 @@ var (
 	UserName3       = "xiaoming"
 	TargetId  int64 = 1727882
 
-	MyUserId = UserId2
+	MyUserId = UserId1
 )

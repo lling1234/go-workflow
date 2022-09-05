@@ -3,11 +3,10 @@ package logic
 import (
 	"act/common/act/identitylink"
 	"act/rpc/general"
-	"context"
-	"errors"
-
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
+	"context"
+	"errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -31,13 +30,17 @@ func (l *FindIdentityLinkByTaskIdLogic) FindIdentityLinkByTaskId(in *act.TaskIdA
 	if err != nil {
 		return nil, err
 	}
-	il, err := tx.IdentityLink.Query().Where(identitylink.TaskIDEQ(in.Id), identitylink.UserIDEQ(general.MyUserId), identitylink.IsDelEQ(0), identitylink.IsDealEQ(0)).First(l.ctx)
+	ils, err := tx.IdentityLink.Query().
+		Where(identitylink.TaskIDEQ(in.Id), identitylink.UserIDEQ(general.MyUserId), identitylink.IsDelEQ(0), identitylink.IsDealEQ(0)).
+		Select(identitylink.FieldID, identitylink.FieldUserID, identitylink.FieldUserName, identitylink.FieldStep, identitylink.FieldProcInstID, identitylink.FieldTaskID, identitylink.FieldTargetID).
+		All(l.ctx)
 	if err != nil {
 		return nil, err
 	}
-	if il == nil {
+	if ils == nil || len(ils) == 0 {
 		return nil, errors.New("用户没有审批权限")
 	}
+	il := ils[0]
 	return &act.IdentityLinkReply{
 		Id:         il.ID,
 		UserId:     il.UserID,

@@ -67,6 +67,7 @@ message UpdateProcInstReq {
   int64 taskId = 8;
   int32 isFinish = 9;
   string endTime = 10;
+  string code = 11;
 }
 
 message ProcInstReply {
@@ -230,6 +231,8 @@ service act {
   rpc delProcInst(DataIdReq) returns(Nil);
   rpc findIdentityLinkByTaskId(TaskIdArg) returns(IdentityLinkReply);
   rpc findExecutionByInstId(ProcInstIdArg) returns(ExecutionReq);
+  rpc delIdentityLink(ProcInstIdArg) returns(Nil);
+  rpc withdraw(DataIdReq) returns(Nil);
 
   rpc findAllProcInst(ProcInstReq) returns(ProcInstReply);
   rpc findMyProcInst(MyProcInstReq) returns(ProcInstReply);

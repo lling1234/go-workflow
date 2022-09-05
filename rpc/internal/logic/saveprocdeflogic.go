@@ -1,6 +1,7 @@
 package logic
 
 import (
+	act2 "act/common/act"
 	"act/common/act/procdef"
 	"act/common/tools/date"
 	"act/rpc/general"
@@ -32,7 +33,7 @@ func (l *SaveProcDefLogic) SaveProcDef(in *act.SaveProcDefReq) (*act.ProcDefRepl
 	if err != nil {
 		return nil, err
 	}
-	version, err := l.FindMaxVersionByFormId(in.FormId)
+	version, err := l.FindMaxVersionByFormId(in.FormId, tx)
 	if err != nil {
 		return nil, err
 	}
@@ -72,12 +73,8 @@ func (l *SaveProcDefLogic) convert(in *act.SaveProcDefReq, version int32) *act.P
 	}
 }
 
-func (l *SaveProcDefLogic) FindMaxVersionByFormId(formId string) (int32, error) {
-	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
-	if err != nil {
-		return 0, err
-	}
-	defs, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(formId)).All(l.ctx)
+func (l *SaveProcDefLogic) FindMaxVersionByFormId(formId string, tx *act2.Tx) (int32, error) {
+	defs, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(formId)).Select(procdef.FieldVersion).All(l.ctx)
 	if err != nil {
 		return 0, err
 	}

@@ -2,8 +2,10 @@ package logic
 
 import (
 	"act/common/act/procdef"
+	"act/common/act/procinst"
 	"act/rpc/general"
 	"context"
+	"errors"
 
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
@@ -28,13 +30,23 @@ func NewDelProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelPro
 func (l *DelProcDefLogic) DelProcDef(in *act.FindProcDefReq) (*act.Nil, error) {
 	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
 	if err != nil {
-		return nil, err
+		return &act.Nil{}, err
 	}
-	err = tx.ProcDef.Update().
-	Where(procdef.FormIDEQ(in.FormId), procdef.TargetIDEQ(general.TargetId), procdef.VersionEQ(in.Version)).SetIsDel(1).Exec(l.ctx)
+	def, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(in.FormId), procdef.TargetIDEQ(general.TargetId), procdef.VersionEQ(in.Version)).First(l.ctx)
+	if err != nil {
+		return &act.Nil{}, err
+	}
+	inst, err := tx.ProcInst.Query().Where(procinst.ProcDefIDEQ(def.ID), procinst.IsDelEQ(0)).First(l.ctx)
+	if err != nil {
+		return &act.Nil{}, err
+	}
+	if inst != nil {
+		return &act.Nil{}, errors.New("该流程定义已被引用，无法删除。")
+	}
+	err = tx.ProcDef.Update().Where(procdef.IDEQ(def.ID)).SetIsDel(1).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
-		return nil, err
+		return &act.Nil{}, err
 	}
 	return &act.Nil{}, nil
 }
