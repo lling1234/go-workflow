@@ -12,5 +12,6 @@ func TestNodeInfo(t *testing.T) {
 	//str := "{\"formId\":\"e842590abf244df8a19208d058a5a006\",\"formName\":\"未命名表单\",\"resource\":{\"id\":\"root\",\"desc\":\"任何人\",\"name\":\"发起人\",\"type\":\"ROOT\",\"props\":{\"formPerms\":[],\"assignedUser\":[]},\"children\":{\"id\":\"node_630130407989\",\"parentId\":\"root\",\"props\":{\"assignedType\":\"ASSIGN_USER\",\"mode\":\"AND\",\"assignedUser\":[{\"id\":61769798,\"name\":\"李四\",\"type\":\"user\",\"selected\":false}],\"refuse\":{\"type\":\"TO_BEFORE\",\"target\":\"\"}},\"type\":\"APPROVAL\",\"name\":\"审批人\",\"children\":{\"id\":\"node_630249811630\",\"parentId\":\"node_630130407989\",\"props\":{\"assignedType\":\"ASSIGN_USER\",\"mode\":\"AND\",\"assignedUser\":[{\"id\":381496,\"name\":\"旅人\",\"type\":\"user\",\"selected\":false}],\"refuse\":{\"type\":\"TO_BEFORE\",\"target\":\"\"}},\"type\":\"APPROVAL\",\"name\":\"审批人\",\"children\":{}}},\"parentId\":null}}"
 	var nodeInfos []*flow.NodeInfo
 	util.Str2Struct(str, &nodeInfos)
+
 	fmt.Println(nodeInfos[3])
 }
