@@ -3,8 +3,9 @@ package flow
 import (
 	"container/list"
 	"errors"
-	"github.com/mumushuiding/util"
 	"strconv"
+
+	"github.com/mumushuiding/util"
 )
 
 // Node represents a specific logical unit of processing and routing
@@ -78,7 +79,8 @@ const (
 	DISCARD
 )
 
-var ResultTypes = [...]string{PENDING: "待处理", DEALING: "处理中", REJECT: "驳回", WITHDRAW: "已撤回", NOTPASS: "未通过", HAVEPASS: "已通过", DISCARD: "废弃"}
+var ResultTypes = [...]string{PENDING: "待处理", DEALING: "处理中", REJECT: "驳回",
+	WITHDRAW: "已撤回", NOTPASS: "未通过", HAVEPASS: "已通过", DISCARD: "废弃"}
 
 func (n *Node) add2ExecutionList(list *list.List) {
 	switch n.Type {

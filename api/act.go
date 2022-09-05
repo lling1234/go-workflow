@@ -18,7 +18,6 @@ import (
 var configFile = flag.String("f", "etc/act-api.yaml", "the config file")
 
 func swaggerUrl(w http.ResponseWriter, r *http.Request) {
-	//这里定义代理目标地址，这里定义到本机9091端口
 	u, _ := url.Parse("http://ling11.top:1122/")
 	proxy := httputil.NewSingleHostReverseProxy(u)
 	proxy.ServeHTTP(w, r)

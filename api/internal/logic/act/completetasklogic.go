@@ -54,6 +54,7 @@ func (l *CompleteTaskLogic) Complete(req *types.CompleteTask, RPC actclient.Act)
 		return err
 	}
 	log.Println(2222222)
+	log.Println("taskId",taskId)
 	//2、根据最新节点ID和用户ID找到对应的审批人
 	identityLink, err := RPC.FindIdentityLinkByTaskId(l.ctx, &actclient.TaskIdArg{
 		Id: taskId,
