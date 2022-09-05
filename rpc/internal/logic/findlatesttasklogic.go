@@ -38,12 +38,6 @@ func (l *FindLatestTaskLogic) FindLatestTask(in *act.DataIdReq) (*act.TaskReply,
 	if err != nil {
 		return nil, err
 	}
-	//var mode string
-	//if t.Mode == task.ModeOr{
-	//	mode = "or"
-	//}else if t.Mode == task.ModeAnd {
-	//	mode = "and"
-	//}
 	return &act.TaskReply{
 		Id:         t.ID,
 		Step:       t.Step,
