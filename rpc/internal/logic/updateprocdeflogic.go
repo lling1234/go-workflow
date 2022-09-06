@@ -7,6 +7,7 @@ import (
 	"act/rpc/types/act"
 	"context"
 	"github.com/zeromicro/go-zero/core/logx"
+	"log"
 	"time"
 )
 
@@ -37,9 +38,11 @@ func (l *UpdateProcDefLogic) UpdateProcDef(in *act.FindProcDefReq) (*act.ProcDef
 		procDefUpdate.SetResource(in.Resource)
 	}
 	if in.Code != "" {
+		log.Println("code", in.Code)
 		procDefUpdate.SetCode(in.Code)
 	}
 	if in.Name != "" {
+		log.Println("name", in.Name)
 		procDefUpdate.SetName(in.Name)
 	}
 	if in.RemainHours != 0 {

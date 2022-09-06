@@ -2,12 +2,13 @@ syntax = "v1"
 
 type (
 	SaveProcDef {
-		Name        string `json:"name"`
-		Code        string `json:"code"`
+		Name        string `json:"name,optional"`
+		Code        string `json:"code,optional"`
 		FormId      string `json:"formId"`
 		FormName    string `json:"formName"`
-		RemainHours int32  `json:"remainHours"`
+		RemainHours int32  `json:"remainHours,optional"`
 		Resource    string `json:"resource"`
+		Version     int32  `json:"version,optional"`
 	}
 
 	FormIdReq {
@@ -24,7 +25,7 @@ type (
 	CompleteTask {
 		DataId  int64  `json:"dataId"`
 		Result  int    `json:"result"`
-		Comment string `json:"comment"`
+		Comment string `json:"comment,optional"`
 	}
 	DataIdReq {
 		DataId int64 `json:"dataId"`
