@@ -36,17 +36,19 @@ func (l *DelProcDefLogic) DelProcDef(in *act.FindProcDefReq) (*act.Nil, error) {
 	if err != nil {
 		return &act.Nil{}, err
 	}
-	inst, err := tx.ProcInst.Query().Where(procinst.ProcDefIDEQ(def.ID), procinst.IsDelEQ(0)).First(l.ctx)
+	insts, err := tx.ProcInst.Query().Where(procinst.ProcDefIDEQ(def.ID), procinst.IsDelEQ(0)).All(l.ctx)
 	if err != nil {
 		return &act.Nil{}, err
 	}
-	if inst != nil {
+	if insts != nil && len(insts) > 0 {
 		return &act.Nil{}, errors.New("该流程定义已被引用，无法删除。")
 	}
+
 	err = tx.ProcDef.Update().Where(procdef.IDEQ(def.ID)).SetIsDel(1).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return &act.Nil{}, err
 	}
+	tx.Commit()
 	return &act.Nil{}, nil
 }

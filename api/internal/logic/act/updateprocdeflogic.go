@@ -37,6 +37,7 @@ func (l *UpdateProcDefLogic) UpdateProcDef(req *types.SaveProcDef) (resp *types.
 		FormId:      req.FormId,
 		Resource:    string(resource),
 		RemainHours: req.RemainHours,
+		Version:     req.Version,
 	})
 
 	if err != nil {

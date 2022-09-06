@@ -35,5 +35,6 @@ func (l *DelIdentityLinkLogic) DelIdentityLink(in *act.ProcInstIdArg) (*act.Nil,
 		tx.Rollback()
 		return nil, err
 	}
+	tx.Commit()
 	return &act.Nil{}, nil
 }

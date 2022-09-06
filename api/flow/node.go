@@ -42,7 +42,11 @@ type NodeProps struct {
 	Mode         string          `json:"mode,optional"`
 	Station      string          `json:"station,optional,optional"`
 	AssignedUser []*AssignedUser `json:"assignedUser,optional"`
-	Refuse       string          `json:"refuse,optional"`
+	Refuse       Refuse          `json:"refuse,optional"`
+}
+type Refuse struct {
+	Type   string `json:"type,optional"`
+	Target string `json:"target,optional"`
 }
 type CondProps struct {
 	GroupsType string `json:"groupsType,optional"`

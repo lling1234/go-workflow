@@ -10,6 +10,7 @@ type SaveProcDef struct {
 	FormName    string     `json:"formName,optional"`
 	RemainHours int32      `json:"remainHours,optional"`
 	Resource    *flow.Node `json:"resource"`
+	Version     int32      `json:"version,optional"`
 }
 
 type FormIdReq struct {
@@ -25,8 +26,8 @@ type StartProcInst struct {
 
 type CompleteTask struct {
 	DataId  int64  `json:"dataId"`
-	Result  int    `json:"result"`
-	Comment string `json:"comment"`
+	Result  int    `json:"result,optional"`
+	Comment string `json:"comment,optional"`
 }
 
 type DataIdReq struct {
