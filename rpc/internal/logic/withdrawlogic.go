@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"act/rpc/constant"
 	"context"
 	"errors"
 	"log"
@@ -49,7 +50,7 @@ func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
 	if userid == procdefInfo.CreateUserID {
 		_, err := tx.ProcInst.Update().
 			Where(procinst.ProcDefID(procinstInfo.ProcDefID)).
-			SetState(4).SetIsFinished(1).SetEndTime(time.Now()).SetUpdateTime(time.Now()).Save(l.ctx)
+			SetState(constant.WITHDRAW).SetIsFinished(1).SetEndTime(time.Now()).SetUpdateTime(time.Now()).Save(l.ctx)
 		if err != nil {
 			tx.Rollback()
 			return nil, err
