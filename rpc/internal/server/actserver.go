@@ -67,7 +67,11 @@ func (s *ActServer) SaveIdentityLink(ctx context.Context, in *act.IdentityLinkRe
 	return l.SaveIdentityLink(in)
 }
 
+<<<<<<< HEAD
 func (s *ActServer) FindLatestTask(ctx context.Context, in *act.DataIdReq) (*act.TaskReply, error) {
+=======
+func (s *ActServer) FindLatestTask(ctx context.Context, in *act.ProcInstIdArg) (*act.TaskReply, error) {
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	l := logic.NewFindLatestTaskLogic(ctx, s.svcCtx)
 	return l.FindLatestTask(in)
 }
@@ -112,6 +116,14 @@ func (s *ActServer) Withdraw(ctx context.Context, in *act.DataIdReq) (*act.Nil, 
 	return l.Withdraw(in)
 }
 
+<<<<<<< HEAD
+=======
+func (s *ActServer) FindProcInstByDataId(ctx context.Context, in *act.DataIdReq) (*act.ProcInstReply, error) {
+	l := logic.NewFindProcInstByDataIdLogic(ctx, s.svcCtx)
+	return l.FindProcInstByDataId(in)
+}
+
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 func (s *ActServer) FindAllProcInst(ctx context.Context, in *act.ProcInstReq) (*act.ProcInstReply, error) {
 	l := logic.NewFindAllProcInstLogic(ctx, s.svcCtx)
 	return l.FindAllProcInst(in)

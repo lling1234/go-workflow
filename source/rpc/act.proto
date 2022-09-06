@@ -54,6 +54,23 @@ message ProcInstReq {
   int64 targetId = 7;
   int32 remainHours = 8;
   int32 state = 9;
+<<<<<<< HEAD
+=======
+}
+
+message UpdateProcInstReq {
+  int64 procDefId = 1;
+  int64 dataId = 2;
+  string formId = 3;
+  int64 targetId = 4;
+  int32 remainHours = 5;
+  int32 state = 6;
+  string nodeId = 7;
+  int64 taskId = 8;
+  int32 isFinish = 9;
+  string endTime = 10;
+  string code = 11;
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 }
 
 message ProcInstReply {
@@ -95,6 +112,7 @@ message ExecutionReply {
 }
 
 message TaskReq {
+<<<<<<< HEAD
   string nodeId = 1;
   int64 procInstId = 2;
   int64 dataId = 3;
@@ -104,6 +122,19 @@ message TaskReq {
   string memberApprover = 7;
   string agreeApprover = 8;
   string mode = 9;
+=======
+  int64 id = 1;
+  string nodeId = 2;
+  int64 procInstId = 3;
+  int64 dataId = 4;
+  int32 level = 5;
+  int32 isFinished = 6;
+  int32 step = 7;
+  string memberApprover = 8;
+  string agreeApprover = 9;
+  string mode = 10;
+  string claimTime = 11;
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 }
 
 message TaskReply {
@@ -151,11 +182,25 @@ message IdentityLinkReply {
 
 message DataIdReq {
   int64 dataId = 1;
+<<<<<<< HEAD
 }
 
 message TaskIdReply {
   int64 id = 1;
 }
+=======
+  int32 step = 2;
+}
+
+message TaskIdArg {
+  int64 id = 1;
+}
+
+message ProcInstIdArg {
+  int64 id = 1;
+}
+
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 message Nil{
 }
 
@@ -189,23 +234,43 @@ message ElapsedTimeReply {
   int64 targetId = 3;
   int32 cost = 4;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 
 service act {
   rpc saveProcDef(SaveProcDefReq) returns(ProcDefReply);
   rpc findDefByFormId(FindProcDefReq) returns(ProcDefReply);
   rpc updateProcDef(FindProcDefReq) returns(ProcDefReply);
+<<<<<<< HEAD
+=======
+  rpc setProcDefActive(FindProcDefReq) returns(Nil);
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
   rpc delProcDef(FindProcDefReq) returns(Nil);
 
   rpc saveProcInst(ProcInstReq) returns(ProcInstReply);
   rpc saveExecution(ExecutionReq) returns(ExecutionReply);
   rpc saveTask(TaskReq) returns(TaskReply);
   rpc saveIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
+<<<<<<< HEAD
   rpc findLatestTaskId(DataIdReq) returns(TaskIdReply);
   rpc updateProcInst(ProcInstReq) returns(ProcInstReply);
   rpc updateTask(TaskReq) returns(TaskReply);
   rpc updateIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
   rpc delProcInst(DataIdReq) returns(Nil);
 
+=======
+  rpc findLatestTask(DataIdReq) returns(TaskReply);
+  rpc updateProcInst(UpdateProcInstReq) returns(ProcInstReply);
+  rpc updateTask(TaskReq) returns(TaskReply);
+  rpc updateIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
+  rpc delProcInst(DataIdReq) returns(Nil);
+  rpc findIdentityLinkByTaskId(TaskIdArg) returns(IdentityLinkReply);
+  rpc findExecutionByInstId(ProcInstIdArg) returns(ExecutionReq);
+  rpc delIdentityLink(ProcInstIdArg) returns(Nil);
+  rpc withdraw(DataIdReq) returns(Nil);
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 
   rpc findAllProcInst(ProcInstReq) returns(ProcInstReply);
   rpc findMyProcInst(MyProcInstReq) returns(ProcInstReply);

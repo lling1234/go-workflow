@@ -5,6 +5,10 @@ go 1.18
 require (
 	entgo.io/ent v0.11.2
 	github.com/ahmetb/go-linq/v3 v3.2.0
+<<<<<<< HEAD
+=======
+	github.com/duke-git/lancet/v2 v2.1.4
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang/glog v1.0.0
@@ -49,7 +53,10 @@ require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/googleapis/gnostic v0.5.5 // indirect
 	github.com/hashicorp/hcl/v2 v2.10.0 // indirect
+<<<<<<< HEAD
 	github.com/josharian/intern v1.0.0 // indirect
+=======
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/mailru/easyjson v0.7.6 // indirect
 	github.com/mattn/go-colorable v0.1.9 // indirect

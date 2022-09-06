@@ -13,6 +13,15 @@ type (
 	FormIdReq {
 		FormId  string `json:"formId"`
 		Version int32  `json:"version"`
+<<<<<<< HEAD
+	}
+
+	StartProcInst {
+		Title  string `json:"title"`
+		FormId string `json:"formId"`
+		DataId int64  `json:"dataId"`
+=======
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	}
 
 	StartProcInst {
@@ -21,7 +30,7 @@ type (
 		DataId int64  `json:"dataId"`
 	}
 
-	CompeleteTask {
+	CompleteTask {
 		DataId  int64  `json:"dataId"`
 		Result  int    `json:"result"`
 		Comment string `json:"comment"`
@@ -69,6 +78,7 @@ service act-api {
 	
 	@server(
 		group: act
+<<<<<<< HEAD
 		handler: findOneProcDef
 	)
 	post /act/procdef/findoneprocdef (FormIdReq) returns (CommonResponse)
@@ -96,12 +106,51 @@ service act-api {
 		handler: startProcInst
 	)
 	post /act/procinst/start (StartProcInst) returns (CommonResponse)
+=======
+		handler: updateProcDef
+	)
+	post /act/procdef/update (SaveProcDef) returns (CommonResponse)
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	
 	@server(
 		group: act
-		handler: compeleteTask
+		handler: findOneProcDef
 	)
+<<<<<<< HEAD
 	post /act/procinst/compelete (CompeleteTask) returns (CommonResponse)
+=======
+	post /act/procdef/findone (FormIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: findAllProcDef
+	)
+	post /act/procdef/findall (FormIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: setActive
+	)
+	post /act/procdef/setactive (FormIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: delProcDef
+	)
+	post /act/procdef/del (FormIdReq) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: startProcInst
+	)
+	post /act/procinst/start (StartProcInst) returns (CommonResponse)
+	
+	@server(
+		group: act
+		handler: completeTask
+	)
+	post /act/procinst/complete (CompleteTask) returns (CommonResponse)
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	
 	@server(
 		group: act
@@ -125,7 +174,11 @@ service act-api {
 		group: act
 		handler: findAllProcess
 	)
+<<<<<<< HEAD
 	post /act/process/findallprocess (SearchProcess) returns (CommonResponse)
+=======
+	post /act/process/findall (SearchProcess) returns (CommonResponse)
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	
 	@server(
 		group: act
