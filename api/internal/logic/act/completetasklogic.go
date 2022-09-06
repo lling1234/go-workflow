@@ -37,9 +37,15 @@ func (l *CompleteTaskLogic) CompleteTask(req *types.CompleteTask) (resp *types.C
 }
 
 func (l *CompleteTaskLogic) Complete(req *types.CompleteTask, RPC actclient.Act) error {
-	// 1.找出该数据的流程最新审批节点
-	task, err := RPC.FindLatestTask(l.ctx, &actclient.DataIdReq{
+	inst, err := RPC.FindProcInstByDataId(l.ctx, &actclient.DataIdReq{
 		DataId: req.DataId,
+	})
+	if err != nil {
+		return err
+	}
+	// 1.找出该数据的流程最新审批节点
+	task, err := RPC.FindLatestTask(l.ctx, &actclient.ProcInstIdArg{
+		Id: inst.Id,
 	})
 	taskId := task.Id
 	if err != nil {
