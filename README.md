@@ -7,6 +7,7 @@
 
 ```
 ## git规范
+```
 ● add/feat：新功能
 ● fix：bug修复
 ● update：更新
@@ -18,3 +19,4 @@
 ● revert：撤销上一次的commit
 ● refactor：某个已有功能重构
 ● build：构建工具或构建过程的变动
+```
