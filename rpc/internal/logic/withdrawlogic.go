@@ -1,13 +1,13 @@
 package logic
 
 import (
-	"act/common/act/procdef"
-	"act/common/act/procinst"
-	"act/rpc/general"
 	"context"
+	"errors"
 	"log"
 	"time"
 
+	"act/common/act/procdef"
+	"act/common/act/procinst"
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
 
@@ -35,26 +35,27 @@ func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
 		return nil, err
 	}
 	// 2.2根据procdefID在proc_def数据库表中查询到create_user_id
-	procinst, err := tx.ProcInst.Query().Where(procinst.DataIDEQ(in.DataId)).First(l.ctx)
+	procinstInfo, err := tx.ProcInst.Query().Where(procinst.DataIDEQ(in.DataId)).First(l.ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	procdef, err := tx.ProcDef.Query().Where(procdef.IDEQ(procinst.ProcDefID)).First(l.ctx)
+	procdefInfo, err := tx.ProcDef.Query().Where(procdef.IDEQ(procinstInfo.ProcDefID)).First(l.ctx)
 	if err != nil {
 		return nil, err
 	}
 	// TODO userid=101
-	userid := general.UserId0
-	if userid == procdef.CreateUserID {
+	var userid int64 = 101
+	if userid == procdefInfo.CreateUserID {
 		_, err := tx.ProcInst.Update().
+			Where(procinst.ProcDefID(procinstInfo.ProcDefID)).
 			SetState(4).SetIsFinished(1).SetEndTime(time.Now()).SetUpdateTime(time.Now()).Save(l.ctx)
 		if err != nil {
 			tx.Rollback()
 			return nil, err
 		}
 	} else {
-		return &act.Nil{}, nil
+		return &act.Nil{}, errors.New("人员未找到！")
 	}
 	err = tx.Commit()
 	if err != nil {
