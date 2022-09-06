@@ -26,4 +26,5 @@ func TestUsers(t *testing.T) {
 	var node *flow.Node
 	util.Str2Struct(str, &node)
 	fmt.Printf("第一个审批人：%s,第二个审批人：%s", node.Children.Props.AssignedUser[0].Name, node.Children.Props.AssignedUser[1].Name)
+
 }

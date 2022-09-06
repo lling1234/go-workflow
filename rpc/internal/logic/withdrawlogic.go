@@ -5,6 +5,7 @@ import (
 	"act/common/act/procinst"
 	"act/rpc/general"
 	"context"
+	"log"
 	"time"
 
 	"act/rpc/internal/svc"
@@ -28,6 +29,7 @@ func NewWithdrawLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Withdraw
 }
 
 func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
+	log.Println("in 2222222", in.DataId)
 	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
 	if err != nil {
 		return nil, err
@@ -42,6 +44,7 @@ func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
 	if err != nil {
 		return nil, err
 	}
+	// TODO userid=101
 	userid := general.UserId0
 	if userid == procdef.CreateUserID {
 		_, err := tx.ProcInst.Update().

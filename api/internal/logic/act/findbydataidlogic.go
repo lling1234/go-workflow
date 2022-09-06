@@ -1,6 +1,7 @@
 package act
 
 import (
+	"act/rpc/types/act"
 	"context"
 
 	"act/api/internal/svc"
@@ -24,7 +25,9 @@ func NewFindByDataIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Find
 }
 
 func (l *FindByDataIdLogic) FindByDataId(req *types.DataIdReq) (resp *types.CommonResponse, err error) {
-	// todo: add your logic here and delete this line
+	reply, err := l.svcCtx.Rpc.FindProcInstByDataId(l.ctx, &act.DataIdReq{
+		DataId: req.DataId,
+	})
 
-	return
+	return types.GetCommonResponse(err, reply)
 }
