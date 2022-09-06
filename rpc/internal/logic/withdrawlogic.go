@@ -1,12 +1,13 @@
 package logic
 
 import (
+	"act/common/act/procdef"
+	"act/common/act/procinst"
+	"act/rpc/general"
 	"context"
 	"log"
 	"time"
 
-	"act/common/act/procdef"
-	"act/common/act/procinst"
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
 
@@ -44,7 +45,7 @@ func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
 		return nil, err
 	}
 	// TODO userid=101
-	var userid int64 = 101
+	userid := general.UserId0
 	if userid == procdef.CreateUserID {
 		_, err := tx.ProcInst.Update().
 			SetState(4).SetIsFinished(1).SetEndTime(time.Now()).SetUpdateTime(time.Now()).Save(l.ctx)
