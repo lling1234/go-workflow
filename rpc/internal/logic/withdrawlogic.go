@@ -6,7 +6,6 @@ import (
 	"log"
 	"time"
 
-	"act/common/act/procdef"
 	"act/common/act/procinst"
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
@@ -40,13 +39,9 @@ func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
 		return nil, err
 	}
 
-	procdefInfo, err := tx.ProcDef.Query().Where(procdef.IDEQ(procinstInfo.ProcDefID)).First(l.ctx)
-	if err != nil {
-		return nil, err
-	}
-	// TODO userid=101
-	var userid int64 = 101
-	if userid == procdefInfo.CreateUserID {
+	// TODO StartUserID=11025 StartUserName=xiaoming
+	var userid int64 = 11025
+	if userid == procinstInfo.StartUserID {
 		_, err := tx.ProcInst.Update().
 			Where(procinst.ProcDefID(procinstInfo.ProcDefID)).
 			SetState(4).SetIsFinished(1).SetEndTime(time.Now()).SetUpdateTime(time.Now()).Save(l.ctx)
