@@ -69,7 +69,7 @@ func (l *SaveProcDefLogic) convert(in *act.SaveProcDefReq, version int32) *act.P
 		Version:     version,
 		TargetId:    in.TargetId,
 		IsDel:       0,
-		IsActive:    1,
+		IsActive:    0,
 	}
 }
 

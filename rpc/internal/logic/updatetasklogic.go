@@ -42,7 +42,7 @@ func (l *UpdateTaskLogic) UpdateTask(in *act.TaskReq) (*act.TaskReply, error) {
 	} else {
 		agreers = oldTask.AgreeApprover + "," + strconv.FormatInt(general.MyUserId, 10)
 	}
-	err = tx.Task.Update().Where(task.IDEQ(in.Id)).SetUpdateTime(time.Now()).SetIsFinished(int8(in.IsFinished)).SetAgreeApprover(agreers).SetClaimTime(time.Now()).Exec(l.ctx)
+	err = tx.Task.Update().Where(task.IDEQ(in.Id)).SetUpdateTime(time.Now()).SetIsFinished(in.IsFinished).SetAgreeApprover(agreers).SetClaimTime(time.Now()).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err

@@ -361,7 +361,7 @@ func (pdq *ProcDefQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   procdef.Table,
 			Columns: procdef.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: procdef.FieldID,
 			},
 		},

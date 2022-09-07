@@ -25,7 +25,7 @@ type Execution struct {
 	// 开始时间
 	StartTime time.Time `json:"start_time,omitempty"`
 	// 是否删除,0:未删除,1:已删除
-	IsDel int8 `json:"is_del,omitempty"`
+	IsDel int32 `json:"is_del,omitempty"`
 	// 创建时间
 	CreateTime time.Time `json:"create_time,omitempty"`
 	// 流程修改时间
@@ -63,7 +63,7 @@ func (e *Execution) assignValues(columns []string, values []interface{}) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			e.ID = value.Int64
+			e.ID = int64(value.Int64)
 		case execution.FieldProcInstID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field proc_inst_id", values[i])
@@ -92,7 +92,7 @@ func (e *Execution) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field is_del", values[i])
 			} else if value.Valid {
-				e.IsDel = int8(value.Int64)
+				e.IsDel = int32(value.Int64)
 			}
 		case execution.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {

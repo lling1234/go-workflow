@@ -361,7 +361,7 @@ func (piq *ProcInstQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   procinst.Table,
 			Columns: procinst.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: procinst.FieldID,
 			},
 		},

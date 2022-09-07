@@ -6,6 +6,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// ConcurrentNode is the predicate function for concurrentnode builders.
+type ConcurrentNode func(*sql.Selector)
+
 // Execution is the predicate function for execution builders.
 type Execution func(*sql.Selector)
 

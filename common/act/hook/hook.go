@@ -8,6 +8,19 @@ import (
 	"fmt"
 )
 
+// The ConcurrentNodeFunc type is an adapter to allow the use of ordinary
+// function as ConcurrentNode mutator.
+type ConcurrentNodeFunc func(context.Context, *act.ConcurrentNodeMutation) (act.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ConcurrentNodeFunc) Mutate(ctx context.Context, m act.Mutation) (act.Value, error) {
+	mv, ok := m.(*act.ConcurrentNodeMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *act.ConcurrentNodeMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The ExecutionFunc type is an adapter to allow the use of ordinary
 // function as Execution mutator.
 type ExecutionFunc func(context.Context, *act.ExecutionMutation) (act.Value, error)

@@ -45,7 +45,7 @@ func (l *UpdateProcDefLogic) UpdateProcDef(in *act.FindProcDefReq) (*act.ProcDef
 	if in.RemainHours != 0 {
 		procDefUpdate.SetRemainHours(in.RemainHours)
 	}
-	err = procDefUpdate.SetUpdateTime(time.Now()).Exec(l.ctx)
+	err = procDefUpdate.SetUpdateTime(time.Now()).SetUpdateUserID(general.MyUserId).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err

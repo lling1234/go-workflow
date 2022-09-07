@@ -9,7 +9,14 @@ var (
 	UserName2       = "旅人"
 	UserId3   int64 = 11025
 	UserName3       = "xiaoming"
-	TargetId  int64 = 1727882
+	UserId4   int64 = 568898
+	UserName4       = "王翠花"
+	UserId5   int64 = 489564
+	UserName5       = "李秋香"
+	UserId6   int64 = 6418616
+	UserName6       = "张三"
 
-	MyUserId = UserId1
+	TargetId int64 = 1727882
+
+	MyUserId = UserId2
 )

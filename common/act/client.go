@@ -10,6 +10,7 @@ import (
 
 	"act/common/act/migrate"
 
+	"act/common/act/concurrentnode"
 	"act/common/act/execution"
 	"act/common/act/identitylink"
 	"act/common/act/procdef"
@@ -25,6 +26,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// ConcurrentNode is the client for interacting with the ConcurrentNode builders.
+	ConcurrentNode *ConcurrentNodeClient
 	// Execution is the client for interacting with the Execution builders.
 	Execution *ExecutionClient
 	// IdentityLink is the client for interacting with the IdentityLink builders.
@@ -48,6 +51,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.ConcurrentNode = NewConcurrentNodeClient(c.config)
 	c.Execution = NewExecutionClient(c.config)
 	c.IdentityLink = NewIdentityLinkClient(c.config)
 	c.ProcDef = NewProcDefClient(c.config)
@@ -84,13 +88,14 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:          ctx,
-		config:       cfg,
-		Execution:    NewExecutionClient(cfg),
-		IdentityLink: NewIdentityLinkClient(cfg),
-		ProcDef:      NewProcDefClient(cfg),
-		ProcInst:     NewProcInstClient(cfg),
-		Task:         NewTaskClient(cfg),
+		ctx:            ctx,
+		config:         cfg,
+		ConcurrentNode: NewConcurrentNodeClient(cfg),
+		Execution:      NewExecutionClient(cfg),
+		IdentityLink:   NewIdentityLinkClient(cfg),
+		ProcDef:        NewProcDefClient(cfg),
+		ProcInst:       NewProcInstClient(cfg),
+		Task:           NewTaskClient(cfg),
 	}, nil
 }
 
@@ -108,20 +113,21 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:          ctx,
-		config:       cfg,
-		Execution:    NewExecutionClient(cfg),
-		IdentityLink: NewIdentityLinkClient(cfg),
-		ProcDef:      NewProcDefClient(cfg),
-		ProcInst:     NewProcInstClient(cfg),
-		Task:         NewTaskClient(cfg),
+		ctx:            ctx,
+		config:         cfg,
+		ConcurrentNode: NewConcurrentNodeClient(cfg),
+		Execution:      NewExecutionClient(cfg),
+		IdentityLink:   NewIdentityLinkClient(cfg),
+		ProcDef:        NewProcDefClient(cfg),
+		ProcInst:       NewProcInstClient(cfg),
+		Task:           NewTaskClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Execution.
+//		ConcurrentNode.
 //		Query().
 //		Count(ctx)
 //
@@ -144,11 +150,102 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.ConcurrentNode.Use(hooks...)
 	c.Execution.Use(hooks...)
 	c.IdentityLink.Use(hooks...)
 	c.ProcDef.Use(hooks...)
 	c.ProcInst.Use(hooks...)
 	c.Task.Use(hooks...)
+}
+
+// ConcurrentNodeClient is a client for the ConcurrentNode schema.
+type ConcurrentNodeClient struct {
+	config
+}
+
+// NewConcurrentNodeClient returns a client for the ConcurrentNode from the given config.
+func NewConcurrentNodeClient(c config) *ConcurrentNodeClient {
+	return &ConcurrentNodeClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `concurrentnode.Hooks(f(g(h())))`.
+func (c *ConcurrentNodeClient) Use(hooks ...Hook) {
+	c.hooks.ConcurrentNode = append(c.hooks.ConcurrentNode, hooks...)
+}
+
+// Create returns a builder for creating a ConcurrentNode entity.
+func (c *ConcurrentNodeClient) Create() *ConcurrentNodeCreate {
+	mutation := newConcurrentNodeMutation(c.config, OpCreate)
+	return &ConcurrentNodeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ConcurrentNode entities.
+func (c *ConcurrentNodeClient) CreateBulk(builders ...*ConcurrentNodeCreate) *ConcurrentNodeCreateBulk {
+	return &ConcurrentNodeCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ConcurrentNode.
+func (c *ConcurrentNodeClient) Update() *ConcurrentNodeUpdate {
+	mutation := newConcurrentNodeMutation(c.config, OpUpdate)
+	return &ConcurrentNodeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ConcurrentNodeClient) UpdateOne(cn *ConcurrentNode) *ConcurrentNodeUpdateOne {
+	mutation := newConcurrentNodeMutation(c.config, OpUpdateOne, withConcurrentNode(cn))
+	return &ConcurrentNodeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ConcurrentNodeClient) UpdateOneID(id int64) *ConcurrentNodeUpdateOne {
+	mutation := newConcurrentNodeMutation(c.config, OpUpdateOne, withConcurrentNodeID(id))
+	return &ConcurrentNodeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ConcurrentNode.
+func (c *ConcurrentNodeClient) Delete() *ConcurrentNodeDelete {
+	mutation := newConcurrentNodeMutation(c.config, OpDelete)
+	return &ConcurrentNodeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ConcurrentNodeClient) DeleteOne(cn *ConcurrentNode) *ConcurrentNodeDeleteOne {
+	return c.DeleteOneID(cn.ID)
+}
+
+// DeleteOne returns a builder for deleting the given entity by its id.
+func (c *ConcurrentNodeClient) DeleteOneID(id int64) *ConcurrentNodeDeleteOne {
+	builder := c.Delete().Where(concurrentnode.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ConcurrentNodeDeleteOne{builder}
+}
+
+// Query returns a query builder for ConcurrentNode.
+func (c *ConcurrentNodeClient) Query() *ConcurrentNodeQuery {
+	return &ConcurrentNodeQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a ConcurrentNode entity by its id.
+func (c *ConcurrentNodeClient) Get(ctx context.Context, id int64) (*ConcurrentNode, error) {
+	return c.Query().Where(concurrentnode.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ConcurrentNodeClient) GetX(ctx context.Context, id int64) *ConcurrentNode {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ConcurrentNodeClient) Hooks() []Hook {
+	return c.hooks.ConcurrentNode
 }
 
 // ExecutionClient is a client for the Execution schema.

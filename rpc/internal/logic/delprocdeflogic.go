@@ -6,6 +6,7 @@ import (
 	"act/rpc/general"
 	"context"
 	"errors"
+	"time"
 
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
@@ -44,7 +45,7 @@ func (l *DelProcDefLogic) DelProcDef(in *act.FindProcDefReq) (*act.Nil, error) {
 		return &act.Nil{}, errors.New("该流程定义已被引用，无法删除。")
 	}
 
-	err = tx.ProcDef.Update().Where(procdef.IDEQ(def.ID)).SetIsDel(1).Exec(l.ctx)
+	err = tx.ProcDef.Update().Where(procdef.IDEQ(def.ID)).SetIsDel(1).SetDelUserID(general.MyUserId).SetDelTime(time.Now()).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return &act.Nil{}, err

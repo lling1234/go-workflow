@@ -210,7 +210,6 @@ func (l *CompleteTaskLogic) moveNextStage(RPC actclient.Act, instId int64, level
 	task := actclient.TaskReq{
 		NodeId:         nodeInfo.NodeID,
 		ProcInstId:     instId,
-		DataId:         dataId,
 		Level:          level,
 		IsFinished:     0,
 		Step:           level,
@@ -243,7 +242,6 @@ func (l *CompleteTaskLogic) finishTask(RPC actclient.Act, instId int64, level in
 	task := actclient.TaskReq{
 		NodeId:     "结束",
 		ProcInstId: instId,
-		DataId:     dataId,
 		Level:      level,
 		IsFinished: 1,
 		Step:       level,

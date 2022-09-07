@@ -61,13 +61,13 @@ func (ec *ExecutionCreate) SetNillableStartTime(t *time.Time) *ExecutionCreate {
 }
 
 // SetIsDel sets the "is_del" field.
-func (ec *ExecutionCreate) SetIsDel(i int8) *ExecutionCreate {
+func (ec *ExecutionCreate) SetIsDel(i int32) *ExecutionCreate {
 	ec.mutation.SetIsDel(i)
 	return ec
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (ec *ExecutionCreate) SetNillableIsDel(i *int8) *ExecutionCreate {
+func (ec *ExecutionCreate) SetNillableIsDel(i *int32) *ExecutionCreate {
 	if i != nil {
 		ec.SetIsDel(*i)
 	}
@@ -99,6 +99,12 @@ func (ec *ExecutionCreate) SetNillableUpdateTime(t *time.Time) *ExecutionCreate 
 	if t != nil {
 		ec.SetUpdateTime(*t)
 	}
+	return ec
+}
+
+// SetID sets the "id" field.
+func (ec *ExecutionCreate) SetID(i int64) *ExecutionCreate {
+	ec.mutation.SetID(i)
 	return ec
 }
 
@@ -221,8 +227,10 @@ func (ec *ExecutionCreate) sqlSave(ctx context.Context) (*Execution, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = id
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	return _node, nil
 }
 
@@ -232,11 +240,15 @@ func (ec *ExecutionCreate) createSpec() (*Execution, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: execution.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: execution.FieldID,
 			},
 		}
 	)
+	if id, ok := ec.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := ec.mutation.ProcInstID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt64,
@@ -271,7 +283,7 @@ func (ec *ExecutionCreate) createSpec() (*Execution, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := ec.mutation.IsDel(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: execution.FieldIsDel,
 		})
@@ -337,9 +349,9 @@ func (ecb *ExecutionCreateBulk) Save(ctx context.Context) ([]*Execution, error) 
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = id
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

@@ -3,7 +3,6 @@
 package task
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -32,8 +31,6 @@ const (
 	FieldIsFinished = "is_finished"
 	// FieldMode holds the string denoting the mode field in the database.
 	FieldMode = "mode"
-	// FieldDataID holds the string denoting the data_id field in the database.
-	FieldDataID = "data_id"
 	// FieldIsDel holds the string denoting the is_del field in the database.
 	FieldIsDel = "is_del"
 	// FieldUpdateTime holds the string denoting the update_time field in the database.
@@ -55,7 +52,6 @@ var Columns = []string{
 	FieldAgreeApprover,
 	FieldIsFinished,
 	FieldMode,
-	FieldDataID,
 	FieldIsDel,
 	FieldUpdateTime,
 }
@@ -75,42 +71,16 @@ var (
 	NodeIDValidator func(string) error
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime time.Time
-	// DefaultClaimTime holds the default value on creation for the "claim_time" field.
-	DefaultClaimTime time.Time
 	// MemberApproverValidator is a validator for the "member_approver" field. It is called by the builders before save.
 	MemberApproverValidator func(string) error
 	// AgreeApproverValidator is a validator for the "agree_approver" field. It is called by the builders before save.
 	AgreeApproverValidator func(string) error
 	// DefaultIsFinished holds the default value on creation for the "is_finished" field.
-	DefaultIsFinished int8
+	DefaultIsFinished int32
+	// DefaultMode holds the default value on creation for the "mode" field.
+	DefaultMode string
 	// DefaultIsDel holds the default value on creation for the "is_del" field.
-	DefaultIsDel int8
+	DefaultIsDel int32
 	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
 	DefaultUpdateTime time.Time
 )
-
-// Mode defines the type for the "mode" enum field.
-type Mode string
-
-// ModeOr is the default value of the Mode enum.
-const DefaultMode = ModeOr
-
-// Mode values.
-const (
-	ModeAnd Mode = "and"
-	ModeOr  Mode = "or"
-)
-
-func (m Mode) String() string {
-	return string(m)
-}
-
-// ModeValidator is a validator for the "mode" field enum values. It is called by the builders before save.
-func ModeValidator(m Mode) error {
-	switch m {
-	case ModeAnd, ModeOr:
-		return nil
-	default:
-		return fmt.Errorf("task: invalid enum value for mode field: %q", m)
-	}
-}

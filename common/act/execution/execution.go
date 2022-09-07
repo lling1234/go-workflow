@@ -57,7 +57,7 @@ var (
 	// DefaultStartTime holds the default value on creation for the "start_time" field.
 	DefaultStartTime time.Time
 	// DefaultIsDel holds the default value on creation for the "is_del" field.
-	DefaultIsDel int8
+	DefaultIsDel int32
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime time.Time
 	// DefaultUpdateTime holds the default value on creation for the "update_time" field.

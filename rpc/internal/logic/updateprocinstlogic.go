@@ -3,6 +3,7 @@ package logic
 import (
 	"act/common/act/procinst"
 	"act/rpc/constant"
+	"act/rpc/general"
 	"context"
 	"time"
 
@@ -46,7 +47,7 @@ func (l *UpdateProcInstLogic) UpdateProcInst(in *act.UpdateProcInstReq) (*act.Pr
 	if in.IsFinish == 1 {
 		procInstUpdate.SetIsFinished(1).SetEndTime(time.Now())
 	}
-	err = procInstUpdate.Exec(l.ctx)
+	err = procInstUpdate.SetUpdateTime(time.Now()).SetUpdateUserID(general.MyUserId).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return &act.ProcInstReply{}, err

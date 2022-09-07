@@ -196,14 +196,14 @@ func (tu *TaskUpdate) ClearAgreeApprover() *TaskUpdate {
 }
 
 // SetIsFinished sets the "is_finished" field.
-func (tu *TaskUpdate) SetIsFinished(i int8) *TaskUpdate {
+func (tu *TaskUpdate) SetIsFinished(i int32) *TaskUpdate {
 	tu.mutation.ResetIsFinished()
 	tu.mutation.SetIsFinished(i)
 	return tu
 }
 
 // SetNillableIsFinished sets the "is_finished" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableIsFinished(i *int8) *TaskUpdate {
+func (tu *TaskUpdate) SetNillableIsFinished(i *int32) *TaskUpdate {
 	if i != nil {
 		tu.SetIsFinished(*i)
 	}
@@ -211,7 +211,7 @@ func (tu *TaskUpdate) SetNillableIsFinished(i *int8) *TaskUpdate {
 }
 
 // AddIsFinished adds i to the "is_finished" field.
-func (tu *TaskUpdate) AddIsFinished(i int8) *TaskUpdate {
+func (tu *TaskUpdate) AddIsFinished(i int32) *TaskUpdate {
 	tu.mutation.AddIsFinished(i)
 	return tu
 }
@@ -223,15 +223,15 @@ func (tu *TaskUpdate) ClearIsFinished() *TaskUpdate {
 }
 
 // SetMode sets the "mode" field.
-func (tu *TaskUpdate) SetMode(t task.Mode) *TaskUpdate {
-	tu.mutation.SetMode(t)
+func (tu *TaskUpdate) SetMode(s string) *TaskUpdate {
+	tu.mutation.SetMode(s)
 	return tu
 }
 
 // SetNillableMode sets the "mode" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableMode(t *task.Mode) *TaskUpdate {
-	if t != nil {
-		tu.SetMode(*t)
+func (tu *TaskUpdate) SetNillableMode(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetMode(*s)
 	}
 	return tu
 }
@@ -242,42 +242,15 @@ func (tu *TaskUpdate) ClearMode() *TaskUpdate {
 	return tu
 }
 
-// SetDataID sets the "data_id" field.
-func (tu *TaskUpdate) SetDataID(i int64) *TaskUpdate {
-	tu.mutation.ResetDataID()
-	tu.mutation.SetDataID(i)
-	return tu
-}
-
-// SetNillableDataID sets the "data_id" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableDataID(i *int64) *TaskUpdate {
-	if i != nil {
-		tu.SetDataID(*i)
-	}
-	return tu
-}
-
-// AddDataID adds i to the "data_id" field.
-func (tu *TaskUpdate) AddDataID(i int64) *TaskUpdate {
-	tu.mutation.AddDataID(i)
-	return tu
-}
-
-// ClearDataID clears the value of the "data_id" field.
-func (tu *TaskUpdate) ClearDataID() *TaskUpdate {
-	tu.mutation.ClearDataID()
-	return tu
-}
-
 // SetIsDel sets the "is_del" field.
-func (tu *TaskUpdate) SetIsDel(i int8) *TaskUpdate {
+func (tu *TaskUpdate) SetIsDel(i int32) *TaskUpdate {
 	tu.mutation.ResetIsDel()
 	tu.mutation.SetIsDel(i)
 	return tu
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableIsDel(i *int8) *TaskUpdate {
+func (tu *TaskUpdate) SetNillableIsDel(i *int32) *TaskUpdate {
 	if i != nil {
 		tu.SetIsDel(*i)
 	}
@@ -285,7 +258,7 @@ func (tu *TaskUpdate) SetNillableIsDel(i *int8) *TaskUpdate {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (tu *TaskUpdate) AddIsDel(i int8) *TaskUpdate {
+func (tu *TaskUpdate) AddIsDel(i int32) *TaskUpdate {
 	tu.mutation.AddIsDel(i)
 	return tu
 }
@@ -398,11 +371,6 @@ func (tu *TaskUpdate) check() error {
 			return &ValidationError{Name: "agree_approver", err: fmt.Errorf(`act: validator failed for field "Task.agree_approver": %w`, err)}
 		}
 	}
-	if v, ok := tu.mutation.Mode(); ok {
-		if err := task.ModeValidator(v); err != nil {
-			return &ValidationError{Name: "mode", err: fmt.Errorf(`act: validator failed for field "Task.mode": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -412,7 +380,7 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Table:   task.Table,
 			Columns: task.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: task.FieldID,
 			},
 		},
@@ -545,74 +513,54 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := tu.mutation.IsFinished(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: task.FieldIsFinished,
 		})
 	}
 	if value, ok := tu.mutation.AddedIsFinished(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: task.FieldIsFinished,
 		})
 	}
 	if tu.mutation.IsFinishedCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: task.FieldIsFinished,
 		})
 	}
 	if value, ok := tu.mutation.Mode(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: task.FieldMode,
 		})
 	}
 	if tu.mutation.ModeCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
+			Type:   field.TypeString,
 			Column: task.FieldMode,
-		})
-	}
-	if value, ok := tu.mutation.DataID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: task.FieldDataID,
-		})
-	}
-	if value, ok := tu.mutation.AddedDataID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: task.FieldDataID,
-		})
-	}
-	if tu.mutation.DataIDCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Column: task.FieldDataID,
 		})
 	}
 	if value, ok := tu.mutation.IsDel(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: task.FieldIsDel,
 		})
 	}
 	if value, ok := tu.mutation.AddedIsDel(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: task.FieldIsDel,
 		})
 	}
 	if tu.mutation.IsDelCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: task.FieldIsDel,
 		})
 	}
@@ -816,14 +764,14 @@ func (tuo *TaskUpdateOne) ClearAgreeApprover() *TaskUpdateOne {
 }
 
 // SetIsFinished sets the "is_finished" field.
-func (tuo *TaskUpdateOne) SetIsFinished(i int8) *TaskUpdateOne {
+func (tuo *TaskUpdateOne) SetIsFinished(i int32) *TaskUpdateOne {
 	tuo.mutation.ResetIsFinished()
 	tuo.mutation.SetIsFinished(i)
 	return tuo
 }
 
 // SetNillableIsFinished sets the "is_finished" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableIsFinished(i *int8) *TaskUpdateOne {
+func (tuo *TaskUpdateOne) SetNillableIsFinished(i *int32) *TaskUpdateOne {
 	if i != nil {
 		tuo.SetIsFinished(*i)
 	}
@@ -831,7 +779,7 @@ func (tuo *TaskUpdateOne) SetNillableIsFinished(i *int8) *TaskUpdateOne {
 }
 
 // AddIsFinished adds i to the "is_finished" field.
-func (tuo *TaskUpdateOne) AddIsFinished(i int8) *TaskUpdateOne {
+func (tuo *TaskUpdateOne) AddIsFinished(i int32) *TaskUpdateOne {
 	tuo.mutation.AddIsFinished(i)
 	return tuo
 }
@@ -843,15 +791,15 @@ func (tuo *TaskUpdateOne) ClearIsFinished() *TaskUpdateOne {
 }
 
 // SetMode sets the "mode" field.
-func (tuo *TaskUpdateOne) SetMode(t task.Mode) *TaskUpdateOne {
-	tuo.mutation.SetMode(t)
+func (tuo *TaskUpdateOne) SetMode(s string) *TaskUpdateOne {
+	tuo.mutation.SetMode(s)
 	return tuo
 }
 
 // SetNillableMode sets the "mode" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableMode(t *task.Mode) *TaskUpdateOne {
-	if t != nil {
-		tuo.SetMode(*t)
+func (tuo *TaskUpdateOne) SetNillableMode(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetMode(*s)
 	}
 	return tuo
 }
@@ -862,42 +810,15 @@ func (tuo *TaskUpdateOne) ClearMode() *TaskUpdateOne {
 	return tuo
 }
 
-// SetDataID sets the "data_id" field.
-func (tuo *TaskUpdateOne) SetDataID(i int64) *TaskUpdateOne {
-	tuo.mutation.ResetDataID()
-	tuo.mutation.SetDataID(i)
-	return tuo
-}
-
-// SetNillableDataID sets the "data_id" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableDataID(i *int64) *TaskUpdateOne {
-	if i != nil {
-		tuo.SetDataID(*i)
-	}
-	return tuo
-}
-
-// AddDataID adds i to the "data_id" field.
-func (tuo *TaskUpdateOne) AddDataID(i int64) *TaskUpdateOne {
-	tuo.mutation.AddDataID(i)
-	return tuo
-}
-
-// ClearDataID clears the value of the "data_id" field.
-func (tuo *TaskUpdateOne) ClearDataID() *TaskUpdateOne {
-	tuo.mutation.ClearDataID()
-	return tuo
-}
-
 // SetIsDel sets the "is_del" field.
-func (tuo *TaskUpdateOne) SetIsDel(i int8) *TaskUpdateOne {
+func (tuo *TaskUpdateOne) SetIsDel(i int32) *TaskUpdateOne {
 	tuo.mutation.ResetIsDel()
 	tuo.mutation.SetIsDel(i)
 	return tuo
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableIsDel(i *int8) *TaskUpdateOne {
+func (tuo *TaskUpdateOne) SetNillableIsDel(i *int32) *TaskUpdateOne {
 	if i != nil {
 		tuo.SetIsDel(*i)
 	}
@@ -905,7 +826,7 @@ func (tuo *TaskUpdateOne) SetNillableIsDel(i *int8) *TaskUpdateOne {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (tuo *TaskUpdateOne) AddIsDel(i int8) *TaskUpdateOne {
+func (tuo *TaskUpdateOne) AddIsDel(i int32) *TaskUpdateOne {
 	tuo.mutation.AddIsDel(i)
 	return tuo
 }
@@ -1031,11 +952,6 @@ func (tuo *TaskUpdateOne) check() error {
 			return &ValidationError{Name: "agree_approver", err: fmt.Errorf(`act: validator failed for field "Task.agree_approver": %w`, err)}
 		}
 	}
-	if v, ok := tuo.mutation.Mode(); ok {
-		if err := task.ModeValidator(v); err != nil {
-			return &ValidationError{Name: "mode", err: fmt.Errorf(`act: validator failed for field "Task.mode": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -1045,7 +961,7 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 			Table:   task.Table,
 			Columns: task.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: task.FieldID,
 			},
 		},
@@ -1195,74 +1111,54 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if value, ok := tuo.mutation.IsFinished(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: task.FieldIsFinished,
 		})
 	}
 	if value, ok := tuo.mutation.AddedIsFinished(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: task.FieldIsFinished,
 		})
 	}
 	if tuo.mutation.IsFinishedCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: task.FieldIsFinished,
 		})
 	}
 	if value, ok := tuo.mutation.Mode(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: task.FieldMode,
 		})
 	}
 	if tuo.mutation.ModeCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
+			Type:   field.TypeString,
 			Column: task.FieldMode,
-		})
-	}
-	if value, ok := tuo.mutation.DataID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: task.FieldDataID,
-		})
-	}
-	if value, ok := tuo.mutation.AddedDataID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: task.FieldDataID,
-		})
-	}
-	if tuo.mutation.DataIDCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Column: task.FieldDataID,
 		})
 	}
 	if value, ok := tuo.mutation.IsDel(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: task.FieldIsDel,
 		})
 	}
 	if value, ok := tuo.mutation.AddedIsDel(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: task.FieldIsDel,
 		})
 	}
 	if tuo.mutation.IsDelCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: task.FieldIsDel,
 		})
 	}

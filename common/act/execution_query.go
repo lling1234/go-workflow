@@ -361,7 +361,7 @@ func (eq *ExecutionQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   execution.Table,
 			Columns: execution.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: execution.FieldID,
 			},
 		},

@@ -33,13 +33,11 @@ type Task struct {
 	// 已审批用户
 	AgreeApprover string `json:"agree_approver,omitempty"`
 	// 任务是否完成 2:未结束 1:已完成
-	IsFinished int8 `json:"is_finished,omitempty"`
+	IsFinished int32 `json:"is_finished,omitempty"`
 	// 会签or或签
-	Mode task.Mode `json:"mode,omitempty"`
-	// 流程绑定数据ID
-	DataID int64 `json:"data_id,omitempty"`
+	Mode string `json:"mode,omitempty"`
 	// 是否删除
-	IsDel int8 `json:"is_del,omitempty"`
+	IsDel int32 `json:"is_del,omitempty"`
 	// 流程修改时间
 	UpdateTime time.Time `json:"update_time,omitempty"`
 }
@@ -49,7 +47,7 @@ func (*Task) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case task.FieldID, task.FieldLevel, task.FieldStep, task.FieldProcInstID, task.FieldIsFinished, task.FieldDataID, task.FieldIsDel:
+		case task.FieldID, task.FieldLevel, task.FieldStep, task.FieldProcInstID, task.FieldIsFinished, task.FieldIsDel:
 			values[i] = new(sql.NullInt64)
 		case task.FieldNodeID, task.FieldMemberApprover, task.FieldAgreeApprover, task.FieldMode:
 			values[i] = new(sql.NullString)
@@ -75,7 +73,7 @@ func (t *Task) assignValues(columns []string, values []interface{}) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			t.ID = value.Int64
+			t.ID = int64(value.Int64)
 		case task.FieldNodeID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field node_id", values[i])
@@ -128,25 +126,19 @@ func (t *Task) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field is_finished", values[i])
 			} else if value.Valid {
-				t.IsFinished = int8(value.Int64)
+				t.IsFinished = int32(value.Int64)
 			}
 		case task.FieldMode:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mode", values[i])
 			} else if value.Valid {
-				t.Mode = task.Mode(value.String)
-			}
-		case task.FieldDataID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field data_id", values[i])
-			} else if value.Valid {
-				t.DataID = value.Int64
+				t.Mode = value.String
 			}
 		case task.FieldIsDel:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field is_del", values[i])
 			} else if value.Valid {
-				t.IsDel = int8(value.Int64)
+				t.IsDel = int32(value.Int64)
 			}
 		case task.FieldUpdateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -210,10 +202,7 @@ func (t *Task) String() string {
 	builder.WriteString(fmt.Sprintf("%v", t.IsFinished))
 	builder.WriteString(", ")
 	builder.WriteString("mode=")
-	builder.WriteString(fmt.Sprintf("%v", t.Mode))
-	builder.WriteString(", ")
-	builder.WriteString("data_id=")
-	builder.WriteString(fmt.Sprintf("%v", t.DataID))
+	builder.WriteString(t.Mode)
 	builder.WriteString(", ")
 	builder.WriteString("is_del=")
 	builder.WriteString(fmt.Sprintf("%v", t.IsDel))

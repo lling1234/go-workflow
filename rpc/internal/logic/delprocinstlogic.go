@@ -5,7 +5,9 @@ import (
 	"act/common/act/identitylink"
 	"act/common/act/procinst"
 	"act/common/act/task"
+	"act/rpc/general"
 	"context"
+	"time"
 
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
@@ -37,7 +39,7 @@ func (l *DelProcInstLogic) DelProcInst(in *act.DataIdReq) (*act.Nil, error) {
 		return nil, err
 	}
 	instId := inst.ID
-	err = tx.ProcInst.Update().Where(procinst.IDEQ(instId)).SetIsDel(1).Exec(l.ctx)
+	err = tx.ProcInst.Update().Where(procinst.IDEQ(instId)).SetIsDel(1).SetDelUserID(general.MyUserId).SetDelTime(time.Now()).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err

@@ -137,21 +137,21 @@ func AgreeApprover(v string) predicate.Task {
 }
 
 // IsFinished applies equality check predicate on the "is_finished" field. It's identical to IsFinishedEQ.
-func IsFinished(v int8) predicate.Task {
+func IsFinished(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsFinished), v))
 	})
 }
 
-// DataID applies equality check predicate on the "data_id" field. It's identical to DataIDEQ.
-func DataID(v int64) predicate.Task {
+// Mode applies equality check predicate on the "mode" field. It's identical to ModeEQ.
+func Mode(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDataID), v))
+		s.Where(sql.EQ(s.C(FieldMode), v))
 	})
 }
 
 // IsDel applies equality check predicate on the "is_del" field. It's identical to IsDelEQ.
-func IsDel(v int8) predicate.Task {
+func IsDel(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDel), v))
 	})
@@ -880,21 +880,21 @@ func AgreeApproverContainsFold(v string) predicate.Task {
 }
 
 // IsFinishedEQ applies the EQ predicate on the "is_finished" field.
-func IsFinishedEQ(v int8) predicate.Task {
+func IsFinishedEQ(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsFinished), v))
 	})
 }
 
 // IsFinishedNEQ applies the NEQ predicate on the "is_finished" field.
-func IsFinishedNEQ(v int8) predicate.Task {
+func IsFinishedNEQ(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldIsFinished), v))
 	})
 }
 
 // IsFinishedIn applies the In predicate on the "is_finished" field.
-func IsFinishedIn(vs ...int8) predicate.Task {
+func IsFinishedIn(vs ...int32) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -905,7 +905,7 @@ func IsFinishedIn(vs ...int8) predicate.Task {
 }
 
 // IsFinishedNotIn applies the NotIn predicate on the "is_finished" field.
-func IsFinishedNotIn(vs ...int8) predicate.Task {
+func IsFinishedNotIn(vs ...int32) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -916,28 +916,28 @@ func IsFinishedNotIn(vs ...int8) predicate.Task {
 }
 
 // IsFinishedGT applies the GT predicate on the "is_finished" field.
-func IsFinishedGT(v int8) predicate.Task {
+func IsFinishedGT(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldIsFinished), v))
 	})
 }
 
 // IsFinishedGTE applies the GTE predicate on the "is_finished" field.
-func IsFinishedGTE(v int8) predicate.Task {
+func IsFinishedGTE(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldIsFinished), v))
 	})
 }
 
 // IsFinishedLT applies the LT predicate on the "is_finished" field.
-func IsFinishedLT(v int8) predicate.Task {
+func IsFinishedLT(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldIsFinished), v))
 	})
 }
 
 // IsFinishedLTE applies the LTE predicate on the "is_finished" field.
-func IsFinishedLTE(v int8) predicate.Task {
+func IsFinishedLTE(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldIsFinished), v))
 	})
@@ -958,21 +958,21 @@ func IsFinishedNotNil() predicate.Task {
 }
 
 // ModeEQ applies the EQ predicate on the "mode" field.
-func ModeEQ(v Mode) predicate.Task {
+func ModeEQ(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldMode), v))
 	})
 }
 
 // ModeNEQ applies the NEQ predicate on the "mode" field.
-func ModeNEQ(v Mode) predicate.Task {
+func ModeNEQ(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldMode), v))
 	})
 }
 
 // ModeIn applies the In predicate on the "mode" field.
-func ModeIn(vs ...Mode) predicate.Task {
+func ModeIn(vs ...string) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -983,13 +983,62 @@ func ModeIn(vs ...Mode) predicate.Task {
 }
 
 // ModeNotIn applies the NotIn predicate on the "mode" field.
-func ModeNotIn(vs ...Mode) predicate.Task {
+func ModeNotIn(vs ...string) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.NotIn(s.C(FieldMode), v...))
+	})
+}
+
+// ModeGT applies the GT predicate on the "mode" field.
+func ModeGT(v string) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldMode), v))
+	})
+}
+
+// ModeGTE applies the GTE predicate on the "mode" field.
+func ModeGTE(v string) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldMode), v))
+	})
+}
+
+// ModeLT applies the LT predicate on the "mode" field.
+func ModeLT(v string) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldMode), v))
+	})
+}
+
+// ModeLTE applies the LTE predicate on the "mode" field.
+func ModeLTE(v string) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldMode), v))
+	})
+}
+
+// ModeContains applies the Contains predicate on the "mode" field.
+func ModeContains(v string) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldMode), v))
+	})
+}
+
+// ModeHasPrefix applies the HasPrefix predicate on the "mode" field.
+func ModeHasPrefix(v string) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldMode), v))
+	})
+}
+
+// ModeHasSuffix applies the HasSuffix predicate on the "mode" field.
+func ModeHasSuffix(v string) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldMode), v))
 	})
 }
 
@@ -1007,100 +1056,36 @@ func ModeNotNil() predicate.Task {
 	})
 }
 
-// DataIDEQ applies the EQ predicate on the "data_id" field.
-func DataIDEQ(v int64) predicate.Task {
+// ModeEqualFold applies the EqualFold predicate on the "mode" field.
+func ModeEqualFold(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDataID), v))
+		s.Where(sql.EqualFold(s.C(FieldMode), v))
 	})
 }
 
-// DataIDNEQ applies the NEQ predicate on the "data_id" field.
-func DataIDNEQ(v int64) predicate.Task {
+// ModeContainsFold applies the ContainsFold predicate on the "mode" field.
+func ModeContainsFold(v string) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldDataID), v))
-	})
-}
-
-// DataIDIn applies the In predicate on the "data_id" field.
-func DataIDIn(vs ...int64) predicate.Task {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldDataID), v...))
-	})
-}
-
-// DataIDNotIn applies the NotIn predicate on the "data_id" field.
-func DataIDNotIn(vs ...int64) predicate.Task {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldDataID), v...))
-	})
-}
-
-// DataIDGT applies the GT predicate on the "data_id" field.
-func DataIDGT(v int64) predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldDataID), v))
-	})
-}
-
-// DataIDGTE applies the GTE predicate on the "data_id" field.
-func DataIDGTE(v int64) predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldDataID), v))
-	})
-}
-
-// DataIDLT applies the LT predicate on the "data_id" field.
-func DataIDLT(v int64) predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldDataID), v))
-	})
-}
-
-// DataIDLTE applies the LTE predicate on the "data_id" field.
-func DataIDLTE(v int64) predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldDataID), v))
-	})
-}
-
-// DataIDIsNil applies the IsNil predicate on the "data_id" field.
-func DataIDIsNil() predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldDataID)))
-	})
-}
-
-// DataIDNotNil applies the NotNil predicate on the "data_id" field.
-func DataIDNotNil() predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldDataID)))
+		s.Where(sql.ContainsFold(s.C(FieldMode), v))
 	})
 }
 
 // IsDelEQ applies the EQ predicate on the "is_del" field.
-func IsDelEQ(v int8) predicate.Task {
+func IsDelEQ(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelNEQ applies the NEQ predicate on the "is_del" field.
-func IsDelNEQ(v int8) predicate.Task {
+func IsDelNEQ(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelIn applies the In predicate on the "is_del" field.
-func IsDelIn(vs ...int8) predicate.Task {
+func IsDelIn(vs ...int32) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1111,7 +1096,7 @@ func IsDelIn(vs ...int8) predicate.Task {
 }
 
 // IsDelNotIn applies the NotIn predicate on the "is_del" field.
-func IsDelNotIn(vs ...int8) predicate.Task {
+func IsDelNotIn(vs ...int32) predicate.Task {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1122,28 +1107,28 @@ func IsDelNotIn(vs ...int8) predicate.Task {
 }
 
 // IsDelGT applies the GT predicate on the "is_del" field.
-func IsDelGT(v int8) predicate.Task {
+func IsDelGT(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelGTE applies the GTE predicate on the "is_del" field.
-func IsDelGTE(v int8) predicate.Task {
+func IsDelGTE(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelLT applies the LT predicate on the "is_del" field.
-func IsDelLT(v int8) predicate.Task {
+func IsDelLT(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelLTE applies the LTE predicate on the "is_del" field.
-func IsDelLTE(v int8) predicate.Task {
+func IsDelLTE(v int32) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldIsDel), v))
 	})

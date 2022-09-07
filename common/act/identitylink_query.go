@@ -361,7 +361,7 @@ func (ilq *IdentityLinkQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   identitylink.Table,
 			Columns: identitylink.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: identitylink.FieldID,
 			},
 		},

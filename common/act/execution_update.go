@@ -95,14 +95,14 @@ func (eu *ExecutionUpdate) ClearStartTime() *ExecutionUpdate {
 }
 
 // SetIsDel sets the "is_del" field.
-func (eu *ExecutionUpdate) SetIsDel(i int8) *ExecutionUpdate {
+func (eu *ExecutionUpdate) SetIsDel(i int32) *ExecutionUpdate {
 	eu.mutation.ResetIsDel()
 	eu.mutation.SetIsDel(i)
 	return eu
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (eu *ExecutionUpdate) SetNillableIsDel(i *int8) *ExecutionUpdate {
+func (eu *ExecutionUpdate) SetNillableIsDel(i *int32) *ExecutionUpdate {
 	if i != nil {
 		eu.SetIsDel(*i)
 	}
@@ -110,7 +110,7 @@ func (eu *ExecutionUpdate) SetNillableIsDel(i *int8) *ExecutionUpdate {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (eu *ExecutionUpdate) AddIsDel(i int8) *ExecutionUpdate {
+func (eu *ExecutionUpdate) AddIsDel(i int32) *ExecutionUpdate {
 	eu.mutation.AddIsDel(i)
 	return eu
 }
@@ -242,7 +242,7 @@ func (eu *ExecutionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Table:   execution.Table,
 			Columns: execution.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: execution.FieldID,
 			},
 		},
@@ -310,21 +310,21 @@ func (eu *ExecutionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := eu.mutation.IsDel(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: execution.FieldIsDel,
 		})
 	}
 	if value, ok := eu.mutation.AddedIsDel(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: execution.FieldIsDel,
 		})
 	}
 	if eu.mutation.IsDelCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: execution.FieldIsDel,
 		})
 	}
@@ -440,14 +440,14 @@ func (euo *ExecutionUpdateOne) ClearStartTime() *ExecutionUpdateOne {
 }
 
 // SetIsDel sets the "is_del" field.
-func (euo *ExecutionUpdateOne) SetIsDel(i int8) *ExecutionUpdateOne {
+func (euo *ExecutionUpdateOne) SetIsDel(i int32) *ExecutionUpdateOne {
 	euo.mutation.ResetIsDel()
 	euo.mutation.SetIsDel(i)
 	return euo
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (euo *ExecutionUpdateOne) SetNillableIsDel(i *int8) *ExecutionUpdateOne {
+func (euo *ExecutionUpdateOne) SetNillableIsDel(i *int32) *ExecutionUpdateOne {
 	if i != nil {
 		euo.SetIsDel(*i)
 	}
@@ -455,7 +455,7 @@ func (euo *ExecutionUpdateOne) SetNillableIsDel(i *int8) *ExecutionUpdateOne {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (euo *ExecutionUpdateOne) AddIsDel(i int8) *ExecutionUpdateOne {
+func (euo *ExecutionUpdateOne) AddIsDel(i int32) *ExecutionUpdateOne {
 	euo.mutation.AddIsDel(i)
 	return euo
 }
@@ -600,7 +600,7 @@ func (euo *ExecutionUpdateOne) sqlSave(ctx context.Context) (_node *Execution, e
 			Table:   execution.Table,
 			Columns: execution.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: execution.FieldID,
 			},
 		},
@@ -685,21 +685,21 @@ func (euo *ExecutionUpdateOne) sqlSave(ctx context.Context) (_node *Execution, e
 	}
 	if value, ok := euo.mutation.IsDel(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: execution.FieldIsDel,
 		})
 	}
 	if value, ok := euo.mutation.AddedIsDel(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: execution.FieldIsDel,
 		})
 	}
 	if euo.mutation.IsDelCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: execution.FieldIsDel,
 		})
 	}

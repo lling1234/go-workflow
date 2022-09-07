@@ -3,6 +3,7 @@
 package act
 
 import (
+	"act/common/act/concurrentnode"
 	"act/common/act/execution"
 	"act/common/act/identitylink"
 	"act/common/act/predicate"
@@ -27,12 +28,1031 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeExecution    = "Execution"
-	TypeIdentityLink = "IdentityLink"
-	TypeProcDef      = "ProcDef"
-	TypeProcInst     = "ProcInst"
-	TypeTask         = "Task"
+	TypeConcurrentNode = "ConcurrentNode"
+	TypeExecution      = "Execution"
+	TypeIdentityLink   = "IdentityLink"
+	TypeProcDef        = "ProcDef"
+	TypeProcInst       = "ProcInst"
+	TypeTask           = "Task"
 )
+
+// ConcurrentNodeMutation represents an operation that mutates the ConcurrentNode nodes in the graph.
+type ConcurrentNodeMutation struct {
+	config
+	op              Op
+	typ             string
+	id              *int64
+	proc_inst_id    *int64
+	addproc_inst_id *int64
+	proc_def_id     *int64
+	addproc_def_id  *int64
+	node_id         *string
+	node_info       *string
+	prev_id         *string
+	next_id         *string
+	state           *int32
+	addstate        *int32
+	is_del          *int32
+	addis_del       *int32
+	create_time     *time.Time
+	update_time     *time.Time
+	clearedFields   map[string]struct{}
+	done            bool
+	oldValue        func(context.Context) (*ConcurrentNode, error)
+	predicates      []predicate.ConcurrentNode
+}
+
+var _ ent.Mutation = (*ConcurrentNodeMutation)(nil)
+
+// concurrentnodeOption allows management of the mutation configuration using functional options.
+type concurrentnodeOption func(*ConcurrentNodeMutation)
+
+// newConcurrentNodeMutation creates new mutation for the ConcurrentNode entity.
+func newConcurrentNodeMutation(c config, op Op, opts ...concurrentnodeOption) *ConcurrentNodeMutation {
+	m := &ConcurrentNodeMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeConcurrentNode,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withConcurrentNodeID sets the ID field of the mutation.
+func withConcurrentNodeID(id int64) concurrentnodeOption {
+	return func(m *ConcurrentNodeMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ConcurrentNode
+		)
+		m.oldValue = func(ctx context.Context) (*ConcurrentNode, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ConcurrentNode.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withConcurrentNode sets the old ConcurrentNode of the mutation.
+func withConcurrentNode(node *ConcurrentNode) concurrentnodeOption {
+	return func(m *ConcurrentNodeMutation) {
+		m.oldValue = func(context.Context) (*ConcurrentNode, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ConcurrentNodeMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ConcurrentNodeMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("act: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ConcurrentNode entities.
+func (m *ConcurrentNodeMutation) SetID(id int64) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ConcurrentNodeMutation) ID() (id int64, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ConcurrentNodeMutation) IDs(ctx context.Context) ([]int64, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int64{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ConcurrentNode.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetProcInstID sets the "proc_inst_id" field.
+func (m *ConcurrentNodeMutation) SetProcInstID(i int64) {
+	m.proc_inst_id = &i
+	m.addproc_inst_id = nil
+}
+
+// ProcInstID returns the value of the "proc_inst_id" field in the mutation.
+func (m *ConcurrentNodeMutation) ProcInstID() (r int64, exists bool) {
+	v := m.proc_inst_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProcInstID returns the old "proc_inst_id" field's value of the ConcurrentNode entity.
+// If the ConcurrentNode object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ConcurrentNodeMutation) OldProcInstID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProcInstID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProcInstID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProcInstID: %w", err)
+	}
+	return oldValue.ProcInstID, nil
+}
+
+// AddProcInstID adds i to the "proc_inst_id" field.
+func (m *ConcurrentNodeMutation) AddProcInstID(i int64) {
+	if m.addproc_inst_id != nil {
+		*m.addproc_inst_id += i
+	} else {
+		m.addproc_inst_id = &i
+	}
+}
+
+// AddedProcInstID returns the value that was added to the "proc_inst_id" field in this mutation.
+func (m *ConcurrentNodeMutation) AddedProcInstID() (r int64, exists bool) {
+	v := m.addproc_inst_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetProcInstID resets all changes to the "proc_inst_id" field.
+func (m *ConcurrentNodeMutation) ResetProcInstID() {
+	m.proc_inst_id = nil
+	m.addproc_inst_id = nil
+}
+
+// SetProcDefID sets the "proc_def_id" field.
+func (m *ConcurrentNodeMutation) SetProcDefID(i int64) {
+	m.proc_def_id = &i
+	m.addproc_def_id = nil
+}
+
+// ProcDefID returns the value of the "proc_def_id" field in the mutation.
+func (m *ConcurrentNodeMutation) ProcDefID() (r int64, exists bool) {
+	v := m.proc_def_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProcDefID returns the old "proc_def_id" field's value of the ConcurrentNode entity.
+// If the ConcurrentNode object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ConcurrentNodeMutation) OldProcDefID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProcDefID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProcDefID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProcDefID: %w", err)
+	}
+	return oldValue.ProcDefID, nil
+}
+
+// AddProcDefID adds i to the "proc_def_id" field.
+func (m *ConcurrentNodeMutation) AddProcDefID(i int64) {
+	if m.addproc_def_id != nil {
+		*m.addproc_def_id += i
+	} else {
+		m.addproc_def_id = &i
+	}
+}
+
+// AddedProcDefID returns the value that was added to the "proc_def_id" field in this mutation.
+func (m *ConcurrentNodeMutation) AddedProcDefID() (r int64, exists bool) {
+	v := m.addproc_def_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetProcDefID resets all changes to the "proc_def_id" field.
+func (m *ConcurrentNodeMutation) ResetProcDefID() {
+	m.proc_def_id = nil
+	m.addproc_def_id = nil
+}
+
+// SetNodeID sets the "node_id" field.
+func (m *ConcurrentNodeMutation) SetNodeID(s string) {
+	m.node_id = &s
+}
+
+// NodeID returns the value of the "node_id" field in the mutation.
+func (m *ConcurrentNodeMutation) NodeID() (r string, exists bool) {
+	v := m.node_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNodeID returns the old "node_id" field's value of the ConcurrentNode entity.
+// If the ConcurrentNode object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ConcurrentNodeMutation) OldNodeID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNodeID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNodeID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNodeID: %w", err)
+	}
+	return oldValue.NodeID, nil
+}
+
+// ResetNodeID resets all changes to the "node_id" field.
+func (m *ConcurrentNodeMutation) ResetNodeID() {
+	m.node_id = nil
+}
+
+// SetNodeInfo sets the "node_info" field.
+func (m *ConcurrentNodeMutation) SetNodeInfo(s string) {
+	m.node_info = &s
+}
+
+// NodeInfo returns the value of the "node_info" field in the mutation.
+func (m *ConcurrentNodeMutation) NodeInfo() (r string, exists bool) {
+	v := m.node_info
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNodeInfo returns the old "node_info" field's value of the ConcurrentNode entity.
+// If the ConcurrentNode object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ConcurrentNodeMutation) OldNodeInfo(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNodeInfo is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNodeInfo requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNodeInfo: %w", err)
+	}
+	return oldValue.NodeInfo, nil
+}
+
+// ClearNodeInfo clears the value of the "node_info" field.
+func (m *ConcurrentNodeMutation) ClearNodeInfo() {
+	m.node_info = nil
+	m.clearedFields[concurrentnode.FieldNodeInfo] = struct{}{}
+}
+
+// NodeInfoCleared returns if the "node_info" field was cleared in this mutation.
+func (m *ConcurrentNodeMutation) NodeInfoCleared() bool {
+	_, ok := m.clearedFields[concurrentnode.FieldNodeInfo]
+	return ok
+}
+
+// ResetNodeInfo resets all changes to the "node_info" field.
+func (m *ConcurrentNodeMutation) ResetNodeInfo() {
+	m.node_info = nil
+	delete(m.clearedFields, concurrentnode.FieldNodeInfo)
+}
+
+// SetPrevID sets the "prev_id" field.
+func (m *ConcurrentNodeMutation) SetPrevID(s string) {
+	m.prev_id = &s
+}
+
+// PrevID returns the value of the "prev_id" field in the mutation.
+func (m *ConcurrentNodeMutation) PrevID() (r string, exists bool) {
+	v := m.prev_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrevID returns the old "prev_id" field's value of the ConcurrentNode entity.
+// If the ConcurrentNode object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ConcurrentNodeMutation) OldPrevID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrevID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrevID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrevID: %w", err)
+	}
+	return oldValue.PrevID, nil
+}
+
+// ResetPrevID resets all changes to the "prev_id" field.
+func (m *ConcurrentNodeMutation) ResetPrevID() {
+	m.prev_id = nil
+}
+
+// SetNextID sets the "next_id" field.
+func (m *ConcurrentNodeMutation) SetNextID(s string) {
+	m.next_id = &s
+}
+
+// NextID returns the value of the "next_id" field in the mutation.
+func (m *ConcurrentNodeMutation) NextID() (r string, exists bool) {
+	v := m.next_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNextID returns the old "next_id" field's value of the ConcurrentNode entity.
+// If the ConcurrentNode object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ConcurrentNodeMutation) OldNextID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNextID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNextID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNextID: %w", err)
+	}
+	return oldValue.NextID, nil
+}
+
+// ResetNextID resets all changes to the "next_id" field.
+func (m *ConcurrentNodeMutation) ResetNextID() {
+	m.next_id = nil
+}
+
+// SetState sets the "state" field.
+func (m *ConcurrentNodeMutation) SetState(i int32) {
+	m.state = &i
+	m.addstate = nil
+}
+
+// State returns the value of the "state" field in the mutation.
+func (m *ConcurrentNodeMutation) State() (r int32, exists bool) {
+	v := m.state
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldState returns the old "state" field's value of the ConcurrentNode entity.
+// If the ConcurrentNode object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ConcurrentNodeMutation) OldState(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldState is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldState requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldState: %w", err)
+	}
+	return oldValue.State, nil
+}
+
+// AddState adds i to the "state" field.
+func (m *ConcurrentNodeMutation) AddState(i int32) {
+	if m.addstate != nil {
+		*m.addstate += i
+	} else {
+		m.addstate = &i
+	}
+}
+
+// AddedState returns the value that was added to the "state" field in this mutation.
+func (m *ConcurrentNodeMutation) AddedState() (r int32, exists bool) {
+	v := m.addstate
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetState resets all changes to the "state" field.
+func (m *ConcurrentNodeMutation) ResetState() {
+	m.state = nil
+	m.addstate = nil
+}
+
+// SetIsDel sets the "is_del" field.
+func (m *ConcurrentNodeMutation) SetIsDel(i int32) {
+	m.is_del = &i
+	m.addis_del = nil
+}
+
+// IsDel returns the value of the "is_del" field in the mutation.
+func (m *ConcurrentNodeMutation) IsDel() (r int32, exists bool) {
+	v := m.is_del
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsDel returns the old "is_del" field's value of the ConcurrentNode entity.
+// If the ConcurrentNode object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ConcurrentNodeMutation) OldIsDel(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsDel is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsDel requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsDel: %w", err)
+	}
+	return oldValue.IsDel, nil
+}
+
+// AddIsDel adds i to the "is_del" field.
+func (m *ConcurrentNodeMutation) AddIsDel(i int32) {
+	if m.addis_del != nil {
+		*m.addis_del += i
+	} else {
+		m.addis_del = &i
+	}
+}
+
+// AddedIsDel returns the value that was added to the "is_del" field in this mutation.
+func (m *ConcurrentNodeMutation) AddedIsDel() (r int32, exists bool) {
+	v := m.addis_del
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearIsDel clears the value of the "is_del" field.
+func (m *ConcurrentNodeMutation) ClearIsDel() {
+	m.is_del = nil
+	m.addis_del = nil
+	m.clearedFields[concurrentnode.FieldIsDel] = struct{}{}
+}
+
+// IsDelCleared returns if the "is_del" field was cleared in this mutation.
+func (m *ConcurrentNodeMutation) IsDelCleared() bool {
+	_, ok := m.clearedFields[concurrentnode.FieldIsDel]
+	return ok
+}
+
+// ResetIsDel resets all changes to the "is_del" field.
+func (m *ConcurrentNodeMutation) ResetIsDel() {
+	m.is_del = nil
+	m.addis_del = nil
+	delete(m.clearedFields, concurrentnode.FieldIsDel)
+}
+
+// SetCreateTime sets the "create_time" field.
+func (m *ConcurrentNodeMutation) SetCreateTime(t time.Time) {
+	m.create_time = &t
+}
+
+// CreateTime returns the value of the "create_time" field in the mutation.
+func (m *ConcurrentNodeMutation) CreateTime() (r time.Time, exists bool) {
+	v := m.create_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateTime returns the old "create_time" field's value of the ConcurrentNode entity.
+// If the ConcurrentNode object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ConcurrentNodeMutation) OldCreateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateTime: %w", err)
+	}
+	return oldValue.CreateTime, nil
+}
+
+// ClearCreateTime clears the value of the "create_time" field.
+func (m *ConcurrentNodeMutation) ClearCreateTime() {
+	m.create_time = nil
+	m.clearedFields[concurrentnode.FieldCreateTime] = struct{}{}
+}
+
+// CreateTimeCleared returns if the "create_time" field was cleared in this mutation.
+func (m *ConcurrentNodeMutation) CreateTimeCleared() bool {
+	_, ok := m.clearedFields[concurrentnode.FieldCreateTime]
+	return ok
+}
+
+// ResetCreateTime resets all changes to the "create_time" field.
+func (m *ConcurrentNodeMutation) ResetCreateTime() {
+	m.create_time = nil
+	delete(m.clearedFields, concurrentnode.FieldCreateTime)
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (m *ConcurrentNodeMutation) SetUpdateTime(t time.Time) {
+	m.update_time = &t
+}
+
+// UpdateTime returns the value of the "update_time" field in the mutation.
+func (m *ConcurrentNodeMutation) UpdateTime() (r time.Time, exists bool) {
+	v := m.update_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTime returns the old "update_time" field's value of the ConcurrentNode entity.
+// If the ConcurrentNode object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ConcurrentNodeMutation) OldUpdateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTime: %w", err)
+	}
+	return oldValue.UpdateTime, nil
+}
+
+// ClearUpdateTime clears the value of the "update_time" field.
+func (m *ConcurrentNodeMutation) ClearUpdateTime() {
+	m.update_time = nil
+	m.clearedFields[concurrentnode.FieldUpdateTime] = struct{}{}
+}
+
+// UpdateTimeCleared returns if the "update_time" field was cleared in this mutation.
+func (m *ConcurrentNodeMutation) UpdateTimeCleared() bool {
+	_, ok := m.clearedFields[concurrentnode.FieldUpdateTime]
+	return ok
+}
+
+// ResetUpdateTime resets all changes to the "update_time" field.
+func (m *ConcurrentNodeMutation) ResetUpdateTime() {
+	m.update_time = nil
+	delete(m.clearedFields, concurrentnode.FieldUpdateTime)
+}
+
+// Where appends a list predicates to the ConcurrentNodeMutation builder.
+func (m *ConcurrentNodeMutation) Where(ps ...predicate.ConcurrentNode) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *ConcurrentNodeMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (ConcurrentNode).
+func (m *ConcurrentNodeMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ConcurrentNodeMutation) Fields() []string {
+	fields := make([]string, 0, 10)
+	if m.proc_inst_id != nil {
+		fields = append(fields, concurrentnode.FieldProcInstID)
+	}
+	if m.proc_def_id != nil {
+		fields = append(fields, concurrentnode.FieldProcDefID)
+	}
+	if m.node_id != nil {
+		fields = append(fields, concurrentnode.FieldNodeID)
+	}
+	if m.node_info != nil {
+		fields = append(fields, concurrentnode.FieldNodeInfo)
+	}
+	if m.prev_id != nil {
+		fields = append(fields, concurrentnode.FieldPrevID)
+	}
+	if m.next_id != nil {
+		fields = append(fields, concurrentnode.FieldNextID)
+	}
+	if m.state != nil {
+		fields = append(fields, concurrentnode.FieldState)
+	}
+	if m.is_del != nil {
+		fields = append(fields, concurrentnode.FieldIsDel)
+	}
+	if m.create_time != nil {
+		fields = append(fields, concurrentnode.FieldCreateTime)
+	}
+	if m.update_time != nil {
+		fields = append(fields, concurrentnode.FieldUpdateTime)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ConcurrentNodeMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case concurrentnode.FieldProcInstID:
+		return m.ProcInstID()
+	case concurrentnode.FieldProcDefID:
+		return m.ProcDefID()
+	case concurrentnode.FieldNodeID:
+		return m.NodeID()
+	case concurrentnode.FieldNodeInfo:
+		return m.NodeInfo()
+	case concurrentnode.FieldPrevID:
+		return m.PrevID()
+	case concurrentnode.FieldNextID:
+		return m.NextID()
+	case concurrentnode.FieldState:
+		return m.State()
+	case concurrentnode.FieldIsDel:
+		return m.IsDel()
+	case concurrentnode.FieldCreateTime:
+		return m.CreateTime()
+	case concurrentnode.FieldUpdateTime:
+		return m.UpdateTime()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ConcurrentNodeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case concurrentnode.FieldProcInstID:
+		return m.OldProcInstID(ctx)
+	case concurrentnode.FieldProcDefID:
+		return m.OldProcDefID(ctx)
+	case concurrentnode.FieldNodeID:
+		return m.OldNodeID(ctx)
+	case concurrentnode.FieldNodeInfo:
+		return m.OldNodeInfo(ctx)
+	case concurrentnode.FieldPrevID:
+		return m.OldPrevID(ctx)
+	case concurrentnode.FieldNextID:
+		return m.OldNextID(ctx)
+	case concurrentnode.FieldState:
+		return m.OldState(ctx)
+	case concurrentnode.FieldIsDel:
+		return m.OldIsDel(ctx)
+	case concurrentnode.FieldCreateTime:
+		return m.OldCreateTime(ctx)
+	case concurrentnode.FieldUpdateTime:
+		return m.OldUpdateTime(ctx)
+	}
+	return nil, fmt.Errorf("unknown ConcurrentNode field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ConcurrentNodeMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case concurrentnode.FieldProcInstID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProcInstID(v)
+		return nil
+	case concurrentnode.FieldProcDefID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProcDefID(v)
+		return nil
+	case concurrentnode.FieldNodeID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNodeID(v)
+		return nil
+	case concurrentnode.FieldNodeInfo:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNodeInfo(v)
+		return nil
+	case concurrentnode.FieldPrevID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrevID(v)
+		return nil
+	case concurrentnode.FieldNextID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNextID(v)
+		return nil
+	case concurrentnode.FieldState:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetState(v)
+		return nil
+	case concurrentnode.FieldIsDel:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsDel(v)
+		return nil
+	case concurrentnode.FieldCreateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateTime(v)
+		return nil
+	case concurrentnode.FieldUpdateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTime(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ConcurrentNode field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ConcurrentNodeMutation) AddedFields() []string {
+	var fields []string
+	if m.addproc_inst_id != nil {
+		fields = append(fields, concurrentnode.FieldProcInstID)
+	}
+	if m.addproc_def_id != nil {
+		fields = append(fields, concurrentnode.FieldProcDefID)
+	}
+	if m.addstate != nil {
+		fields = append(fields, concurrentnode.FieldState)
+	}
+	if m.addis_del != nil {
+		fields = append(fields, concurrentnode.FieldIsDel)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ConcurrentNodeMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case concurrentnode.FieldProcInstID:
+		return m.AddedProcInstID()
+	case concurrentnode.FieldProcDefID:
+		return m.AddedProcDefID()
+	case concurrentnode.FieldState:
+		return m.AddedState()
+	case concurrentnode.FieldIsDel:
+		return m.AddedIsDel()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ConcurrentNodeMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case concurrentnode.FieldProcInstID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddProcInstID(v)
+		return nil
+	case concurrentnode.FieldProcDefID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddProcDefID(v)
+		return nil
+	case concurrentnode.FieldState:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddState(v)
+		return nil
+	case concurrentnode.FieldIsDel:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddIsDel(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ConcurrentNode numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ConcurrentNodeMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(concurrentnode.FieldNodeInfo) {
+		fields = append(fields, concurrentnode.FieldNodeInfo)
+	}
+	if m.FieldCleared(concurrentnode.FieldIsDel) {
+		fields = append(fields, concurrentnode.FieldIsDel)
+	}
+	if m.FieldCleared(concurrentnode.FieldCreateTime) {
+		fields = append(fields, concurrentnode.FieldCreateTime)
+	}
+	if m.FieldCleared(concurrentnode.FieldUpdateTime) {
+		fields = append(fields, concurrentnode.FieldUpdateTime)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ConcurrentNodeMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ConcurrentNodeMutation) ClearField(name string) error {
+	switch name {
+	case concurrentnode.FieldNodeInfo:
+		m.ClearNodeInfo()
+		return nil
+	case concurrentnode.FieldIsDel:
+		m.ClearIsDel()
+		return nil
+	case concurrentnode.FieldCreateTime:
+		m.ClearCreateTime()
+		return nil
+	case concurrentnode.FieldUpdateTime:
+		m.ClearUpdateTime()
+		return nil
+	}
+	return fmt.Errorf("unknown ConcurrentNode nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ConcurrentNodeMutation) ResetField(name string) error {
+	switch name {
+	case concurrentnode.FieldProcInstID:
+		m.ResetProcInstID()
+		return nil
+	case concurrentnode.FieldProcDefID:
+		m.ResetProcDefID()
+		return nil
+	case concurrentnode.FieldNodeID:
+		m.ResetNodeID()
+		return nil
+	case concurrentnode.FieldNodeInfo:
+		m.ResetNodeInfo()
+		return nil
+	case concurrentnode.FieldPrevID:
+		m.ResetPrevID()
+		return nil
+	case concurrentnode.FieldNextID:
+		m.ResetNextID()
+		return nil
+	case concurrentnode.FieldState:
+		m.ResetState()
+		return nil
+	case concurrentnode.FieldIsDel:
+		m.ResetIsDel()
+		return nil
+	case concurrentnode.FieldCreateTime:
+		m.ResetCreateTime()
+		return nil
+	case concurrentnode.FieldUpdateTime:
+		m.ResetUpdateTime()
+		return nil
+	}
+	return fmt.Errorf("unknown ConcurrentNode field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ConcurrentNodeMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ConcurrentNodeMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ConcurrentNodeMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ConcurrentNodeMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ConcurrentNodeMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ConcurrentNodeMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ConcurrentNodeMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ConcurrentNode unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ConcurrentNodeMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ConcurrentNode edge %s", name)
+}
 
 // ExecutionMutation represents an operation that mutates the Execution nodes in the graph.
 type ExecutionMutation struct {
@@ -46,8 +1066,8 @@ type ExecutionMutation struct {
 	addproc_def_id  *int64
 	node_infos      *string
 	start_time      *time.Time
-	is_del          *int8
-	addis_del       *int8
+	is_del          *int32
+	addis_del       *int32
 	create_time     *time.Time
 	update_time     *time.Time
 	clearedFields   map[string]struct{}
@@ -124,6 +1144,12 @@ func (m ExecutionMutation) Tx() (*Tx, error) {
 	tx := &Tx{config: m.config}
 	tx.init()
 	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Execution entities.
+func (m *ExecutionMutation) SetID(id int64) {
+	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
@@ -365,13 +1391,13 @@ func (m *ExecutionMutation) ResetStartTime() {
 }
 
 // SetIsDel sets the "is_del" field.
-func (m *ExecutionMutation) SetIsDel(i int8) {
+func (m *ExecutionMutation) SetIsDel(i int32) {
 	m.is_del = &i
 	m.addis_del = nil
 }
 
 // IsDel returns the value of the "is_del" field in the mutation.
-func (m *ExecutionMutation) IsDel() (r int8, exists bool) {
+func (m *ExecutionMutation) IsDel() (r int32, exists bool) {
 	v := m.is_del
 	if v == nil {
 		return
@@ -382,7 +1408,7 @@ func (m *ExecutionMutation) IsDel() (r int8, exists bool) {
 // OldIsDel returns the old "is_del" field's value of the Execution entity.
 // If the Execution object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ExecutionMutation) OldIsDel(ctx context.Context) (v int8, err error) {
+func (m *ExecutionMutation) OldIsDel(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsDel is only allowed on UpdateOne operations")
 	}
@@ -397,7 +1423,7 @@ func (m *ExecutionMutation) OldIsDel(ctx context.Context) (v int8, err error) {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (m *ExecutionMutation) AddIsDel(i int8) {
+func (m *ExecutionMutation) AddIsDel(i int32) {
 	if m.addis_del != nil {
 		*m.addis_del += i
 	} else {
@@ -406,7 +1432,7 @@ func (m *ExecutionMutation) AddIsDel(i int8) {
 }
 
 // AddedIsDel returns the value that was added to the "is_del" field in this mutation.
-func (m *ExecutionMutation) AddedIsDel() (r int8, exists bool) {
+func (m *ExecutionMutation) AddedIsDel() (r int32, exists bool) {
 	v := m.addis_del
 	if v == nil {
 		return
@@ -656,7 +1682,7 @@ func (m *ExecutionMutation) SetField(name string, value ent.Value) error {
 		m.SetStartTime(v)
 		return nil
 	case execution.FieldIsDel:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -731,7 +1757,7 @@ func (m *ExecutionMutation) AddField(name string, value ent.Value) error {
 		m.AddProcDefID(v)
 		return nil
 	case execution.FieldIsDel:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -891,10 +1917,10 @@ type IdentityLinkMutation struct {
 	result          *int32
 	addresult       *int32
 	create_time     *time.Time
-	is_del          *int8
-	addis_del       *int8
-	is_deal         *int8
-	addis_deal      *int8
+	is_del          *int32
+	addis_del       *int32
+	is_deal         *int32
+	addis_deal      *int32
 	update_time     *time.Time
 	clearedFields   map[string]struct{}
 	done            bool
@@ -970,6 +1996,12 @@ func (m IdentityLinkMutation) Tx() (*Tx, error) {
 	tx := &Tx{config: m.config}
 	tx.init()
 	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of IdentityLink entities.
+func (m *IdentityLinkMutation) SetID(id int64) {
+	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
@@ -1540,13 +2572,13 @@ func (m *IdentityLinkMutation) ResetCreateTime() {
 }
 
 // SetIsDel sets the "is_del" field.
-func (m *IdentityLinkMutation) SetIsDel(i int8) {
+func (m *IdentityLinkMutation) SetIsDel(i int32) {
 	m.is_del = &i
 	m.addis_del = nil
 }
 
 // IsDel returns the value of the "is_del" field in the mutation.
-func (m *IdentityLinkMutation) IsDel() (r int8, exists bool) {
+func (m *IdentityLinkMutation) IsDel() (r int32, exists bool) {
 	v := m.is_del
 	if v == nil {
 		return
@@ -1557,7 +2589,7 @@ func (m *IdentityLinkMutation) IsDel() (r int8, exists bool) {
 // OldIsDel returns the old "is_del" field's value of the IdentityLink entity.
 // If the IdentityLink object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *IdentityLinkMutation) OldIsDel(ctx context.Context) (v int8, err error) {
+func (m *IdentityLinkMutation) OldIsDel(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsDel is only allowed on UpdateOne operations")
 	}
@@ -1572,7 +2604,7 @@ func (m *IdentityLinkMutation) OldIsDel(ctx context.Context) (v int8, err error)
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (m *IdentityLinkMutation) AddIsDel(i int8) {
+func (m *IdentityLinkMutation) AddIsDel(i int32) {
 	if m.addis_del != nil {
 		*m.addis_del += i
 	} else {
@@ -1581,7 +2613,7 @@ func (m *IdentityLinkMutation) AddIsDel(i int8) {
 }
 
 // AddedIsDel returns the value that was added to the "is_del" field in this mutation.
-func (m *IdentityLinkMutation) AddedIsDel() (r int8, exists bool) {
+func (m *IdentityLinkMutation) AddedIsDel() (r int32, exists bool) {
 	v := m.addis_del
 	if v == nil {
 		return
@@ -1610,13 +2642,13 @@ func (m *IdentityLinkMutation) ResetIsDel() {
 }
 
 // SetIsDeal sets the "is_deal" field.
-func (m *IdentityLinkMutation) SetIsDeal(i int8) {
+func (m *IdentityLinkMutation) SetIsDeal(i int32) {
 	m.is_deal = &i
 	m.addis_deal = nil
 }
 
 // IsDeal returns the value of the "is_deal" field in the mutation.
-func (m *IdentityLinkMutation) IsDeal() (r int8, exists bool) {
+func (m *IdentityLinkMutation) IsDeal() (r int32, exists bool) {
 	v := m.is_deal
 	if v == nil {
 		return
@@ -1627,7 +2659,7 @@ func (m *IdentityLinkMutation) IsDeal() (r int8, exists bool) {
 // OldIsDeal returns the old "is_deal" field's value of the IdentityLink entity.
 // If the IdentityLink object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *IdentityLinkMutation) OldIsDeal(ctx context.Context) (v int8, err error) {
+func (m *IdentityLinkMutation) OldIsDeal(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsDeal is only allowed on UpdateOne operations")
 	}
@@ -1642,7 +2674,7 @@ func (m *IdentityLinkMutation) OldIsDeal(ctx context.Context) (v int8, err error
 }
 
 // AddIsDeal adds i to the "is_deal" field.
-func (m *IdentityLinkMutation) AddIsDeal(i int8) {
+func (m *IdentityLinkMutation) AddIsDeal(i int32) {
 	if m.addis_deal != nil {
 		*m.addis_deal += i
 	} else {
@@ -1651,7 +2683,7 @@ func (m *IdentityLinkMutation) AddIsDeal(i int8) {
 }
 
 // AddedIsDeal returns the value that was added to the "is_deal" field in this mutation.
-func (m *IdentityLinkMutation) AddedIsDeal() (r int8, exists bool) {
+func (m *IdentityLinkMutation) AddedIsDeal() (r int32, exists bool) {
 	v := m.addis_deal
 	if v == nil {
 		return
@@ -1922,14 +2954,14 @@ func (m *IdentityLinkMutation) SetField(name string, value ent.Value) error {
 		m.SetCreateTime(v)
 		return nil
 	case identitylink.FieldIsDel:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIsDel(v)
 		return nil
 	case identitylink.FieldIsDeal:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2050,14 +3082,14 @@ func (m *IdentityLinkMutation) AddField(name string, value ent.Value) error {
 		m.AddResult(v)
 		return nil
 	case identitylink.FieldIsDel:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddIsDel(v)
 		return nil
 	case identitylink.FieldIsDeal:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2262,11 +3294,16 @@ type ProcDefMutation struct {
 	form_name         *string
 	remain_hours      *int32
 	addremain_hours   *int32
-	is_del            *int8
-	addis_del         *int8
-	is_active         *int8
-	addis_active      *int8
+	is_del            *int32
+	addis_del         *int32
+	is_active         *int32
+	addis_active      *int32
 	update_time       *time.Time
+	del_time          *time.Time
+	del_user_id       *int64
+	adddel_user_id    *int64
+	update_user_id    *int64
+	addupdate_user_id *int64
 	clearedFields     map[string]struct{}
 	done              bool
 	oldValue          func(context.Context) (*ProcDef, error)
@@ -2341,6 +3378,12 @@ func (m ProcDefMutation) Tx() (*Tx, error) {
 	tx := &Tx{config: m.config}
 	tx.init()
 	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ProcDef entities.
+func (m *ProcDefMutation) SetID(id int64) {
+	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
@@ -2982,13 +4025,13 @@ func (m *ProcDefMutation) ResetRemainHours() {
 }
 
 // SetIsDel sets the "is_del" field.
-func (m *ProcDefMutation) SetIsDel(i int8) {
+func (m *ProcDefMutation) SetIsDel(i int32) {
 	m.is_del = &i
 	m.addis_del = nil
 }
 
 // IsDel returns the value of the "is_del" field in the mutation.
-func (m *ProcDefMutation) IsDel() (r int8, exists bool) {
+func (m *ProcDefMutation) IsDel() (r int32, exists bool) {
 	v := m.is_del
 	if v == nil {
 		return
@@ -2999,7 +4042,7 @@ func (m *ProcDefMutation) IsDel() (r int8, exists bool) {
 // OldIsDel returns the old "is_del" field's value of the ProcDef entity.
 // If the ProcDef object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcDefMutation) OldIsDel(ctx context.Context) (v int8, err error) {
+func (m *ProcDefMutation) OldIsDel(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsDel is only allowed on UpdateOne operations")
 	}
@@ -3014,7 +4057,7 @@ func (m *ProcDefMutation) OldIsDel(ctx context.Context) (v int8, err error) {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (m *ProcDefMutation) AddIsDel(i int8) {
+func (m *ProcDefMutation) AddIsDel(i int32) {
 	if m.addis_del != nil {
 		*m.addis_del += i
 	} else {
@@ -3023,7 +4066,7 @@ func (m *ProcDefMutation) AddIsDel(i int8) {
 }
 
 // AddedIsDel returns the value that was added to the "is_del" field in this mutation.
-func (m *ProcDefMutation) AddedIsDel() (r int8, exists bool) {
+func (m *ProcDefMutation) AddedIsDel() (r int32, exists bool) {
 	v := m.addis_del
 	if v == nil {
 		return
@@ -3052,13 +4095,13 @@ func (m *ProcDefMutation) ResetIsDel() {
 }
 
 // SetIsActive sets the "is_active" field.
-func (m *ProcDefMutation) SetIsActive(i int8) {
+func (m *ProcDefMutation) SetIsActive(i int32) {
 	m.is_active = &i
 	m.addis_active = nil
 }
 
 // IsActive returns the value of the "is_active" field in the mutation.
-func (m *ProcDefMutation) IsActive() (r int8, exists bool) {
+func (m *ProcDefMutation) IsActive() (r int32, exists bool) {
 	v := m.is_active
 	if v == nil {
 		return
@@ -3069,7 +4112,7 @@ func (m *ProcDefMutation) IsActive() (r int8, exists bool) {
 // OldIsActive returns the old "is_active" field's value of the ProcDef entity.
 // If the ProcDef object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcDefMutation) OldIsActive(ctx context.Context) (v int8, err error) {
+func (m *ProcDefMutation) OldIsActive(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsActive is only allowed on UpdateOne operations")
 	}
@@ -3084,7 +4127,7 @@ func (m *ProcDefMutation) OldIsActive(ctx context.Context) (v int8, err error) {
 }
 
 // AddIsActive adds i to the "is_active" field.
-func (m *ProcDefMutation) AddIsActive(i int8) {
+func (m *ProcDefMutation) AddIsActive(i int32) {
 	if m.addis_active != nil {
 		*m.addis_active += i
 	} else {
@@ -3093,7 +4136,7 @@ func (m *ProcDefMutation) AddIsActive(i int8) {
 }
 
 // AddedIsActive returns the value that was added to the "is_active" field in this mutation.
-func (m *ProcDefMutation) AddedIsActive() (r int8, exists bool) {
+func (m *ProcDefMutation) AddedIsActive() (r int32, exists bool) {
 	v := m.addis_active
 	if v == nil {
 		return
@@ -3170,6 +4213,195 @@ func (m *ProcDefMutation) ResetUpdateTime() {
 	delete(m.clearedFields, procdef.FieldUpdateTime)
 }
 
+// SetDelTime sets the "del_time" field.
+func (m *ProcDefMutation) SetDelTime(t time.Time) {
+	m.del_time = &t
+}
+
+// DelTime returns the value of the "del_time" field in the mutation.
+func (m *ProcDefMutation) DelTime() (r time.Time, exists bool) {
+	v := m.del_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDelTime returns the old "del_time" field's value of the ProcDef entity.
+// If the ProcDef object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcDefMutation) OldDelTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDelTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDelTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDelTime: %w", err)
+	}
+	return oldValue.DelTime, nil
+}
+
+// ClearDelTime clears the value of the "del_time" field.
+func (m *ProcDefMutation) ClearDelTime() {
+	m.del_time = nil
+	m.clearedFields[procdef.FieldDelTime] = struct{}{}
+}
+
+// DelTimeCleared returns if the "del_time" field was cleared in this mutation.
+func (m *ProcDefMutation) DelTimeCleared() bool {
+	_, ok := m.clearedFields[procdef.FieldDelTime]
+	return ok
+}
+
+// ResetDelTime resets all changes to the "del_time" field.
+func (m *ProcDefMutation) ResetDelTime() {
+	m.del_time = nil
+	delete(m.clearedFields, procdef.FieldDelTime)
+}
+
+// SetDelUserID sets the "del_user_id" field.
+func (m *ProcDefMutation) SetDelUserID(i int64) {
+	m.del_user_id = &i
+	m.adddel_user_id = nil
+}
+
+// DelUserID returns the value of the "del_user_id" field in the mutation.
+func (m *ProcDefMutation) DelUserID() (r int64, exists bool) {
+	v := m.del_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDelUserID returns the old "del_user_id" field's value of the ProcDef entity.
+// If the ProcDef object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcDefMutation) OldDelUserID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDelUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDelUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDelUserID: %w", err)
+	}
+	return oldValue.DelUserID, nil
+}
+
+// AddDelUserID adds i to the "del_user_id" field.
+func (m *ProcDefMutation) AddDelUserID(i int64) {
+	if m.adddel_user_id != nil {
+		*m.adddel_user_id += i
+	} else {
+		m.adddel_user_id = &i
+	}
+}
+
+// AddedDelUserID returns the value that was added to the "del_user_id" field in this mutation.
+func (m *ProcDefMutation) AddedDelUserID() (r int64, exists bool) {
+	v := m.adddel_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDelUserID clears the value of the "del_user_id" field.
+func (m *ProcDefMutation) ClearDelUserID() {
+	m.del_user_id = nil
+	m.adddel_user_id = nil
+	m.clearedFields[procdef.FieldDelUserID] = struct{}{}
+}
+
+// DelUserIDCleared returns if the "del_user_id" field was cleared in this mutation.
+func (m *ProcDefMutation) DelUserIDCleared() bool {
+	_, ok := m.clearedFields[procdef.FieldDelUserID]
+	return ok
+}
+
+// ResetDelUserID resets all changes to the "del_user_id" field.
+func (m *ProcDefMutation) ResetDelUserID() {
+	m.del_user_id = nil
+	m.adddel_user_id = nil
+	delete(m.clearedFields, procdef.FieldDelUserID)
+}
+
+// SetUpdateUserID sets the "update_user_id" field.
+func (m *ProcDefMutation) SetUpdateUserID(i int64) {
+	m.update_user_id = &i
+	m.addupdate_user_id = nil
+}
+
+// UpdateUserID returns the value of the "update_user_id" field in the mutation.
+func (m *ProcDefMutation) UpdateUserID() (r int64, exists bool) {
+	v := m.update_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateUserID returns the old "update_user_id" field's value of the ProcDef entity.
+// If the ProcDef object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcDefMutation) OldUpdateUserID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateUserID: %w", err)
+	}
+	return oldValue.UpdateUserID, nil
+}
+
+// AddUpdateUserID adds i to the "update_user_id" field.
+func (m *ProcDefMutation) AddUpdateUserID(i int64) {
+	if m.addupdate_user_id != nil {
+		*m.addupdate_user_id += i
+	} else {
+		m.addupdate_user_id = &i
+	}
+}
+
+// AddedUpdateUserID returns the value that was added to the "update_user_id" field in this mutation.
+func (m *ProcDefMutation) AddedUpdateUserID() (r int64, exists bool) {
+	v := m.addupdate_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearUpdateUserID clears the value of the "update_user_id" field.
+func (m *ProcDefMutation) ClearUpdateUserID() {
+	m.update_user_id = nil
+	m.addupdate_user_id = nil
+	m.clearedFields[procdef.FieldUpdateUserID] = struct{}{}
+}
+
+// UpdateUserIDCleared returns if the "update_user_id" field was cleared in this mutation.
+func (m *ProcDefMutation) UpdateUserIDCleared() bool {
+	_, ok := m.clearedFields[procdef.FieldUpdateUserID]
+	return ok
+}
+
+// ResetUpdateUserID resets all changes to the "update_user_id" field.
+func (m *ProcDefMutation) ResetUpdateUserID() {
+	m.update_user_id = nil
+	m.addupdate_user_id = nil
+	delete(m.clearedFields, procdef.FieldUpdateUserID)
+}
+
 // Where appends a list predicates to the ProcDefMutation builder.
 func (m *ProcDefMutation) Where(ps ...predicate.ProcDef) {
 	m.predicates = append(m.predicates, ps...)
@@ -3189,7 +4421,7 @@ func (m *ProcDefMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProcDefMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 17)
 	if m.name != nil {
 		fields = append(fields, procdef.FieldName)
 	}
@@ -3232,6 +4464,15 @@ func (m *ProcDefMutation) Fields() []string {
 	if m.update_time != nil {
 		fields = append(fields, procdef.FieldUpdateTime)
 	}
+	if m.del_time != nil {
+		fields = append(fields, procdef.FieldDelTime)
+	}
+	if m.del_user_id != nil {
+		fields = append(fields, procdef.FieldDelUserID)
+	}
+	if m.update_user_id != nil {
+		fields = append(fields, procdef.FieldUpdateUserID)
+	}
 	return fields
 }
 
@@ -3268,6 +4509,12 @@ func (m *ProcDefMutation) Field(name string) (ent.Value, bool) {
 		return m.IsActive()
 	case procdef.FieldUpdateTime:
 		return m.UpdateTime()
+	case procdef.FieldDelTime:
+		return m.DelTime()
+	case procdef.FieldDelUserID:
+		return m.DelUserID()
+	case procdef.FieldUpdateUserID:
+		return m.UpdateUserID()
 	}
 	return nil, false
 }
@@ -3305,6 +4552,12 @@ func (m *ProcDefMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldIsActive(ctx)
 	case procdef.FieldUpdateTime:
 		return m.OldUpdateTime(ctx)
+	case procdef.FieldDelTime:
+		return m.OldDelTime(ctx)
+	case procdef.FieldDelUserID:
+		return m.OldDelUserID(ctx)
+	case procdef.FieldUpdateUserID:
+		return m.OldUpdateUserID(ctx)
 	}
 	return nil, fmt.Errorf("unknown ProcDef field %s", name)
 }
@@ -3392,14 +4645,14 @@ func (m *ProcDefMutation) SetField(name string, value ent.Value) error {
 		m.SetRemainHours(v)
 		return nil
 	case procdef.FieldIsDel:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIsDel(v)
 		return nil
 	case procdef.FieldIsActive:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3411,6 +4664,27 @@ func (m *ProcDefMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdateTime(v)
+		return nil
+	case procdef.FieldDelTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDelTime(v)
+		return nil
+	case procdef.FieldDelUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDelUserID(v)
+		return nil
+	case procdef.FieldUpdateUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateUserID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ProcDef field %s", name)
@@ -3438,6 +4712,12 @@ func (m *ProcDefMutation) AddedFields() []string {
 	if m.addis_active != nil {
 		fields = append(fields, procdef.FieldIsActive)
 	}
+	if m.adddel_user_id != nil {
+		fields = append(fields, procdef.FieldDelUserID)
+	}
+	if m.addupdate_user_id != nil {
+		fields = append(fields, procdef.FieldUpdateUserID)
+	}
 	return fields
 }
 
@@ -3458,6 +4738,10 @@ func (m *ProcDefMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedIsDel()
 	case procdef.FieldIsActive:
 		return m.AddedIsActive()
+	case procdef.FieldDelUserID:
+		return m.AddedDelUserID()
+	case procdef.FieldUpdateUserID:
+		return m.AddedUpdateUserID()
 	}
 	return nil, false
 }
@@ -3496,18 +4780,32 @@ func (m *ProcDefMutation) AddField(name string, value ent.Value) error {
 		m.AddRemainHours(v)
 		return nil
 	case procdef.FieldIsDel:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddIsDel(v)
 		return nil
 	case procdef.FieldIsActive:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddIsActive(v)
+		return nil
+	case procdef.FieldDelUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDelUserID(v)
+		return nil
+	case procdef.FieldUpdateUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdateUserID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ProcDef numeric field %s", name)
@@ -3555,6 +4853,15 @@ func (m *ProcDefMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(procdef.FieldUpdateTime) {
 		fields = append(fields, procdef.FieldUpdateTime)
+	}
+	if m.FieldCleared(procdef.FieldDelTime) {
+		fields = append(fields, procdef.FieldDelTime)
+	}
+	if m.FieldCleared(procdef.FieldDelUserID) {
+		fields = append(fields, procdef.FieldDelUserID)
+	}
+	if m.FieldCleared(procdef.FieldUpdateUserID) {
+		fields = append(fields, procdef.FieldUpdateUserID)
 	}
 	return fields
 }
@@ -3609,6 +4916,15 @@ func (m *ProcDefMutation) ClearField(name string) error {
 	case procdef.FieldUpdateTime:
 		m.ClearUpdateTime()
 		return nil
+	case procdef.FieldDelTime:
+		m.ClearDelTime()
+		return nil
+	case procdef.FieldDelUserID:
+		m.ClearDelUserID()
+		return nil
+	case procdef.FieldUpdateUserID:
+		m.ClearUpdateUserID()
+		return nil
 	}
 	return fmt.Errorf("unknown ProcDef nullable field %s", name)
 }
@@ -3658,6 +4974,15 @@ func (m *ProcDefMutation) ResetField(name string) error {
 		return nil
 	case procdef.FieldUpdateTime:
 		m.ResetUpdateTime()
+		return nil
+	case procdef.FieldDelTime:
+		m.ResetDelTime()
+		return nil
+	case procdef.FieldDelUserID:
+		m.ResetDelUserID()
+		return nil
+	case procdef.FieldUpdateUserID:
+		m.ResetUpdateUserID()
 		return nil
 	}
 	return fmt.Errorf("unknown ProcDef field %s", name)
@@ -3714,39 +5039,47 @@ func (m *ProcDefMutation) ResetEdge(name string) error {
 // ProcInstMutation represents an operation that mutates the ProcInst nodes in the graph.
 type ProcInstMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int64
-	proc_def_id      *int64
-	addproc_def_id   *int64
-	title            *string
-	code             *string
-	target_id        *int64
-	addtarget_id     *int64
-	node_id          *string
-	task_id          *int64
-	addtask_id       *int64
-	start_time       *time.Time
-	end_time         *time.Time
-	start_user_id    *int64
-	addstart_user_id *int64
-	start_user_name  *string
-	is_finished      *int8
-	addis_finished   *int8
-	state            *int32
-	addstate         *int32
-	data_id          *int64
-	adddata_id       *int64
-	is_del           *int8
-	addis_del        *int8
-	create_time      *time.Time
-	remain_hours     *int32
-	addremain_hours  *int32
-	update_time      *time.Time
-	clearedFields    map[string]struct{}
-	done             bool
-	oldValue         func(context.Context) (*ProcInst, error)
-	predicates       []predicate.ProcInst
+	op                Op
+	typ               string
+	id                *int64
+	proc_def_id       *int64
+	addproc_def_id    *int64
+	title             *string
+	code              *string
+	target_id         *int64
+	addtarget_id      *int64
+	node_id           *string
+	task_id           *int64
+	addtask_id        *int64
+	start_time        *time.Time
+	end_time          *time.Time
+	start_user_id     *int64
+	addstart_user_id  *int64
+	start_user_name   *string
+	is_finished       *int32
+	addis_finished    *int32
+	state             *int32
+	addstate          *int32
+	data_id           *int64
+	adddata_id        *int64
+	is_del            *int32
+	addis_del         *int32
+	create_time       *time.Time
+	remain_hours      *int32
+	addremain_hours   *int32
+	update_time       *time.Time
+	flow_type         *int32
+	addflow_type      *int32
+	remark            *string
+	del_time          *time.Time
+	del_user_id       *int64
+	adddel_user_id    *int64
+	update_user_id    *int64
+	addupdate_user_id *int64
+	clearedFields     map[string]struct{}
+	done              bool
+	oldValue          func(context.Context) (*ProcInst, error)
+	predicates        []predicate.ProcInst
 }
 
 var _ ent.Mutation = (*ProcInstMutation)(nil)
@@ -3817,6 +5150,12 @@ func (m ProcInstMutation) Tx() (*Tx, error) {
 	tx := &Tx{config: m.config}
 	tx.init()
 	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ProcInst entities.
+func (m *ProcInstMutation) SetID(id int64) {
+	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
@@ -4408,13 +5747,13 @@ func (m *ProcInstMutation) ResetStartUserName() {
 }
 
 // SetIsFinished sets the "is_finished" field.
-func (m *ProcInstMutation) SetIsFinished(i int8) {
+func (m *ProcInstMutation) SetIsFinished(i int32) {
 	m.is_finished = &i
 	m.addis_finished = nil
 }
 
 // IsFinished returns the value of the "is_finished" field in the mutation.
-func (m *ProcInstMutation) IsFinished() (r int8, exists bool) {
+func (m *ProcInstMutation) IsFinished() (r int32, exists bool) {
 	v := m.is_finished
 	if v == nil {
 		return
@@ -4425,7 +5764,7 @@ func (m *ProcInstMutation) IsFinished() (r int8, exists bool) {
 // OldIsFinished returns the old "is_finished" field's value of the ProcInst entity.
 // If the ProcInst object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcInstMutation) OldIsFinished(ctx context.Context) (v int8, err error) {
+func (m *ProcInstMutation) OldIsFinished(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsFinished is only allowed on UpdateOne operations")
 	}
@@ -4440,7 +5779,7 @@ func (m *ProcInstMutation) OldIsFinished(ctx context.Context) (v int8, err error
 }
 
 // AddIsFinished adds i to the "is_finished" field.
-func (m *ProcInstMutation) AddIsFinished(i int8) {
+func (m *ProcInstMutation) AddIsFinished(i int32) {
 	if m.addis_finished != nil {
 		*m.addis_finished += i
 	} else {
@@ -4449,7 +5788,7 @@ func (m *ProcInstMutation) AddIsFinished(i int8) {
 }
 
 // AddedIsFinished returns the value that was added to the "is_finished" field in this mutation.
-func (m *ProcInstMutation) AddedIsFinished() (r int8, exists bool) {
+func (m *ProcInstMutation) AddedIsFinished() (r int32, exists bool) {
 	v := m.addis_finished
 	if v == nil {
 		return
@@ -4618,13 +5957,13 @@ func (m *ProcInstMutation) ResetDataID() {
 }
 
 // SetIsDel sets the "is_del" field.
-func (m *ProcInstMutation) SetIsDel(i int8) {
+func (m *ProcInstMutation) SetIsDel(i int32) {
 	m.is_del = &i
 	m.addis_del = nil
 }
 
 // IsDel returns the value of the "is_del" field in the mutation.
-func (m *ProcInstMutation) IsDel() (r int8, exists bool) {
+func (m *ProcInstMutation) IsDel() (r int32, exists bool) {
 	v := m.is_del
 	if v == nil {
 		return
@@ -4635,7 +5974,7 @@ func (m *ProcInstMutation) IsDel() (r int8, exists bool) {
 // OldIsDel returns the old "is_del" field's value of the ProcInst entity.
 // If the ProcInst object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcInstMutation) OldIsDel(ctx context.Context) (v int8, err error) {
+func (m *ProcInstMutation) OldIsDel(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsDel is only allowed on UpdateOne operations")
 	}
@@ -4650,7 +5989,7 @@ func (m *ProcInstMutation) OldIsDel(ctx context.Context) (v int8, err error) {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (m *ProcInstMutation) AddIsDel(i int8) {
+func (m *ProcInstMutation) AddIsDel(i int32) {
 	if m.addis_del != nil {
 		*m.addis_del += i
 	} else {
@@ -4659,7 +5998,7 @@ func (m *ProcInstMutation) AddIsDel(i int8) {
 }
 
 // AddedIsDel returns the value that was added to the "is_del" field in this mutation.
-func (m *ProcInstMutation) AddedIsDel() (r int8, exists bool) {
+func (m *ProcInstMutation) AddedIsDel() (r int32, exists bool) {
 	v := m.addis_del
 	if v == nil {
 		return
@@ -4855,6 +6194,314 @@ func (m *ProcInstMutation) ResetUpdateTime() {
 	delete(m.clearedFields, procinst.FieldUpdateTime)
 }
 
+// SetFlowType sets the "flow_type" field.
+func (m *ProcInstMutation) SetFlowType(i int32) {
+	m.flow_type = &i
+	m.addflow_type = nil
+}
+
+// FlowType returns the value of the "flow_type" field in the mutation.
+func (m *ProcInstMutation) FlowType() (r int32, exists bool) {
+	v := m.flow_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFlowType returns the old "flow_type" field's value of the ProcInst entity.
+// If the ProcInst object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcInstMutation) OldFlowType(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFlowType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFlowType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFlowType: %w", err)
+	}
+	return oldValue.FlowType, nil
+}
+
+// AddFlowType adds i to the "flow_type" field.
+func (m *ProcInstMutation) AddFlowType(i int32) {
+	if m.addflow_type != nil {
+		*m.addflow_type += i
+	} else {
+		m.addflow_type = &i
+	}
+}
+
+// AddedFlowType returns the value that was added to the "flow_type" field in this mutation.
+func (m *ProcInstMutation) AddedFlowType() (r int32, exists bool) {
+	v := m.addflow_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearFlowType clears the value of the "flow_type" field.
+func (m *ProcInstMutation) ClearFlowType() {
+	m.flow_type = nil
+	m.addflow_type = nil
+	m.clearedFields[procinst.FieldFlowType] = struct{}{}
+}
+
+// FlowTypeCleared returns if the "flow_type" field was cleared in this mutation.
+func (m *ProcInstMutation) FlowTypeCleared() bool {
+	_, ok := m.clearedFields[procinst.FieldFlowType]
+	return ok
+}
+
+// ResetFlowType resets all changes to the "flow_type" field.
+func (m *ProcInstMutation) ResetFlowType() {
+	m.flow_type = nil
+	m.addflow_type = nil
+	delete(m.clearedFields, procinst.FieldFlowType)
+}
+
+// SetRemark sets the "remark" field.
+func (m *ProcInstMutation) SetRemark(s string) {
+	m.remark = &s
+}
+
+// Remark returns the value of the "remark" field in the mutation.
+func (m *ProcInstMutation) Remark() (r string, exists bool) {
+	v := m.remark
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRemark returns the old "remark" field's value of the ProcInst entity.
+// If the ProcInst object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcInstMutation) OldRemark(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRemark is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRemark requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRemark: %w", err)
+	}
+	return oldValue.Remark, nil
+}
+
+// ClearRemark clears the value of the "remark" field.
+func (m *ProcInstMutation) ClearRemark() {
+	m.remark = nil
+	m.clearedFields[procinst.FieldRemark] = struct{}{}
+}
+
+// RemarkCleared returns if the "remark" field was cleared in this mutation.
+func (m *ProcInstMutation) RemarkCleared() bool {
+	_, ok := m.clearedFields[procinst.FieldRemark]
+	return ok
+}
+
+// ResetRemark resets all changes to the "remark" field.
+func (m *ProcInstMutation) ResetRemark() {
+	m.remark = nil
+	delete(m.clearedFields, procinst.FieldRemark)
+}
+
+// SetDelTime sets the "del_time" field.
+func (m *ProcInstMutation) SetDelTime(t time.Time) {
+	m.del_time = &t
+}
+
+// DelTime returns the value of the "del_time" field in the mutation.
+func (m *ProcInstMutation) DelTime() (r time.Time, exists bool) {
+	v := m.del_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDelTime returns the old "del_time" field's value of the ProcInst entity.
+// If the ProcInst object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcInstMutation) OldDelTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDelTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDelTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDelTime: %w", err)
+	}
+	return oldValue.DelTime, nil
+}
+
+// ClearDelTime clears the value of the "del_time" field.
+func (m *ProcInstMutation) ClearDelTime() {
+	m.del_time = nil
+	m.clearedFields[procinst.FieldDelTime] = struct{}{}
+}
+
+// DelTimeCleared returns if the "del_time" field was cleared in this mutation.
+func (m *ProcInstMutation) DelTimeCleared() bool {
+	_, ok := m.clearedFields[procinst.FieldDelTime]
+	return ok
+}
+
+// ResetDelTime resets all changes to the "del_time" field.
+func (m *ProcInstMutation) ResetDelTime() {
+	m.del_time = nil
+	delete(m.clearedFields, procinst.FieldDelTime)
+}
+
+// SetDelUserID sets the "del_user_id" field.
+func (m *ProcInstMutation) SetDelUserID(i int64) {
+	m.del_user_id = &i
+	m.adddel_user_id = nil
+}
+
+// DelUserID returns the value of the "del_user_id" field in the mutation.
+func (m *ProcInstMutation) DelUserID() (r int64, exists bool) {
+	v := m.del_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDelUserID returns the old "del_user_id" field's value of the ProcInst entity.
+// If the ProcInst object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcInstMutation) OldDelUserID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDelUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDelUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDelUserID: %w", err)
+	}
+	return oldValue.DelUserID, nil
+}
+
+// AddDelUserID adds i to the "del_user_id" field.
+func (m *ProcInstMutation) AddDelUserID(i int64) {
+	if m.adddel_user_id != nil {
+		*m.adddel_user_id += i
+	} else {
+		m.adddel_user_id = &i
+	}
+}
+
+// AddedDelUserID returns the value that was added to the "del_user_id" field in this mutation.
+func (m *ProcInstMutation) AddedDelUserID() (r int64, exists bool) {
+	v := m.adddel_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDelUserID clears the value of the "del_user_id" field.
+func (m *ProcInstMutation) ClearDelUserID() {
+	m.del_user_id = nil
+	m.adddel_user_id = nil
+	m.clearedFields[procinst.FieldDelUserID] = struct{}{}
+}
+
+// DelUserIDCleared returns if the "del_user_id" field was cleared in this mutation.
+func (m *ProcInstMutation) DelUserIDCleared() bool {
+	_, ok := m.clearedFields[procinst.FieldDelUserID]
+	return ok
+}
+
+// ResetDelUserID resets all changes to the "del_user_id" field.
+func (m *ProcInstMutation) ResetDelUserID() {
+	m.del_user_id = nil
+	m.adddel_user_id = nil
+	delete(m.clearedFields, procinst.FieldDelUserID)
+}
+
+// SetUpdateUserID sets the "update_user_id" field.
+func (m *ProcInstMutation) SetUpdateUserID(i int64) {
+	m.update_user_id = &i
+	m.addupdate_user_id = nil
+}
+
+// UpdateUserID returns the value of the "update_user_id" field in the mutation.
+func (m *ProcInstMutation) UpdateUserID() (r int64, exists bool) {
+	v := m.update_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateUserID returns the old "update_user_id" field's value of the ProcInst entity.
+// If the ProcInst object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcInstMutation) OldUpdateUserID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateUserID: %w", err)
+	}
+	return oldValue.UpdateUserID, nil
+}
+
+// AddUpdateUserID adds i to the "update_user_id" field.
+func (m *ProcInstMutation) AddUpdateUserID(i int64) {
+	if m.addupdate_user_id != nil {
+		*m.addupdate_user_id += i
+	} else {
+		m.addupdate_user_id = &i
+	}
+}
+
+// AddedUpdateUserID returns the value that was added to the "update_user_id" field in this mutation.
+func (m *ProcInstMutation) AddedUpdateUserID() (r int64, exists bool) {
+	v := m.addupdate_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearUpdateUserID clears the value of the "update_user_id" field.
+func (m *ProcInstMutation) ClearUpdateUserID() {
+	m.update_user_id = nil
+	m.addupdate_user_id = nil
+	m.clearedFields[procinst.FieldUpdateUserID] = struct{}{}
+}
+
+// UpdateUserIDCleared returns if the "update_user_id" field was cleared in this mutation.
+func (m *ProcInstMutation) UpdateUserIDCleared() bool {
+	_, ok := m.clearedFields[procinst.FieldUpdateUserID]
+	return ok
+}
+
+// ResetUpdateUserID resets all changes to the "update_user_id" field.
+func (m *ProcInstMutation) ResetUpdateUserID() {
+	m.update_user_id = nil
+	m.addupdate_user_id = nil
+	delete(m.clearedFields, procinst.FieldUpdateUserID)
+}
+
 // Where appends a list predicates to the ProcInstMutation builder.
 func (m *ProcInstMutation) Where(ps ...predicate.ProcInst) {
 	m.predicates = append(m.predicates, ps...)
@@ -4874,7 +6521,7 @@ func (m *ProcInstMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProcInstMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 22)
 	if m.proc_def_id != nil {
 		fields = append(fields, procinst.FieldProcDefID)
 	}
@@ -4926,6 +6573,21 @@ func (m *ProcInstMutation) Fields() []string {
 	if m.update_time != nil {
 		fields = append(fields, procinst.FieldUpdateTime)
 	}
+	if m.flow_type != nil {
+		fields = append(fields, procinst.FieldFlowType)
+	}
+	if m.remark != nil {
+		fields = append(fields, procinst.FieldRemark)
+	}
+	if m.del_time != nil {
+		fields = append(fields, procinst.FieldDelTime)
+	}
+	if m.del_user_id != nil {
+		fields = append(fields, procinst.FieldDelUserID)
+	}
+	if m.update_user_id != nil {
+		fields = append(fields, procinst.FieldUpdateUserID)
+	}
 	return fields
 }
 
@@ -4968,6 +6630,16 @@ func (m *ProcInstMutation) Field(name string) (ent.Value, bool) {
 		return m.RemainHours()
 	case procinst.FieldUpdateTime:
 		return m.UpdateTime()
+	case procinst.FieldFlowType:
+		return m.FlowType()
+	case procinst.FieldRemark:
+		return m.Remark()
+	case procinst.FieldDelTime:
+		return m.DelTime()
+	case procinst.FieldDelUserID:
+		return m.DelUserID()
+	case procinst.FieldUpdateUserID:
+		return m.UpdateUserID()
 	}
 	return nil, false
 }
@@ -5011,6 +6683,16 @@ func (m *ProcInstMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldRemainHours(ctx)
 	case procinst.FieldUpdateTime:
 		return m.OldUpdateTime(ctx)
+	case procinst.FieldFlowType:
+		return m.OldFlowType(ctx)
+	case procinst.FieldRemark:
+		return m.OldRemark(ctx)
+	case procinst.FieldDelTime:
+		return m.OldDelTime(ctx)
+	case procinst.FieldDelUserID:
+		return m.OldDelUserID(ctx)
+	case procinst.FieldUpdateUserID:
+		return m.OldUpdateUserID(ctx)
 	}
 	return nil, fmt.Errorf("unknown ProcInst field %s", name)
 }
@@ -5091,7 +6773,7 @@ func (m *ProcInstMutation) SetField(name string, value ent.Value) error {
 		m.SetStartUserName(v)
 		return nil
 	case procinst.FieldIsFinished:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5112,7 +6794,7 @@ func (m *ProcInstMutation) SetField(name string, value ent.Value) error {
 		m.SetDataID(v)
 		return nil
 	case procinst.FieldIsDel:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5138,6 +6820,41 @@ func (m *ProcInstMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdateTime(v)
+		return nil
+	case procinst.FieldFlowType:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFlowType(v)
+		return nil
+	case procinst.FieldRemark:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRemark(v)
+		return nil
+	case procinst.FieldDelTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDelTime(v)
+		return nil
+	case procinst.FieldDelUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDelUserID(v)
+		return nil
+	case procinst.FieldUpdateUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateUserID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ProcInst field %s", name)
@@ -5174,6 +6891,15 @@ func (m *ProcInstMutation) AddedFields() []string {
 	if m.addremain_hours != nil {
 		fields = append(fields, procinst.FieldRemainHours)
 	}
+	if m.addflow_type != nil {
+		fields = append(fields, procinst.FieldFlowType)
+	}
+	if m.adddel_user_id != nil {
+		fields = append(fields, procinst.FieldDelUserID)
+	}
+	if m.addupdate_user_id != nil {
+		fields = append(fields, procinst.FieldUpdateUserID)
+	}
 	return fields
 }
 
@@ -5200,6 +6926,12 @@ func (m *ProcInstMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedIsDel()
 	case procinst.FieldRemainHours:
 		return m.AddedRemainHours()
+	case procinst.FieldFlowType:
+		return m.AddedFlowType()
+	case procinst.FieldDelUserID:
+		return m.AddedDelUserID()
+	case procinst.FieldUpdateUserID:
+		return m.AddedUpdateUserID()
 	}
 	return nil, false
 }
@@ -5238,7 +6970,7 @@ func (m *ProcInstMutation) AddField(name string, value ent.Value) error {
 		m.AddStartUserID(v)
 		return nil
 	case procinst.FieldIsFinished:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5259,7 +6991,7 @@ func (m *ProcInstMutation) AddField(name string, value ent.Value) error {
 		m.AddDataID(v)
 		return nil
 	case procinst.FieldIsDel:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5271,6 +7003,27 @@ func (m *ProcInstMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddRemainHours(v)
+		return nil
+	case procinst.FieldFlowType:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFlowType(v)
+		return nil
+	case procinst.FieldDelUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDelUserID(v)
+		return nil
+	case procinst.FieldUpdateUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdateUserID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ProcInst numeric field %s", name)
@@ -5327,6 +7080,21 @@ func (m *ProcInstMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(procinst.FieldUpdateTime) {
 		fields = append(fields, procinst.FieldUpdateTime)
+	}
+	if m.FieldCleared(procinst.FieldFlowType) {
+		fields = append(fields, procinst.FieldFlowType)
+	}
+	if m.FieldCleared(procinst.FieldRemark) {
+		fields = append(fields, procinst.FieldRemark)
+	}
+	if m.FieldCleared(procinst.FieldDelTime) {
+		fields = append(fields, procinst.FieldDelTime)
+	}
+	if m.FieldCleared(procinst.FieldDelUserID) {
+		fields = append(fields, procinst.FieldDelUserID)
+	}
+	if m.FieldCleared(procinst.FieldUpdateUserID) {
+		fields = append(fields, procinst.FieldUpdateUserID)
 	}
 	return fields
 }
@@ -5390,6 +7158,21 @@ func (m *ProcInstMutation) ClearField(name string) error {
 	case procinst.FieldUpdateTime:
 		m.ClearUpdateTime()
 		return nil
+	case procinst.FieldFlowType:
+		m.ClearFlowType()
+		return nil
+	case procinst.FieldRemark:
+		m.ClearRemark()
+		return nil
+	case procinst.FieldDelTime:
+		m.ClearDelTime()
+		return nil
+	case procinst.FieldDelUserID:
+		m.ClearDelUserID()
+		return nil
+	case procinst.FieldUpdateUserID:
+		m.ClearUpdateUserID()
+		return nil
 	}
 	return fmt.Errorf("unknown ProcInst nullable field %s", name)
 }
@@ -5448,6 +7231,21 @@ func (m *ProcInstMutation) ResetField(name string) error {
 		return nil
 	case procinst.FieldUpdateTime:
 		m.ResetUpdateTime()
+		return nil
+	case procinst.FieldFlowType:
+		m.ResetFlowType()
+		return nil
+	case procinst.FieldRemark:
+		m.ResetRemark()
+		return nil
+	case procinst.FieldDelTime:
+		m.ResetDelTime()
+		return nil
+	case procinst.FieldDelUserID:
+		m.ResetDelUserID()
+		return nil
+	case procinst.FieldUpdateUserID:
+		m.ResetUpdateUserID()
 		return nil
 	}
 	return fmt.Errorf("unknown ProcInst field %s", name)
@@ -5518,13 +7316,11 @@ type TaskMutation struct {
 	claim_time      *time.Time
 	member_approver *string
 	agree_approver  *string
-	is_finished     *int8
-	addis_finished  *int8
-	mode            *task.Mode
-	data_id         *int64
-	adddata_id      *int64
-	is_del          *int8
-	addis_del       *int8
+	is_finished     *int32
+	addis_finished  *int32
+	mode            *string
+	is_del          *int32
+	addis_del       *int32
 	update_time     *time.Time
 	clearedFields   map[string]struct{}
 	done            bool
@@ -5600,6 +7396,12 @@ func (m TaskMutation) Tx() (*Tx, error) {
 	tx := &Tx{config: m.config}
 	tx.init()
 	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Task entities.
+func (m *TaskMutation) SetID(id int64) {
+	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
@@ -6072,13 +7874,13 @@ func (m *TaskMutation) ResetAgreeApprover() {
 }
 
 // SetIsFinished sets the "is_finished" field.
-func (m *TaskMutation) SetIsFinished(i int8) {
+func (m *TaskMutation) SetIsFinished(i int32) {
 	m.is_finished = &i
 	m.addis_finished = nil
 }
 
 // IsFinished returns the value of the "is_finished" field in the mutation.
-func (m *TaskMutation) IsFinished() (r int8, exists bool) {
+func (m *TaskMutation) IsFinished() (r int32, exists bool) {
 	v := m.is_finished
 	if v == nil {
 		return
@@ -6089,7 +7891,7 @@ func (m *TaskMutation) IsFinished() (r int8, exists bool) {
 // OldIsFinished returns the old "is_finished" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldIsFinished(ctx context.Context) (v int8, err error) {
+func (m *TaskMutation) OldIsFinished(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsFinished is only allowed on UpdateOne operations")
 	}
@@ -6104,7 +7906,7 @@ func (m *TaskMutation) OldIsFinished(ctx context.Context) (v int8, err error) {
 }
 
 // AddIsFinished adds i to the "is_finished" field.
-func (m *TaskMutation) AddIsFinished(i int8) {
+func (m *TaskMutation) AddIsFinished(i int32) {
 	if m.addis_finished != nil {
 		*m.addis_finished += i
 	} else {
@@ -6113,7 +7915,7 @@ func (m *TaskMutation) AddIsFinished(i int8) {
 }
 
 // AddedIsFinished returns the value that was added to the "is_finished" field in this mutation.
-func (m *TaskMutation) AddedIsFinished() (r int8, exists bool) {
+func (m *TaskMutation) AddedIsFinished() (r int32, exists bool) {
 	v := m.addis_finished
 	if v == nil {
 		return
@@ -6142,12 +7944,12 @@ func (m *TaskMutation) ResetIsFinished() {
 }
 
 // SetMode sets the "mode" field.
-func (m *TaskMutation) SetMode(t task.Mode) {
-	m.mode = &t
+func (m *TaskMutation) SetMode(s string) {
+	m.mode = &s
 }
 
 // Mode returns the value of the "mode" field in the mutation.
-func (m *TaskMutation) Mode() (r task.Mode, exists bool) {
+func (m *TaskMutation) Mode() (r string, exists bool) {
 	v := m.mode
 	if v == nil {
 		return
@@ -6158,7 +7960,7 @@ func (m *TaskMutation) Mode() (r task.Mode, exists bool) {
 // OldMode returns the old "mode" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldMode(ctx context.Context) (v task.Mode, err error) {
+func (m *TaskMutation) OldMode(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldMode is only allowed on UpdateOne operations")
 	}
@@ -6190,84 +7992,14 @@ func (m *TaskMutation) ResetMode() {
 	delete(m.clearedFields, task.FieldMode)
 }
 
-// SetDataID sets the "data_id" field.
-func (m *TaskMutation) SetDataID(i int64) {
-	m.data_id = &i
-	m.adddata_id = nil
-}
-
-// DataID returns the value of the "data_id" field in the mutation.
-func (m *TaskMutation) DataID() (r int64, exists bool) {
-	v := m.data_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDataID returns the old "data_id" field's value of the Task entity.
-// If the Task object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldDataID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDataID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDataID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDataID: %w", err)
-	}
-	return oldValue.DataID, nil
-}
-
-// AddDataID adds i to the "data_id" field.
-func (m *TaskMutation) AddDataID(i int64) {
-	if m.adddata_id != nil {
-		*m.adddata_id += i
-	} else {
-		m.adddata_id = &i
-	}
-}
-
-// AddedDataID returns the value that was added to the "data_id" field in this mutation.
-func (m *TaskMutation) AddedDataID() (r int64, exists bool) {
-	v := m.adddata_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearDataID clears the value of the "data_id" field.
-func (m *TaskMutation) ClearDataID() {
-	m.data_id = nil
-	m.adddata_id = nil
-	m.clearedFields[task.FieldDataID] = struct{}{}
-}
-
-// DataIDCleared returns if the "data_id" field was cleared in this mutation.
-func (m *TaskMutation) DataIDCleared() bool {
-	_, ok := m.clearedFields[task.FieldDataID]
-	return ok
-}
-
-// ResetDataID resets all changes to the "data_id" field.
-func (m *TaskMutation) ResetDataID() {
-	m.data_id = nil
-	m.adddata_id = nil
-	delete(m.clearedFields, task.FieldDataID)
-}
-
 // SetIsDel sets the "is_del" field.
-func (m *TaskMutation) SetIsDel(i int8) {
+func (m *TaskMutation) SetIsDel(i int32) {
 	m.is_del = &i
 	m.addis_del = nil
 }
 
 // IsDel returns the value of the "is_del" field in the mutation.
-func (m *TaskMutation) IsDel() (r int8, exists bool) {
+func (m *TaskMutation) IsDel() (r int32, exists bool) {
 	v := m.is_del
 	if v == nil {
 		return
@@ -6278,7 +8010,7 @@ func (m *TaskMutation) IsDel() (r int8, exists bool) {
 // OldIsDel returns the old "is_del" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldIsDel(ctx context.Context) (v int8, err error) {
+func (m *TaskMutation) OldIsDel(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsDel is only allowed on UpdateOne operations")
 	}
@@ -6293,7 +8025,7 @@ func (m *TaskMutation) OldIsDel(ctx context.Context) (v int8, err error) {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (m *TaskMutation) AddIsDel(i int8) {
+func (m *TaskMutation) AddIsDel(i int32) {
 	if m.addis_del != nil {
 		*m.addis_del += i
 	} else {
@@ -6302,7 +8034,7 @@ func (m *TaskMutation) AddIsDel(i int8) {
 }
 
 // AddedIsDel returns the value that was added to the "is_del" field in this mutation.
-func (m *TaskMutation) AddedIsDel() (r int8, exists bool) {
+func (m *TaskMutation) AddedIsDel() (r int32, exists bool) {
 	v := m.addis_del
 	if v == nil {
 		return
@@ -6398,7 +8130,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 12)
 	if m.node_id != nil {
 		fields = append(fields, task.FieldNodeID)
 	}
@@ -6428,9 +8160,6 @@ func (m *TaskMutation) Fields() []string {
 	}
 	if m.mode != nil {
 		fields = append(fields, task.FieldMode)
-	}
-	if m.data_id != nil {
-		fields = append(fields, task.FieldDataID)
 	}
 	if m.is_del != nil {
 		fields = append(fields, task.FieldIsDel)
@@ -6466,8 +8195,6 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.IsFinished()
 	case task.FieldMode:
 		return m.Mode()
-	case task.FieldDataID:
-		return m.DataID()
 	case task.FieldIsDel:
 		return m.IsDel()
 	case task.FieldUpdateTime:
@@ -6501,8 +8228,6 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldIsFinished(ctx)
 	case task.FieldMode:
 		return m.OldMode(ctx)
-	case task.FieldDataID:
-		return m.OldDataID(ctx)
 	case task.FieldIsDel:
 		return m.OldIsDel(ctx)
 	case task.FieldUpdateTime:
@@ -6573,28 +8298,21 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		m.SetAgreeApprover(v)
 		return nil
 	case task.FieldIsFinished:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIsFinished(v)
 		return nil
 	case task.FieldMode:
-		v, ok := value.(task.Mode)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetMode(v)
 		return nil
-	case task.FieldDataID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDataID(v)
-		return nil
 	case task.FieldIsDel:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -6627,9 +8345,6 @@ func (m *TaskMutation) AddedFields() []string {
 	if m.addis_finished != nil {
 		fields = append(fields, task.FieldIsFinished)
 	}
-	if m.adddata_id != nil {
-		fields = append(fields, task.FieldDataID)
-	}
 	if m.addis_del != nil {
 		fields = append(fields, task.FieldIsDel)
 	}
@@ -6649,8 +8364,6 @@ func (m *TaskMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedProcInstID()
 	case task.FieldIsFinished:
 		return m.AddedIsFinished()
-	case task.FieldDataID:
-		return m.AddedDataID()
 	case task.FieldIsDel:
 		return m.AddedIsDel()
 	}
@@ -6684,21 +8397,14 @@ func (m *TaskMutation) AddField(name string, value ent.Value) error {
 		m.AddProcInstID(v)
 		return nil
 	case task.FieldIsFinished:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddIsFinished(v)
 		return nil
-	case task.FieldDataID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddDataID(v)
-		return nil
 	case task.FieldIsDel:
-		v, ok := value.(int8)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -6738,9 +8444,6 @@ func (m *TaskMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(task.FieldMode) {
 		fields = append(fields, task.FieldMode)
-	}
-	if m.FieldCleared(task.FieldDataID) {
-		fields = append(fields, task.FieldDataID)
 	}
 	if m.FieldCleared(task.FieldIsDel) {
 		fields = append(fields, task.FieldIsDel)
@@ -6789,9 +8492,6 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldMode:
 		m.ClearMode()
 		return nil
-	case task.FieldDataID:
-		m.ClearDataID()
-		return nil
 	case task.FieldIsDel:
 		m.ClearIsDel()
 		return nil
@@ -6835,9 +8535,6 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldMode:
 		m.ResetMode()
-		return nil
-	case task.FieldDataID:
-		m.ResetDataID()
 		return nil
 	case task.FieldIsDel:
 		m.ResetIsDel()

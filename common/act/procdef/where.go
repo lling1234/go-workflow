@@ -158,14 +158,14 @@ func RemainHours(v int32) predicate.ProcDef {
 }
 
 // IsDel applies equality check predicate on the "is_del" field. It's identical to IsDelEQ.
-func IsDel(v int8) predicate.ProcDef {
+func IsDel(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsActive applies equality check predicate on the "is_active" field. It's identical to IsActiveEQ.
-func IsActive(v int8) predicate.ProcDef {
+func IsActive(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsActive), v))
 	})
@@ -175,6 +175,27 @@ func IsActive(v int8) predicate.ProcDef {
 func UpdateTime(v time.Time) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldUpdateTime), v))
+	})
+}
+
+// DelTime applies equality check predicate on the "del_time" field. It's identical to DelTimeEQ.
+func DelTime(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDelTime), v))
+	})
+}
+
+// DelUserID applies equality check predicate on the "del_user_id" field. It's identical to DelUserIDEQ.
+func DelUserID(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDelUserID), v))
+	})
+}
+
+// UpdateUserID applies equality check predicate on the "update_user_id" field. It's identical to UpdateUserIDEQ.
+func UpdateUserID(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdateUserID), v))
 	})
 }
 
@@ -1233,21 +1254,21 @@ func RemainHoursNotNil() predicate.ProcDef {
 }
 
 // IsDelEQ applies the EQ predicate on the "is_del" field.
-func IsDelEQ(v int8) predicate.ProcDef {
+func IsDelEQ(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelNEQ applies the NEQ predicate on the "is_del" field.
-func IsDelNEQ(v int8) predicate.ProcDef {
+func IsDelNEQ(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelIn applies the In predicate on the "is_del" field.
-func IsDelIn(vs ...int8) predicate.ProcDef {
+func IsDelIn(vs ...int32) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1258,7 +1279,7 @@ func IsDelIn(vs ...int8) predicate.ProcDef {
 }
 
 // IsDelNotIn applies the NotIn predicate on the "is_del" field.
-func IsDelNotIn(vs ...int8) predicate.ProcDef {
+func IsDelNotIn(vs ...int32) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1269,28 +1290,28 @@ func IsDelNotIn(vs ...int8) predicate.ProcDef {
 }
 
 // IsDelGT applies the GT predicate on the "is_del" field.
-func IsDelGT(v int8) predicate.ProcDef {
+func IsDelGT(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelGTE applies the GTE predicate on the "is_del" field.
-func IsDelGTE(v int8) predicate.ProcDef {
+func IsDelGTE(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelLT applies the LT predicate on the "is_del" field.
-func IsDelLT(v int8) predicate.ProcDef {
+func IsDelLT(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelLTE applies the LTE predicate on the "is_del" field.
-func IsDelLTE(v int8) predicate.ProcDef {
+func IsDelLTE(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldIsDel), v))
 	})
@@ -1311,21 +1332,21 @@ func IsDelNotNil() predicate.ProcDef {
 }
 
 // IsActiveEQ applies the EQ predicate on the "is_active" field.
-func IsActiveEQ(v int8) predicate.ProcDef {
+func IsActiveEQ(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsActive), v))
 	})
 }
 
 // IsActiveNEQ applies the NEQ predicate on the "is_active" field.
-func IsActiveNEQ(v int8) predicate.ProcDef {
+func IsActiveNEQ(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldIsActive), v))
 	})
 }
 
 // IsActiveIn applies the In predicate on the "is_active" field.
-func IsActiveIn(vs ...int8) predicate.ProcDef {
+func IsActiveIn(vs ...int32) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1336,7 +1357,7 @@ func IsActiveIn(vs ...int8) predicate.ProcDef {
 }
 
 // IsActiveNotIn applies the NotIn predicate on the "is_active" field.
-func IsActiveNotIn(vs ...int8) predicate.ProcDef {
+func IsActiveNotIn(vs ...int32) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1347,28 +1368,28 @@ func IsActiveNotIn(vs ...int8) predicate.ProcDef {
 }
 
 // IsActiveGT applies the GT predicate on the "is_active" field.
-func IsActiveGT(v int8) predicate.ProcDef {
+func IsActiveGT(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldIsActive), v))
 	})
 }
 
 // IsActiveGTE applies the GTE predicate on the "is_active" field.
-func IsActiveGTE(v int8) predicate.ProcDef {
+func IsActiveGTE(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldIsActive), v))
 	})
 }
 
 // IsActiveLT applies the LT predicate on the "is_active" field.
-func IsActiveLT(v int8) predicate.ProcDef {
+func IsActiveLT(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldIsActive), v))
 	})
 }
 
 // IsActiveLTE applies the LTE predicate on the "is_active" field.
-func IsActiveLTE(v int8) predicate.ProcDef {
+func IsActiveLTE(v int32) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldIsActive), v))
 	})
@@ -1463,6 +1484,240 @@ func UpdateTimeIsNil() predicate.ProcDef {
 func UpdateTimeNotNil() predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldUpdateTime)))
+	})
+}
+
+// DelTimeEQ applies the EQ predicate on the "del_time" field.
+func DelTimeEQ(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDelTime), v))
+	})
+}
+
+// DelTimeNEQ applies the NEQ predicate on the "del_time" field.
+func DelTimeNEQ(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldDelTime), v))
+	})
+}
+
+// DelTimeIn applies the In predicate on the "del_time" field.
+func DelTimeIn(vs ...time.Time) predicate.ProcDef {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldDelTime), v...))
+	})
+}
+
+// DelTimeNotIn applies the NotIn predicate on the "del_time" field.
+func DelTimeNotIn(vs ...time.Time) predicate.ProcDef {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldDelTime), v...))
+	})
+}
+
+// DelTimeGT applies the GT predicate on the "del_time" field.
+func DelTimeGT(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldDelTime), v))
+	})
+}
+
+// DelTimeGTE applies the GTE predicate on the "del_time" field.
+func DelTimeGTE(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldDelTime), v))
+	})
+}
+
+// DelTimeLT applies the LT predicate on the "del_time" field.
+func DelTimeLT(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldDelTime), v))
+	})
+}
+
+// DelTimeLTE applies the LTE predicate on the "del_time" field.
+func DelTimeLTE(v time.Time) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldDelTime), v))
+	})
+}
+
+// DelTimeIsNil applies the IsNil predicate on the "del_time" field.
+func DelTimeIsNil() predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldDelTime)))
+	})
+}
+
+// DelTimeNotNil applies the NotNil predicate on the "del_time" field.
+func DelTimeNotNil() predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldDelTime)))
+	})
+}
+
+// DelUserIDEQ applies the EQ predicate on the "del_user_id" field.
+func DelUserIDEQ(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDelUserID), v))
+	})
+}
+
+// DelUserIDNEQ applies the NEQ predicate on the "del_user_id" field.
+func DelUserIDNEQ(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldDelUserID), v))
+	})
+}
+
+// DelUserIDIn applies the In predicate on the "del_user_id" field.
+func DelUserIDIn(vs ...int64) predicate.ProcDef {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldDelUserID), v...))
+	})
+}
+
+// DelUserIDNotIn applies the NotIn predicate on the "del_user_id" field.
+func DelUserIDNotIn(vs ...int64) predicate.ProcDef {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldDelUserID), v...))
+	})
+}
+
+// DelUserIDGT applies the GT predicate on the "del_user_id" field.
+func DelUserIDGT(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldDelUserID), v))
+	})
+}
+
+// DelUserIDGTE applies the GTE predicate on the "del_user_id" field.
+func DelUserIDGTE(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldDelUserID), v))
+	})
+}
+
+// DelUserIDLT applies the LT predicate on the "del_user_id" field.
+func DelUserIDLT(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldDelUserID), v))
+	})
+}
+
+// DelUserIDLTE applies the LTE predicate on the "del_user_id" field.
+func DelUserIDLTE(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldDelUserID), v))
+	})
+}
+
+// DelUserIDIsNil applies the IsNil predicate on the "del_user_id" field.
+func DelUserIDIsNil() predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldDelUserID)))
+	})
+}
+
+// DelUserIDNotNil applies the NotNil predicate on the "del_user_id" field.
+func DelUserIDNotNil() predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldDelUserID)))
+	})
+}
+
+// UpdateUserIDEQ applies the EQ predicate on the "update_user_id" field.
+func UpdateUserIDEQ(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdateUserID), v))
+	})
+}
+
+// UpdateUserIDNEQ applies the NEQ predicate on the "update_user_id" field.
+func UpdateUserIDNEQ(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldUpdateUserID), v))
+	})
+}
+
+// UpdateUserIDIn applies the In predicate on the "update_user_id" field.
+func UpdateUserIDIn(vs ...int64) predicate.ProcDef {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldUpdateUserID), v...))
+	})
+}
+
+// UpdateUserIDNotIn applies the NotIn predicate on the "update_user_id" field.
+func UpdateUserIDNotIn(vs ...int64) predicate.ProcDef {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldUpdateUserID), v...))
+	})
+}
+
+// UpdateUserIDGT applies the GT predicate on the "update_user_id" field.
+func UpdateUserIDGT(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldUpdateUserID), v))
+	})
+}
+
+// UpdateUserIDGTE applies the GTE predicate on the "update_user_id" field.
+func UpdateUserIDGTE(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldUpdateUserID), v))
+	})
+}
+
+// UpdateUserIDLT applies the LT predicate on the "update_user_id" field.
+func UpdateUserIDLT(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldUpdateUserID), v))
+	})
+}
+
+// UpdateUserIDLTE applies the LTE predicate on the "update_user_id" field.
+func UpdateUserIDLTE(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldUpdateUserID), v))
+	})
+}
+
+// UpdateUserIDIsNil applies the IsNil predicate on the "update_user_id" field.
+func UpdateUserIDIsNil() predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldUpdateUserID)))
+	})
+}
+
+// UpdateUserIDNotNil applies the NotNil predicate on the "update_user_id" field.
+func UpdateUserIDNotNil() predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldUpdateUserID)))
 	})
 }
 

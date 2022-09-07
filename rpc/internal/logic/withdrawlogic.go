@@ -39,9 +39,8 @@ func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// TODO StartUserID=11025 StartUserName=xiaoming
-	var userid int64 = 11025
+	// TODO userid=101
+	var userid int64 = 101
 	//1、"待处理", 2、"处理中", 3、 "驳回", 4、"已撤回" ,5、 "未通过",6、 "已通过", 7、"废弃"
 	//流程状态为 1、"待处理", 2、"处理中", 3、 "驳回" 才可以被撤回
 	if userid == procinstInfo.StartUserID && procinstInfo.State < constant.WITHDRAW {
@@ -56,13 +55,9 @@ func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
 		return &act.Nil{}, errors.New("人员未找到！")
 	}
 	err = tx.Commit()
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
 	// 3.UserID和create_user_id比较不相等返回，无权限撤回
 
 	// 4.UserID和create_user_id比较相等,将流程实例表state=4,isFinish=1,endTime=now,updateTime=now
 
-	return &act.Nil{}, nil
+	return &act.Nil{}, err
 }

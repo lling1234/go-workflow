@@ -54,7 +54,6 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 	task := actclient.TaskReq{
 		NodeId:     "开始",
 		ProcInstId: inst.Id,
-		DataId:     req.DataId,
 		Level:      STEP,
 		IsFinished: 1,
 		Step:       STEP,
@@ -86,9 +85,9 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 	util.Str2Struct(exec.NodeInfos, &nodeInfos)
 	// -----------------生成新任务-------------
 	firstNode := nodeInfos[1]
-	if firstNode.Mode == "AND" {
-		//task.MemberCount = int32(firstNode.MemberCount)
-	}
+	//if firstNode.Mode == "AND" {
+	//task.MemberCount = int32(firstNode.MemberCount)
+	//}
 	task.NodeId = firstNode.NodeID
 	STEP = 2
 	//task.AgreeNum = 0

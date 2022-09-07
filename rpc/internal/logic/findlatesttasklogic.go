@@ -3,10 +3,10 @@ package logic
 import (
 	act2 "act/common/act"
 	"act/common/act/task"
+	"context"
 
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
-	"context"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,7 +26,6 @@ func NewFindLatestTaskLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Fi
 }
 
 func (l *FindLatestTaskLogic) FindLatestTask(in *act.ProcInstIdArg) (*act.TaskReply, error) {
-
 	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
 	if err != nil {
 		return nil, err
@@ -39,10 +38,12 @@ func (l *FindLatestTaskLogic) FindLatestTask(in *act.ProcInstIdArg) (*act.TaskRe
 	}
 
 	return &act.TaskReply{
-		Id:         t.ID,
-		Step:       t.Step,
-		Level:      t.Step,
-		Mode:       string(t.Mode),
-		ProcInstId: t.ProcInstID,
+		Id:             t.ID,
+		Step:           t.Step,
+		Level:          t.Step,
+		Mode:           string(t.Mode),
+		ProcInstId:     t.ProcInstID,
+		MemberApprover: t.MemberApprover,
+		AgreeApprover:  t.AgreeApprover,
 	}, nil
 }

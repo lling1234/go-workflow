@@ -109,7 +109,7 @@ func StartTime(v time.Time) predicate.Execution {
 }
 
 // IsDel applies equality check predicate on the "is_del" field. It's identical to IsDelEQ.
-func IsDel(v int8) predicate.Execution {
+func IsDel(v int32) predicate.Execution {
 	return predicate.Execution(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDel), v))
 	})
@@ -449,21 +449,21 @@ func StartTimeNotNil() predicate.Execution {
 }
 
 // IsDelEQ applies the EQ predicate on the "is_del" field.
-func IsDelEQ(v int8) predicate.Execution {
+func IsDelEQ(v int32) predicate.Execution {
 	return predicate.Execution(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelNEQ applies the NEQ predicate on the "is_del" field.
-func IsDelNEQ(v int8) predicate.Execution {
+func IsDelNEQ(v int32) predicate.Execution {
 	return predicate.Execution(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelIn applies the In predicate on the "is_del" field.
-func IsDelIn(vs ...int8) predicate.Execution {
+func IsDelIn(vs ...int32) predicate.Execution {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -474,7 +474,7 @@ func IsDelIn(vs ...int8) predicate.Execution {
 }
 
 // IsDelNotIn applies the NotIn predicate on the "is_del" field.
-func IsDelNotIn(vs ...int8) predicate.Execution {
+func IsDelNotIn(vs ...int32) predicate.Execution {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -485,28 +485,28 @@ func IsDelNotIn(vs ...int8) predicate.Execution {
 }
 
 // IsDelGT applies the GT predicate on the "is_del" field.
-func IsDelGT(v int8) predicate.Execution {
+func IsDelGT(v int32) predicate.Execution {
 	return predicate.Execution(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelGTE applies the GTE predicate on the "is_del" field.
-func IsDelGTE(v int8) predicate.Execution {
+func IsDelGTE(v int32) predicate.Execution {
 	return predicate.Execution(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelLT applies the LT predicate on the "is_del" field.
-func IsDelLT(v int8) predicate.Execution {
+func IsDelLT(v int32) predicate.Execution {
 	return predicate.Execution(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelLTE applies the LTE predicate on the "is_del" field.
-func IsDelLTE(v int8) predicate.Execution {
+func IsDelLTE(v int32) predicate.Execution {
 	return predicate.Execution(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldIsDel), v))
 	})

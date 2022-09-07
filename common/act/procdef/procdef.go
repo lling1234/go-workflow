@@ -39,6 +39,12 @@ const (
 	FieldIsActive = "is_active"
 	// FieldUpdateTime holds the string denoting the update_time field in the database.
 	FieldUpdateTime = "update_time"
+	// FieldDelTime holds the string denoting the del_time field in the database.
+	FieldDelTime = "del_time"
+	// FieldDelUserID holds the string denoting the del_user_id field in the database.
+	FieldDelUserID = "del_user_id"
+	// FieldUpdateUserID holds the string denoting the update_user_id field in the database.
+	FieldUpdateUserID = "update_user_id"
 	// Table holds the table name of the procdef in the database.
 	Table = "act_proc_def"
 )
@@ -60,6 +66,9 @@ var Columns = []string{
 	FieldIsDel,
 	FieldIsActive,
 	FieldUpdateTime,
+	FieldDelTime,
+	FieldDelUserID,
+	FieldUpdateUserID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -90,9 +99,9 @@ var (
 	// DefaultRemainHours holds the default value on creation for the "remain_hours" field.
 	DefaultRemainHours int32
 	// DefaultIsDel holds the default value on creation for the "is_del" field.
-	DefaultIsDel int8
+	DefaultIsDel int32
 	// DefaultIsActive holds the default value on creation for the "is_active" field.
-	DefaultIsActive int8
+	DefaultIsActive int32
 	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
 	DefaultUpdateTime time.Time
 )
