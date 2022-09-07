@@ -6,10 +6,13 @@ import (
 	"act/common/tools/date"
 	"act/rpc/general"
 	"context"
+	"log"
 	"time"
 
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
+
+	linq "github.com/ahmetb/go-linq/v3"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -78,11 +81,16 @@ func (l *SaveProcDefLogic) FindMaxVersionByFormId(formId string, tx *act2.Tx) (i
 	if err != nil {
 		return 0, err
 	}
-	var maxVersion int32 = 0
-	for _, v := range defs {
-		if maxVersion < v.Version {
-			maxVersion = v.Version
-		}
-	}
-	return maxVersion, nil
+
+	maxVersion := linq.From(defs).SelectT(func(a *act2.ProcDef) int32 {
+		return a.Version
+	}).Max()
+	log.Println("maxVersion", maxVersion)
+	// var maxVersion int32 = 0
+	// for _, v := range defs {
+	// 	if maxVersion < v.Version {
+	// 		maxVersion = v.Version
+	// 	}
+	// }
+	return maxVersion.(int32), nil
 }

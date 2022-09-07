@@ -54,7 +54,6 @@ func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
 	}
 	err = tx.Commit()
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
 	// 3.UserID和create_user_id比较不相等返回，无权限撤回
