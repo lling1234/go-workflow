@@ -25,11 +25,17 @@ func (ProcDef) Fields() []ent.Field {
 		field.String("form_id").MaxLen(50).Comment("业务表单ID").Optional(),
 		field.String("form_name").MaxLen(50).Comment("业务表单名称").Optional(),
 		field.Int32("remain_hours").Default(0).Comment("审批限定时间").Optional(),
+<<<<<<< HEAD
+		field.Int8("is_del").Default(0).Comment("是否删除,0:未删除,1:已删除").Optional(),
+		field.Int8("is_active").Default(0).Comment("流程是否生效,0:否,1:是").Optional(),
+		field.Time("update_time").Default(time.Now()).Comment("流程修改时间").Optional(),
+=======
 		field.Int32("is_del").Default(0).Comment("是否删除,0:未删除,1:已删除").Optional(),
 		field.Int32("is_active").Default(0).Comment("流程是否生效,0:否,1:是").Optional(),
 		field.Time("update_time").Default(time.Now()).Comment("流程修改时间").Optional(),
 		field.Time("del_time").Default(time.Now()).Comment("流程删除时间").Optional(),
 		field.Int64("del_user_id").Comment("删除人id").Optional(),
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	}
 }
 

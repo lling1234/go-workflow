@@ -7,6 +7,7 @@ import (
 
 	"act/api/internal/svc"
 	"act/api/internal/types"
+	"act/rpc/actclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

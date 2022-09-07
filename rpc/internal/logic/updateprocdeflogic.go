@@ -7,7 +7,10 @@ import (
 	"act/rpc/types/act"
 	"context"
 	"github.com/zeromicro/go-zero/core/logx"
+<<<<<<< HEAD
+=======
 	"time"
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 )
 
 type UpdateProcDefLogic struct {
@@ -32,6 +35,10 @@ func (l *UpdateProcDefLogic) UpdateProcDef(in *act.FindProcDefReq) (*act.ProcDef
 		return nil, err
 	}
 
+<<<<<<< HEAD
+	err = tx.ProcDef.Update().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(general.TargetId), procdef.VersionEQ(version)).SetResource(in.Resource).
+		SetRemainHours(in.RemainHours).SetName(in.Name).SetCode(in.Code).Exec(l.ctx)
+=======
 	procDefUpdate := tx.ProcDef.Update().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(general.TargetId), procdef.VersionEQ(version))
 	if in.Resource != "" {
 		procDefUpdate.SetResource(in.Resource)
@@ -46,6 +53,7 @@ func (l *UpdateProcDefLogic) UpdateProcDef(in *act.FindProcDefReq) (*act.ProcDef
 		procDefUpdate.SetRemainHours(in.RemainHours)
 	}
 	err = procDefUpdate.SetUpdateTime(time.Now()).Exec(l.ctx)
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	if err != nil {
 		tx.Rollback()
 		return nil, err

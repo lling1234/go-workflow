@@ -36,6 +36,15 @@ func (l *DelProcDefLogic) DelProcDef(in *act.FindProcDefReq) (*act.Nil, error) {
 	if err != nil {
 		return &act.Nil{}, err
 	}
+<<<<<<< HEAD
+	inst, err := tx.ProcInst.Query().Where(procinst.ProcDefIDEQ(def.ID), procinst.IsDelEQ(0)).First(l.ctx)
+	if err != nil {
+		return &act.Nil{}, err
+	}
+	if inst != nil {
+		return &act.Nil{}, errors.New("该流程定义已被引用，无法删除。")
+	}
+=======
 	insts, err := tx.ProcInst.Query().Where(procinst.ProcDefIDEQ(def.ID), procinst.IsDelEQ(0)).All(l.ctx)
 	if err != nil {
 		return &act.Nil{}, err
@@ -44,11 +53,15 @@ func (l *DelProcDefLogic) DelProcDef(in *act.FindProcDefReq) (*act.Nil, error) {
 		return &act.Nil{}, errors.New("该流程定义已被引用，无法删除。")
 	}
 
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	err = tx.ProcDef.Update().Where(procdef.IDEQ(def.ID)).SetIsDel(1).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return &act.Nil{}, err
 	}
+<<<<<<< HEAD
+=======
 	tx.Commit()
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	return &act.Nil{}, nil
 }

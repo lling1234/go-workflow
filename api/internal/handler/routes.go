@@ -25,12 +25,20 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
+<<<<<<< HEAD
+				Path:    "/act/procdef/findoneprocdef",
+=======
 				Path:    "/act/procdef/findone",
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 				Handler: act.FindOneProcDefHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
+<<<<<<< HEAD
+				Path:    "/act/procdef/findallprocdef",
+=======
 				Path:    "/act/procdef/findall",
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 				Handler: act.FindAllProcDefHandler(serverCtx),
 			},
 			{
@@ -70,7 +78,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
+<<<<<<< HEAD
+				Path:    "/act/process/findallprocess",
+=======
 				Path:    "/act/process/findall",
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 				Handler: act.FindAllProcessHandler(serverCtx),
 			},
 			{

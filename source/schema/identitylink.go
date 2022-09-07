@@ -23,8 +23,13 @@ func (IdentityLink) Fields() []ent.Field {
 		field.Int64("task_id").Comment("节点任务"),
 		field.Int32("result").Comment("审批结果 3驳回、5未通过、6已通过").Optional(),
 		field.Time("create_time").Default(time.Now()).Comment("创建时间").Optional(),
+<<<<<<< HEAD
+		field.Int8("is_del").Default(0).Comment("是否删除,0:未删除,1:已删除").Optional(),
+		field.Int8("is_deal").Default(0).Comment("是否已审批 ,0:未审批,1:已审批").Optional(),
+=======
 		field.Int32("is_del").Default(0).Comment("是否删除,0:未删除,1:已删除").Optional(),
 		field.Int32("is_deal").Default(0).Comment("是否已审批 ,0:未审批,1:已审批").Optional(),
+>>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 		field.Time("update_time").Default(time.Now()).Comment("流程修改时间").Optional(),
 	}
 }
