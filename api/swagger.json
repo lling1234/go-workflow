@@ -1,0 +1,778 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/act/procdef/add": {
+      "post": {
+        "summary": "流程定义保存",
+        "operationId": "addProcDef",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SaveProcDef"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/procdef/del": {
+      "post": {
+        "summary": "删除流程定义",
+        "operationId": "delProcDef",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FormIdReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/procdef/findallprocdef": {
+      "post": {
+        "summary": "查找表单所有的流程",
+        "operationId": "findAllProcDef",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FormIdReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/procdef/findoneprocdef": {
+      "post": {
+        "summary": "查找正在使用的流程",
+        "operationId": "findOneProcDef",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FormIdReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/procdef/setactive": {
+      "post": {
+        "summary": "启用对应的流程定义",
+        "operationId": "setActive",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FormIdReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/procdef/update": {
+      "post": {
+        "summary": "流程定义修改",
+        "operationId": "updateProcDef",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SaveProcDef"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/process/findallprocess": {
+      "post": {
+        "summary": "查询所有流程",
+        "operationId": "findAllProcess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SearchProcess"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/process/findelapsedtime": {
+      "post": {
+        "summary": "查询各用户审批平均耗时",
+        "operationId": "findElapsedTime",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/process/findmyapproved": {
+      "post": {
+        "summary": "我已审批的流程",
+        "operationId": "findMyApproved",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PageReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/process/findmyfinish": {
+      "post": {
+        "summary": "我发起（已完成）的流程",
+        "operationId": "findMyFinish",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PageReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/process/findmypending": {
+      "post": {
+        "summary": "待我审批的流程",
+        "operationId": "findMyPending",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PageReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/process/findmystart": {
+      "post": {
+        "summary": "我发起的流程",
+        "operationId": "findMyStart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PageReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/process/findmyunfinish": {
+      "post": {
+        "summary": "我发起（未完成）的流程",
+        "operationId": "findMyUnFinish",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PageReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/process/findovertime": {
+      "post": {
+        "summary": "查询审批超时流程",
+        "operationId": "findOverTime",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/procinst/complete": {
+      "post": {
+        "summary": "流程审批",
+        "operationId": "completeTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CompleteTask"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/procinst/del": {
+      "post": {
+        "summary": "删除流程实例",
+        "operationId": "delProcInst",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DataIdReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/procinst/findbydataid": {
+      "post": {
+        "summary": "查看流程图",
+        "operationId": "findByDataId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DataIdReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/procinst/start": {
+      "post": {
+        "summary": "发起流程",
+        "operationId": "startProcInst",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StartProcInst"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    },
+    "/act/procinst/withdraw": {
+      "post": {
+        "summary": "撤回/直接结束 ",
+        "operationId": "withdraw",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CommonResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DataIdReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "act-api"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CommonResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "data": {
+          "type": "object"
+        },
+        "msg": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      },
+      "title": "CommonResponse",
+      "required": [
+        "code",
+        "data",
+        "msg",
+        "success"
+      ]
+    },
+    "CompleteTask": {
+      "type": "object",
+      "properties": {
+        "dataId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "result": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "comment": {
+          "type": "string"
+        }
+      },
+      "title": "CompleteTask",
+      "required": [
+        "dataId",
+        "result",
+        "comment"
+      ]
+    },
+    "DataIdReq": {
+      "type": "object",
+      "properties": {
+        "dataId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "DataIdReq",
+      "required": [
+        "dataId"
+      ]
+    },
+    "FormIdReq": {
+      "type": "object",
+      "properties": {
+        "formId": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "FormIdReq",
+      "required": [
+        "formId",
+        "version"
+      ]
+    },
+    "PageReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pageIndex": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "PageReq",
+      "required": [
+        "pageSize",
+        "pageIndex"
+      ]
+    },
+    "SaveProcDef": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "formId": {
+          "type": "string"
+        },
+        "formName": {
+          "type": "string"
+        },
+        "remainHours": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "resource": {
+          "type": "string"
+        }
+      },
+      "title": "SaveProcDef",
+      "required": [
+        "name",
+        "code",
+        "formId",
+        "formName",
+        "remainHours",
+        "resource"
+      ]
+    },
+    "SearchProcess": {
+      "type": "object",
+      "properties": {
+        "starter": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "state": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pageIndex": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "SearchProcess",
+      "required": [
+        "starter",
+        "title",
+        "code",
+        "state",
+        "pageSize",
+        "pageIndex"
+      ]
+    },
+    "StartProcInst": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "formId": {
+          "type": "string"
+        },
+        "dataId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "StartProcInst",
+      "required": [
+        "title",
+        "formId",
+        "dataId"
+      ]
+    },
+    "UserReq": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pageIndex": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "UserReq",
+      "required": [
+        "userId",
+        "userName",
+        "pageSize",
+        "pageIndex"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}

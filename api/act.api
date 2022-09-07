@@ -1,0 +1,214 @@
+syntax = "v1"
+
+type (
+	SaveProcDef {
+		Name        string `json:"name,optional"`
+		Code        string `json:"code,optional"`
+		FormId      string `json:"formId"`
+		FormName    string `json:"formName"`
+		RemainHours int32  `json:"remainHours,optional"`
+		Resource    string `json:"resource"`
+		Version     int32  `json:"version,optional"`
+	}
+
+	FormIdReq {
+		FormId  string `json:"formId"`
+		Version int32  `json:"version"`
+	}
+
+	StartProcInst {
+		Title  string `json:"title"`
+		FormId string `json:"formId"`
+		DataId int64  `json:"dataId"`
+	}
+
+	CompleteTask {
+		DataId  int64  `json:"dataId"`
+		Result  int32    `json:"result"`
+		Comment string `json:"comment,optional"`
+	}
+	DataIdReq {
+		DataId int64 `json:"dataId"`
+	}
+
+	SearchProcess {
+		Starter   string `json:"starter"`
+		Title     string `json:"title"`
+		Code      string `json:"code"`
+		State     int32  `json:"state"`
+		PageSize  int32  `json:"pageSize"`
+		PageIndex int32  `json:"pageIndex"`
+	}
+
+	PageReq {
+		PageSize  int32 `json:"pageSize"`
+		PageIndex int32 `json:"pageIndex"`
+	}
+
+	UserReq {
+		UserId    int64  `json:"userId"`
+		UserName  string `json:"userName"`
+		PageSize  int32  `json:"pageSize"`
+		PageIndex int32  `json:"pageIndex"`
+	}
+)
+
+type (
+	CommonResponse {
+		Code    int32       `json:"code"`
+		Data    interface{} `json:"data"`
+		Msg     string      `json:"msg"`
+		Success bool        `json:"success"`
+	}
+)
+service act-api {
+
+	@doc "流程定义保存"
+	@server(
+		group: act
+		handler: addProcDef
+	)
+	post /act/procdef/add (SaveProcDef) returns (CommonResponse)
+	
+
+	@doc "流程定义修改"
+	@server(
+		group: act
+		handler: updateProcDef
+	)
+	post /act/procdef/update (SaveProcDef) returns (CommonResponse)
+	
+
+	@doc "查找正在使用的流程"
+	@server(
+		group: act
+		handler: findOneProcDef
+	)
+	post /act/procdef/findone (FormIdReq) returns (CommonResponse)
+
+	@doc "查找表单所有的流程"
+	@server(
+		group: act
+		handler: findAllProcDef
+	)
+	post /act/procdef/findall (FormIdReq) returns (CommonResponse)
+
+
+	@doc "启用对应的流程定义"
+	@server(
+		group: act
+		handler: setActive
+	)
+	post /act/procdef/setactive (FormIdReq) returns (CommonResponse)
+	
+
+	@doc "删除流程定义"
+	@server(
+		group: act
+		handler: delProcDef
+	)
+	post /act/procdef/del (FormIdReq) returns (CommonResponse)
+	
+
+	@doc "发起流程"
+	@server(
+		group: act
+		handler: startProcInst
+	)
+	post /act/procinst/start (StartProcInst) returns (CommonResponse)
+	
+
+	@doc "流程审批"
+	@server(
+		group: act
+		handler: completeTask
+	)
+	post /act/procinst/complete (CompleteTask) returns (CommonResponse)
+	
+
+	@doc "查看流程图"
+	@server(
+		group: act
+		handler: findByDataId
+	)
+	post /act/procinst/findbydataid (DataIdReq) returns (CommonResponse)
+	
+
+	@doc "撤回/直接结束 "
+	@server(
+		group: act
+		handler: withdraw
+	)
+	post /act/procinst/withdraw (DataIdReq) returns (CommonResponse)
+	
+
+	@doc "删除流程实例"
+	@server(
+		group: act
+		handler: delProcInst
+	)
+	post /act/procinst/del (DataIdReq) returns (CommonResponse)
+	
+
+	@doc "查询所有流程"
+	@server(
+		group: act
+		handler: findAllProcess
+	)
+	post /act/process/findall (SearchProcess) returns (CommonResponse)
+	
+	@doc "我发起的流程"
+	@server(
+		group: act
+		handler: findMyStart
+	)
+	post /act/process/findmystart (PageReq) returns (CommonResponse)
+	
+
+	@doc "我发起（未完成）的流程"
+	@server(
+		group: act
+		handler: findMyUnFinish
+	)
+	post /act/process/findmyunfinish (PageReq) returns (CommonResponse)
+	
+
+	@doc "我发起（已完成）的流程"
+	@server(
+		group: act
+		handler: findMyFinish
+	)
+	post /act/process/findmyfinish (PageReq) returns (CommonResponse)
+	
+
+	@doc "待我审批的流程"
+	@server(
+		group: act
+		handler: findMyPending
+	)
+	post /act/process/findmypending (PageReq) returns (CommonResponse)
+	
+
+	@doc "我已审批的流程"
+	@server(
+		group: act
+		handler: findMyApproved
+	)
+	post /act/process/findmyapproved (PageReq) returns (CommonResponse)
+	
+
+	@doc "查询各用户审批平均耗时"
+	@server(
+		group: act
+		handler: findElapsedTime
+	)
+	post /act/process/findelapsedtime (UserReq) returns (CommonResponse)
+	
+
+	@doc "查询审批超时流程"
+	@server(
+		group: act
+		handler: findOverTime
+	)
+	post /act/process/findovertime (UserReq) returns (CommonResponse)
+}

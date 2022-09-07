@@ -1,0 +1,243 @@
+syntax = "proto3";
+
+package act;
+
+option go_package = "./act";
+
+message SaveProcDefReq {
+  int64 userId = 1;
+  string userName = 2;
+  string name = 3;
+  string code = 4;
+  string FormId = 5;
+  string FormName = 6;
+  int32 remainHours = 7;
+  int64 targetId = 8;
+  string resource = 9;
+  int32 version = 10;
+}
+
+message ProcDefReply {
+  int64 id = 1;
+  string name = 2;
+  string code = 3;
+  int32 version = 4;
+  string resource = 5;
+  int64 createUserId = 6;
+  string createUserName = 7;
+  string createTime = 8;
+  int64 targetId = 9;
+  string formId = 10;
+  string formName = 11;
+  int32 remainHours = 12;
+  int32 isDel = 13;
+  int32 isActive = 14;
+}
+message FindProcDefReq {
+  string formId = 1;
+  int32 version = 2;
+  int32 isActive = 3;
+  string name = 4;
+  string code = 5;
+  int32 remainHours = 6;
+  string resource = 7;
+}
+
+
+message ProcInstReq {
+  int64 userId = 1;
+  string userName = 2;
+  int64 procDefId = 3;
+  string title = 4;
+  int64 dataId = 5;
+  string formId = 6;
+  int64 targetId = 7;
+  int32 remainHours = 8;
+  int32 state = 9;
+}
+
+message UpdateProcInstReq {
+  int64 procDefId = 1;
+  int64 dataId = 2;
+  string formId = 3;
+  int64 targetId = 4;
+  int32 remainHours = 5;
+  int32 state = 6;
+  string nodeId = 7;
+  int64 taskId = 8;
+  int32 isFinish = 9;
+  string endTime = 10;
+  string code = 11;
+}
+
+message ProcInstReply {
+  int64 id = 1;
+  int64 procDefId = 2;
+  string title = 3;
+  string code = 4;
+  int64 targetId = 5;
+  string nodeId = 6;
+  int64 taskId = 7;
+  string startTime = 8;
+  string endTime = 9;
+  int64 startUserId = 10;
+  string startUserName = 11;
+  int32 isFinished = 12;
+  int32 state = 13;
+  int64 dataId = 14;
+  int32 isDel = 15;
+  string createTime = 16;
+  string updateTime = 17;
+  int32 remainHours = 18;
+}
+
+
+message ExecutionReq {
+  int64 procInstId = 1;
+  int64 procDefId = 2;
+  string nodeInfos = 3;
+  string startTime = 4;
+}
+
+message ExecutionReply {
+  int64 id = 1;
+  int64 procInstId = 2;
+  int64 procDefId = 3;
+  string nodeInfos = 4;
+  int32 isActive = 5;
+  string startTime = 6;
+}
+
+message TaskReq {
+  int64 id = 1;
+  string nodeId = 2;
+  int64 procInstId = 3;
+  int64 dataId = 4;
+  int32 level = 5;
+  int32 isFinished = 6;
+  int32 step = 7;
+  string memberApprover = 8;
+  string agreeApprover = 9;
+  string mode = 10;
+  string claimTime = 11;
+}
+
+message TaskReply {
+  int64 id = 1;
+  string nodeId = 2;
+  int32 level = 3;
+  int32 step = 4;
+  int64 procInstId = 5;
+  string createTime = 6;
+  string claimTime = 7;
+  string memberApprover = 8;
+  string agreeApprover = 9;
+  int32 isFinished = 10;
+  string mode = 11;
+  int32 isDel = 12;
+}
+
+
+message IdentityLinkReq {
+  int64 userId = 1;
+  string userName = 2;
+  int64 procInstId = 3;
+  int64 taskId = 4;
+  string comment = 5;
+  int32 result = 6;
+  int32 step = 7;
+  int32 isDeal = 8;
+}
+
+message IdentityLinkReply {
+  int64 id = 1;
+  int64 userId = 2;
+  string userName = 3;
+  int32 step = 4;
+  int64 procInstId = 5;
+  int64 targetId = 6;
+  string comment = 7;
+  int64 taskId = 8;
+  int32 result = 9;
+  string createTime = 10;
+  int32 isDel = 11;
+  int32 isDeal = 12;
+}
+
+
+message DataIdReq {
+  int64 dataId = 1;
+  int32 step = 2;
+}
+
+message TaskIdArg {
+  int64 id = 1;
+}
+
+message ProcInstIdArg {
+  int64 id = 1;
+}
+
+message Nil{
+}
+
+message SearchProcInstReq {
+  string userName = 1;
+  int32 state = 2;
+  string title = 3;
+  string code = 4;
+  PageReq page = 5;
+}
+
+message MyProcInstReq {
+  int32 isFinish = 1;
+  PageReq page = 2;
+}
+
+message PageReq {
+  int32 pageSize = 1;
+  int32 pageIndex = 2;
+}
+
+message UserReq {
+  int64 userId = 1;
+  string userName = 2;
+  PageReq page = 3;
+}
+
+message ElapsedTimeReply {
+  int64 userId = 1;
+  string userName = 2;
+  int64 targetId = 3;
+  int32 cost = 4;
+}
+
+
+service act {
+  rpc saveProcDef(SaveProcDefReq) returns(ProcDefReply);
+  rpc findDefByFormId(FindProcDefReq) returns(ProcDefReply);
+  rpc updateProcDef(FindProcDefReq) returns(ProcDefReply);
+  rpc setProcDefActive(FindProcDefReq) returns(Nil);
+  rpc delProcDef(FindProcDefReq) returns(Nil);
+
+  rpc saveProcInst(ProcInstReq) returns(ProcInstReply);
+  rpc saveExecution(ExecutionReq) returns(ExecutionReply);
+  rpc saveTask(TaskReq) returns(TaskReply);
+  rpc saveIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
+  rpc findLatestTask(DataIdReq) returns(TaskReply);
+  rpc updateProcInst(UpdateProcInstReq) returns(ProcInstReply);
+  rpc updateTask(TaskReq) returns(TaskReply);
+  rpc updateIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
+  rpc delProcInst(DataIdReq) returns(Nil);
+  rpc findIdentityLinkByTaskId(TaskIdArg) returns(IdentityLinkReply);
+  rpc findExecutionByInstId(ProcInstIdArg) returns(ExecutionReq);
+  rpc delIdentityLink(ProcInstIdArg) returns(Nil);
+  rpc withdraw(DataIdReq) returns(Nil);
+
+  rpc findAllProcInst(ProcInstReq) returns(ProcInstReply);
+  rpc findMyProcInst(MyProcInstReq) returns(ProcInstReply);
+  rpc findMyApproval(MyProcInstReq) returns(ProcInstReply);
+  rpc findOverTime(UserReq) returns(ProcInstReply);
+  rpc findElapsedTime(UserReq) returns(ElapsedTimeReply);
+
+}
