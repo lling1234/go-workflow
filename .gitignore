@@ -5,3 +5,7 @@ STAR.fznews.com.cn.crt
 STAR.fznews.com.cn.key
 server.crt
 server.key
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+/.idea/
