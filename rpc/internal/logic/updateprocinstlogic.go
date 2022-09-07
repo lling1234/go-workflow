@@ -1,13 +1,8 @@
 package logic
 
 import (
-<<<<<<< HEAD
-	"act/api/flow"
-	"act/common/act/procinst"
-=======
 	"act/common/act/procinst"
 	"act/rpc/constant"
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	"context"
 	"time"
 
@@ -37,11 +32,7 @@ func (l *UpdateProcInstLogic) UpdateProcInst(in *act.UpdateProcInstReq) (*act.Pr
 		return nil, err
 	}
 
-<<<<<<< HEAD
-	procInstUpdate := tx.ProcInst.Update().Where(procinst.DataIDEQ(in.DataId), procinst.StateNotIn(flow.WITHDRAW, flow.DISCARD), procinst.IsDelEQ(0))
-=======
 	procInstUpdate := tx.ProcInst.Update().Where(procinst.DataIDEQ(in.DataId), procinst.StateNotIn(constant.WITHDRAW, constant.DISCARD), procinst.IsDelEQ(0))
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 
 	if in.TaskId != 0 {
 		procInstUpdate.SetNodeID(in.NodeId).SetTaskID(in.TaskId)
@@ -49,11 +40,7 @@ func (l *UpdateProcInstLogic) UpdateProcInst(in *act.UpdateProcInstReq) (*act.Pr
 	if in.State != 0 {
 		procInstUpdate.SetState(in.State)
 	}
-<<<<<<< HEAD
-	if in.State == flow.HAVEPASS {
-=======
 	if in.State == constant.HAVEPASS {
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 		procInstUpdate.SetCode(in.Code)
 	}
 	if in.IsFinish == 1 {

@@ -45,11 +45,7 @@ type (
 		SaveExecution(ctx context.Context, in *ExecutionReq, opts ...grpc.CallOption) (*ExecutionReply, error)
 		SaveTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error)
 		SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
-<<<<<<< HEAD
-		FindLatestTask(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskReply, error)
-=======
 		FindLatestTask(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*TaskReply, error)
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 		UpdateProcInst(ctx context.Context, in *UpdateProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 		UpdateTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error)
 		UpdateIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
@@ -58,10 +54,7 @@ type (
 		FindExecutionByInstId(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*ExecutionReq, error)
 		DelIdentityLink(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*Nil, error)
 		Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error)
-<<<<<<< HEAD
-=======
 		FindProcInstByDataId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*ProcInstReply, error)
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 		FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 		FindMyProcInst(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 		FindMyApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
@@ -125,11 +118,7 @@ func (m *defaultAct) SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, 
 	return client.SaveIdentityLink(ctx, in, opts...)
 }
 
-<<<<<<< HEAD
-func (m *defaultAct) FindLatestTask(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskReply, error) {
-=======
 func (m *defaultAct) FindLatestTask(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*TaskReply, error) {
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	client := act.NewActClient(m.cli.Conn())
 	return client.FindLatestTask(ctx, in, opts...)
 }
@@ -174,14 +163,11 @@ func (m *defaultAct) Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.C
 	return client.Withdraw(ctx, in, opts...)
 }
 
-<<<<<<< HEAD
-=======
 func (m *defaultAct) FindProcInstByDataId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
 	client := act.NewActClient(m.cli.Conn())
 	return client.FindProcInstByDataId(ctx, in, opts...)
 }
 
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 func (m *defaultAct) FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
 	client := act.NewActClient(m.cli.Conn())
 	return client.FindAllProcInst(ctx, in, opts...)

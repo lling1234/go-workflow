@@ -2,6 +2,8 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"time"
 )
@@ -9,6 +11,13 @@ import (
 // ConcurrentNode holds the schema definition for the ConcurrentNode entity.
 type ConcurrentNode struct {
 	ent.Schema
+}
+
+// Table Name
+func (ConcurrentNode) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entsql.Annotation{Table: "act_concurrent_node"},
+	}
 }
 
 // Fields of the IdentityLink.

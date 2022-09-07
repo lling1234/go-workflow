@@ -2,20 +2,12 @@ Name: act.rpc
 ListenOn: 127.0.0.1:8080
 Etcd:
   Hosts:
-<<<<<<< HEAD
-  - qkbyte.orginone.cn:6005
-=======
-  - 127.0.0.1:2379
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
+    - 127.0.0.1:2379
   Key: act.rpc
 Store:
   Mode: dev
   Driver: mysql
-<<<<<<< HEAD
-  DataSource: root:123456@(127.0.0.1:3306)/wflow?charset=utf8&parseTime=true&loc=Local
-=======
   DataSource: root:ye199169@(127.0.0.1:3306)/wflow?charset=utf8&parseTime=true&loc=Local
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
   Cache:
     Network: tcp
     Addr: 127.0.0.1:6379

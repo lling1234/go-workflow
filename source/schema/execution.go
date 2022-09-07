@@ -2,6 +2,8 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"time"
 )
@@ -9,6 +11,13 @@ import (
 // Execution holds the schema definition for the Execution entity.
 type Execution struct {
 	ent.Schema
+}
+
+// Table Name
+func (Execution) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entsql.Annotation{Table: "act_execution"},
+	}
 }
 
 // Fields of the Execution.

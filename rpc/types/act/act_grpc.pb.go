@@ -31,11 +31,7 @@ type ActClient interface {
 	SaveExecution(ctx context.Context, in *ExecutionReq, opts ...grpc.CallOption) (*ExecutionReply, error)
 	SaveTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error)
 	SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
-<<<<<<< HEAD
-	FindLatestTask(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskReply, error)
-=======
 	FindLatestTask(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*TaskReply, error)
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	UpdateProcInst(ctx context.Context, in *UpdateProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	UpdateTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error)
 	UpdateIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
@@ -44,10 +40,7 @@ type ActClient interface {
 	FindExecutionByInstId(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*ExecutionReq, error)
 	DelIdentityLink(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*Nil, error)
 	Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error)
-<<<<<<< HEAD
-=======
 	FindProcInstByDataId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*ProcInstReply, error)
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	FindMyProcInst(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	FindMyApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
@@ -144,11 +137,7 @@ func (c *actClient) SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, o
 	return out, nil
 }
 
-<<<<<<< HEAD
-func (c *actClient) FindLatestTask(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*TaskReply, error) {
-=======
 func (c *actClient) FindLatestTask(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*TaskReply, error) {
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	out := new(TaskReply)
 	err := c.cc.Invoke(ctx, "/act.act/findLatestTask", in, out, opts...)
 	if err != nil {
@@ -229,8 +218,6 @@ func (c *actClient) Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.Ca
 	return out, nil
 }
 
-<<<<<<< HEAD
-=======
 func (c *actClient) FindProcInstByDataId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
 	out := new(ProcInstReply)
 	err := c.cc.Invoke(ctx, "/act.act/findProcInstByDataId", in, out, opts...)
@@ -240,7 +227,6 @@ func (c *actClient) FindProcInstByDataId(ctx context.Context, in *DataIdReq, opt
 	return out, nil
 }
 
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 func (c *actClient) FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
 	out := new(ProcInstReply)
 	err := c.cc.Invoke(ctx, "/act.act/findAllProcInst", in, out, opts...)
@@ -299,11 +285,7 @@ type ActServer interface {
 	SaveExecution(context.Context, *ExecutionReq) (*ExecutionReply, error)
 	SaveTask(context.Context, *TaskReq) (*TaskReply, error)
 	SaveIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error)
-<<<<<<< HEAD
-	FindLatestTask(context.Context, *DataIdReq) (*TaskReply, error)
-=======
 	FindLatestTask(context.Context, *ProcInstIdArg) (*TaskReply, error)
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	UpdateProcInst(context.Context, *UpdateProcInstReq) (*ProcInstReply, error)
 	UpdateTask(context.Context, *TaskReq) (*TaskReply, error)
 	UpdateIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error)
@@ -312,10 +294,7 @@ type ActServer interface {
 	FindExecutionByInstId(context.Context, *ProcInstIdArg) (*ExecutionReq, error)
 	DelIdentityLink(context.Context, *ProcInstIdArg) (*Nil, error)
 	Withdraw(context.Context, *DataIdReq) (*Nil, error)
-<<<<<<< HEAD
-=======
 	FindProcInstByDataId(context.Context, *DataIdReq) (*ProcInstReply, error)
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	FindAllProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error)
 	FindMyProcInst(context.Context, *MyProcInstReq) (*ProcInstReply, error)
 	FindMyApproval(context.Context, *MyProcInstReq) (*ProcInstReply, error)
@@ -355,11 +334,7 @@ func (UnimplementedActServer) SaveTask(context.Context, *TaskReq) (*TaskReply, e
 func (UnimplementedActServer) SaveIdentityLink(context.Context, *IdentityLinkReq) (*IdentityLinkReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveIdentityLink not implemented")
 }
-<<<<<<< HEAD
-func (UnimplementedActServer) FindLatestTask(context.Context, *DataIdReq) (*TaskReply, error) {
-=======
 func (UnimplementedActServer) FindLatestTask(context.Context, *ProcInstIdArg) (*TaskReply, error) {
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	return nil, status.Errorf(codes.Unimplemented, "method FindLatestTask not implemented")
 }
 func (UnimplementedActServer) UpdateProcInst(context.Context, *UpdateProcInstReq) (*ProcInstReply, error) {
@@ -386,12 +361,9 @@ func (UnimplementedActServer) DelIdentityLink(context.Context, *ProcInstIdArg) (
 func (UnimplementedActServer) Withdraw(context.Context, *DataIdReq) (*Nil, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Withdraw not implemented")
 }
-<<<<<<< HEAD
-=======
 func (UnimplementedActServer) FindProcInstByDataId(context.Context, *DataIdReq) (*ProcInstReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindProcInstByDataId not implemented")
 }
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 func (UnimplementedActServer) FindAllProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindAllProcInst not implemented")
 }
@@ -583,11 +555,7 @@ func _Act_SaveIdentityLink_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _Act_FindLatestTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-<<<<<<< HEAD
-	in := new(DataIdReq)
-=======
 	in := new(ProcInstIdArg)
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -599,11 +567,7 @@ func _Act_FindLatestTask_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: "/act.act/findLatestTask",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-<<<<<<< HEAD
-		return srv.(ActServer).FindLatestTask(ctx, req.(*DataIdReq))
-=======
 		return srv.(ActServer).FindLatestTask(ctx, req.(*ProcInstIdArg))
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -752,8 +716,6 @@ func _Act_Withdraw_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-<<<<<<< HEAD
-=======
 func _Act_FindProcInstByDataId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DataIdReq)
 	if err := dec(in); err != nil {
@@ -772,7 +734,6 @@ func _Act_FindProcInstByDataId_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 func _Act_FindAllProcInst_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProcInstReq)
 	if err := dec(in); err != nil {
@@ -943,13 +904,10 @@ var Act_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Act_Withdraw_Handler,
 		},
 		{
-<<<<<<< HEAD
-=======
 			MethodName: "findProcInstByDataId",
 			Handler:    _Act_FindProcInstByDataId_Handler,
 		},
 		{
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 			MethodName: "findAllProcInst",
 			Handler:    _Act_FindAllProcInst_Handler,
 		},

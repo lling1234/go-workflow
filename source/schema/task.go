@@ -2,6 +2,8 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"time"
 )
@@ -9,6 +11,13 @@ import (
 // Task holds the schema definition for the Task entity.
 type Task struct {
 	ent.Schema
+}
+
+// Table Name
+func (Task) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entsql.Annotation{Table: "act_task"},
+	}
 }
 
 // Fields of the Task.
@@ -19,23 +28,12 @@ func (Task) Fields() []ent.Field {
 		field.Int32("step").Comment("流程步数").Optional(),
 		field.Int64("proc_inst_id").Comment("流程实例id"),
 		field.Time("create_time").Default(time.Now()).Comment("任务创建时间").Optional(),
-<<<<<<< HEAD
-		field.Time("claim_time").Default(time.Now()).Comment("节点最新审批时间").Optional(),
-		field.String("member_approver").MaxLen(5000).Comment("可审批用户").Optional(),
-		field.String("agree_approver").MaxLen(2000).Comment("已审批用户").Optional(),
-		field.Int8("is_finished").Default(0).Comment("任务是否完成 2:未结束 1:已完成").Optional(),
-		field.Enum("mode").Values("and", "or").Default("or").Comment("会签or或签").Optional(),
-		field.Int64("data_id").Comment("流程绑定数据ID").Optional(),
-		field.Int8("is_del").Default(0).Comment("是否删除").Optional(),
-=======
 		field.Time("claim_time").Comment("节点最新审批时间").Optional(),
 		field.String("member_approver").MaxLen(5000).Comment("可审批用户").Optional(),
 		field.String("agree_approver").MaxLen(2000).Comment("已审批用户").Optional(),
 		field.Int32("is_finished").Default(0).Comment("任务是否完成 2:未结束 1:已完成").Optional(),
 		field.Enum("mode").Default("or").Comment("会签or或签").Optional(),
-		field.Int64("data_id").Comment("流程绑定数据ID").Optional(),
 		field.Int32("is_del").Default(0).Comment("是否删除").Optional(),
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 		field.Time("update_time").Default(time.Now()).Comment("流程修改时间").Optional(),
 	}
 }

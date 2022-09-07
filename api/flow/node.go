@@ -3,14 +3,8 @@ package flow
 import (
 	"container/list"
 	"errors"
-<<<<<<< HEAD
-	"strconv"
-
-	"github.com/mumushuiding/util"
-=======
 	"github.com/mumushuiding/util"
 	"strconv"
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 )
 
 // Node represents a specific logical unit of processing and routing
@@ -48,15 +42,11 @@ type NodeProps struct {
 	Mode         string          `json:"mode,optional"`
 	Station      string          `json:"station,optional,optional"`
 	AssignedUser []*AssignedUser `json:"assignedUser,optional"`
-<<<<<<< HEAD
-	Refuse       string          `json:"refuse,optional"`
-=======
 	Refuse       Refuse          `json:"refuse,optional"`
 }
 type Refuse struct {
 	Type   string `json:"type,optional"`
 	Target string `json:"target,optional"`
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 }
 type CondProps struct {
 	GroupsType string `json:"groupsType,optional"`
@@ -67,7 +57,7 @@ type AssignedUser struct {
 	ID       int64  `json:"id"`
 	Name     string `json:"name"`
 	Type     string `json:"type"`
-	Selected bool   `json:"selected"`
+	Selected bool   `json:"selected,optional"`
 }
 
 // NodeInfo 节点信息
@@ -76,7 +66,7 @@ type NodeInfo struct {
 	Type         string `json:"type"`
 	AssignedType string `json:"assignedType"`
 	//MemberCount   int    `json:"memberCount"`
-	Level         int    `json:"level"`
+	Level         int    `json:"level,optional"`
 	Mode          string `json:"mode"`
 	ApproverNames string `json:"approverNames"`
 	ApproverIds   string `json:"approverIds"`
@@ -92,12 +82,7 @@ const (
 	DISCARD
 )
 
-<<<<<<< HEAD
-var ResultTypes = [...]string{PENDING: "待处理", DEALING: "处理中", REJECT: "驳回",
-	WITHDRAW: "已撤回", NOTPASS: "未通过", HAVEPASS: "已通过", DISCARD: "废弃"}
-=======
 var ResultTypes = [...]string{PENDING: "待处理", DEALING: "处理中", REJECT: "驳回", WITHDRAW: "已撤回", NOTPASS: "未通过", HAVEPASS: "已通过", DISCARD: "废弃"}
->>>>>>> 2b4417e13dae4513883e0b8957c2674704c971fb
 
 func (n *Node) add2ExecutionList(list *list.List) {
 	switch n.Type {
