@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"act/rpc/constant"
 	"context"
 	"errors"
 	"log"
@@ -41,10 +42,12 @@ func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
 
 	// TODO StartUserID=11025 StartUserName=xiaoming
 	var userid int64 = 11025
-	if userid == procinstInfo.StartUserID {
+	//1、"待处理", 2、"处理中", 3、 "驳回", 4、"已撤回" ,5、 "未通过",6、 "已通过", 7、"废弃"
+	//流程状态为 1、"待处理", 2、"处理中", 3、 "驳回" 才可以被撤回
+	if userid == procinstInfo.StartUserID && procinstInfo.State < constant.WITHDRAW {
 		_, err := tx.ProcInst.Update().
 			Where(procinst.ProcDefID(procinstInfo.ProcDefID)).
-			SetState(4).SetIsFinished(1).SetEndTime(time.Now()).SetUpdateTime(time.Now()).Save(l.ctx)
+			SetState(constant.WITHDRAW).SetIsFinished(1).SetEndTime(time.Now()).SetUpdateTime(time.Now()).Save(l.ctx)
 		if err != nil {
 			tx.Rollback()
 			return nil, err
