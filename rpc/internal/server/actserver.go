@@ -112,7 +112,7 @@ func (s *ActServer) Withdraw(ctx context.Context, in *act.DataIdReq) (*act.Nil, 
 	return l.Withdraw(in)
 }
 
-func (s *ActServer) FindAllProcInst(ctx context.Context, in *act.ProcInstReq) (*act.ProcInstReply, error) {
+func (s *ActServer) FindAllProcInst(ctx context.Context, in *act.IdRequest) (*act.CommonRpcRes, error) {
 	l := logic.NewFindAllProcInstLogic(ctx, s.svcCtx)
 	return l.FindAllProcInst(in)
 }

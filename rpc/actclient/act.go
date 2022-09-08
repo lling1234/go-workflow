@@ -13,16 +13,19 @@ import (
 )
 
 type (
+	CommonRpcRes      = act.CommonRpcRes
 	DataIdReq         = act.DataIdReq
 	ElapsedTimeReply  = act.ElapsedTimeReply
 	ExecutionReply    = act.ExecutionReply
 	ExecutionReq      = act.ExecutionReq
 	FindProcDefReq    = act.FindProcDefReq
+	IdRequest         = act.IdRequest
 	IdentityLinkReply = act.IdentityLinkReply
 	IdentityLinkReq   = act.IdentityLinkReq
 	MyProcInstReq     = act.MyProcInstReq
 	Nil               = act.Nil
 	PageReq           = act.PageReq
+	PageRequest       = act.PageRequest
 	ProcDefReply      = act.ProcDefReply
 	ProcInstIdArg     = act.ProcInstIdArg
 	ProcInstReply     = act.ProcInstReply
@@ -54,7 +57,7 @@ type (
 		FindExecutionByInstId(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*ExecutionReq, error)
 		DelIdentityLink(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*Nil, error)
 		Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error)
-		FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
+		FindAllProcInst(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*CommonRpcRes, error)
 		FindMyProcInst(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 		FindMyApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 		FindOverTime(ctx context.Context, in *UserReq, opts ...grpc.CallOption) (*ProcInstReply, error)
@@ -162,7 +165,7 @@ func (m *defaultAct) Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.C
 	return client.Withdraw(ctx, in, opts...)
 }
 
-func (m *defaultAct) FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
+func (m *defaultAct) FindAllProcInst(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*CommonRpcRes, error) {
 	client := act.NewActClient(m.cli.Conn())
 	return client.FindAllProcInst(ctx, in, opts...)
 }

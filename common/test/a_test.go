@@ -4,6 +4,7 @@ import (
 	"act/common/act"
 	ent "act/common/act"
 	"act/common/act/procdef"
+	"act/common/act/procinst"
 	"act/common/cache"
 	"act/common/models"
 	"act/common/store"
@@ -20,6 +21,33 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"google.golang.org/protobuf/runtime/protoimpl"
 )
+
+// 流程实例查询，过滤
+func TestActDbCreate7(t *testing.T) {
+	store := store.NewCommonStore(models.DbStoreConfig{
+		Driver:       "mysql",
+		Mode:         "dev",
+		DataCenterId: 1,
+		WorkerId:     1,
+		DataSource:   "root:123456@(localhost)/wflow?charset=utf8&parseTime=true&loc=Local",
+		Cache: cache.CacheConfig{
+			Addr:     "qkbyte.orginone.cn:6002",
+			Password: "orginone",
+		},
+	})
+	defer store.Close()
+	ctx := context.Background()
+
+	var filter string = "请假"
+
+	pArr, err := store.ProcInst.Query().Where(procinst.TitleContains(filter)).
+		All(ctx)
+	if err != nil {
+		t.Log(err)
+	}
+	t.Log("pArr", pArr)
+
+}
 
 func query() []*ent.ProcDef {
 	store := store.NewCommonStore(models.DbStoreConfig{
@@ -136,7 +164,11 @@ func TestActDbCreate5(t *testing.T) {
 	defer store.Close()
 	ctx := context.Background()
 
-	defs, err := store.ProcDef.Query().Where(procdef.FormIDEQ("12393481")).Select(procdef.FieldVersion).All(ctx)
+	defs, err := store.ProcDef.Query().
+		Where(procdef.FormIDEQ("12393481")).Select(procdef.FieldVersion).
+		Where(procdef.NameContains("请假")).
+		All(ctx)
+	fmt.Println("defs", defs)
 	if err != nil {
 		t.Log(err)
 	}
