@@ -58,6 +58,6 @@ func (l *FindDefByFormIdLogic) convert(actpd *act2.ProcDef) *act.ProcDefReply {
 		FormName:       actpd.FormName,
 		Resource:       actpd.Resource,
 		RemainHours:    actpd.RemainHours,
-		IsActive:       int32(actpd.IsActive),
+		IsActive:       actpd.IsActive,
 	}
 }

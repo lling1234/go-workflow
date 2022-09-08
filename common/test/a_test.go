@@ -37,7 +37,7 @@ func TestActDbCreate(t *testing.T) {
 }
 
 func TestAmain(t *testing.T) {
-	client, err := ent.Open("mysql", "root:ye199169@tcp(127.0.0.1:3306)/act?parseTime=True&loc=Local")
+	client, err := ent.Open("mysql", "root:ye199169@tcp(127.0.0.1:3306)/wflow?parseTime=True&loc=Local")
 	if err != nil {
 		log.Fatal(err)
 	}

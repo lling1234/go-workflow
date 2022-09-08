@@ -29,7 +29,8 @@ func (l *SaveExecutionLogic) SaveExecution(in *act.ExecutionReq) (*act.Execution
 	if err != nil {
 		return nil, err
 	}
-	_, err = tx.Execution.Create().SetProcDefID(in.ProcDefId).SetProcInstID(in.ProcInstId).SetNodeInfos(in.NodeInfos).SetStartTime(time.Now()).Save(l.ctx)
+	_, err = tx.Execution.Create().SetProcDefID(in.ProcDefId).SetProcInstID(in.ProcInstId).SetNodeInfos(in.NodeInfos).SetStartTime(time.Now()).
+		Save(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err

@@ -23,8 +23,8 @@ func NewFindAllProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *F
 	}
 }
 
-func (l *FindAllProcInstLogic) FindAllProcInst(in *act.ProcInstReq) (*act.ProcInstReply, error) {
+func (l *FindAllProcInstLogic) FindAllProcInst(in *act.IdRequest) (*act.CommonRpcRes, error) {
 	// todo: add your logic here and delete this line
 
-	return &act.ProcInstReply{}, nil
+	return &act.CommonRpcRes{}, nil
 }

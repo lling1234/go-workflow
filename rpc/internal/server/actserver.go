@@ -117,7 +117,7 @@ func (s *ActServer) FindProcInstByDataId(ctx context.Context, in *act.DataIdReq)
 	return l.FindProcInstByDataId(in)
 }
 
-func (s *ActServer) FindAllProcInst(ctx context.Context, in *act.ProcInstReq) (*act.ProcInstReply, error) {
+func (s *ActServer) FindAllProcInst(ctx context.Context, in *act.IdRequest) (*act.CommonRpcRes, error) {
 	l := logic.NewFindAllProcInstLogic(ctx, s.svcCtx)
 	return l.FindAllProcInst(in)
 }
