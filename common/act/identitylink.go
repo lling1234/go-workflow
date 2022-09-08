@@ -35,9 +35,9 @@ type IdentityLink struct {
 	// 创建时间
 	CreateTime time.Time `json:"create_time,omitempty"`
 	// 是否删除,0:未删除,1:已删除
-	IsDel int8 `json:"is_del,omitempty"`
+	IsDel int32 `json:"is_del,omitempty"`
 	// 是否已审批 ,0:未审批,1:已审批
-	IsDeal int8 `json:"is_deal,omitempty"`
+	IsDeal int32 `json:"is_deal,omitempty"`
 	// 流程修改时间
 	UpdateTime time.Time `json:"update_time,omitempty"`
 }
@@ -73,7 +73,7 @@ func (il *IdentityLink) assignValues(columns []string, values []interface{}) err
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			il.ID = value.Int64
+			il.ID = int64(value.Int64)
 		case identitylink.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
@@ -132,13 +132,13 @@ func (il *IdentityLink) assignValues(columns []string, values []interface{}) err
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field is_del", values[i])
 			} else if value.Valid {
-				il.IsDel = int8(value.Int64)
+				il.IsDel = int32(value.Int64)
 			}
 		case identitylink.FieldIsDeal:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field is_deal", values[i])
 			} else if value.Valid {
-				il.IsDeal = int8(value.Int64)
+				il.IsDeal = int32(value.Int64)
 			}
 		case identitylink.FieldUpdateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {

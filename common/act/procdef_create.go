@@ -167,13 +167,13 @@ func (pdc *ProcDefCreate) SetNillableRemainHours(i *int32) *ProcDefCreate {
 }
 
 // SetIsDel sets the "is_del" field.
-func (pdc *ProcDefCreate) SetIsDel(i int8) *ProcDefCreate {
+func (pdc *ProcDefCreate) SetIsDel(i int32) *ProcDefCreate {
 	pdc.mutation.SetIsDel(i)
 	return pdc
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (pdc *ProcDefCreate) SetNillableIsDel(i *int8) *ProcDefCreate {
+func (pdc *ProcDefCreate) SetNillableIsDel(i *int32) *ProcDefCreate {
 	if i != nil {
 		pdc.SetIsDel(*i)
 	}
@@ -181,13 +181,13 @@ func (pdc *ProcDefCreate) SetNillableIsDel(i *int8) *ProcDefCreate {
 }
 
 // SetIsActive sets the "is_active" field.
-func (pdc *ProcDefCreate) SetIsActive(i int8) *ProcDefCreate {
+func (pdc *ProcDefCreate) SetIsActive(i int32) *ProcDefCreate {
 	pdc.mutation.SetIsActive(i)
 	return pdc
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (pdc *ProcDefCreate) SetNillableIsActive(i *int8) *ProcDefCreate {
+func (pdc *ProcDefCreate) SetNillableIsActive(i *int32) *ProcDefCreate {
 	if i != nil {
 		pdc.SetIsActive(*i)
 	}
@@ -205,6 +205,54 @@ func (pdc *ProcDefCreate) SetNillableUpdateTime(t *time.Time) *ProcDefCreate {
 	if t != nil {
 		pdc.SetUpdateTime(*t)
 	}
+	return pdc
+}
+
+// SetDelTime sets the "del_time" field.
+func (pdc *ProcDefCreate) SetDelTime(t time.Time) *ProcDefCreate {
+	pdc.mutation.SetDelTime(t)
+	return pdc
+}
+
+// SetNillableDelTime sets the "del_time" field if the given value is not nil.
+func (pdc *ProcDefCreate) SetNillableDelTime(t *time.Time) *ProcDefCreate {
+	if t != nil {
+		pdc.SetDelTime(*t)
+	}
+	return pdc
+}
+
+// SetDelUserID sets the "del_user_id" field.
+func (pdc *ProcDefCreate) SetDelUserID(i int64) *ProcDefCreate {
+	pdc.mutation.SetDelUserID(i)
+	return pdc
+}
+
+// SetNillableDelUserID sets the "del_user_id" field if the given value is not nil.
+func (pdc *ProcDefCreate) SetNillableDelUserID(i *int64) *ProcDefCreate {
+	if i != nil {
+		pdc.SetDelUserID(*i)
+	}
+	return pdc
+}
+
+// SetUpdateUserID sets the "update_user_id" field.
+func (pdc *ProcDefCreate) SetUpdateUserID(i int64) *ProcDefCreate {
+	pdc.mutation.SetUpdateUserID(i)
+	return pdc
+}
+
+// SetNillableUpdateUserID sets the "update_user_id" field if the given value is not nil.
+func (pdc *ProcDefCreate) SetNillableUpdateUserID(i *int64) *ProcDefCreate {
+	if i != nil {
+		pdc.SetUpdateUserID(*i)
+	}
+	return pdc
+}
+
+// SetID sets the "id" field.
+func (pdc *ProcDefCreate) SetID(i int64) *ProcDefCreate {
+	pdc.mutation.SetID(i)
 	return pdc
 }
 
@@ -353,8 +401,10 @@ func (pdc *ProcDefCreate) sqlSave(ctx context.Context) (*ProcDef, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = id
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	return _node, nil
 }
 
@@ -364,11 +414,15 @@ func (pdc *ProcDefCreate) createSpec() (*ProcDef, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: procdef.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: procdef.FieldID,
 			},
 		}
 	)
+	if id, ok := pdc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := pdc.mutation.Name(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -459,7 +513,7 @@ func (pdc *ProcDefCreate) createSpec() (*ProcDef, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pdc.mutation.IsDel(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldIsDel,
 		})
@@ -467,7 +521,7 @@ func (pdc *ProcDefCreate) createSpec() (*ProcDef, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pdc.mutation.IsActive(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldIsActive,
 		})
@@ -480,6 +534,30 @@ func (pdc *ProcDefCreate) createSpec() (*ProcDef, *sqlgraph.CreateSpec) {
 			Column: procdef.FieldUpdateTime,
 		})
 		_node.UpdateTime = value
+	}
+	if value, ok := pdc.mutation.DelTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: procdef.FieldDelTime,
+		})
+		_node.DelTime = value
+	}
+	if value, ok := pdc.mutation.DelUserID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldDelUserID,
+		})
+		_node.DelUserID = value
+	}
+	if value, ok := pdc.mutation.UpdateUserID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldUpdateUserID,
+		})
+		_node.UpdateUserID = value
 	}
 	return _node, _spec
 }
@@ -525,9 +603,9 @@ func (pdcb *ProcDefCreateBulk) Save(ctx context.Context) ([]*ProcDef, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = id
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

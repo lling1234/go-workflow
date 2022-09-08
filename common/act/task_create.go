@@ -125,13 +125,13 @@ func (tc *TaskCreate) SetNillableAgreeApprover(s *string) *TaskCreate {
 }
 
 // SetIsFinished sets the "is_finished" field.
-func (tc *TaskCreate) SetIsFinished(i int8) *TaskCreate {
+func (tc *TaskCreate) SetIsFinished(i int32) *TaskCreate {
 	tc.mutation.SetIsFinished(i)
 	return tc
 }
 
 // SetNillableIsFinished sets the "is_finished" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableIsFinished(i *int8) *TaskCreate {
+func (tc *TaskCreate) SetNillableIsFinished(i *int32) *TaskCreate {
 	if i != nil {
 		tc.SetIsFinished(*i)
 	}
@@ -139,41 +139,27 @@ func (tc *TaskCreate) SetNillableIsFinished(i *int8) *TaskCreate {
 }
 
 // SetMode sets the "mode" field.
-func (tc *TaskCreate) SetMode(t task.Mode) *TaskCreate {
-	tc.mutation.SetMode(t)
+func (tc *TaskCreate) SetMode(s string) *TaskCreate {
+	tc.mutation.SetMode(s)
 	return tc
 }
 
 // SetNillableMode sets the "mode" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableMode(t *task.Mode) *TaskCreate {
-	if t != nil {
-		tc.SetMode(*t)
-	}
-	return tc
-}
-
-// SetDataID sets the "data_id" field.
-func (tc *TaskCreate) SetDataID(i int64) *TaskCreate {
-	tc.mutation.SetDataID(i)
-	return tc
-}
-
-// SetNillableDataID sets the "data_id" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableDataID(i *int64) *TaskCreate {
-	if i != nil {
-		tc.SetDataID(*i)
+func (tc *TaskCreate) SetNillableMode(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetMode(*s)
 	}
 	return tc
 }
 
 // SetIsDel sets the "is_del" field.
-func (tc *TaskCreate) SetIsDel(i int8) *TaskCreate {
+func (tc *TaskCreate) SetIsDel(i int32) *TaskCreate {
 	tc.mutation.SetIsDel(i)
 	return tc
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableIsDel(i *int8) *TaskCreate {
+func (tc *TaskCreate) SetNillableIsDel(i *int32) *TaskCreate {
 	if i != nil {
 		tc.SetIsDel(*i)
 	}
@@ -191,6 +177,12 @@ func (tc *TaskCreate) SetNillableUpdateTime(t *time.Time) *TaskCreate {
 	if t != nil {
 		tc.SetUpdateTime(*t)
 	}
+	return tc
+}
+
+// SetID sets the "id" field.
+func (tc *TaskCreate) SetID(i int64) *TaskCreate {
+	tc.mutation.SetID(i)
 	return tc
 }
 
@@ -275,10 +267,6 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultCreateTime
 		tc.mutation.SetCreateTime(v)
 	}
-	if _, ok := tc.mutation.ClaimTime(); !ok {
-		v := task.DefaultClaimTime
-		tc.mutation.SetClaimTime(v)
-	}
 	if _, ok := tc.mutation.IsFinished(); !ok {
 		v := task.DefaultIsFinished
 		tc.mutation.SetIsFinished(v)
@@ -317,11 +305,6 @@ func (tc *TaskCreate) check() error {
 			return &ValidationError{Name: "agree_approver", err: fmt.Errorf(`act: validator failed for field "Task.agree_approver": %w`, err)}
 		}
 	}
-	if v, ok := tc.mutation.Mode(); ok {
-		if err := task.ModeValidator(v); err != nil {
-			return &ValidationError{Name: "mode", err: fmt.Errorf(`act: validator failed for field "Task.mode": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -333,8 +316,10 @@ func (tc *TaskCreate) sqlSave(ctx context.Context) (*Task, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = id
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	return _node, nil
 }
 
@@ -344,11 +329,15 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: task.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: task.FieldID,
 			},
 		}
 	)
+	if id, ok := tc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := tc.mutation.NodeID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -415,7 +404,7 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := tc.mutation.IsFinished(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: task.FieldIsFinished,
 		})
@@ -423,23 +412,15 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := tc.mutation.Mode(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: task.FieldMode,
 		})
 		_node.Mode = value
 	}
-	if value, ok := tc.mutation.DataID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: task.FieldDataID,
-		})
-		_node.DataID = value
-	}
 	if value, ok := tc.mutation.IsDel(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: task.FieldIsDel,
 		})
@@ -497,9 +478,9 @@ func (tcb *TaskCreateBulk) Save(ctx context.Context) ([]*Task, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = id
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

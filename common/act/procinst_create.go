@@ -153,13 +153,13 @@ func (pic *ProcInstCreate) SetNillableStartUserName(s *string) *ProcInstCreate {
 }
 
 // SetIsFinished sets the "is_finished" field.
-func (pic *ProcInstCreate) SetIsFinished(i int8) *ProcInstCreate {
+func (pic *ProcInstCreate) SetIsFinished(i int32) *ProcInstCreate {
 	pic.mutation.SetIsFinished(i)
 	return pic
 }
 
 // SetNillableIsFinished sets the "is_finished" field if the given value is not nil.
-func (pic *ProcInstCreate) SetNillableIsFinished(i *int8) *ProcInstCreate {
+func (pic *ProcInstCreate) SetNillableIsFinished(i *int32) *ProcInstCreate {
 	if i != nil {
 		pic.SetIsFinished(*i)
 	}
@@ -195,13 +195,13 @@ func (pic *ProcInstCreate) SetNillableDataID(i *int64) *ProcInstCreate {
 }
 
 // SetIsDel sets the "is_del" field.
-func (pic *ProcInstCreate) SetIsDel(i int8) *ProcInstCreate {
+func (pic *ProcInstCreate) SetIsDel(i int32) *ProcInstCreate {
 	pic.mutation.SetIsDel(i)
 	return pic
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (pic *ProcInstCreate) SetNillableIsDel(i *int8) *ProcInstCreate {
+func (pic *ProcInstCreate) SetNillableIsDel(i *int32) *ProcInstCreate {
 	if i != nil {
 		pic.SetIsDel(*i)
 	}
@@ -247,6 +247,82 @@ func (pic *ProcInstCreate) SetNillableUpdateTime(t *time.Time) *ProcInstCreate {
 	if t != nil {
 		pic.SetUpdateTime(*t)
 	}
+	return pic
+}
+
+// SetFlowType sets the "flow_type" field.
+func (pic *ProcInstCreate) SetFlowType(i int32) *ProcInstCreate {
+	pic.mutation.SetFlowType(i)
+	return pic
+}
+
+// SetNillableFlowType sets the "flow_type" field if the given value is not nil.
+func (pic *ProcInstCreate) SetNillableFlowType(i *int32) *ProcInstCreate {
+	if i != nil {
+		pic.SetFlowType(*i)
+	}
+	return pic
+}
+
+// SetRemark sets the "remark" field.
+func (pic *ProcInstCreate) SetRemark(s string) *ProcInstCreate {
+	pic.mutation.SetRemark(s)
+	return pic
+}
+
+// SetNillableRemark sets the "remark" field if the given value is not nil.
+func (pic *ProcInstCreate) SetNillableRemark(s *string) *ProcInstCreate {
+	if s != nil {
+		pic.SetRemark(*s)
+	}
+	return pic
+}
+
+// SetDelTime sets the "del_time" field.
+func (pic *ProcInstCreate) SetDelTime(t time.Time) *ProcInstCreate {
+	pic.mutation.SetDelTime(t)
+	return pic
+}
+
+// SetNillableDelTime sets the "del_time" field if the given value is not nil.
+func (pic *ProcInstCreate) SetNillableDelTime(t *time.Time) *ProcInstCreate {
+	if t != nil {
+		pic.SetDelTime(*t)
+	}
+	return pic
+}
+
+// SetDelUserID sets the "del_user_id" field.
+func (pic *ProcInstCreate) SetDelUserID(i int64) *ProcInstCreate {
+	pic.mutation.SetDelUserID(i)
+	return pic
+}
+
+// SetNillableDelUserID sets the "del_user_id" field if the given value is not nil.
+func (pic *ProcInstCreate) SetNillableDelUserID(i *int64) *ProcInstCreate {
+	if i != nil {
+		pic.SetDelUserID(*i)
+	}
+	return pic
+}
+
+// SetUpdateUserID sets the "update_user_id" field.
+func (pic *ProcInstCreate) SetUpdateUserID(i int64) *ProcInstCreate {
+	pic.mutation.SetUpdateUserID(i)
+	return pic
+}
+
+// SetNillableUpdateUserID sets the "update_user_id" field if the given value is not nil.
+func (pic *ProcInstCreate) SetNillableUpdateUserID(i *int64) *ProcInstCreate {
+	if i != nil {
+		pic.SetUpdateUserID(*i)
+	}
+	return pic
+}
+
+// SetID sets the "id" field.
+func (pic *ProcInstCreate) SetID(i int64) *ProcInstCreate {
+	pic.mutation.SetID(i)
 	return pic
 }
 
@@ -347,6 +423,10 @@ func (pic *ProcInstCreate) defaults() {
 		v := procinst.DefaultUpdateTime
 		pic.mutation.SetUpdateTime(v)
 	}
+	if _, ok := pic.mutation.FlowType(); !ok {
+		v := procinst.DefaultFlowType
+		pic.mutation.SetFlowType(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -374,6 +454,11 @@ func (pic *ProcInstCreate) check() error {
 			return &ValidationError{Name: "start_user_name", err: fmt.Errorf(`act: validator failed for field "ProcInst.start_user_name": %w`, err)}
 		}
 	}
+	if v, ok := pic.mutation.Remark(); ok {
+		if err := procinst.RemarkValidator(v); err != nil {
+			return &ValidationError{Name: "remark", err: fmt.Errorf(`act: validator failed for field "ProcInst.remark": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -385,8 +470,10 @@ func (pic *ProcInstCreate) sqlSave(ctx context.Context) (*ProcInst, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = id
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	return _node, nil
 }
 
@@ -396,11 +483,15 @@ func (pic *ProcInstCreate) createSpec() (*ProcInst, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: procinst.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: procinst.FieldID,
 			},
 		}
 	)
+	if id, ok := pic.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := pic.mutation.ProcDefID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt64,
@@ -483,7 +574,7 @@ func (pic *ProcInstCreate) createSpec() (*ProcInst, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pic.mutation.IsFinished(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldIsFinished,
 		})
@@ -507,7 +598,7 @@ func (pic *ProcInstCreate) createSpec() (*ProcInst, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pic.mutation.IsDel(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldIsDel,
 		})
@@ -536,6 +627,46 @@ func (pic *ProcInstCreate) createSpec() (*ProcInst, *sqlgraph.CreateSpec) {
 			Column: procinst.FieldUpdateTime,
 		})
 		_node.UpdateTime = value
+	}
+	if value, ok := pic.mutation.FlowType(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
+			Value:  value,
+			Column: procinst.FieldFlowType,
+		})
+		_node.FlowType = value
+	}
+	if value, ok := pic.mutation.Remark(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: procinst.FieldRemark,
+		})
+		_node.Remark = value
+	}
+	if value, ok := pic.mutation.DelTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: procinst.FieldDelTime,
+		})
+		_node.DelTime = value
+	}
+	if value, ok := pic.mutation.DelUserID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procinst.FieldDelUserID,
+		})
+		_node.DelUserID = value
+	}
+	if value, ok := pic.mutation.UpdateUserID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procinst.FieldUpdateUserID,
+		})
+		_node.UpdateUserID = value
 	}
 	return _node, _spec
 }
@@ -581,9 +712,9 @@ func (picb *ProcInstCreateBulk) Save(ctx context.Context) ([]*ProcInst, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = id
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

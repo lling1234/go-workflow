@@ -8,11 +8,11 @@ import (
 	"context"
 	"errors"
 	"github.com/mumushuiding/util"
+	"github.com/zeromicro/go-zero/core/logx"
 	"log"
 	"strconv"
 	"strings"
-
-	"github.com/zeromicro/go-zero/core/logx"
+	"time"
 )
 
 type CompleteTaskLogic struct {
@@ -31,30 +31,32 @@ func NewCompleteTaskLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Comp
 
 func (l *CompleteTaskLogic) CompleteTask(req *types.CompleteTask) (resp *types.CommonResponse, err error) {
 	RPC := l.svcCtx.Rpc
-	err = l.Complete(req, RPC)
+	inst, err := RPC.FindProcInstByDataId(l.ctx, &actclient.DataIdReq{
+		DataId: req.DataId,
+	})
+	if err != nil {
+		return types.GetErrorCommonResponse(err.Error())
+	}
+	err = l.Complete(req, RPC, inst.Id)
 
 	return types.GetCommonResponse(err, "ok")
 }
 
-func (l *CompleteTaskLogic) Complete(req *types.CompleteTask, RPC actclient.Act) error {
+func (l *CompleteTaskLogic) Complete(req *types.CompleteTask, RPC actclient.Act, instId int64) error {
 	// 1.找出该数据的流程最新审批节点
-	task, err := RPC.FindLatestTask(l.ctx, &actclient.DataIdReq{
-		DataId: req.DataId,
+	task, err := RPC.FindLatestTask(l.ctx, &actclient.ProcInstIdArg{
+		Id: instId,
 	})
 	taskId := task.Id
 	if err != nil {
 		return err
 	}
 	log.Println(1111111)
-	_, err = RPC.UpdateTask(l.ctx, &actclient.TaskReq{
-		Id:         taskId,
-		IsFinished: 1,
-	})
+	var isTaskFinished int32 = 1
 	if err != nil {
 		return err
 	}
 	log.Println(2222222)
-	log.Println("taskId",taskId)
 	//2、根据最新节点ID和用户ID找到对应的审批人
 	identityLink, err := RPC.FindIdentityLinkByTaskId(l.ctx, &actclient.TaskIdArg{
 		Id: taskId,
@@ -83,53 +85,110 @@ func (l *CompleteTaskLogic) Complete(req *types.CompleteTask, RPC actclient.Act)
 	//5.审批通过 生成新的流程节点和新的审批人表
 	var isInstFinish int32 = 0
 	var approvalState int32 = 0
-	if req.Result == flow.HAVEPASS {
+	switch req.Result {
+	case flow.HAVEPASS:
 		nodeInfos, err := l.findNodeInfosByInstId(RPC, task.ProcInstId)
 		log.Println(5555555)
 		if err != nil {
 			return err
 		}
-		if task.Mode == "or" {
+		if strings.ToLower(task.Mode) == "or" {
 			if task.Level == int32(len(nodeInfos)-1) {
 				isInstFinish = 1
 				approvalState = flow.HAVEPASS
-			}
-		} else if task.Mode == "and" {
-			//1.判断是否该节点的所有人都已经审批 TODO 返回数组不会写，暂时写只有一个审批人的
-			//2.是否为末级节点
-			log.Printf("task.Level:%d,nodeInfos_len:%d", task.Level, len(nodeInfos)-1)
-			if task.Level == int32(len(nodeInfos)-1) {
-				isInstFinish = 1
-				approvalState = flow.HAVEPASS
-				err = l.finishTask(RPC, task.ProcInstId, task.Level+1, req.DataId)
+				_, err = l.finishTask(RPC, task.ProcInstId, task.Level+1, req.DataId)
 				if err != nil {
 					return err
 				}
 			} else {
 				approvalState = flow.DEALING
-				err = l.moveNextStage(RPC, task.ProcInstId, task.Level+1, req.DataId, task.Mode, nodeInfos)
+				err = l.moveNextStage(RPC, task.ProcInstId, task.Level+1, req.DataId, nodeInfos)
 				if err != nil {
 					return err
 				}
 			}
+		} else if strings.ToLower(task.Mode) == "and" {
+			//1.判断是否该节点的所有人都已经审批
+			log.Println("andand")
+			//2.是否为末级节点
+			if l.isTaskFinished(task.MemberApprover, task.AgreeApprover, identityLink.UserId) {
+				if task.Level == int32(len(nodeInfos)-1) {
+					isInstFinish = 1
+					approvalState = flow.HAVEPASS
+					_, err = l.finishTask(RPC, task.ProcInstId, task.Level+1, req.DataId)
+					if err != nil {
+						return err
+					}
+				} else {
+					log.Println("andmoveNextStage")
+					approvalState = flow.DEALING
+					err = l.moveNextStage(RPC, task.ProcInstId, task.Level+1, req.DataId, nodeInfos)
+					if err != nil {
+						return err
+					}
+				}
+			} else {
+				log.Println("andDEALING")
+				approvalState = flow.DEALING
+				isTaskFinished = 0
+			}
+
 		}
 		//6、审批不通过 直接结束流程 更新流程实例 is_finished=1 state = 7
-	} else if req.Result == flow.DISCARD {
+	case flow.NOTPASS:
+		log.Println("req.Result", req.Result)
 		isInstFinish = 1
-		approvalState = flow.DISCARD
+		approvalState = flow.NOTPASS
 		//7.驳回  驳回到上一节点审批 驳回到指定节点审批 直接结束流程
-	} else if req.Result == flow.REJECT {
+	case flow.REJECT:
 		approvalState = flow.REJECT
 	}
-	//log.Println("isInstFinish", isInstFinish)
-	log.Println("approvalState", approvalState)
+
+	_, err = RPC.UpdateTask(l.ctx, &actclient.TaskReq{
+		Id:         taskId,
+		IsFinished: isTaskFinished,
+	})
+	//log.Println("approvalState", approvalState)
+	var flowCode string
+	if approvalState == flow.HAVEPASS {
+		flowCode = l.generateCode()
+	}
 	//8.反向更新流程实例表
 	_, err = RPC.UpdateProcInst(l.ctx, &actclient.UpdateProcInstReq{
 		DataId:   req.DataId,
 		State:    approvalState,
 		IsFinish: isInstFinish,
+		Code:     flowCode,
+		TaskId:   taskId,
 	})
 	return nil
+}
+
+func (l *CompleteTaskLogic) generateCode() string {
+	return "ORGINONE" + time.Now().Format("20060102")
+}
+
+func (l *CompleteTaskLogic) isTaskFinished(memberStr string, agreerStr string, userId int64) bool {
+	userIdStr := strconv.FormatInt(userId, 10)
+	members := strings.Split(memberStr, ",")
+	if agreerStr == "" {
+		if len(members) == 1 {
+			return members[0] == userIdStr
+		}
+	}
+	agreers := strings.Split(agreerStr+","+userIdStr, ",")
+	flag := true
+	if len(members) == len(agreers) {
+		for _, v := range agreers {
+			flag = strings.Contains(memberStr, v)
+			if !flag {
+				break
+			}
+		}
+	} else {
+		flag = false
+	}
+	return flag
 }
 
 func (l *CompleteTaskLogic) findNodeInfosByInstId(RPC actclient.Act, instId int64) ([]*flow.NodeInfo, error) {
@@ -144,18 +203,18 @@ func (l *CompleteTaskLogic) findNodeInfosByInstId(RPC actclient.Act, instId int6
 	util.Str2Struct(exec.NodeInfos, &nodeInfos)
 	return nodeInfos, err
 }
-func (l *CompleteTaskLogic) moveNextStage(RPC actclient.Act, instId int64, level int32, dataId int64, mode string, nodeInfos []*flow.NodeInfo) error {
+
+func (l *CompleteTaskLogic) moveNextStage(RPC actclient.Act, instId int64, level int32, dataId int64, nodeInfos []*flow.NodeInfo) error {
 	nodeInfo := nodeInfos[level-1] //计数是从0开始，因此需要-1
 	//4.保存流程任务
 	task := actclient.TaskReq{
 		NodeId:         nodeInfo.NodeID,
 		ProcInstId:     instId,
-		DataId:         dataId,
 		Level:          level,
 		IsFinished:     0,
 		Step:           level,
 		MemberApprover: nodeInfo.ApproverIds,
-		Mode:           mode,
+		Mode:           nodeInfo.Mode,
 	}
 	newTask, err := RPC.SaveTask(l.ctx, &task)
 	if err != nil {
@@ -179,17 +238,19 @@ func (l *CompleteTaskLogic) moveNextStage(RPC actclient.Act, instId int64, level
 
 	return nil
 }
-func (l *CompleteTaskLogic) finishTask(RPC actclient.Act, instId int64, level int32, dataId int64) error {
-	newTask := actclient.TaskReq{
+func (l *CompleteTaskLogic) finishTask(RPC actclient.Act, instId int64, level int32, dataId int64) (int64, error) {
+	task := actclient.TaskReq{
 		NodeId:     "结束",
 		ProcInstId: instId,
-		DataId:     dataId,
 		Level:      level,
 		IsFinished: 1,
 		Step:       level,
 	}
 	log.Println(666666)
-	_, err := RPC.SaveTask(l.ctx, &newTask)
+	newTask, err := RPC.SaveTask(l.ctx, &task)
 	log.Println(7777777)
-	return err
+	if newTask == nil {
+		return 0, err
+	}
+	return newTask.Id, err
 }

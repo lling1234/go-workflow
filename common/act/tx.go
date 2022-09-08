@@ -12,6 +12,8 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// ConcurrentNode is the client for interacting with the ConcurrentNode builders.
+	ConcurrentNode *ConcurrentNodeClient
 	// Execution is the client for interacting with the Execution builders.
 	Execution *ExecutionClient
 	// IdentityLink is the client for interacting with the IdentityLink builders.
@@ -157,6 +159,7 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
+	tx.ConcurrentNode = NewConcurrentNodeClient(tx.config)
 	tx.Execution = NewExecutionClient(tx.config)
 	tx.IdentityLink = NewIdentityLinkClient(tx.config)
 	tx.ProcDef = NewProcDefClient(tx.config)
@@ -171,7 +174,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: Execution.QueryXXX(), the query will be executed
+// applies a query, for example: ConcurrentNode.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

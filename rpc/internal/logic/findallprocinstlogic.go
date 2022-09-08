@@ -28,6 +28,7 @@ func NewFindAllProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *F
 	}
 }
 
+<<<<<<< HEAD
 // 流程实例查询,根据id查询，分页查询和根据title过滤
 func (l *FindAllProcInstLogic) FindAllProcInst(in *act.IdRequest) (*act.CommonRpcRes, error) {
 	log.Println("FindAllProcInst111111111", in)
@@ -65,4 +66,10 @@ func (l *FindAllProcInstLogic) FindAllProcInst(in *act.IdRequest) (*act.CommonRp
 	log.Println("----------------")
 	log.Println("res555555555", res)
 	return &act.CommonRpcRes{Json: res.Json}, nil
+=======
+func (l *FindAllProcInstLogic) FindAllProcInst(in *act.IdRequest) (*act.CommonRpcRes, error) {
+	// todo: add your logic here and delete this line
+
+	return &act.CommonRpcRes{}, nil
+>>>>>>> 4a54178f732840048a6d221f9338a6e8f5d12ba3
 }

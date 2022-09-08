@@ -74,9 +74,9 @@ var (
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime time.Time
 	// DefaultIsDel holds the default value on creation for the "is_del" field.
-	DefaultIsDel int8
+	DefaultIsDel int32
 	// DefaultIsDeal holds the default value on creation for the "is_deal" field.
-	DefaultIsDeal int8
+	DefaultIsDeal int32
 	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
 	DefaultUpdateTime time.Time
 )

@@ -6,6 +6,7 @@ import (
 	"container/list"
 	"context"
 	"github.com/mumushuiding/util"
+	"log"
 	"strconv"
 	"strings"
 
@@ -46,7 +47,9 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 		RemainHours: def.RemainHours,
 		State:       flow.PENDING,
 	}
+	log.Println(111)
 	inst, err := RPC.SaveProcInst(l.ctx, instReq)
+	log.Println(222)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
@@ -54,14 +57,13 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 	task := actclient.TaskReq{
 		NodeId:     "开始",
 		ProcInstId: inst.Id,
-		DataId:     req.DataId,
 		Level:      STEP,
 		IsFinished: 1,
 		Step:       STEP,
-		//MemberCount:   1,
-		Mode: "or",
+		Mode:       "or",
 	}
 	_, err = RPC.SaveTask(l.ctx, &task)
+	log.Println(33333)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
@@ -86,9 +88,9 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 	util.Str2Struct(exec.NodeInfos, &nodeInfos)
 	// -----------------生成新任务-------------
 	firstNode := nodeInfos[1]
-	if firstNode.Mode == "AND" {
-		//task.MemberCount = int32(firstNode.MemberCount)
-	}
+	//if firstNode.Mode == "AND" {
+	//task.MemberCount = int32(firstNode.MemberCount)
+	//}
 	task.NodeId = firstNode.NodeID
 	STEP = 2
 	//task.AgreeNum = 0

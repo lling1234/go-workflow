@@ -131,13 +131,13 @@ func (ilc *IdentityLinkCreate) SetNillableCreateTime(t *time.Time) *IdentityLink
 }
 
 // SetIsDel sets the "is_del" field.
-func (ilc *IdentityLinkCreate) SetIsDel(i int8) *IdentityLinkCreate {
+func (ilc *IdentityLinkCreate) SetIsDel(i int32) *IdentityLinkCreate {
 	ilc.mutation.SetIsDel(i)
 	return ilc
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (ilc *IdentityLinkCreate) SetNillableIsDel(i *int8) *IdentityLinkCreate {
+func (ilc *IdentityLinkCreate) SetNillableIsDel(i *int32) *IdentityLinkCreate {
 	if i != nil {
 		ilc.SetIsDel(*i)
 	}
@@ -145,13 +145,13 @@ func (ilc *IdentityLinkCreate) SetNillableIsDel(i *int8) *IdentityLinkCreate {
 }
 
 // SetIsDeal sets the "is_deal" field.
-func (ilc *IdentityLinkCreate) SetIsDeal(i int8) *IdentityLinkCreate {
+func (ilc *IdentityLinkCreate) SetIsDeal(i int32) *IdentityLinkCreate {
 	ilc.mutation.SetIsDeal(i)
 	return ilc
 }
 
 // SetNillableIsDeal sets the "is_deal" field if the given value is not nil.
-func (ilc *IdentityLinkCreate) SetNillableIsDeal(i *int8) *IdentityLinkCreate {
+func (ilc *IdentityLinkCreate) SetNillableIsDeal(i *int32) *IdentityLinkCreate {
 	if i != nil {
 		ilc.SetIsDeal(*i)
 	}
@@ -169,6 +169,12 @@ func (ilc *IdentityLinkCreate) SetNillableUpdateTime(t *time.Time) *IdentityLink
 	if t != nil {
 		ilc.SetUpdateTime(*t)
 	}
+	return ilc
+}
+
+// SetID sets the "id" field.
+func (ilc *IdentityLinkCreate) SetID(i int64) *IdentityLinkCreate {
+	ilc.mutation.SetID(i)
 	return ilc
 }
 
@@ -296,8 +302,10 @@ func (ilc *IdentityLinkCreate) sqlSave(ctx context.Context) (*IdentityLink, erro
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = id
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	return _node, nil
 }
 
@@ -307,11 +315,15 @@ func (ilc *IdentityLinkCreate) createSpec() (*IdentityLink, *sqlgraph.CreateSpec
 		_spec = &sqlgraph.CreateSpec{
 			Table: identitylink.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: identitylink.FieldID,
 			},
 		}
 	)
+	if id, ok := ilc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := ilc.mutation.UserID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt64,
@@ -386,7 +398,7 @@ func (ilc *IdentityLinkCreate) createSpec() (*IdentityLink, *sqlgraph.CreateSpec
 	}
 	if value, ok := ilc.mutation.IsDel(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldIsDel,
 		})
@@ -394,7 +406,7 @@ func (ilc *IdentityLinkCreate) createSpec() (*IdentityLink, *sqlgraph.CreateSpec
 	}
 	if value, ok := ilc.mutation.IsDeal(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldIsDeal,
 		})
@@ -452,9 +464,9 @@ func (ilcb *IdentityLinkCreateBulk) Save(ctx context.Context) ([]*IdentityLink, 
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = id
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

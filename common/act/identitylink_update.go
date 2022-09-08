@@ -223,14 +223,14 @@ func (ilu *IdentityLinkUpdate) ClearCreateTime() *IdentityLinkUpdate {
 }
 
 // SetIsDel sets the "is_del" field.
-func (ilu *IdentityLinkUpdate) SetIsDel(i int8) *IdentityLinkUpdate {
+func (ilu *IdentityLinkUpdate) SetIsDel(i int32) *IdentityLinkUpdate {
 	ilu.mutation.ResetIsDel()
 	ilu.mutation.SetIsDel(i)
 	return ilu
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (ilu *IdentityLinkUpdate) SetNillableIsDel(i *int8) *IdentityLinkUpdate {
+func (ilu *IdentityLinkUpdate) SetNillableIsDel(i *int32) *IdentityLinkUpdate {
 	if i != nil {
 		ilu.SetIsDel(*i)
 	}
@@ -238,7 +238,7 @@ func (ilu *IdentityLinkUpdate) SetNillableIsDel(i *int8) *IdentityLinkUpdate {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (ilu *IdentityLinkUpdate) AddIsDel(i int8) *IdentityLinkUpdate {
+func (ilu *IdentityLinkUpdate) AddIsDel(i int32) *IdentityLinkUpdate {
 	ilu.mutation.AddIsDel(i)
 	return ilu
 }
@@ -250,14 +250,14 @@ func (ilu *IdentityLinkUpdate) ClearIsDel() *IdentityLinkUpdate {
 }
 
 // SetIsDeal sets the "is_deal" field.
-func (ilu *IdentityLinkUpdate) SetIsDeal(i int8) *IdentityLinkUpdate {
+func (ilu *IdentityLinkUpdate) SetIsDeal(i int32) *IdentityLinkUpdate {
 	ilu.mutation.ResetIsDeal()
 	ilu.mutation.SetIsDeal(i)
 	return ilu
 }
 
 // SetNillableIsDeal sets the "is_deal" field if the given value is not nil.
-func (ilu *IdentityLinkUpdate) SetNillableIsDeal(i *int8) *IdentityLinkUpdate {
+func (ilu *IdentityLinkUpdate) SetNillableIsDeal(i *int32) *IdentityLinkUpdate {
 	if i != nil {
 		ilu.SetIsDeal(*i)
 	}
@@ -265,7 +265,7 @@ func (ilu *IdentityLinkUpdate) SetNillableIsDeal(i *int8) *IdentityLinkUpdate {
 }
 
 // AddIsDeal adds i to the "is_deal" field.
-func (ilu *IdentityLinkUpdate) AddIsDeal(i int8) *IdentityLinkUpdate {
+func (ilu *IdentityLinkUpdate) AddIsDeal(i int32) *IdentityLinkUpdate {
 	ilu.mutation.AddIsDeal(i)
 	return ilu
 }
@@ -382,7 +382,7 @@ func (ilu *IdentityLinkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Table:   identitylink.Table,
 			Columns: identitylink.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: identitylink.FieldID,
 			},
 		},
@@ -543,41 +543,41 @@ func (ilu *IdentityLinkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := ilu.mutation.IsDel(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldIsDel,
 		})
 	}
 	if value, ok := ilu.mutation.AddedIsDel(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldIsDel,
 		})
 	}
 	if ilu.mutation.IsDelCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: identitylink.FieldIsDel,
 		})
 	}
 	if value, ok := ilu.mutation.IsDeal(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldIsDeal,
 		})
 	}
 	if value, ok := ilu.mutation.AddedIsDeal(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldIsDeal,
 		})
 	}
 	if ilu.mutation.IsDealCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: identitylink.FieldIsDeal,
 		})
 	}
@@ -808,14 +808,14 @@ func (iluo *IdentityLinkUpdateOne) ClearCreateTime() *IdentityLinkUpdateOne {
 }
 
 // SetIsDel sets the "is_del" field.
-func (iluo *IdentityLinkUpdateOne) SetIsDel(i int8) *IdentityLinkUpdateOne {
+func (iluo *IdentityLinkUpdateOne) SetIsDel(i int32) *IdentityLinkUpdateOne {
 	iluo.mutation.ResetIsDel()
 	iluo.mutation.SetIsDel(i)
 	return iluo
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (iluo *IdentityLinkUpdateOne) SetNillableIsDel(i *int8) *IdentityLinkUpdateOne {
+func (iluo *IdentityLinkUpdateOne) SetNillableIsDel(i *int32) *IdentityLinkUpdateOne {
 	if i != nil {
 		iluo.SetIsDel(*i)
 	}
@@ -823,7 +823,7 @@ func (iluo *IdentityLinkUpdateOne) SetNillableIsDel(i *int8) *IdentityLinkUpdate
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (iluo *IdentityLinkUpdateOne) AddIsDel(i int8) *IdentityLinkUpdateOne {
+func (iluo *IdentityLinkUpdateOne) AddIsDel(i int32) *IdentityLinkUpdateOne {
 	iluo.mutation.AddIsDel(i)
 	return iluo
 }
@@ -835,14 +835,14 @@ func (iluo *IdentityLinkUpdateOne) ClearIsDel() *IdentityLinkUpdateOne {
 }
 
 // SetIsDeal sets the "is_deal" field.
-func (iluo *IdentityLinkUpdateOne) SetIsDeal(i int8) *IdentityLinkUpdateOne {
+func (iluo *IdentityLinkUpdateOne) SetIsDeal(i int32) *IdentityLinkUpdateOne {
 	iluo.mutation.ResetIsDeal()
 	iluo.mutation.SetIsDeal(i)
 	return iluo
 }
 
 // SetNillableIsDeal sets the "is_deal" field if the given value is not nil.
-func (iluo *IdentityLinkUpdateOne) SetNillableIsDeal(i *int8) *IdentityLinkUpdateOne {
+func (iluo *IdentityLinkUpdateOne) SetNillableIsDeal(i *int32) *IdentityLinkUpdateOne {
 	if i != nil {
 		iluo.SetIsDeal(*i)
 	}
@@ -850,7 +850,7 @@ func (iluo *IdentityLinkUpdateOne) SetNillableIsDeal(i *int8) *IdentityLinkUpdat
 }
 
 // AddIsDeal adds i to the "is_deal" field.
-func (iluo *IdentityLinkUpdateOne) AddIsDeal(i int8) *IdentityLinkUpdateOne {
+func (iluo *IdentityLinkUpdateOne) AddIsDeal(i int32) *IdentityLinkUpdateOne {
 	iluo.mutation.AddIsDeal(i)
 	return iluo
 }
@@ -980,7 +980,7 @@ func (iluo *IdentityLinkUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 			Table:   identitylink.Table,
 			Columns: identitylink.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: identitylink.FieldID,
 			},
 		},
@@ -1158,41 +1158,41 @@ func (iluo *IdentityLinkUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 	}
 	if value, ok := iluo.mutation.IsDel(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldIsDel,
 		})
 	}
 	if value, ok := iluo.mutation.AddedIsDel(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldIsDel,
 		})
 	}
 	if iluo.mutation.IsDelCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: identitylink.FieldIsDel,
 		})
 	}
 	if value, ok := iluo.mutation.IsDeal(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldIsDeal,
 		})
 	}
 	if value, ok := iluo.mutation.AddedIsDeal(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: identitylink.FieldIsDeal,
 		})
 	}
 	if iluo.mutation.IsDealCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: identitylink.FieldIsDeal,
 		})
 	}

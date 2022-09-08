@@ -45,6 +45,16 @@ const (
 	FieldRemainHours = "remain_hours"
 	// FieldUpdateTime holds the string denoting the update_time field in the database.
 	FieldUpdateTime = "update_time"
+	// FieldFlowType holds the string denoting the flow_type field in the database.
+	FieldFlowType = "flow_type"
+	// FieldRemark holds the string denoting the remark field in the database.
+	FieldRemark = "remark"
+	// FieldDelTime holds the string denoting the del_time field in the database.
+	FieldDelTime = "del_time"
+	// FieldDelUserID holds the string denoting the del_user_id field in the database.
+	FieldDelUserID = "del_user_id"
+	// FieldUpdateUserID holds the string denoting the update_user_id field in the database.
+	FieldUpdateUserID = "update_user_id"
 	// Table holds the table name of the procinst in the database.
 	Table = "act_proc_inst"
 )
@@ -69,6 +79,11 @@ var Columns = []string{
 	FieldCreateTime,
 	FieldRemainHours,
 	FieldUpdateTime,
+	FieldFlowType,
+	FieldRemark,
+	FieldDelTime,
+	FieldDelUserID,
+	FieldUpdateUserID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -93,11 +108,15 @@ var (
 	// StartUserNameValidator is a validator for the "start_user_name" field. It is called by the builders before save.
 	StartUserNameValidator func(string) error
 	// DefaultIsFinished holds the default value on creation for the "is_finished" field.
-	DefaultIsFinished int8
+	DefaultIsFinished int32
 	// DefaultIsDel holds the default value on creation for the "is_del" field.
-	DefaultIsDel int8
+	DefaultIsDel int32
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime time.Time
 	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
 	DefaultUpdateTime time.Time
+	// DefaultFlowType holds the default value on creation for the "flow_type" field.
+	DefaultFlowType int32
+	// RemarkValidator is a validator for the "remark" field. It is called by the builders before save.
+	RemarkValidator func(string) error
 )

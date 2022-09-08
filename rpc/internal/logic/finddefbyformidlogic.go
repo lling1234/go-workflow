@@ -6,6 +6,7 @@ import (
 	"act/common/tools/date"
 	"act/rpc/general"
 	"context"
+	"errors"
 
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
@@ -33,11 +34,14 @@ func (l *FindDefByFormIdLogic) FindDefByFormId(in *act.FindProcDefReq) (*act.Pro
 	if err != nil {
 		return nil, err
 	}
-	def, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(general.TargetId), procdef.IsActiveEQ(1)).First(l.ctx)
+	defs, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(general.TargetId), procdef.IsActiveEQ(1)).All(l.ctx)
 	if err != nil {
 		return nil, err
 	}
-	return l.convert(def), nil
+	if defs == nil || len(defs) == 0 {
+		return nil, errors.New("找不到对应的流程定义")
+	}
+	return l.convert(defs[0]), nil
 }
 
 func (l *FindDefByFormIdLogic) convert(actpd *act2.ProcDef) *act.ProcDefReply {
@@ -54,6 +58,6 @@ func (l *FindDefByFormIdLogic) convert(actpd *act2.ProcDef) *act.ProcDefReply {
 		FormName:       actpd.FormName,
 		Resource:       actpd.Resource,
 		RemainHours:    actpd.RemainHours,
-		IsActive:       int32(actpd.IsActive),
+		IsActive:       actpd.IsActive,
 	}
 }

@@ -263,14 +263,14 @@ func (pdu *ProcDefUpdate) ClearRemainHours() *ProcDefUpdate {
 }
 
 // SetIsDel sets the "is_del" field.
-func (pdu *ProcDefUpdate) SetIsDel(i int8) *ProcDefUpdate {
+func (pdu *ProcDefUpdate) SetIsDel(i int32) *ProcDefUpdate {
 	pdu.mutation.ResetIsDel()
 	pdu.mutation.SetIsDel(i)
 	return pdu
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (pdu *ProcDefUpdate) SetNillableIsDel(i *int8) *ProcDefUpdate {
+func (pdu *ProcDefUpdate) SetNillableIsDel(i *int32) *ProcDefUpdate {
 	if i != nil {
 		pdu.SetIsDel(*i)
 	}
@@ -278,7 +278,7 @@ func (pdu *ProcDefUpdate) SetNillableIsDel(i *int8) *ProcDefUpdate {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (pdu *ProcDefUpdate) AddIsDel(i int8) *ProcDefUpdate {
+func (pdu *ProcDefUpdate) AddIsDel(i int32) *ProcDefUpdate {
 	pdu.mutation.AddIsDel(i)
 	return pdu
 }
@@ -290,14 +290,14 @@ func (pdu *ProcDefUpdate) ClearIsDel() *ProcDefUpdate {
 }
 
 // SetIsActive sets the "is_active" field.
-func (pdu *ProcDefUpdate) SetIsActive(i int8) *ProcDefUpdate {
+func (pdu *ProcDefUpdate) SetIsActive(i int32) *ProcDefUpdate {
 	pdu.mutation.ResetIsActive()
 	pdu.mutation.SetIsActive(i)
 	return pdu
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (pdu *ProcDefUpdate) SetNillableIsActive(i *int8) *ProcDefUpdate {
+func (pdu *ProcDefUpdate) SetNillableIsActive(i *int32) *ProcDefUpdate {
 	if i != nil {
 		pdu.SetIsActive(*i)
 	}
@@ -305,7 +305,7 @@ func (pdu *ProcDefUpdate) SetNillableIsActive(i *int8) *ProcDefUpdate {
 }
 
 // AddIsActive adds i to the "is_active" field.
-func (pdu *ProcDefUpdate) AddIsActive(i int8) *ProcDefUpdate {
+func (pdu *ProcDefUpdate) AddIsActive(i int32) *ProcDefUpdate {
 	pdu.mutation.AddIsActive(i)
 	return pdu
 }
@@ -333,6 +333,80 @@ func (pdu *ProcDefUpdate) SetNillableUpdateTime(t *time.Time) *ProcDefUpdate {
 // ClearUpdateTime clears the value of the "update_time" field.
 func (pdu *ProcDefUpdate) ClearUpdateTime() *ProcDefUpdate {
 	pdu.mutation.ClearUpdateTime()
+	return pdu
+}
+
+// SetDelTime sets the "del_time" field.
+func (pdu *ProcDefUpdate) SetDelTime(t time.Time) *ProcDefUpdate {
+	pdu.mutation.SetDelTime(t)
+	return pdu
+}
+
+// SetNillableDelTime sets the "del_time" field if the given value is not nil.
+func (pdu *ProcDefUpdate) SetNillableDelTime(t *time.Time) *ProcDefUpdate {
+	if t != nil {
+		pdu.SetDelTime(*t)
+	}
+	return pdu
+}
+
+// ClearDelTime clears the value of the "del_time" field.
+func (pdu *ProcDefUpdate) ClearDelTime() *ProcDefUpdate {
+	pdu.mutation.ClearDelTime()
+	return pdu
+}
+
+// SetDelUserID sets the "del_user_id" field.
+func (pdu *ProcDefUpdate) SetDelUserID(i int64) *ProcDefUpdate {
+	pdu.mutation.ResetDelUserID()
+	pdu.mutation.SetDelUserID(i)
+	return pdu
+}
+
+// SetNillableDelUserID sets the "del_user_id" field if the given value is not nil.
+func (pdu *ProcDefUpdate) SetNillableDelUserID(i *int64) *ProcDefUpdate {
+	if i != nil {
+		pdu.SetDelUserID(*i)
+	}
+	return pdu
+}
+
+// AddDelUserID adds i to the "del_user_id" field.
+func (pdu *ProcDefUpdate) AddDelUserID(i int64) *ProcDefUpdate {
+	pdu.mutation.AddDelUserID(i)
+	return pdu
+}
+
+// ClearDelUserID clears the value of the "del_user_id" field.
+func (pdu *ProcDefUpdate) ClearDelUserID() *ProcDefUpdate {
+	pdu.mutation.ClearDelUserID()
+	return pdu
+}
+
+// SetUpdateUserID sets the "update_user_id" field.
+func (pdu *ProcDefUpdate) SetUpdateUserID(i int64) *ProcDefUpdate {
+	pdu.mutation.ResetUpdateUserID()
+	pdu.mutation.SetUpdateUserID(i)
+	return pdu
+}
+
+// SetNillableUpdateUserID sets the "update_user_id" field if the given value is not nil.
+func (pdu *ProcDefUpdate) SetNillableUpdateUserID(i *int64) *ProcDefUpdate {
+	if i != nil {
+		pdu.SetUpdateUserID(*i)
+	}
+	return pdu
+}
+
+// AddUpdateUserID adds i to the "update_user_id" field.
+func (pdu *ProcDefUpdate) AddUpdateUserID(i int64) *ProcDefUpdate {
+	pdu.mutation.AddUpdateUserID(i)
+	return pdu
+}
+
+// ClearUpdateUserID clears the value of the "update_user_id" field.
+func (pdu *ProcDefUpdate) ClearUpdateUserID() *ProcDefUpdate {
+	pdu.mutation.ClearUpdateUserID()
 	return pdu
 }
 
@@ -442,7 +516,7 @@ func (pdu *ProcDefUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Table:   procdef.Table,
 			Columns: procdef.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: procdef.FieldID,
 			},
 		},
@@ -621,41 +695,41 @@ func (pdu *ProcDefUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pdu.mutation.IsDel(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldIsDel,
 		})
 	}
 	if value, ok := pdu.mutation.AddedIsDel(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldIsDel,
 		})
 	}
 	if pdu.mutation.IsDelCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: procdef.FieldIsDel,
 		})
 	}
 	if value, ok := pdu.mutation.IsActive(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldIsActive,
 		})
 	}
 	if value, ok := pdu.mutation.AddedIsActive(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldIsActive,
 		})
 	}
 	if pdu.mutation.IsActiveCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: procdef.FieldIsActive,
 		})
 	}
@@ -670,6 +744,59 @@ func (pdu *ProcDefUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Column: procdef.FieldUpdateTime,
+		})
+	}
+	if value, ok := pdu.mutation.DelTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: procdef.FieldDelTime,
+		})
+	}
+	if pdu.mutation.DelTimeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: procdef.FieldDelTime,
+		})
+	}
+	if value, ok := pdu.mutation.DelUserID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldDelUserID,
+		})
+	}
+	if value, ok := pdu.mutation.AddedDelUserID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldDelUserID,
+		})
+	}
+	if pdu.mutation.DelUserIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Column: procdef.FieldDelUserID,
+		})
+	}
+	if value, ok := pdu.mutation.UpdateUserID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldUpdateUserID,
+		})
+	}
+	if value, ok := pdu.mutation.AddedUpdateUserID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldUpdateUserID,
+		})
+	}
+	if pdu.mutation.UpdateUserIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Column: procdef.FieldUpdateUserID,
 		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pdu.driver, _spec); err != nil {
@@ -926,14 +1053,14 @@ func (pduo *ProcDefUpdateOne) ClearRemainHours() *ProcDefUpdateOne {
 }
 
 // SetIsDel sets the "is_del" field.
-func (pduo *ProcDefUpdateOne) SetIsDel(i int8) *ProcDefUpdateOne {
+func (pduo *ProcDefUpdateOne) SetIsDel(i int32) *ProcDefUpdateOne {
 	pduo.mutation.ResetIsDel()
 	pduo.mutation.SetIsDel(i)
 	return pduo
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (pduo *ProcDefUpdateOne) SetNillableIsDel(i *int8) *ProcDefUpdateOne {
+func (pduo *ProcDefUpdateOne) SetNillableIsDel(i *int32) *ProcDefUpdateOne {
 	if i != nil {
 		pduo.SetIsDel(*i)
 	}
@@ -941,7 +1068,7 @@ func (pduo *ProcDefUpdateOne) SetNillableIsDel(i *int8) *ProcDefUpdateOne {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (pduo *ProcDefUpdateOne) AddIsDel(i int8) *ProcDefUpdateOne {
+func (pduo *ProcDefUpdateOne) AddIsDel(i int32) *ProcDefUpdateOne {
 	pduo.mutation.AddIsDel(i)
 	return pduo
 }
@@ -953,14 +1080,14 @@ func (pduo *ProcDefUpdateOne) ClearIsDel() *ProcDefUpdateOne {
 }
 
 // SetIsActive sets the "is_active" field.
-func (pduo *ProcDefUpdateOne) SetIsActive(i int8) *ProcDefUpdateOne {
+func (pduo *ProcDefUpdateOne) SetIsActive(i int32) *ProcDefUpdateOne {
 	pduo.mutation.ResetIsActive()
 	pduo.mutation.SetIsActive(i)
 	return pduo
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (pduo *ProcDefUpdateOne) SetNillableIsActive(i *int8) *ProcDefUpdateOne {
+func (pduo *ProcDefUpdateOne) SetNillableIsActive(i *int32) *ProcDefUpdateOne {
 	if i != nil {
 		pduo.SetIsActive(*i)
 	}
@@ -968,7 +1095,7 @@ func (pduo *ProcDefUpdateOne) SetNillableIsActive(i *int8) *ProcDefUpdateOne {
 }
 
 // AddIsActive adds i to the "is_active" field.
-func (pduo *ProcDefUpdateOne) AddIsActive(i int8) *ProcDefUpdateOne {
+func (pduo *ProcDefUpdateOne) AddIsActive(i int32) *ProcDefUpdateOne {
 	pduo.mutation.AddIsActive(i)
 	return pduo
 }
@@ -996,6 +1123,80 @@ func (pduo *ProcDefUpdateOne) SetNillableUpdateTime(t *time.Time) *ProcDefUpdate
 // ClearUpdateTime clears the value of the "update_time" field.
 func (pduo *ProcDefUpdateOne) ClearUpdateTime() *ProcDefUpdateOne {
 	pduo.mutation.ClearUpdateTime()
+	return pduo
+}
+
+// SetDelTime sets the "del_time" field.
+func (pduo *ProcDefUpdateOne) SetDelTime(t time.Time) *ProcDefUpdateOne {
+	pduo.mutation.SetDelTime(t)
+	return pduo
+}
+
+// SetNillableDelTime sets the "del_time" field if the given value is not nil.
+func (pduo *ProcDefUpdateOne) SetNillableDelTime(t *time.Time) *ProcDefUpdateOne {
+	if t != nil {
+		pduo.SetDelTime(*t)
+	}
+	return pduo
+}
+
+// ClearDelTime clears the value of the "del_time" field.
+func (pduo *ProcDefUpdateOne) ClearDelTime() *ProcDefUpdateOne {
+	pduo.mutation.ClearDelTime()
+	return pduo
+}
+
+// SetDelUserID sets the "del_user_id" field.
+func (pduo *ProcDefUpdateOne) SetDelUserID(i int64) *ProcDefUpdateOne {
+	pduo.mutation.ResetDelUserID()
+	pduo.mutation.SetDelUserID(i)
+	return pduo
+}
+
+// SetNillableDelUserID sets the "del_user_id" field if the given value is not nil.
+func (pduo *ProcDefUpdateOne) SetNillableDelUserID(i *int64) *ProcDefUpdateOne {
+	if i != nil {
+		pduo.SetDelUserID(*i)
+	}
+	return pduo
+}
+
+// AddDelUserID adds i to the "del_user_id" field.
+func (pduo *ProcDefUpdateOne) AddDelUserID(i int64) *ProcDefUpdateOne {
+	pduo.mutation.AddDelUserID(i)
+	return pduo
+}
+
+// ClearDelUserID clears the value of the "del_user_id" field.
+func (pduo *ProcDefUpdateOne) ClearDelUserID() *ProcDefUpdateOne {
+	pduo.mutation.ClearDelUserID()
+	return pduo
+}
+
+// SetUpdateUserID sets the "update_user_id" field.
+func (pduo *ProcDefUpdateOne) SetUpdateUserID(i int64) *ProcDefUpdateOne {
+	pduo.mutation.ResetUpdateUserID()
+	pduo.mutation.SetUpdateUserID(i)
+	return pduo
+}
+
+// SetNillableUpdateUserID sets the "update_user_id" field if the given value is not nil.
+func (pduo *ProcDefUpdateOne) SetNillableUpdateUserID(i *int64) *ProcDefUpdateOne {
+	if i != nil {
+		pduo.SetUpdateUserID(*i)
+	}
+	return pduo
+}
+
+// AddUpdateUserID adds i to the "update_user_id" field.
+func (pduo *ProcDefUpdateOne) AddUpdateUserID(i int64) *ProcDefUpdateOne {
+	pduo.mutation.AddUpdateUserID(i)
+	return pduo
+}
+
+// ClearUpdateUserID clears the value of the "update_user_id" field.
+func (pduo *ProcDefUpdateOne) ClearUpdateUserID() *ProcDefUpdateOne {
+	pduo.mutation.ClearUpdateUserID()
 	return pduo
 }
 
@@ -1118,7 +1319,7 @@ func (pduo *ProcDefUpdateOne) sqlSave(ctx context.Context) (_node *ProcDef, err 
 			Table:   procdef.Table,
 			Columns: procdef.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: procdef.FieldID,
 			},
 		},
@@ -1314,41 +1515,41 @@ func (pduo *ProcDefUpdateOne) sqlSave(ctx context.Context) (_node *ProcDef, err 
 	}
 	if value, ok := pduo.mutation.IsDel(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldIsDel,
 		})
 	}
 	if value, ok := pduo.mutation.AddedIsDel(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldIsDel,
 		})
 	}
 	if pduo.mutation.IsDelCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: procdef.FieldIsDel,
 		})
 	}
 	if value, ok := pduo.mutation.IsActive(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldIsActive,
 		})
 	}
 	if value, ok := pduo.mutation.AddedIsActive(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procdef.FieldIsActive,
 		})
 	}
 	if pduo.mutation.IsActiveCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: procdef.FieldIsActive,
 		})
 	}
@@ -1363,6 +1564,59 @@ func (pduo *ProcDefUpdateOne) sqlSave(ctx context.Context) (_node *ProcDef, err 
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Column: procdef.FieldUpdateTime,
+		})
+	}
+	if value, ok := pduo.mutation.DelTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: procdef.FieldDelTime,
+		})
+	}
+	if pduo.mutation.DelTimeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: procdef.FieldDelTime,
+		})
+	}
+	if value, ok := pduo.mutation.DelUserID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldDelUserID,
+		})
+	}
+	if value, ok := pduo.mutation.AddedDelUserID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldDelUserID,
+		})
+	}
+	if pduo.mutation.DelUserIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Column: procdef.FieldDelUserID,
+		})
+	}
+	if value, ok := pduo.mutation.UpdateUserID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldUpdateUserID,
+		})
+	}
+	if value, ok := pduo.mutation.AddedUpdateUserID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldUpdateUserID,
+		})
+	}
+	if pduo.mutation.UpdateUserIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Column: procdef.FieldUpdateUserID,
 		})
 	}
 	_node = &ProcDef{config: pduo.config}

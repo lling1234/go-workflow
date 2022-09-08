@@ -4,5 +4,5 @@ Port: 8080
 Rpc:
   Etcd:
     Hosts:
-      - qkbyte.orginone.cn:6005
+      - 127.0.0.1:2379
     Key: act.rpc

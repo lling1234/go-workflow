@@ -56,6 +56,20 @@ message ProcInstReq {
   int32 state = 9;
 }
 
+message UpdateProcInstReq {
+  int64 procDefId = 1;
+  int64 dataId = 2;
+  string formId = 3;
+  int64 targetId = 4;
+  int32 remainHours = 5;
+  int32 state = 6;
+  string nodeId = 7;
+  int64 taskId = 8;
+  int32 isFinish = 9;
+  string endTime = 10;
+  string code = 11;
+}
+
 message ProcInstReply {
   int64 id = 1;
   int64 procDefId = 2;
@@ -95,15 +109,17 @@ message ExecutionReply {
 }
 
 message TaskReq {
-  string nodeId = 1;
-  int64 procInstId = 2;
-  int64 dataId = 3;
-  int32 level = 4;
-  int32 isFinished = 5;
-  int32 step = 6;
-  string memberApprover = 7;
-  string agreeApprover = 8;
-  string mode = 9;
+  int64 id = 1;
+  string nodeId = 2;
+  int64 procInstId = 3;
+  int64 dataId = 4;
+  int32 level = 5;
+  int32 isFinished = 6;
+  int32 step = 7;
+  string memberApprover = 8;
+  string agreeApprover = 9;
+  string mode = 10;
+  string claimTime = 11;
 }
 
 message TaskReply {
@@ -151,11 +167,17 @@ message IdentityLinkReply {
 
 message DataIdReq {
   int64 dataId = 1;
+  int32 step = 2;
 }
 
-message TaskIdReply {
+message TaskIdArg {
   int64 id = 1;
 }
+
+message ProcInstIdArg {
+  int64 id = 1;
+}
+
 message Nil{
 }
 
@@ -190,6 +212,7 @@ message ElapsedTimeReply {
   int32 cost = 4;
 }
 
+<<<<<<< HEAD
 message CommonRpcRes{
   //返回数据JSON
   string json = 1;
@@ -206,23 +229,29 @@ message IdRequest {
   int64 offset = 3;
   string filter = 4;
 }
+=======
+>>>>>>> 4a54178f732840048a6d221f9338a6e8f5d12ba3
 
 service act {
   rpc saveProcDef(SaveProcDefReq) returns(ProcDefReply);
   rpc findDefByFormId(FindProcDefReq) returns(ProcDefReply);
   rpc updateProcDef(FindProcDefReq) returns(ProcDefReply);
+  rpc setProcDefActive(FindProcDefReq) returns(Nil);
   rpc delProcDef(FindProcDefReq) returns(Nil);
 
   rpc saveProcInst(ProcInstReq) returns(ProcInstReply);
   rpc saveExecution(ExecutionReq) returns(ExecutionReply);
   rpc saveTask(TaskReq) returns(TaskReply);
   rpc saveIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
-  rpc findLatestTaskId(DataIdReq) returns(TaskIdReply);
-  rpc updateProcInst(ProcInstReq) returns(ProcInstReply);
+  rpc findLatestTask(DataIdReq) returns(TaskReply);
+  rpc updateProcInst(UpdateProcInstReq) returns(ProcInstReply);
   rpc updateTask(TaskReq) returns(TaskReply);
   rpc updateIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
   rpc delProcInst(DataIdReq) returns(Nil);
-
+  rpc findIdentityLinkByTaskId(TaskIdArg) returns(IdentityLinkReply);
+  rpc findExecutionByInstId(ProcInstIdArg) returns(ExecutionReq);
+  rpc delIdentityLink(ProcInstIdArg) returns(Nil);
+  rpc withdraw(DataIdReq) returns(Nil);
 
   rpc findAllProcInst(IdRequest) returns(CommonRpcRes);
   rpc findMyProcInst(MyProcInstReq) returns(ProcInstReply);

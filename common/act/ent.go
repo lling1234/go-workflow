@@ -3,6 +3,7 @@
 package act
 
 import (
+	"act/common/act/concurrentnode"
 	"act/common/act/execution"
 	"act/common/act/identitylink"
 	"act/common/act/procdef"
@@ -35,11 +36,12 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
-		execution.Table:    execution.ValidColumn,
-		identitylink.Table: identitylink.ValidColumn,
-		procdef.Table:      procdef.ValidColumn,
-		procinst.Table:     procinst.ValidColumn,
-		task.Table:         task.ValidColumn,
+		concurrentnode.Table: concurrentnode.ValidColumn,
+		execution.Table:      execution.ValidColumn,
+		identitylink.Table:   identitylink.ValidColumn,
+		procdef.Table:        procdef.ValidColumn,
+		procinst.Table:       procinst.ValidColumn,
+		task.Table:           task.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

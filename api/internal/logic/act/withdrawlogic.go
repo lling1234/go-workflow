@@ -1,12 +1,12 @@
 package act
 
 import (
+	"act/rpc/actclient"
 	"context"
 	"log"
 
 	"act/api/internal/svc"
 	"act/api/internal/types"
-	"act/rpc/actclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

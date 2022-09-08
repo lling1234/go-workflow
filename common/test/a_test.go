@@ -4,8 +4,11 @@ import (
 	"act/common/act"
 	ent "act/common/act"
 	"act/common/act/procdef"
+<<<<<<< HEAD
 	"act/common/act/procinst"
 	"act/common/cache"
+=======
+>>>>>>> 4a54178f732840048a6d221f9338a6e8f5d12ba3
 	"act/common/models"
 	"act/common/store"
 	"act/common/tools/linq"
@@ -296,7 +299,7 @@ func TestActDbCreate(t *testing.T) {
 }
 
 func TestAmain(t *testing.T) {
-	client, err := ent.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/wflow?parseTime=True&loc=Local")
+	client, err := ent.Open("mysql", "root:ye199169@tcp(127.0.0.1:3306)/wflow?parseTime=True&loc=Local")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -324,4 +327,18 @@ func CreatProcDef(ctx context.Context, client *ent.Client) (*ent.ProcDef, error)
 	}
 
 	return p, nil
+}
+
+func TestMax(t *testing.T) {
+	client, err := ent.Open("mysql", "root:ye199169@tcp(127.0.0.1:3306)/act?parseTime=True&loc=Local")
+	if err != nil {
+		log.Fatal(err)
+	}
+	ctx := context.Background()
+	defs, err := client.ProcDef.Query().Where(procdef.FormIDEQ("0a270a2faaea4881bb3792dcb758d7bc")).Select(procdef.FieldVersion).All(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	max := linq.From(defs).Max()
+	log.Println("max", max)
 }

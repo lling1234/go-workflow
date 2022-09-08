@@ -243,14 +243,14 @@ func (piu *ProcInstUpdate) ClearStartUserName() *ProcInstUpdate {
 }
 
 // SetIsFinished sets the "is_finished" field.
-func (piu *ProcInstUpdate) SetIsFinished(i int8) *ProcInstUpdate {
+func (piu *ProcInstUpdate) SetIsFinished(i int32) *ProcInstUpdate {
 	piu.mutation.ResetIsFinished()
 	piu.mutation.SetIsFinished(i)
 	return piu
 }
 
 // SetNillableIsFinished sets the "is_finished" field if the given value is not nil.
-func (piu *ProcInstUpdate) SetNillableIsFinished(i *int8) *ProcInstUpdate {
+func (piu *ProcInstUpdate) SetNillableIsFinished(i *int32) *ProcInstUpdate {
 	if i != nil {
 		piu.SetIsFinished(*i)
 	}
@@ -258,7 +258,7 @@ func (piu *ProcInstUpdate) SetNillableIsFinished(i *int8) *ProcInstUpdate {
 }
 
 // AddIsFinished adds i to the "is_finished" field.
-func (piu *ProcInstUpdate) AddIsFinished(i int8) *ProcInstUpdate {
+func (piu *ProcInstUpdate) AddIsFinished(i int32) *ProcInstUpdate {
 	piu.mutation.AddIsFinished(i)
 	return piu
 }
@@ -324,14 +324,14 @@ func (piu *ProcInstUpdate) ClearDataID() *ProcInstUpdate {
 }
 
 // SetIsDel sets the "is_del" field.
-func (piu *ProcInstUpdate) SetIsDel(i int8) *ProcInstUpdate {
+func (piu *ProcInstUpdate) SetIsDel(i int32) *ProcInstUpdate {
 	piu.mutation.ResetIsDel()
 	piu.mutation.SetIsDel(i)
 	return piu
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (piu *ProcInstUpdate) SetNillableIsDel(i *int8) *ProcInstUpdate {
+func (piu *ProcInstUpdate) SetNillableIsDel(i *int32) *ProcInstUpdate {
 	if i != nil {
 		piu.SetIsDel(*i)
 	}
@@ -339,7 +339,7 @@ func (piu *ProcInstUpdate) SetNillableIsDel(i *int8) *ProcInstUpdate {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (piu *ProcInstUpdate) AddIsDel(i int8) *ProcInstUpdate {
+func (piu *ProcInstUpdate) AddIsDel(i int32) *ProcInstUpdate {
 	piu.mutation.AddIsDel(i)
 	return piu
 }
@@ -414,6 +414,127 @@ func (piu *ProcInstUpdate) SetNillableUpdateTime(t *time.Time) *ProcInstUpdate {
 // ClearUpdateTime clears the value of the "update_time" field.
 func (piu *ProcInstUpdate) ClearUpdateTime() *ProcInstUpdate {
 	piu.mutation.ClearUpdateTime()
+	return piu
+}
+
+// SetFlowType sets the "flow_type" field.
+func (piu *ProcInstUpdate) SetFlowType(i int32) *ProcInstUpdate {
+	piu.mutation.ResetFlowType()
+	piu.mutation.SetFlowType(i)
+	return piu
+}
+
+// SetNillableFlowType sets the "flow_type" field if the given value is not nil.
+func (piu *ProcInstUpdate) SetNillableFlowType(i *int32) *ProcInstUpdate {
+	if i != nil {
+		piu.SetFlowType(*i)
+	}
+	return piu
+}
+
+// AddFlowType adds i to the "flow_type" field.
+func (piu *ProcInstUpdate) AddFlowType(i int32) *ProcInstUpdate {
+	piu.mutation.AddFlowType(i)
+	return piu
+}
+
+// ClearFlowType clears the value of the "flow_type" field.
+func (piu *ProcInstUpdate) ClearFlowType() *ProcInstUpdate {
+	piu.mutation.ClearFlowType()
+	return piu
+}
+
+// SetRemark sets the "remark" field.
+func (piu *ProcInstUpdate) SetRemark(s string) *ProcInstUpdate {
+	piu.mutation.SetRemark(s)
+	return piu
+}
+
+// SetNillableRemark sets the "remark" field if the given value is not nil.
+func (piu *ProcInstUpdate) SetNillableRemark(s *string) *ProcInstUpdate {
+	if s != nil {
+		piu.SetRemark(*s)
+	}
+	return piu
+}
+
+// ClearRemark clears the value of the "remark" field.
+func (piu *ProcInstUpdate) ClearRemark() *ProcInstUpdate {
+	piu.mutation.ClearRemark()
+	return piu
+}
+
+// SetDelTime sets the "del_time" field.
+func (piu *ProcInstUpdate) SetDelTime(t time.Time) *ProcInstUpdate {
+	piu.mutation.SetDelTime(t)
+	return piu
+}
+
+// SetNillableDelTime sets the "del_time" field if the given value is not nil.
+func (piu *ProcInstUpdate) SetNillableDelTime(t *time.Time) *ProcInstUpdate {
+	if t != nil {
+		piu.SetDelTime(*t)
+	}
+	return piu
+}
+
+// ClearDelTime clears the value of the "del_time" field.
+func (piu *ProcInstUpdate) ClearDelTime() *ProcInstUpdate {
+	piu.mutation.ClearDelTime()
+	return piu
+}
+
+// SetDelUserID sets the "del_user_id" field.
+func (piu *ProcInstUpdate) SetDelUserID(i int64) *ProcInstUpdate {
+	piu.mutation.ResetDelUserID()
+	piu.mutation.SetDelUserID(i)
+	return piu
+}
+
+// SetNillableDelUserID sets the "del_user_id" field if the given value is not nil.
+func (piu *ProcInstUpdate) SetNillableDelUserID(i *int64) *ProcInstUpdate {
+	if i != nil {
+		piu.SetDelUserID(*i)
+	}
+	return piu
+}
+
+// AddDelUserID adds i to the "del_user_id" field.
+func (piu *ProcInstUpdate) AddDelUserID(i int64) *ProcInstUpdate {
+	piu.mutation.AddDelUserID(i)
+	return piu
+}
+
+// ClearDelUserID clears the value of the "del_user_id" field.
+func (piu *ProcInstUpdate) ClearDelUserID() *ProcInstUpdate {
+	piu.mutation.ClearDelUserID()
+	return piu
+}
+
+// SetUpdateUserID sets the "update_user_id" field.
+func (piu *ProcInstUpdate) SetUpdateUserID(i int64) *ProcInstUpdate {
+	piu.mutation.ResetUpdateUserID()
+	piu.mutation.SetUpdateUserID(i)
+	return piu
+}
+
+// SetNillableUpdateUserID sets the "update_user_id" field if the given value is not nil.
+func (piu *ProcInstUpdate) SetNillableUpdateUserID(i *int64) *ProcInstUpdate {
+	if i != nil {
+		piu.SetUpdateUserID(*i)
+	}
+	return piu
+}
+
+// AddUpdateUserID adds i to the "update_user_id" field.
+func (piu *ProcInstUpdate) AddUpdateUserID(i int64) *ProcInstUpdate {
+	piu.mutation.AddUpdateUserID(i)
+	return piu
+}
+
+// ClearUpdateUserID clears the value of the "update_user_id" field.
+func (piu *ProcInstUpdate) ClearUpdateUserID() *ProcInstUpdate {
+	piu.mutation.ClearUpdateUserID()
 	return piu
 }
 
@@ -504,6 +625,11 @@ func (piu *ProcInstUpdate) check() error {
 			return &ValidationError{Name: "start_user_name", err: fmt.Errorf(`act: validator failed for field "ProcInst.start_user_name": %w`, err)}
 		}
 	}
+	if v, ok := piu.mutation.Remark(); ok {
+		if err := procinst.RemarkValidator(v); err != nil {
+			return &ValidationError{Name: "remark", err: fmt.Errorf(`act: validator failed for field "ProcInst.remark": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -513,7 +639,7 @@ func (piu *ProcInstUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Table:   procinst.Table,
 			Columns: procinst.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: procinst.FieldID,
 			},
 		},
@@ -679,21 +805,21 @@ func (piu *ProcInstUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := piu.mutation.IsFinished(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldIsFinished,
 		})
 	}
 	if value, ok := piu.mutation.AddedIsFinished(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldIsFinished,
 		})
 	}
 	if piu.mutation.IsFinishedCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: procinst.FieldIsFinished,
 		})
 	}
@@ -739,21 +865,21 @@ func (piu *ProcInstUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := piu.mutation.IsDel(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldIsDel,
 		})
 	}
 	if value, ok := piu.mutation.AddedIsDel(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldIsDel,
 		})
 	}
 	if piu.mutation.IsDelCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: procinst.FieldIsDel,
 		})
 	}
@@ -801,6 +927,92 @@ func (piu *ProcInstUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Column: procinst.FieldUpdateTime,
+		})
+	}
+	if value, ok := piu.mutation.FlowType(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
+			Value:  value,
+			Column: procinst.FieldFlowType,
+		})
+	}
+	if value, ok := piu.mutation.AddedFlowType(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
+			Value:  value,
+			Column: procinst.FieldFlowType,
+		})
+	}
+	if piu.mutation.FlowTypeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
+			Column: procinst.FieldFlowType,
+		})
+	}
+	if value, ok := piu.mutation.Remark(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: procinst.FieldRemark,
+		})
+	}
+	if piu.mutation.RemarkCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: procinst.FieldRemark,
+		})
+	}
+	if value, ok := piu.mutation.DelTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: procinst.FieldDelTime,
+		})
+	}
+	if piu.mutation.DelTimeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: procinst.FieldDelTime,
+		})
+	}
+	if value, ok := piu.mutation.DelUserID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procinst.FieldDelUserID,
+		})
+	}
+	if value, ok := piu.mutation.AddedDelUserID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procinst.FieldDelUserID,
+		})
+	}
+	if piu.mutation.DelUserIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Column: procinst.FieldDelUserID,
+		})
+	}
+	if value, ok := piu.mutation.UpdateUserID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procinst.FieldUpdateUserID,
+		})
+	}
+	if value, ok := piu.mutation.AddedUpdateUserID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procinst.FieldUpdateUserID,
+		})
+	}
+	if piu.mutation.UpdateUserIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Column: procinst.FieldUpdateUserID,
 		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, piu.driver, _spec); err != nil {
@@ -1037,14 +1249,14 @@ func (piuo *ProcInstUpdateOne) ClearStartUserName() *ProcInstUpdateOne {
 }
 
 // SetIsFinished sets the "is_finished" field.
-func (piuo *ProcInstUpdateOne) SetIsFinished(i int8) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) SetIsFinished(i int32) *ProcInstUpdateOne {
 	piuo.mutation.ResetIsFinished()
 	piuo.mutation.SetIsFinished(i)
 	return piuo
 }
 
 // SetNillableIsFinished sets the "is_finished" field if the given value is not nil.
-func (piuo *ProcInstUpdateOne) SetNillableIsFinished(i *int8) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) SetNillableIsFinished(i *int32) *ProcInstUpdateOne {
 	if i != nil {
 		piuo.SetIsFinished(*i)
 	}
@@ -1052,7 +1264,7 @@ func (piuo *ProcInstUpdateOne) SetNillableIsFinished(i *int8) *ProcInstUpdateOne
 }
 
 // AddIsFinished adds i to the "is_finished" field.
-func (piuo *ProcInstUpdateOne) AddIsFinished(i int8) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) AddIsFinished(i int32) *ProcInstUpdateOne {
 	piuo.mutation.AddIsFinished(i)
 	return piuo
 }
@@ -1118,14 +1330,14 @@ func (piuo *ProcInstUpdateOne) ClearDataID() *ProcInstUpdateOne {
 }
 
 // SetIsDel sets the "is_del" field.
-func (piuo *ProcInstUpdateOne) SetIsDel(i int8) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) SetIsDel(i int32) *ProcInstUpdateOne {
 	piuo.mutation.ResetIsDel()
 	piuo.mutation.SetIsDel(i)
 	return piuo
 }
 
 // SetNillableIsDel sets the "is_del" field if the given value is not nil.
-func (piuo *ProcInstUpdateOne) SetNillableIsDel(i *int8) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) SetNillableIsDel(i *int32) *ProcInstUpdateOne {
 	if i != nil {
 		piuo.SetIsDel(*i)
 	}
@@ -1133,7 +1345,7 @@ func (piuo *ProcInstUpdateOne) SetNillableIsDel(i *int8) *ProcInstUpdateOne {
 }
 
 // AddIsDel adds i to the "is_del" field.
-func (piuo *ProcInstUpdateOne) AddIsDel(i int8) *ProcInstUpdateOne {
+func (piuo *ProcInstUpdateOne) AddIsDel(i int32) *ProcInstUpdateOne {
 	piuo.mutation.AddIsDel(i)
 	return piuo
 }
@@ -1208,6 +1420,127 @@ func (piuo *ProcInstUpdateOne) SetNillableUpdateTime(t *time.Time) *ProcInstUpda
 // ClearUpdateTime clears the value of the "update_time" field.
 func (piuo *ProcInstUpdateOne) ClearUpdateTime() *ProcInstUpdateOne {
 	piuo.mutation.ClearUpdateTime()
+	return piuo
+}
+
+// SetFlowType sets the "flow_type" field.
+func (piuo *ProcInstUpdateOne) SetFlowType(i int32) *ProcInstUpdateOne {
+	piuo.mutation.ResetFlowType()
+	piuo.mutation.SetFlowType(i)
+	return piuo
+}
+
+// SetNillableFlowType sets the "flow_type" field if the given value is not nil.
+func (piuo *ProcInstUpdateOne) SetNillableFlowType(i *int32) *ProcInstUpdateOne {
+	if i != nil {
+		piuo.SetFlowType(*i)
+	}
+	return piuo
+}
+
+// AddFlowType adds i to the "flow_type" field.
+func (piuo *ProcInstUpdateOne) AddFlowType(i int32) *ProcInstUpdateOne {
+	piuo.mutation.AddFlowType(i)
+	return piuo
+}
+
+// ClearFlowType clears the value of the "flow_type" field.
+func (piuo *ProcInstUpdateOne) ClearFlowType() *ProcInstUpdateOne {
+	piuo.mutation.ClearFlowType()
+	return piuo
+}
+
+// SetRemark sets the "remark" field.
+func (piuo *ProcInstUpdateOne) SetRemark(s string) *ProcInstUpdateOne {
+	piuo.mutation.SetRemark(s)
+	return piuo
+}
+
+// SetNillableRemark sets the "remark" field if the given value is not nil.
+func (piuo *ProcInstUpdateOne) SetNillableRemark(s *string) *ProcInstUpdateOne {
+	if s != nil {
+		piuo.SetRemark(*s)
+	}
+	return piuo
+}
+
+// ClearRemark clears the value of the "remark" field.
+func (piuo *ProcInstUpdateOne) ClearRemark() *ProcInstUpdateOne {
+	piuo.mutation.ClearRemark()
+	return piuo
+}
+
+// SetDelTime sets the "del_time" field.
+func (piuo *ProcInstUpdateOne) SetDelTime(t time.Time) *ProcInstUpdateOne {
+	piuo.mutation.SetDelTime(t)
+	return piuo
+}
+
+// SetNillableDelTime sets the "del_time" field if the given value is not nil.
+func (piuo *ProcInstUpdateOne) SetNillableDelTime(t *time.Time) *ProcInstUpdateOne {
+	if t != nil {
+		piuo.SetDelTime(*t)
+	}
+	return piuo
+}
+
+// ClearDelTime clears the value of the "del_time" field.
+func (piuo *ProcInstUpdateOne) ClearDelTime() *ProcInstUpdateOne {
+	piuo.mutation.ClearDelTime()
+	return piuo
+}
+
+// SetDelUserID sets the "del_user_id" field.
+func (piuo *ProcInstUpdateOne) SetDelUserID(i int64) *ProcInstUpdateOne {
+	piuo.mutation.ResetDelUserID()
+	piuo.mutation.SetDelUserID(i)
+	return piuo
+}
+
+// SetNillableDelUserID sets the "del_user_id" field if the given value is not nil.
+func (piuo *ProcInstUpdateOne) SetNillableDelUserID(i *int64) *ProcInstUpdateOne {
+	if i != nil {
+		piuo.SetDelUserID(*i)
+	}
+	return piuo
+}
+
+// AddDelUserID adds i to the "del_user_id" field.
+func (piuo *ProcInstUpdateOne) AddDelUserID(i int64) *ProcInstUpdateOne {
+	piuo.mutation.AddDelUserID(i)
+	return piuo
+}
+
+// ClearDelUserID clears the value of the "del_user_id" field.
+func (piuo *ProcInstUpdateOne) ClearDelUserID() *ProcInstUpdateOne {
+	piuo.mutation.ClearDelUserID()
+	return piuo
+}
+
+// SetUpdateUserID sets the "update_user_id" field.
+func (piuo *ProcInstUpdateOne) SetUpdateUserID(i int64) *ProcInstUpdateOne {
+	piuo.mutation.ResetUpdateUserID()
+	piuo.mutation.SetUpdateUserID(i)
+	return piuo
+}
+
+// SetNillableUpdateUserID sets the "update_user_id" field if the given value is not nil.
+func (piuo *ProcInstUpdateOne) SetNillableUpdateUserID(i *int64) *ProcInstUpdateOne {
+	if i != nil {
+		piuo.SetUpdateUserID(*i)
+	}
+	return piuo
+}
+
+// AddUpdateUserID adds i to the "update_user_id" field.
+func (piuo *ProcInstUpdateOne) AddUpdateUserID(i int64) *ProcInstUpdateOne {
+	piuo.mutation.AddUpdateUserID(i)
+	return piuo
+}
+
+// ClearUpdateUserID clears the value of the "update_user_id" field.
+func (piuo *ProcInstUpdateOne) ClearUpdateUserID() *ProcInstUpdateOne {
+	piuo.mutation.ClearUpdateUserID()
 	return piuo
 }
 
@@ -1311,6 +1644,11 @@ func (piuo *ProcInstUpdateOne) check() error {
 			return &ValidationError{Name: "start_user_name", err: fmt.Errorf(`act: validator failed for field "ProcInst.start_user_name": %w`, err)}
 		}
 	}
+	if v, ok := piuo.mutation.Remark(); ok {
+		if err := procinst.RemarkValidator(v); err != nil {
+			return &ValidationError{Name: "remark", err: fmt.Errorf(`act: validator failed for field "ProcInst.remark": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1320,7 +1658,7 @@ func (piuo *ProcInstUpdateOne) sqlSave(ctx context.Context) (_node *ProcInst, er
 			Table:   procinst.Table,
 			Columns: procinst.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeInt64,
 				Column: procinst.FieldID,
 			},
 		},
@@ -1503,21 +1841,21 @@ func (piuo *ProcInstUpdateOne) sqlSave(ctx context.Context) (_node *ProcInst, er
 	}
 	if value, ok := piuo.mutation.IsFinished(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldIsFinished,
 		})
 	}
 	if value, ok := piuo.mutation.AddedIsFinished(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldIsFinished,
 		})
 	}
 	if piuo.mutation.IsFinishedCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: procinst.FieldIsFinished,
 		})
 	}
@@ -1563,21 +1901,21 @@ func (piuo *ProcInstUpdateOne) sqlSave(ctx context.Context) (_node *ProcInst, er
 	}
 	if value, ok := piuo.mutation.IsDel(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldIsDel,
 		})
 	}
 	if value, ok := piuo.mutation.AddedIsDel(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Value:  value,
 			Column: procinst.FieldIsDel,
 		})
 	}
 	if piuo.mutation.IsDelCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
+			Type:   field.TypeInt32,
 			Column: procinst.FieldIsDel,
 		})
 	}
@@ -1625,6 +1963,92 @@ func (piuo *ProcInstUpdateOne) sqlSave(ctx context.Context) (_node *ProcInst, er
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Column: procinst.FieldUpdateTime,
+		})
+	}
+	if value, ok := piuo.mutation.FlowType(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
+			Value:  value,
+			Column: procinst.FieldFlowType,
+		})
+	}
+	if value, ok := piuo.mutation.AddedFlowType(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
+			Value:  value,
+			Column: procinst.FieldFlowType,
+		})
+	}
+	if piuo.mutation.FlowTypeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
+			Column: procinst.FieldFlowType,
+		})
+	}
+	if value, ok := piuo.mutation.Remark(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: procinst.FieldRemark,
+		})
+	}
+	if piuo.mutation.RemarkCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: procinst.FieldRemark,
+		})
+	}
+	if value, ok := piuo.mutation.DelTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: procinst.FieldDelTime,
+		})
+	}
+	if piuo.mutation.DelTimeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: procinst.FieldDelTime,
+		})
+	}
+	if value, ok := piuo.mutation.DelUserID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procinst.FieldDelUserID,
+		})
+	}
+	if value, ok := piuo.mutation.AddedDelUserID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procinst.FieldDelUserID,
+		})
+	}
+	if piuo.mutation.DelUserIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Column: procinst.FieldDelUserID,
+		})
+	}
+	if value, ok := piuo.mutation.UpdateUserID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procinst.FieldUpdateUserID,
+		})
+	}
+	if value, ok := piuo.mutation.AddedUpdateUserID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procinst.FieldUpdateUserID,
+		})
+	}
+	if piuo.mutation.UpdateUserIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Column: procinst.FieldUpdateUserID,
 		})
 	}
 	_node = &ProcInst{config: piuo.config}

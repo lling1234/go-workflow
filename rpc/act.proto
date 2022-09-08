@@ -112,14 +112,13 @@ message TaskReq {
   int64 id = 1;
   string nodeId = 2;
   int64 procInstId = 3;
-  int64 dataId = 4;
-  int32 level = 5;
-  int32 isFinished = 6;
-  int32 step = 7;
-  string memberApprover = 8;
-  string agreeApprover = 9;
-  string mode = 10;
-  string claimTime = 11;
+  int32 level = 4;
+  int32 isFinished = 5;
+  int32 step = 6;
+  string memberApprover = 7;
+  string agreeApprover = 8;
+  string mode = 9;
+  string claimTime = 10;
 }
 
 message TaskReply {
@@ -240,7 +239,7 @@ service act {
   rpc saveExecution(ExecutionReq) returns(ExecutionReply);
   rpc saveTask(TaskReq) returns(TaskReply);
   rpc saveIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
-  rpc findLatestTask(DataIdReq) returns(TaskReply);
+  rpc findLatestTask(ProcInstIdArg) returns(TaskReply);
   rpc updateProcInst(UpdateProcInstReq) returns(ProcInstReply);
   rpc updateTask(TaskReq) returns(TaskReply);
   rpc updateIdentityLink(IdentityLinkReq) returns(IdentityLinkReply);
@@ -249,6 +248,7 @@ service act {
   rpc findExecutionByInstId(ProcInstIdArg) returns(ExecutionReq);
   rpc delIdentityLink(ProcInstIdArg) returns(Nil);
   rpc withdraw(DataIdReq) returns(Nil);
+  rpc findProcInstByDataId(DataIdReq) returns(ProcInstReply);
 
   rpc findAllProcInst(IdRequest) returns(CommonRpcRes);
   rpc findMyProcInst(MyProcInstReq) returns(ProcInstReply);

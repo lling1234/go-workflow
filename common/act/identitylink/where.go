@@ -144,14 +144,14 @@ func CreateTime(v time.Time) predicate.IdentityLink {
 }
 
 // IsDel applies equality check predicate on the "is_del" field. It's identical to IsDelEQ.
-func IsDel(v int8) predicate.IdentityLink {
+func IsDel(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDeal applies equality check predicate on the "is_deal" field. It's identical to IsDealEQ.
-func IsDeal(v int8) predicate.IdentityLink {
+func IsDeal(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDeal), v))
 	})
@@ -909,21 +909,21 @@ func CreateTimeNotNil() predicate.IdentityLink {
 }
 
 // IsDelEQ applies the EQ predicate on the "is_del" field.
-func IsDelEQ(v int8) predicate.IdentityLink {
+func IsDelEQ(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelNEQ applies the NEQ predicate on the "is_del" field.
-func IsDelNEQ(v int8) predicate.IdentityLink {
+func IsDelNEQ(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelIn applies the In predicate on the "is_del" field.
-func IsDelIn(vs ...int8) predicate.IdentityLink {
+func IsDelIn(vs ...int32) predicate.IdentityLink {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -934,7 +934,7 @@ func IsDelIn(vs ...int8) predicate.IdentityLink {
 }
 
 // IsDelNotIn applies the NotIn predicate on the "is_del" field.
-func IsDelNotIn(vs ...int8) predicate.IdentityLink {
+func IsDelNotIn(vs ...int32) predicate.IdentityLink {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -945,28 +945,28 @@ func IsDelNotIn(vs ...int8) predicate.IdentityLink {
 }
 
 // IsDelGT applies the GT predicate on the "is_del" field.
-func IsDelGT(v int8) predicate.IdentityLink {
+func IsDelGT(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelGTE applies the GTE predicate on the "is_del" field.
-func IsDelGTE(v int8) predicate.IdentityLink {
+func IsDelGTE(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelLT applies the LT predicate on the "is_del" field.
-func IsDelLT(v int8) predicate.IdentityLink {
+func IsDelLT(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldIsDel), v))
 	})
 }
 
 // IsDelLTE applies the LTE predicate on the "is_del" field.
-func IsDelLTE(v int8) predicate.IdentityLink {
+func IsDelLTE(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldIsDel), v))
 	})
@@ -987,21 +987,21 @@ func IsDelNotNil() predicate.IdentityLink {
 }
 
 // IsDealEQ applies the EQ predicate on the "is_deal" field.
-func IsDealEQ(v int8) predicate.IdentityLink {
+func IsDealEQ(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIsDeal), v))
 	})
 }
 
 // IsDealNEQ applies the NEQ predicate on the "is_deal" field.
-func IsDealNEQ(v int8) predicate.IdentityLink {
+func IsDealNEQ(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldIsDeal), v))
 	})
 }
 
 // IsDealIn applies the In predicate on the "is_deal" field.
-func IsDealIn(vs ...int8) predicate.IdentityLink {
+func IsDealIn(vs ...int32) predicate.IdentityLink {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1012,7 +1012,7 @@ func IsDealIn(vs ...int8) predicate.IdentityLink {
 }
 
 // IsDealNotIn applies the NotIn predicate on the "is_deal" field.
-func IsDealNotIn(vs ...int8) predicate.IdentityLink {
+func IsDealNotIn(vs ...int32) predicate.IdentityLink {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1023,28 +1023,28 @@ func IsDealNotIn(vs ...int8) predicate.IdentityLink {
 }
 
 // IsDealGT applies the GT predicate on the "is_deal" field.
-func IsDealGT(v int8) predicate.IdentityLink {
+func IsDealGT(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldIsDeal), v))
 	})
 }
 
 // IsDealGTE applies the GTE predicate on the "is_deal" field.
-func IsDealGTE(v int8) predicate.IdentityLink {
+func IsDealGTE(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldIsDeal), v))
 	})
 }
 
 // IsDealLT applies the LT predicate on the "is_deal" field.
-func IsDealLT(v int8) predicate.IdentityLink {
+func IsDealLT(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldIsDeal), v))
 	})
 }
 
 // IsDealLTE applies the LTE predicate on the "is_deal" field.
-func IsDealLTE(v int8) predicate.IdentityLink {
+func IsDealLTE(v int32) predicate.IdentityLink {
 	return predicate.IdentityLink(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldIsDeal), v))
 	})
