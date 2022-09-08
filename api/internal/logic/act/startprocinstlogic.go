@@ -6,6 +6,7 @@ import (
 	"container/list"
 	"context"
 	"github.com/mumushuiding/util"
+	"log"
 	"strconv"
 	"strings"
 
@@ -46,7 +47,9 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 		RemainHours: def.RemainHours,
 		State:       flow.PENDING,
 	}
+	log.Println(111)
 	inst, err := RPC.SaveProcInst(l.ctx, instReq)
+	log.Println(222)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
@@ -57,10 +60,10 @@ func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *type
 		Level:      STEP,
 		IsFinished: 1,
 		Step:       STEP,
-		//MemberCount:   1,
-		Mode: "or",
+		Mode:       "or",
 	}
 	_, err = RPC.SaveTask(l.ctx, &task)
+	log.Println(33333)
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}

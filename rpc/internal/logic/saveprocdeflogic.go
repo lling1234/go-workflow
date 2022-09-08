@@ -41,8 +41,8 @@ func (l *SaveProcDefLogic) SaveProcDef(in *act.SaveProcDefReq) (*act.ProcDefRepl
 	_, err = tx.ProcDef.Create().
 		SetName(in.Name).SetCode(in.Code).SetFormID(in.FormId).SetFormName(in.FormName).
 		SetRemainHours(in.RemainHours).SetResource(in.Resource).
-		SetCreateUserID(in.UserId).SetCreateUserName(in.UserName).SetCreateTime(time.Now()).SetVersion(version).SetTargetID(general.TargetId).
-		Save(l.ctx)
+		SetCreateUserID(in.UserId).SetCreateUserName(in.UserName).SetCreateTime(time.Now()).SetVersion(version).
+		SetTargetID(general.TargetId).Save(l.ctx)
 
 	if err != nil {
 		tx.Rollback()

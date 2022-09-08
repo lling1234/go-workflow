@@ -41,7 +41,7 @@ type ActClient interface {
 	DelIdentityLink(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*Nil, error)
 	Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error)
 	FindProcInstByDataId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*ProcInstReply, error)
-	FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
+	FindAllProcInst(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*CommonRpcRes, error)
 	FindMyProcInst(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	FindMyApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	FindOverTime(ctx context.Context, in *UserReq, opts ...grpc.CallOption) (*ProcInstReply, error)
@@ -227,8 +227,8 @@ func (c *actClient) FindProcInstByDataId(ctx context.Context, in *DataIdReq, opt
 	return out, nil
 }
 
-func (c *actClient) FindAllProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
-	out := new(ProcInstReply)
+func (c *actClient) FindAllProcInst(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*CommonRpcRes, error) {
+	out := new(CommonRpcRes)
 	err := c.cc.Invoke(ctx, "/act.act/findAllProcInst", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -295,7 +295,7 @@ type ActServer interface {
 	DelIdentityLink(context.Context, *ProcInstIdArg) (*Nil, error)
 	Withdraw(context.Context, *DataIdReq) (*Nil, error)
 	FindProcInstByDataId(context.Context, *DataIdReq) (*ProcInstReply, error)
-	FindAllProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error)
+	FindAllProcInst(context.Context, *IdRequest) (*CommonRpcRes, error)
 	FindMyProcInst(context.Context, *MyProcInstReq) (*ProcInstReply, error)
 	FindMyApproval(context.Context, *MyProcInstReq) (*ProcInstReply, error)
 	FindOverTime(context.Context, *UserReq) (*ProcInstReply, error)
@@ -364,7 +364,7 @@ func (UnimplementedActServer) Withdraw(context.Context, *DataIdReq) (*Nil, error
 func (UnimplementedActServer) FindProcInstByDataId(context.Context, *DataIdReq) (*ProcInstReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindProcInstByDataId not implemented")
 }
-func (UnimplementedActServer) FindAllProcInst(context.Context, *ProcInstReq) (*ProcInstReply, error) {
+func (UnimplementedActServer) FindAllProcInst(context.Context, *IdRequest) (*CommonRpcRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindAllProcInst not implemented")
 }
 func (UnimplementedActServer) FindMyProcInst(context.Context, *MyProcInstReq) (*ProcInstReply, error) {
@@ -735,7 +735,7 @@ func _Act_FindProcInstByDataId_Handler(srv interface{}, ctx context.Context, dec
 }
 
 func _Act_FindAllProcInst_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ProcInstReq)
+	in := new(IdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -747,7 +747,7 @@ func _Act_FindAllProcInst_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/act.act/findAllProcInst",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActServer).FindAllProcInst(ctx, req.(*ProcInstReq))
+		return srv.(ActServer).FindAllProcInst(ctx, req.(*IdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

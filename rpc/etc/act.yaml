@@ -7,7 +7,7 @@ Etcd:
 Store:
   Mode: dev
   Driver: mysql
-  DataSource: root:ye199169@(127.0.0.1:3306)/wflow?charset=utf8&parseTime=true&loc=Local
+  DataSource: root:ye199169@(127.0.0.1:3306)/act?charset=utf8&parseTime=true&loc=Local
   Cache:
     Network: tcp
     Addr: 127.0.0.1:6379
