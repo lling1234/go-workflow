@@ -57,10 +57,7 @@ type (
 		FindExecutionByInstId(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*ExecutionReq, error)
 		DelIdentityLink(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*Nil, error)
 		Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error)
-<<<<<<< HEAD
-=======
 		FindProcInstByDataId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*ProcInstReply, error)
->>>>>>> 4a54178f732840048a6d221f9338a6e8f5d12ba3
 		FindAllProcInst(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*CommonRpcRes, error)
 		FindMyProcInst(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 		FindMyApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
@@ -169,14 +166,11 @@ func (m *defaultAct) Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.C
 	return client.Withdraw(ctx, in, opts...)
 }
 
-<<<<<<< HEAD
-=======
 func (m *defaultAct) FindProcInstByDataId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
 	client := act.NewActClient(m.cli.Conn())
 	return client.FindProcInstByDataId(ctx, in, opts...)
 }
 
->>>>>>> 4a54178f732840048a6d221f9338a6e8f5d12ba3
 func (m *defaultAct) FindAllProcInst(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*CommonRpcRes, error) {
 	client := act.NewActClient(m.cli.Conn())
 	return client.FindAllProcInst(ctx, in, opts...)

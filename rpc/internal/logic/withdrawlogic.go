@@ -55,12 +55,6 @@ func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
 		return &act.Nil{}, errors.New("人员未找到！")
 	}
 	err = tx.Commit()
-<<<<<<< HEAD
-	if err != nil {
-		return nil, err
-	}
-=======
->>>>>>> 4a54178f732840048a6d221f9338a6e8f5d12ba3
 	// 3.UserID和create_user_id比较不相等返回，无权限撤回
 
 	// 4.UserID和create_user_id比较相等,将流程实例表state=4,isFinish=1,endTime=now,updateTime=now

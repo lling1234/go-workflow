@@ -212,25 +212,6 @@ message ElapsedTimeReply {
   int32 cost = 4;
 }
 
-<<<<<<< HEAD
-message CommonRpcRes{
-  //返回数据JSON
-  string json = 1;
-}
-message PageRequest {
-  int64 limit = 1;
-  int64 offset = 2;
-  string filter = 3;
-}
-
-message IdRequest {
-  int64 id = 1;
-  int64 limit = 2;
-  int64 offset = 3;
-  string filter = 4;
-}
-=======
->>>>>>> 4a54178f732840048a6d221f9338a6e8f5d12ba3
 
 service act {
   rpc saveProcDef(SaveProcDefReq) returns(ProcDefReply);
@@ -253,7 +234,7 @@ service act {
   rpc delIdentityLink(ProcInstIdArg) returns(Nil);
   rpc withdraw(DataIdReq) returns(Nil);
 
-  rpc findAllProcInst(IdRequest) returns(CommonRpcRes);
+  rpc findAllProcInst(ProcInstReq) returns(ProcInstReply);
   rpc findMyProcInst(MyProcInstReq) returns(ProcInstReply);
   rpc findMyApproval(MyProcInstReq) returns(ProcInstReply);
   rpc findOverTime(UserReq) returns(ProcInstReply);
