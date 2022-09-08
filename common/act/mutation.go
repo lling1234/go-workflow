@@ -394,9 +394,22 @@ func (m *ConcurrentNodeMutation) OldPrevID(ctx context.Context) (v string, err e
 	return oldValue.PrevID, nil
 }
 
+// ClearPrevID clears the value of the "prev_id" field.
+func (m *ConcurrentNodeMutation) ClearPrevID() {
+	m.prev_id = nil
+	m.clearedFields[concurrentnode.FieldPrevID] = struct{}{}
+}
+
+// PrevIDCleared returns if the "prev_id" field was cleared in this mutation.
+func (m *ConcurrentNodeMutation) PrevIDCleared() bool {
+	_, ok := m.clearedFields[concurrentnode.FieldPrevID]
+	return ok
+}
+
 // ResetPrevID resets all changes to the "prev_id" field.
 func (m *ConcurrentNodeMutation) ResetPrevID() {
 	m.prev_id = nil
+	delete(m.clearedFields, concurrentnode.FieldPrevID)
 }
 
 // SetNextID sets the "next_id" field.
@@ -430,9 +443,22 @@ func (m *ConcurrentNodeMutation) OldNextID(ctx context.Context) (v string, err e
 	return oldValue.NextID, nil
 }
 
+// ClearNextID clears the value of the "next_id" field.
+func (m *ConcurrentNodeMutation) ClearNextID() {
+	m.next_id = nil
+	m.clearedFields[concurrentnode.FieldNextID] = struct{}{}
+}
+
+// NextIDCleared returns if the "next_id" field was cleared in this mutation.
+func (m *ConcurrentNodeMutation) NextIDCleared() bool {
+	_, ok := m.clearedFields[concurrentnode.FieldNextID]
+	return ok
+}
+
 // ResetNextID resets all changes to the "next_id" field.
 func (m *ConcurrentNodeMutation) ResetNextID() {
 	m.next_id = nil
+	delete(m.clearedFields, concurrentnode.FieldNextID)
 }
 
 // SetState sets the "state" field.
@@ -485,10 +511,24 @@ func (m *ConcurrentNodeMutation) AddedState() (r int32, exists bool) {
 	return *v, true
 }
 
+// ClearState clears the value of the "state" field.
+func (m *ConcurrentNodeMutation) ClearState() {
+	m.state = nil
+	m.addstate = nil
+	m.clearedFields[concurrentnode.FieldState] = struct{}{}
+}
+
+// StateCleared returns if the "state" field was cleared in this mutation.
+func (m *ConcurrentNodeMutation) StateCleared() bool {
+	_, ok := m.clearedFields[concurrentnode.FieldState]
+	return ok
+}
+
 // ResetState resets all changes to the "state" field.
 func (m *ConcurrentNodeMutation) ResetState() {
 	m.state = nil
 	m.addstate = nil
+	delete(m.clearedFields, concurrentnode.FieldState)
 }
 
 // SetIsDel sets the "is_del" field.
@@ -929,6 +969,15 @@ func (m *ConcurrentNodeMutation) ClearedFields() []string {
 	if m.FieldCleared(concurrentnode.FieldNodeInfo) {
 		fields = append(fields, concurrentnode.FieldNodeInfo)
 	}
+	if m.FieldCleared(concurrentnode.FieldPrevID) {
+		fields = append(fields, concurrentnode.FieldPrevID)
+	}
+	if m.FieldCleared(concurrentnode.FieldNextID) {
+		fields = append(fields, concurrentnode.FieldNextID)
+	}
+	if m.FieldCleared(concurrentnode.FieldState) {
+		fields = append(fields, concurrentnode.FieldState)
+	}
 	if m.FieldCleared(concurrentnode.FieldIsDel) {
 		fields = append(fields, concurrentnode.FieldIsDel)
 	}
@@ -954,6 +1003,15 @@ func (m *ConcurrentNodeMutation) ClearField(name string) error {
 	switch name {
 	case concurrentnode.FieldNodeInfo:
 		m.ClearNodeInfo()
+		return nil
+	case concurrentnode.FieldPrevID:
+		m.ClearPrevID()
+		return nil
+	case concurrentnode.FieldNextID:
+		m.ClearNextID()
+		return nil
+	case concurrentnode.FieldState:
+		m.ClearState()
 		return nil
 	case concurrentnode.FieldIsDel:
 		m.ClearIsDel()
@@ -3290,8 +3348,12 @@ type ProcDefMutation struct {
 	create_time       *time.Time
 	target_id         *int64
 	addtarget_id      *int64
-	form_id           *string
+	form_id           *int64
+	addform_id        *int64
 	form_name         *string
+	app_id            *int64
+	addapp_id         *int64
+	app_name          *string
 	remain_hours      *int32
 	addremain_hours   *int32
 	is_del            *int32
@@ -3857,12 +3919,13 @@ func (m *ProcDefMutation) ResetTargetID() {
 }
 
 // SetFormID sets the "form_id" field.
-func (m *ProcDefMutation) SetFormID(s string) {
-	m.form_id = &s
+func (m *ProcDefMutation) SetFormID(i int64) {
+	m.form_id = &i
+	m.addform_id = nil
 }
 
 // FormID returns the value of the "form_id" field in the mutation.
-func (m *ProcDefMutation) FormID() (r string, exists bool) {
+func (m *ProcDefMutation) FormID() (r int64, exists bool) {
 	v := m.form_id
 	if v == nil {
 		return
@@ -3873,7 +3936,7 @@ func (m *ProcDefMutation) FormID() (r string, exists bool) {
 // OldFormID returns the old "form_id" field's value of the ProcDef entity.
 // If the ProcDef object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcDefMutation) OldFormID(ctx context.Context) (v string, err error) {
+func (m *ProcDefMutation) OldFormID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldFormID is only allowed on UpdateOne operations")
 	}
@@ -3887,9 +3950,28 @@ func (m *ProcDefMutation) OldFormID(ctx context.Context) (v string, err error) {
 	return oldValue.FormID, nil
 }
 
+// AddFormID adds i to the "form_id" field.
+func (m *ProcDefMutation) AddFormID(i int64) {
+	if m.addform_id != nil {
+		*m.addform_id += i
+	} else {
+		m.addform_id = &i
+	}
+}
+
+// AddedFormID returns the value that was added to the "form_id" field in this mutation.
+func (m *ProcDefMutation) AddedFormID() (r int64, exists bool) {
+	v := m.addform_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ClearFormID clears the value of the "form_id" field.
 func (m *ProcDefMutation) ClearFormID() {
 	m.form_id = nil
+	m.addform_id = nil
 	m.clearedFields[procdef.FieldFormID] = struct{}{}
 }
 
@@ -3902,6 +3984,7 @@ func (m *ProcDefMutation) FormIDCleared() bool {
 // ResetFormID resets all changes to the "form_id" field.
 func (m *ProcDefMutation) ResetFormID() {
 	m.form_id = nil
+	m.addform_id = nil
 	delete(m.clearedFields, procdef.FieldFormID)
 }
 
@@ -3952,6 +4035,125 @@ func (m *ProcDefMutation) FormNameCleared() bool {
 func (m *ProcDefMutation) ResetFormName() {
 	m.form_name = nil
 	delete(m.clearedFields, procdef.FieldFormName)
+}
+
+// SetAppID sets the "app_id" field.
+func (m *ProcDefMutation) SetAppID(i int64) {
+	m.app_id = &i
+	m.addapp_id = nil
+}
+
+// AppID returns the value of the "app_id" field in the mutation.
+func (m *ProcDefMutation) AppID() (r int64, exists bool) {
+	v := m.app_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAppID returns the old "app_id" field's value of the ProcDef entity.
+// If the ProcDef object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcDefMutation) OldAppID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAppID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAppID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAppID: %w", err)
+	}
+	return oldValue.AppID, nil
+}
+
+// AddAppID adds i to the "app_id" field.
+func (m *ProcDefMutation) AddAppID(i int64) {
+	if m.addapp_id != nil {
+		*m.addapp_id += i
+	} else {
+		m.addapp_id = &i
+	}
+}
+
+// AddedAppID returns the value that was added to the "app_id" field in this mutation.
+func (m *ProcDefMutation) AddedAppID() (r int64, exists bool) {
+	v := m.addapp_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearAppID clears the value of the "app_id" field.
+func (m *ProcDefMutation) ClearAppID() {
+	m.app_id = nil
+	m.addapp_id = nil
+	m.clearedFields[procdef.FieldAppID] = struct{}{}
+}
+
+// AppIDCleared returns if the "app_id" field was cleared in this mutation.
+func (m *ProcDefMutation) AppIDCleared() bool {
+	_, ok := m.clearedFields[procdef.FieldAppID]
+	return ok
+}
+
+// ResetAppID resets all changes to the "app_id" field.
+func (m *ProcDefMutation) ResetAppID() {
+	m.app_id = nil
+	m.addapp_id = nil
+	delete(m.clearedFields, procdef.FieldAppID)
+}
+
+// SetAppName sets the "app_name" field.
+func (m *ProcDefMutation) SetAppName(s string) {
+	m.app_name = &s
+}
+
+// AppName returns the value of the "app_name" field in the mutation.
+func (m *ProcDefMutation) AppName() (r string, exists bool) {
+	v := m.app_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAppName returns the old "app_name" field's value of the ProcDef entity.
+// If the ProcDef object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcDefMutation) OldAppName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAppName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAppName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAppName: %w", err)
+	}
+	return oldValue.AppName, nil
+}
+
+// ClearAppName clears the value of the "app_name" field.
+func (m *ProcDefMutation) ClearAppName() {
+	m.app_name = nil
+	m.clearedFields[procdef.FieldAppName] = struct{}{}
+}
+
+// AppNameCleared returns if the "app_name" field was cleared in this mutation.
+func (m *ProcDefMutation) AppNameCleared() bool {
+	_, ok := m.clearedFields[procdef.FieldAppName]
+	return ok
+}
+
+// ResetAppName resets all changes to the "app_name" field.
+func (m *ProcDefMutation) ResetAppName() {
+	m.app_name = nil
+	delete(m.clearedFields, procdef.FieldAppName)
 }
 
 // SetRemainHours sets the "remain_hours" field.
@@ -4421,7 +4623,7 @@ func (m *ProcDefMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProcDefMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 19)
 	if m.name != nil {
 		fields = append(fields, procdef.FieldName)
 	}
@@ -4451,6 +4653,12 @@ func (m *ProcDefMutation) Fields() []string {
 	}
 	if m.form_name != nil {
 		fields = append(fields, procdef.FieldFormName)
+	}
+	if m.app_id != nil {
+		fields = append(fields, procdef.FieldAppID)
+	}
+	if m.app_name != nil {
+		fields = append(fields, procdef.FieldAppName)
 	}
 	if m.remain_hours != nil {
 		fields = append(fields, procdef.FieldRemainHours)
@@ -4501,6 +4709,10 @@ func (m *ProcDefMutation) Field(name string) (ent.Value, bool) {
 		return m.FormID()
 	case procdef.FieldFormName:
 		return m.FormName()
+	case procdef.FieldAppID:
+		return m.AppID()
+	case procdef.FieldAppName:
+		return m.AppName()
 	case procdef.FieldRemainHours:
 		return m.RemainHours()
 	case procdef.FieldIsDel:
@@ -4544,6 +4756,10 @@ func (m *ProcDefMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldFormID(ctx)
 	case procdef.FieldFormName:
 		return m.OldFormName(ctx)
+	case procdef.FieldAppID:
+		return m.OldAppID(ctx)
+	case procdef.FieldAppName:
+		return m.OldAppName(ctx)
 	case procdef.FieldRemainHours:
 		return m.OldRemainHours(ctx)
 	case procdef.FieldIsDel:
@@ -4624,7 +4840,7 @@ func (m *ProcDefMutation) SetField(name string, value ent.Value) error {
 		m.SetTargetID(v)
 		return nil
 	case procdef.FieldFormID:
-		v, ok := value.(string)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4636,6 +4852,20 @@ func (m *ProcDefMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetFormName(v)
+		return nil
+	case procdef.FieldAppID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAppID(v)
+		return nil
+	case procdef.FieldAppName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAppName(v)
 		return nil
 	case procdef.FieldRemainHours:
 		v, ok := value.(int32)
@@ -4703,6 +4933,12 @@ func (m *ProcDefMutation) AddedFields() []string {
 	if m.addtarget_id != nil {
 		fields = append(fields, procdef.FieldTargetID)
 	}
+	if m.addform_id != nil {
+		fields = append(fields, procdef.FieldFormID)
+	}
+	if m.addapp_id != nil {
+		fields = append(fields, procdef.FieldAppID)
+	}
 	if m.addremain_hours != nil {
 		fields = append(fields, procdef.FieldRemainHours)
 	}
@@ -4732,6 +4968,10 @@ func (m *ProcDefMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedCreateUserID()
 	case procdef.FieldTargetID:
 		return m.AddedTargetID()
+	case procdef.FieldFormID:
+		return m.AddedFormID()
+	case procdef.FieldAppID:
+		return m.AddedAppID()
 	case procdef.FieldRemainHours:
 		return m.AddedRemainHours()
 	case procdef.FieldIsDel:
@@ -4771,6 +5011,20 @@ func (m *ProcDefMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddTargetID(v)
+		return nil
+	case procdef.FieldFormID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFormID(v)
+		return nil
+	case procdef.FieldAppID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddAppID(v)
 		return nil
 	case procdef.FieldRemainHours:
 		v, ok := value.(int32)
@@ -4842,6 +5096,12 @@ func (m *ProcDefMutation) ClearedFields() []string {
 	if m.FieldCleared(procdef.FieldFormName) {
 		fields = append(fields, procdef.FieldFormName)
 	}
+	if m.FieldCleared(procdef.FieldAppID) {
+		fields = append(fields, procdef.FieldAppID)
+	}
+	if m.FieldCleared(procdef.FieldAppName) {
+		fields = append(fields, procdef.FieldAppName)
+	}
 	if m.FieldCleared(procdef.FieldRemainHours) {
 		fields = append(fields, procdef.FieldRemainHours)
 	}
@@ -4904,6 +5164,12 @@ func (m *ProcDefMutation) ClearField(name string) error {
 	case procdef.FieldFormName:
 		m.ClearFormName()
 		return nil
+	case procdef.FieldAppID:
+		m.ClearAppID()
+		return nil
+	case procdef.FieldAppName:
+		m.ClearAppName()
+		return nil
 	case procdef.FieldRemainHours:
 		m.ClearRemainHours()
 		return nil
@@ -4962,6 +5228,12 @@ func (m *ProcDefMutation) ResetField(name string) error {
 		return nil
 	case procdef.FieldFormName:
 		m.ResetFormName()
+		return nil
+	case procdef.FieldAppID:
+		m.ResetAppID()
+		return nil
+	case procdef.FieldAppName:
+		m.ResetAppName()
 		return nil
 	case procdef.FieldRemainHours:
 		m.ResetRemainHours()

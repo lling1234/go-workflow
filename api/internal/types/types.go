@@ -6,27 +6,31 @@ import "act/api/flow"
 type SaveProcDef struct {
 	Name        string     `json:"name,optional"`
 	Code        string     `json:"code,optional"`
-	FormId      string     `json:"formId"`
+	FormId      int64      `json:"formId,optional"`
 	FormName    string     `json:"formName,optional"`
+	AppId       int64      `json:"appId,optional"`
+	AppName     string     `json:"appName,optional"`
 	RemainHours int32      `json:"remainHours,optional"`
 	Resource    *flow.Node `json:"resource"`
 	Version     int32      `json:"version,optional"`
 }
 
 type FormIdReq struct {
-	FormId  string `json:"formId"`
-	Version int32  `json:"version"`
+	FormId  int64 `json:"formId,optional"`
+	AppId   int64 `json:"appId,optional"`
+	Version int32 `json:"version"`
 }
 
 type StartProcInst struct {
-	Title  string `json:"title"`
-	FormId string `json:"formId"`
+	Title  string `json:"title,optional"`
+	FormId int64  `json:"formId,optional"`
+	AppId  int64  `json:"appId,optional"`
 	DataId int64  `json:"dataId"`
 }
 
-type CompleteTask struct {
+type CompleteProcinst struct {
 	DataId  int64  `json:"dataId"`
-	Result  int    `json:"result,optional"`
+	Result  int32  `json:"result"`
 	Comment string `json:"comment,optional"`
 }
 
@@ -34,23 +38,14 @@ type DataIdReq struct {
 	DataId int64 `json:"dataId"`
 }
 
-type SearchProcess struct {
-	Starter   string `json:"starter"`
-	Title     string `json:"title"`
-	Code      string `json:"code"`
-	State     int32  `json:"state"`
-	PageSize  int32  `json:"pageSize"`
-	PageIndex int32  `json:"pageIndex"`
-}
-
 type PageReq struct {
 	PageSize  int32 `json:"pageSize"`
 	PageIndex int32 `json:"pageIndex"`
 }
 
-type UserReq struct {
-	UserId    int64  `json:"userId"`
-	UserName  string `json:"userName"`
+type OverTimeReq struct {
+	StartDate string `json:"startDate"`
+	EndDate   string `json:"endDate"`
 	PageSize  int32  `json:"pageSize"`
 	PageIndex int32  `json:"pageIndex"`
 }

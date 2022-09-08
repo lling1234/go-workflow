@@ -575,6 +575,20 @@ func PrevIDHasSuffix(v string) predicate.ConcurrentNode {
 	})
 }
 
+// PrevIDIsNil applies the IsNil predicate on the "prev_id" field.
+func PrevIDIsNil() predicate.ConcurrentNode {
+	return predicate.ConcurrentNode(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldPrevID)))
+	})
+}
+
+// PrevIDNotNil applies the NotNil predicate on the "prev_id" field.
+func PrevIDNotNil() predicate.ConcurrentNode {
+	return predicate.ConcurrentNode(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldPrevID)))
+	})
+}
+
 // PrevIDEqualFold applies the EqualFold predicate on the "prev_id" field.
 func PrevIDEqualFold(v string) predicate.ConcurrentNode {
 	return predicate.ConcurrentNode(func(s *sql.Selector) {
@@ -674,6 +688,20 @@ func NextIDHasSuffix(v string) predicate.ConcurrentNode {
 	})
 }
 
+// NextIDIsNil applies the IsNil predicate on the "next_id" field.
+func NextIDIsNil() predicate.ConcurrentNode {
+	return predicate.ConcurrentNode(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldNextID)))
+	})
+}
+
+// NextIDNotNil applies the NotNil predicate on the "next_id" field.
+func NextIDNotNil() predicate.ConcurrentNode {
+	return predicate.ConcurrentNode(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldNextID)))
+	})
+}
+
 // NextIDEqualFold applies the EqualFold predicate on the "next_id" field.
 func NextIDEqualFold(v string) predicate.ConcurrentNode {
 	return predicate.ConcurrentNode(func(s *sql.Selector) {
@@ -749,6 +777,20 @@ func StateLT(v int32) predicate.ConcurrentNode {
 func StateLTE(v int32) predicate.ConcurrentNode {
 	return predicate.ConcurrentNode(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldState), v))
+	})
+}
+
+// StateIsNil applies the IsNil predicate on the "state" field.
+func StateIsNil() predicate.ConcurrentNode {
+	return predicate.ConcurrentNode(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldState)))
+	})
+}
+
+// StateNotNil applies the NotNil predicate on the "state" field.
+func StateNotNil() predicate.ConcurrentNode {
+	return predicate.ConcurrentNode(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldState)))
 	})
 }
 

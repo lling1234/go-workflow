@@ -22,9 +22,9 @@ func NewActServer(svcCtx *svc.ServiceContext) *ActServer {
 	}
 }
 
-func (s *ActServer) SaveProcDef(ctx context.Context, in *act.SaveProcDefReq) (*act.ProcDefReply, error) {
-	l := logic.NewSaveProcDefLogic(ctx, s.svcCtx)
-	return l.SaveProcDef(in)
+func (s *ActServer) AddProcDef(ctx context.Context, in *act.AddProcDefReq) (*act.ProcDefReply, error) {
+	l := logic.NewAddProcDefLogic(ctx, s.svcCtx)
+	return l.AddProcDef(in)
 }
 
 func (s *ActServer) FindDefByFormId(ctx context.Context, in *act.FindProcDefReq) (*act.ProcDefReply, error) {
@@ -47,64 +47,14 @@ func (s *ActServer) DelProcDef(ctx context.Context, in *act.FindProcDefReq) (*ac
 	return l.DelProcDef(in)
 }
 
-func (s *ActServer) SaveProcInst(ctx context.Context, in *act.ProcInstReq) (*act.ProcInstReply, error) {
-	l := logic.NewSaveProcInstLogic(ctx, s.svcCtx)
-	return l.SaveProcInst(in)
+func (s *ActServer) Start(ctx context.Context, in *act.StartProcInstReq) (*act.Nil, error) {
+	l := logic.NewStartLogic(ctx, s.svcCtx)
+	return l.Start(in)
 }
 
-func (s *ActServer) SaveExecution(ctx context.Context, in *act.ExecutionReq) (*act.ExecutionReply, error) {
-	l := logic.NewSaveExecutionLogic(ctx, s.svcCtx)
-	return l.SaveExecution(in)
-}
-
-func (s *ActServer) SaveTask(ctx context.Context, in *act.TaskReq) (*act.TaskReply, error) {
-	l := logic.NewSaveTaskLogic(ctx, s.svcCtx)
-	return l.SaveTask(in)
-}
-
-func (s *ActServer) SaveIdentityLink(ctx context.Context, in *act.IdentityLinkReq) (*act.IdentityLinkReply, error) {
-	l := logic.NewSaveIdentityLinkLogic(ctx, s.svcCtx)
-	return l.SaveIdentityLink(in)
-}
-
-func (s *ActServer) FindLatestTask(ctx context.Context, in *act.ProcInstIdArg) (*act.TaskReply, error) {
-	l := logic.NewFindLatestTaskLogic(ctx, s.svcCtx)
-	return l.FindLatestTask(in)
-}
-
-func (s *ActServer) UpdateProcInst(ctx context.Context, in *act.UpdateProcInstReq) (*act.ProcInstReply, error) {
-	l := logic.NewUpdateProcInstLogic(ctx, s.svcCtx)
-	return l.UpdateProcInst(in)
-}
-
-func (s *ActServer) UpdateTask(ctx context.Context, in *act.TaskReq) (*act.TaskReply, error) {
-	l := logic.NewUpdateTaskLogic(ctx, s.svcCtx)
-	return l.UpdateTask(in)
-}
-
-func (s *ActServer) UpdateIdentityLink(ctx context.Context, in *act.IdentityLinkReq) (*act.IdentityLinkReply, error) {
-	l := logic.NewUpdateIdentityLinkLogic(ctx, s.svcCtx)
-	return l.UpdateIdentityLink(in)
-}
-
-func (s *ActServer) DelProcInst(ctx context.Context, in *act.DataIdReq) (*act.Nil, error) {
-	l := logic.NewDelProcInstLogic(ctx, s.svcCtx)
-	return l.DelProcInst(in)
-}
-
-func (s *ActServer) FindIdentityLinkByTaskId(ctx context.Context, in *act.TaskIdArg) (*act.IdentityLinkReply, error) {
-	l := logic.NewFindIdentityLinkByTaskIdLogic(ctx, s.svcCtx)
-	return l.FindIdentityLinkByTaskId(in)
-}
-
-func (s *ActServer) FindExecutionByInstId(ctx context.Context, in *act.ProcInstIdArg) (*act.ExecutionReq, error) {
-	l := logic.NewFindExecutionByInstIdLogic(ctx, s.svcCtx)
-	return l.FindExecutionByInstId(in)
-}
-
-func (s *ActServer) DelIdentityLink(ctx context.Context, in *act.ProcInstIdArg) (*act.Nil, error) {
-	l := logic.NewDelIdentityLinkLogic(ctx, s.svcCtx)
-	return l.DelIdentityLink(in)
+func (s *ActServer) CompleteNormal(ctx context.Context, in *act.CompleteNormalProcInstReq) (*act.Nil, error) {
+	l := logic.NewCompleteNormalLogic(ctx, s.svcCtx)
+	return l.CompleteNormal(in)
 }
 
 func (s *ActServer) Withdraw(ctx context.Context, in *act.DataIdReq) (*act.Nil, error) {
@@ -112,19 +62,19 @@ func (s *ActServer) Withdraw(ctx context.Context, in *act.DataIdReq) (*act.Nil, 
 	return l.Withdraw(in)
 }
 
+func (s *ActServer) DelProcInst(ctx context.Context, in *act.DataIdReq) (*act.Nil, error) {
+	l := logic.NewDelProcInstLogic(ctx, s.svcCtx)
+	return l.DelProcInst(in)
+}
+
 func (s *ActServer) FindProcInstByDataId(ctx context.Context, in *act.DataIdReq) (*act.ProcInstReply, error) {
 	l := logic.NewFindProcInstByDataIdLogic(ctx, s.svcCtx)
 	return l.FindProcInstByDataId(in)
 }
 
-func (s *ActServer) FindAllProcInst(ctx context.Context, in *act.IdRequest) (*act.CommonRpcRes, error) {
-	l := logic.NewFindAllProcInstLogic(ctx, s.svcCtx)
-	return l.FindAllProcInst(in)
-}
-
-func (s *ActServer) FindMyProcInst(ctx context.Context, in *act.MyProcInstReq) (*act.ProcInstReply, error) {
-	l := logic.NewFindMyProcInstLogic(ctx, s.svcCtx)
-	return l.FindMyProcInst(in)
+func (s *ActServer) FindMyStart(ctx context.Context, in *act.MyProcInstReq) (*act.ProcInstReply, error) {
+	l := logic.NewFindMyStartLogic(ctx, s.svcCtx)
+	return l.FindMyStart(in)
 }
 
 func (s *ActServer) FindMyApproval(ctx context.Context, in *act.MyProcInstReq) (*act.ProcInstReply, error) {
@@ -132,12 +82,17 @@ func (s *ActServer) FindMyApproval(ctx context.Context, in *act.MyProcInstReq) (
 	return l.FindMyApproval(in)
 }
 
-func (s *ActServer) FindOverTime(ctx context.Context, in *act.UserReq) (*act.ProcInstReply, error) {
-	l := logic.NewFindOverTimeLogic(ctx, s.svcCtx)
-	return l.FindOverTime(in)
+func (s *ActServer) FindMyFinishStart(ctx context.Context, in *act.MyProcInstReq) (*act.ProcInstReply, error) {
+	l := logic.NewFindMyFinishStartLogic(ctx, s.svcCtx)
+	return l.FindMyFinishStart(in)
 }
 
-func (s *ActServer) FindElapsedTime(ctx context.Context, in *act.UserReq) (*act.ElapsedTimeReply, error) {
-	l := logic.NewFindElapsedTimeLogic(ctx, s.svcCtx)
-	return l.FindElapsedTime(in)
+func (s *ActServer) FindMyFinishApproval(ctx context.Context, in *act.MyProcInstReq) (*act.ProcInstReply, error) {
+	l := logic.NewFindMyFinishApprovalLogic(ctx, s.svcCtx)
+	return l.FindMyFinishApproval(in)
+}
+
+func (s *ActServer) FindOverTime(ctx context.Context, in *act.OverTimeReq) (*act.ProcInstReply, error) {
+	l := logic.NewFindOverTimeLogic(ctx, s.svcCtx)
+	return l.FindOverTime(in)
 }

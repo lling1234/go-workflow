@@ -1,7 +1,6 @@
 package logic
 
 import (
-	act2 "act/common/act"
 	"act/common/act/procdef"
 	"act/common/tools/date"
 	"act/rpc/general"
@@ -14,41 +13,33 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type SaveProcDefLogic struct {
+type AddProcDefLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewSaveProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SaveProcDefLogic {
-	return &SaveProcDefLogic{
+func NewAddProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddProcDefLogic {
+	return &AddProcDefLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *SaveProcDefLogic) SaveProcDef(in *act.SaveProcDefReq) (*act.ProcDefReply, error) {
-	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
+func (l *AddProcDefLogic) AddProcDef(in *act.AddProcDefReq) (*act.ProcDefReply, error) {
+	version, err := l.GetNewVersion(in.FormId)
 	if err != nil {
 		return nil, err
 	}
-	version, err := l.FindMaxVersionByFormId(in.FormId, tx)
-	if err != nil {
-		return nil, err
-	}
-	version = version + 1
-	_, err = tx.ProcDef.Create().
+	_, err = l.svcCtx.CommonStore.ProcDef.Create().
 		SetName(in.Name).SetCode(in.Code).SetFormID(in.FormId).SetFormName(in.FormName).
+		SetAppName(in.AppName).SetAppID(in.AppId).
 		SetRemainHours(in.RemainHours).SetResource(in.Resource).
-		SetCreateUserID(in.UserId).SetCreateUserName(in.UserName).SetCreateTime(time.Now()).SetVersion(version).
+		SetCreateUserID(general.MyUserId).SetCreateUserName(general.UserName0).
+		SetCreateTime(time.Now()).SetVersion(version).
 		SetTargetID(general.TargetId).Save(l.ctx)
 
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-	err = tx.Commit()
 	if err != nil {
 		return nil, err
 	}
@@ -57,26 +48,27 @@ func (l *SaveProcDefLogic) SaveProcDef(in *act.SaveProcDefReq) (*act.ProcDefRepl
 	return reply, nil
 }
 
-func (l *SaveProcDefLogic) convert(in *act.SaveProcDefReq, version int32) *act.ProcDefReply {
+func (l *AddProcDefLogic) convert(in *act.AddProcDefReq, version int32) *act.ProcDefReply {
 	return &act.ProcDefReply{
 		Name:        in.Name,
 		Code:        in.Code,
 		FormId:      in.FormId,
 		FormName:    in.FormName,
+		AppId:       in.AppId,
+		AppName:     in.AppName,
 		RemainHours: in.RemainHours,
 		Resource:    in.Resource,
 		CreateTime:  date.NowStr(),
 		Version:     version,
-		TargetId:    in.TargetId,
 		IsDel:       0,
 		IsActive:    0,
 	}
 }
 
-func (l *SaveProcDefLogic) FindMaxVersionByFormId(formId string, tx *act2.Tx) (int32, error) {
-	defs, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(formId)).Select(procdef.FieldVersion).All(l.ctx)
+func (l *AddProcDefLogic) GetNewVersion(formId int64) (int32, error) {
+	defs, err := l.svcCtx.CommonStore.ProcDef.Query().Where(procdef.FormIDEQ(formId)).Select(procdef.FieldVersion).All(l.ctx)
 	if err != nil {
-		return 0, err
+		return 1, err
 	}
 	var maxVersion int32 = 0
 	for _, v := range defs {
@@ -84,5 +76,5 @@ func (l *SaveProcDefLogic) FindMaxVersionByFormId(formId string, tx *act2.Tx) (i
 			maxVersion = v.Version
 		}
 	}
-	return maxVersion, nil
+	return maxVersion + 1, nil
 }

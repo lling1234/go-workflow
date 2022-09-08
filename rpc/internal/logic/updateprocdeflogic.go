@@ -3,11 +3,13 @@ package logic
 import (
 	"act/common/act/procdef"
 	"act/rpc/general"
+	"context"
+	"time"
+
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
-	"context"
+
 	"github.com/zeromicro/go-zero/core/logx"
-	"time"
 )
 
 type UpdateProcDefLogic struct {
@@ -25,14 +27,7 @@ func NewUpdateProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Upd
 }
 
 func (l *UpdateProcDefLogic) UpdateProcDef(in *act.FindProcDefReq) (*act.ProcDefReply, error) {
-	formId := in.FormId
-	version := in.Version
-	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	procDefUpdate := tx.ProcDef.Update().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(general.TargetId), procdef.VersionEQ(version))
+	procDefUpdate := l.svcCtx.CommonStore.ProcDef.Update().Where(procdef.FormIDEQ(in.FormId), procdef.TargetIDEQ(general.TargetId), procdef.VersionEQ(in.Version))
 	if in.Resource != "" {
 		procDefUpdate.SetResource(in.Resource)
 	}
@@ -45,12 +40,6 @@ func (l *UpdateProcDefLogic) UpdateProcDef(in *act.FindProcDefReq) (*act.ProcDef
 	if in.RemainHours != 0 {
 		procDefUpdate.SetRemainHours(in.RemainHours)
 	}
-	err = procDefUpdate.SetUpdateTime(time.Now()).SetUpdateUserID(general.MyUserId).Exec(l.ctx)
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
-	tx.Commit()
-	return &act.ProcDefReply{}, nil
+	err := procDefUpdate.SetUpdateTime(time.Now()).SetUpdateUserID(general.MyUserId).Exec(l.ctx)
+	return &act.ProcDefReply{}, err
 }

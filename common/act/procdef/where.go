@@ -137,7 +137,7 @@ func TargetID(v int64) predicate.ProcDef {
 }
 
 // FormID applies equality check predicate on the "form_id" field. It's identical to FormIDEQ.
-func FormID(v string) predicate.ProcDef {
+func FormID(v int64) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldFormID), v))
 	})
@@ -147,6 +147,20 @@ func FormID(v string) predicate.ProcDef {
 func FormName(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldFormName), v))
+	})
+}
+
+// AppID applies equality check predicate on the "app_id" field. It's identical to AppIDEQ.
+func AppID(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAppID), v))
+	})
+}
+
+// AppName applies equality check predicate on the "app_name" field. It's identical to AppNameEQ.
+func AppName(v string) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAppName), v))
 	})
 }
 
@@ -950,21 +964,21 @@ func TargetIDNotNil() predicate.ProcDef {
 }
 
 // FormIDEQ applies the EQ predicate on the "form_id" field.
-func FormIDEQ(v string) predicate.ProcDef {
+func FormIDEQ(v int64) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldFormID), v))
 	})
 }
 
 // FormIDNEQ applies the NEQ predicate on the "form_id" field.
-func FormIDNEQ(v string) predicate.ProcDef {
+func FormIDNEQ(v int64) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldFormID), v))
 	})
 }
 
 // FormIDIn applies the In predicate on the "form_id" field.
-func FormIDIn(vs ...string) predicate.ProcDef {
+func FormIDIn(vs ...int64) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -975,7 +989,7 @@ func FormIDIn(vs ...string) predicate.ProcDef {
 }
 
 // FormIDNotIn applies the NotIn predicate on the "form_id" field.
-func FormIDNotIn(vs ...string) predicate.ProcDef {
+func FormIDNotIn(vs ...int64) predicate.ProcDef {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -986,51 +1000,30 @@ func FormIDNotIn(vs ...string) predicate.ProcDef {
 }
 
 // FormIDGT applies the GT predicate on the "form_id" field.
-func FormIDGT(v string) predicate.ProcDef {
+func FormIDGT(v int64) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldFormID), v))
 	})
 }
 
 // FormIDGTE applies the GTE predicate on the "form_id" field.
-func FormIDGTE(v string) predicate.ProcDef {
+func FormIDGTE(v int64) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldFormID), v))
 	})
 }
 
 // FormIDLT applies the LT predicate on the "form_id" field.
-func FormIDLT(v string) predicate.ProcDef {
+func FormIDLT(v int64) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldFormID), v))
 	})
 }
 
 // FormIDLTE applies the LTE predicate on the "form_id" field.
-func FormIDLTE(v string) predicate.ProcDef {
+func FormIDLTE(v int64) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldFormID), v))
-	})
-}
-
-// FormIDContains applies the Contains predicate on the "form_id" field.
-func FormIDContains(v string) predicate.ProcDef {
-	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldFormID), v))
-	})
-}
-
-// FormIDHasPrefix applies the HasPrefix predicate on the "form_id" field.
-func FormIDHasPrefix(v string) predicate.ProcDef {
-	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldFormID), v))
-	})
-}
-
-// FormIDHasSuffix applies the HasSuffix predicate on the "form_id" field.
-func FormIDHasSuffix(v string) predicate.ProcDef {
-	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldFormID), v))
 	})
 }
 
@@ -1045,20 +1038,6 @@ func FormIDIsNil() predicate.ProcDef {
 func FormIDNotNil() predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldFormID)))
-	})
-}
-
-// FormIDEqualFold applies the EqualFold predicate on the "form_id" field.
-func FormIDEqualFold(v string) predicate.ProcDef {
-	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldFormID), v))
-	})
-}
-
-// FormIDContainsFold applies the ContainsFold predicate on the "form_id" field.
-func FormIDContainsFold(v string) predicate.ProcDef {
-	return predicate.ProcDef(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldFormID), v))
 	})
 }
 
@@ -1172,6 +1151,197 @@ func FormNameEqualFold(v string) predicate.ProcDef {
 func FormNameContainsFold(v string) predicate.ProcDef {
 	return predicate.ProcDef(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldFormName), v))
+	})
+}
+
+// AppIDEQ applies the EQ predicate on the "app_id" field.
+func AppIDEQ(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAppID), v))
+	})
+}
+
+// AppIDNEQ applies the NEQ predicate on the "app_id" field.
+func AppIDNEQ(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldAppID), v))
+	})
+}
+
+// AppIDIn applies the In predicate on the "app_id" field.
+func AppIDIn(vs ...int64) predicate.ProcDef {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldAppID), v...))
+	})
+}
+
+// AppIDNotIn applies the NotIn predicate on the "app_id" field.
+func AppIDNotIn(vs ...int64) predicate.ProcDef {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldAppID), v...))
+	})
+}
+
+// AppIDGT applies the GT predicate on the "app_id" field.
+func AppIDGT(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldAppID), v))
+	})
+}
+
+// AppIDGTE applies the GTE predicate on the "app_id" field.
+func AppIDGTE(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldAppID), v))
+	})
+}
+
+// AppIDLT applies the LT predicate on the "app_id" field.
+func AppIDLT(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldAppID), v))
+	})
+}
+
+// AppIDLTE applies the LTE predicate on the "app_id" field.
+func AppIDLTE(v int64) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldAppID), v))
+	})
+}
+
+// AppIDIsNil applies the IsNil predicate on the "app_id" field.
+func AppIDIsNil() predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldAppID)))
+	})
+}
+
+// AppIDNotNil applies the NotNil predicate on the "app_id" field.
+func AppIDNotNil() predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldAppID)))
+	})
+}
+
+// AppNameEQ applies the EQ predicate on the "app_name" field.
+func AppNameEQ(v string) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAppName), v))
+	})
+}
+
+// AppNameNEQ applies the NEQ predicate on the "app_name" field.
+func AppNameNEQ(v string) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldAppName), v))
+	})
+}
+
+// AppNameIn applies the In predicate on the "app_name" field.
+func AppNameIn(vs ...string) predicate.ProcDef {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldAppName), v...))
+	})
+}
+
+// AppNameNotIn applies the NotIn predicate on the "app_name" field.
+func AppNameNotIn(vs ...string) predicate.ProcDef {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldAppName), v...))
+	})
+}
+
+// AppNameGT applies the GT predicate on the "app_name" field.
+func AppNameGT(v string) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldAppName), v))
+	})
+}
+
+// AppNameGTE applies the GTE predicate on the "app_name" field.
+func AppNameGTE(v string) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldAppName), v))
+	})
+}
+
+// AppNameLT applies the LT predicate on the "app_name" field.
+func AppNameLT(v string) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldAppName), v))
+	})
+}
+
+// AppNameLTE applies the LTE predicate on the "app_name" field.
+func AppNameLTE(v string) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldAppName), v))
+	})
+}
+
+// AppNameContains applies the Contains predicate on the "app_name" field.
+func AppNameContains(v string) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldAppName), v))
+	})
+}
+
+// AppNameHasPrefix applies the HasPrefix predicate on the "app_name" field.
+func AppNameHasPrefix(v string) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldAppName), v))
+	})
+}
+
+// AppNameHasSuffix applies the HasSuffix predicate on the "app_name" field.
+func AppNameHasSuffix(v string) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldAppName), v))
+	})
+}
+
+// AppNameIsNil applies the IsNil predicate on the "app_name" field.
+func AppNameIsNil() predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldAppName)))
+	})
+}
+
+// AppNameNotNil applies the NotNil predicate on the "app_name" field.
+func AppNameNotNil() predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldAppName)))
+	})
+}
+
+// AppNameEqualFold applies the EqualFold predicate on the "app_name" field.
+func AppNameEqualFold(v string) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldAppName), v))
+	})
+}
+
+// AppNameContainsFold applies the ContainsFold predicate on the "app_name" field.
+func AppNameContainsFold(v string) predicate.ProcDef {
+	return predicate.ProcDef(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldAppName), v))
 	})
 }
 

@@ -1,9 +1,7 @@
 package logic
 
 import (
-	"act/common/act/procinst"
 	"context"
-	"errors"
 
 	"act/rpc/internal/svc"
 	"act/rpc/types/act"
@@ -26,19 +24,7 @@ func NewFindProcInstByDataIdLogic(ctx context.Context, svcCtx *svc.ServiceContex
 }
 
 func (l *FindProcInstByDataIdLogic) FindProcInstByDataId(in *act.DataIdReq) (*act.ProcInstReply, error) {
-	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
-	if err != nil {
-		return nil, err
-	}
-	insts, err := tx.ProcInst.Query().Where(procinst.DataIDEQ(in.DataId), procinst.IsDelEQ(0)).All(l.ctx)
-	if err != nil {
-		return nil, err
-	}
-	if insts == nil || len(insts) == 0 {
-		return nil, errors.New("该数据没有对应的流程实例")
-	}
-	inst := insts[0]
-	return &act.ProcInstReply{
-		Id: inst.ID,
-	}, nil
+	// todo: add your logic here and delete this line
+
+	return &act.ProcInstReply{}, nil
 }

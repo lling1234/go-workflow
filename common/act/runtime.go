@@ -117,28 +117,28 @@ func init() {
 	procdefDescCreateTime := procdefFields[7].Descriptor()
 	// procdef.DefaultCreateTime holds the default value on creation for the create_time field.
 	procdef.DefaultCreateTime = procdefDescCreateTime.Default.(time.Time)
-	// procdefDescFormID is the schema descriptor for form_id field.
-	procdefDescFormID := procdefFields[9].Descriptor()
-	// procdef.FormIDValidator is a validator for the "form_id" field. It is called by the builders before save.
-	procdef.FormIDValidator = procdefDescFormID.Validators[0].(func(string) error)
 	// procdefDescFormName is the schema descriptor for form_name field.
 	procdefDescFormName := procdefFields[10].Descriptor()
 	// procdef.FormNameValidator is a validator for the "form_name" field. It is called by the builders before save.
 	procdef.FormNameValidator = procdefDescFormName.Validators[0].(func(string) error)
+	// procdefDescAppName is the schema descriptor for app_name field.
+	procdefDescAppName := procdefFields[12].Descriptor()
+	// procdef.AppNameValidator is a validator for the "app_name" field. It is called by the builders before save.
+	procdef.AppNameValidator = procdefDescAppName.Validators[0].(func(string) error)
 	// procdefDescRemainHours is the schema descriptor for remain_hours field.
-	procdefDescRemainHours := procdefFields[11].Descriptor()
+	procdefDescRemainHours := procdefFields[13].Descriptor()
 	// procdef.DefaultRemainHours holds the default value on creation for the remain_hours field.
 	procdef.DefaultRemainHours = procdefDescRemainHours.Default.(int32)
 	// procdefDescIsDel is the schema descriptor for is_del field.
-	procdefDescIsDel := procdefFields[12].Descriptor()
+	procdefDescIsDel := procdefFields[14].Descriptor()
 	// procdef.DefaultIsDel holds the default value on creation for the is_del field.
 	procdef.DefaultIsDel = procdefDescIsDel.Default.(int32)
 	// procdefDescIsActive is the schema descriptor for is_active field.
-	procdefDescIsActive := procdefFields[13].Descriptor()
+	procdefDescIsActive := procdefFields[15].Descriptor()
 	// procdef.DefaultIsActive holds the default value on creation for the is_active field.
 	procdef.DefaultIsActive = procdefDescIsActive.Default.(int32)
 	// procdefDescUpdateTime is the schema descriptor for update_time field.
-	procdefDescUpdateTime := procdefFields[14].Descriptor()
+	procdefDescUpdateTime := procdefFields[16].Descriptor()
 	// procdef.DefaultUpdateTime holds the default value on creation for the update_time field.
 	procdef.DefaultUpdateTime = procdefDescUpdateTime.Default.(time.Time)
 	procinstFields := schema.ProcInst{}.Fields()

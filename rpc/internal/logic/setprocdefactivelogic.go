@@ -33,12 +33,12 @@ func (l *SetProcDefActiveLogic) SetProcDefActive(in *act.FindProcDefReq) (*act.N
 	if err != nil {
 		return nil, err
 	}
-	err = tx.ProcDef.Update().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(general.TargetId), procdef.VersionEQ(version)).SetIsActive(1).SetUpdateTime(time.Now()).Exec(l.ctx)
+	err = tx.ProcDef.Update().Where(procdef.FormIDEQ(formId), procdef.AppIDEQ(in.AppId), procdef.TargetIDEQ(general.TargetId), procdef.VersionEQ(version)).SetIsActive(1).SetUpdateTime(time.Now()).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
-	err = tx.ProcDef.Update().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(general.TargetId), procdef.VersionNEQ(version)).SetIsActive(0).Exec(l.ctx)
+	err = tx.ProcDef.Update().Where(procdef.FormIDEQ(formId), procdef.AppIDEQ(in.AppId), procdef.TargetIDEQ(general.TargetId), procdef.VersionNEQ(version)).SetIsActive(0).Exec(l.ctx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err

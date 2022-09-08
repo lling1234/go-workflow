@@ -9,21 +9,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type FindMyProcInstLogic struct {
+type FindMyFinishStartLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewFindMyProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindMyProcInstLogic {
-	return &FindMyProcInstLogic{
+func NewFindMyFinishStartLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindMyFinishStartLogic {
+	return &FindMyFinishStartLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *FindMyProcInstLogic) FindMyProcInst(in *act.MyProcInstReq) (*act.ProcInstReply, error) {
+func (l *FindMyFinishStartLogic) FindMyFinishStart(in *act.MyProcInstReq) (*act.ProcInstReply, error) {
 	// todo: add your logic here and delete this line
 
 	return &act.ProcInstReply{}, nil

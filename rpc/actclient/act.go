@@ -13,56 +13,36 @@ import (
 )
 
 type (
-	CommonRpcRes      = act.CommonRpcRes
-	DataIdReq         = act.DataIdReq
-	ElapsedTimeReply  = act.ElapsedTimeReply
-	ExecutionReply    = act.ExecutionReply
-	ExecutionReq      = act.ExecutionReq
-	FindProcDefReq    = act.FindProcDefReq
-	IdRequest         = act.IdRequest
-	IdentityLinkReply = act.IdentityLinkReply
-	IdentityLinkReq   = act.IdentityLinkReq
-	MyProcInstReq     = act.MyProcInstReq
-	Nil               = act.Nil
-	PageReq           = act.PageReq
-	PageRequest       = act.PageRequest
-	ProcDefReply      = act.ProcDefReply
-	ProcInstIdArg     = act.ProcInstIdArg
-	ProcInstReply     = act.ProcInstReply
-	ProcInstReq       = act.ProcInstReq
-	SaveProcDefReq    = act.SaveProcDefReq
-	SearchProcInstReq = act.SearchProcInstReq
-	TaskIdArg         = act.TaskIdArg
-	TaskReply         = act.TaskReply
-	TaskReq           = act.TaskReq
-	UpdateProcInstReq = act.UpdateProcInstReq
-	UserReq           = act.UserReq
+	AddProcDefReq             = act.AddProcDefReq
+	CommonRpcRes              = act.CommonRpcRes
+	CompleteNormalProcInstReq = act.CompleteNormalProcInstReq
+	DataIdReq                 = act.DataIdReq
+	FindProcDefReq            = act.FindProcDefReq
+	IdRequest                 = act.IdRequest
+	MyProcInstReq             = act.MyProcInstReq
+	Nil                       = act.Nil
+	OverTimeReq               = act.OverTimeReq
+	PageRequest               = act.PageRequest
+	ProcDefReply              = act.ProcDefReply
+	ProcInstReply             = act.ProcInstReply
+	StartProcInstReq          = act.StartProcInstReq
 
 	Act interface {
-		SaveProcDef(ctx context.Context, in *SaveProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error)
+		AddProcDef(ctx context.Context, in *AddProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error)
 		FindDefByFormId(ctx context.Context, in *FindProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error)
 		UpdateProcDef(ctx context.Context, in *FindProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error)
 		SetProcDefActive(ctx context.Context, in *FindProcDefReq, opts ...grpc.CallOption) (*Nil, error)
 		DelProcDef(ctx context.Context, in *FindProcDefReq, opts ...grpc.CallOption) (*Nil, error)
-		SaveProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
-		SaveExecution(ctx context.Context, in *ExecutionReq, opts ...grpc.CallOption) (*ExecutionReply, error)
-		SaveTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error)
-		SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
-		FindLatestTask(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*TaskReply, error)
-		UpdateProcInst(ctx context.Context, in *UpdateProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
-		UpdateTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error)
-		UpdateIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error)
-		DelProcInst(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error)
-		FindIdentityLinkByTaskId(ctx context.Context, in *TaskIdArg, opts ...grpc.CallOption) (*IdentityLinkReply, error)
-		FindExecutionByInstId(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*ExecutionReq, error)
-		DelIdentityLink(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*Nil, error)
+		Start(ctx context.Context, in *StartProcInstReq, opts ...grpc.CallOption) (*Nil, error)
+		CompleteNormal(ctx context.Context, in *CompleteNormalProcInstReq, opts ...grpc.CallOption) (*Nil, error)
 		Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error)
+		DelProcInst(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error)
 		FindProcInstByDataId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*ProcInstReply, error)
-		FindAllProcInst(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*CommonRpcRes, error)
-		FindMyProcInst(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
+		FindMyStart(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 		FindMyApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
-		FindOverTime(ctx context.Context, in *UserReq, opts ...grpc.CallOption) (*ProcInstReply, error)
-		FindElapsedTime(ctx context.Context, in *UserReq, opts ...grpc.CallOption) (*ElapsedTimeReply, error)
+		FindMyFinishStart(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
+		FindMyFinishApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error)
+		FindOverTime(ctx context.Context, in *OverTimeReq, opts ...grpc.CallOption) (*ProcInstReply, error)
 	}
 
 	defaultAct struct {
@@ -76,9 +56,9 @@ func NewAct(cli zrpc.Client) Act {
 	}
 }
 
-func (m *defaultAct) SaveProcDef(ctx context.Context, in *SaveProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
+func (m *defaultAct) AddProcDef(ctx context.Context, in *AddProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
 	client := act.NewActClient(m.cli.Conn())
-	return client.SaveProcDef(ctx, in, opts...)
+	return client.AddProcDef(ctx, in, opts...)
 }
 
 func (m *defaultAct) FindDefByFormId(ctx context.Context, in *FindProcDefReq, opts ...grpc.CallOption) (*ProcDefReply, error) {
@@ -101,64 +81,14 @@ func (m *defaultAct) DelProcDef(ctx context.Context, in *FindProcDefReq, opts ..
 	return client.DelProcDef(ctx, in, opts...)
 }
 
-func (m *defaultAct) SaveProcInst(ctx context.Context, in *ProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
+func (m *defaultAct) Start(ctx context.Context, in *StartProcInstReq, opts ...grpc.CallOption) (*Nil, error) {
 	client := act.NewActClient(m.cli.Conn())
-	return client.SaveProcInst(ctx, in, opts...)
+	return client.Start(ctx, in, opts...)
 }
 
-func (m *defaultAct) SaveExecution(ctx context.Context, in *ExecutionReq, opts ...grpc.CallOption) (*ExecutionReply, error) {
+func (m *defaultAct) CompleteNormal(ctx context.Context, in *CompleteNormalProcInstReq, opts ...grpc.CallOption) (*Nil, error) {
 	client := act.NewActClient(m.cli.Conn())
-	return client.SaveExecution(ctx, in, opts...)
-}
-
-func (m *defaultAct) SaveTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error) {
-	client := act.NewActClient(m.cli.Conn())
-	return client.SaveTask(ctx, in, opts...)
-}
-
-func (m *defaultAct) SaveIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error) {
-	client := act.NewActClient(m.cli.Conn())
-	return client.SaveIdentityLink(ctx, in, opts...)
-}
-
-func (m *defaultAct) FindLatestTask(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*TaskReply, error) {
-	client := act.NewActClient(m.cli.Conn())
-	return client.FindLatestTask(ctx, in, opts...)
-}
-
-func (m *defaultAct) UpdateProcInst(ctx context.Context, in *UpdateProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
-	client := act.NewActClient(m.cli.Conn())
-	return client.UpdateProcInst(ctx, in, opts...)
-}
-
-func (m *defaultAct) UpdateTask(ctx context.Context, in *TaskReq, opts ...grpc.CallOption) (*TaskReply, error) {
-	client := act.NewActClient(m.cli.Conn())
-	return client.UpdateTask(ctx, in, opts...)
-}
-
-func (m *defaultAct) UpdateIdentityLink(ctx context.Context, in *IdentityLinkReq, opts ...grpc.CallOption) (*IdentityLinkReply, error) {
-	client := act.NewActClient(m.cli.Conn())
-	return client.UpdateIdentityLink(ctx, in, opts...)
-}
-
-func (m *defaultAct) DelProcInst(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error) {
-	client := act.NewActClient(m.cli.Conn())
-	return client.DelProcInst(ctx, in, opts...)
-}
-
-func (m *defaultAct) FindIdentityLinkByTaskId(ctx context.Context, in *TaskIdArg, opts ...grpc.CallOption) (*IdentityLinkReply, error) {
-	client := act.NewActClient(m.cli.Conn())
-	return client.FindIdentityLinkByTaskId(ctx, in, opts...)
-}
-
-func (m *defaultAct) FindExecutionByInstId(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*ExecutionReq, error) {
-	client := act.NewActClient(m.cli.Conn())
-	return client.FindExecutionByInstId(ctx, in, opts...)
-}
-
-func (m *defaultAct) DelIdentityLink(ctx context.Context, in *ProcInstIdArg, opts ...grpc.CallOption) (*Nil, error) {
-	client := act.NewActClient(m.cli.Conn())
-	return client.DelIdentityLink(ctx, in, opts...)
+	return client.CompleteNormal(ctx, in, opts...)
 }
 
 func (m *defaultAct) Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error) {
@@ -166,19 +96,19 @@ func (m *defaultAct) Withdraw(ctx context.Context, in *DataIdReq, opts ...grpc.C
 	return client.Withdraw(ctx, in, opts...)
 }
 
+func (m *defaultAct) DelProcInst(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*Nil, error) {
+	client := act.NewActClient(m.cli.Conn())
+	return client.DelProcInst(ctx, in, opts...)
+}
+
 func (m *defaultAct) FindProcInstByDataId(ctx context.Context, in *DataIdReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
 	client := act.NewActClient(m.cli.Conn())
 	return client.FindProcInstByDataId(ctx, in, opts...)
 }
 
-func (m *defaultAct) FindAllProcInst(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*CommonRpcRes, error) {
+func (m *defaultAct) FindMyStart(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
 	client := act.NewActClient(m.cli.Conn())
-	return client.FindAllProcInst(ctx, in, opts...)
-}
-
-func (m *defaultAct) FindMyProcInst(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
-	client := act.NewActClient(m.cli.Conn())
-	return client.FindMyProcInst(ctx, in, opts...)
+	return client.FindMyStart(ctx, in, opts...)
 }
 
 func (m *defaultAct) FindMyApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
@@ -186,12 +116,17 @@ func (m *defaultAct) FindMyApproval(ctx context.Context, in *MyProcInstReq, opts
 	return client.FindMyApproval(ctx, in, opts...)
 }
 
-func (m *defaultAct) FindOverTime(ctx context.Context, in *UserReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
+func (m *defaultAct) FindMyFinishStart(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
 	client := act.NewActClient(m.cli.Conn())
-	return client.FindOverTime(ctx, in, opts...)
+	return client.FindMyFinishStart(ctx, in, opts...)
 }
 
-func (m *defaultAct) FindElapsedTime(ctx context.Context, in *UserReq, opts ...grpc.CallOption) (*ElapsedTimeReply, error) {
+func (m *defaultAct) FindMyFinishApproval(ctx context.Context, in *MyProcInstReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
 	client := act.NewActClient(m.cli.Conn())
-	return client.FindElapsedTime(ctx, in, opts...)
+	return client.FindMyFinishApproval(ctx, in, opts...)
+}
+
+func (m *defaultAct) FindOverTime(ctx context.Context, in *OverTimeReq, opts ...grpc.CallOption) (*ProcInstReply, error) {
+	client := act.NewActClient(m.cli.Conn())
+	return client.FindOverTime(ctx, in, opts...)
 }

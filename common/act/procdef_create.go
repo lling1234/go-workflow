@@ -125,15 +125,15 @@ func (pdc *ProcDefCreate) SetNillableTargetID(i *int64) *ProcDefCreate {
 }
 
 // SetFormID sets the "form_id" field.
-func (pdc *ProcDefCreate) SetFormID(s string) *ProcDefCreate {
-	pdc.mutation.SetFormID(s)
+func (pdc *ProcDefCreate) SetFormID(i int64) *ProcDefCreate {
+	pdc.mutation.SetFormID(i)
 	return pdc
 }
 
 // SetNillableFormID sets the "form_id" field if the given value is not nil.
-func (pdc *ProcDefCreate) SetNillableFormID(s *string) *ProcDefCreate {
-	if s != nil {
-		pdc.SetFormID(*s)
+func (pdc *ProcDefCreate) SetNillableFormID(i *int64) *ProcDefCreate {
+	if i != nil {
+		pdc.SetFormID(*i)
 	}
 	return pdc
 }
@@ -148,6 +148,34 @@ func (pdc *ProcDefCreate) SetFormName(s string) *ProcDefCreate {
 func (pdc *ProcDefCreate) SetNillableFormName(s *string) *ProcDefCreate {
 	if s != nil {
 		pdc.SetFormName(*s)
+	}
+	return pdc
+}
+
+// SetAppID sets the "app_id" field.
+func (pdc *ProcDefCreate) SetAppID(i int64) *ProcDefCreate {
+	pdc.mutation.SetAppID(i)
+	return pdc
+}
+
+// SetNillableAppID sets the "app_id" field if the given value is not nil.
+func (pdc *ProcDefCreate) SetNillableAppID(i *int64) *ProcDefCreate {
+	if i != nil {
+		pdc.SetAppID(*i)
+	}
+	return pdc
+}
+
+// SetAppName sets the "app_name" field.
+func (pdc *ProcDefCreate) SetAppName(s string) *ProcDefCreate {
+	pdc.mutation.SetAppName(s)
+	return pdc
+}
+
+// SetNillableAppName sets the "app_name" field if the given value is not nil.
+func (pdc *ProcDefCreate) SetNillableAppName(s *string) *ProcDefCreate {
+	if s != nil {
+		pdc.SetAppName(*s)
 	}
 	return pdc
 }
@@ -380,14 +408,14 @@ func (pdc *ProcDefCreate) check() error {
 			return &ValidationError{Name: "create_user_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.create_user_name": %w`, err)}
 		}
 	}
-	if v, ok := pdc.mutation.FormID(); ok {
-		if err := procdef.FormIDValidator(v); err != nil {
-			return &ValidationError{Name: "form_id", err: fmt.Errorf(`act: validator failed for field "ProcDef.form_id": %w`, err)}
-		}
-	}
 	if v, ok := pdc.mutation.FormName(); ok {
 		if err := procdef.FormNameValidator(v); err != nil {
 			return &ValidationError{Name: "form_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.form_name": %w`, err)}
+		}
+	}
+	if v, ok := pdc.mutation.AppName(); ok {
+		if err := procdef.AppNameValidator(v); err != nil {
+			return &ValidationError{Name: "app_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.app_name": %w`, err)}
 		}
 	}
 	return nil
@@ -489,7 +517,7 @@ func (pdc *ProcDefCreate) createSpec() (*ProcDef, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pdc.mutation.FormID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeInt64,
 			Value:  value,
 			Column: procdef.FieldFormID,
 		})
@@ -502,6 +530,22 @@ func (pdc *ProcDefCreate) createSpec() (*ProcDef, *sqlgraph.CreateSpec) {
 			Column: procdef.FieldFormName,
 		})
 		_node.FormName = value
+	}
+	if value, ok := pdc.mutation.AppID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldAppID,
+		})
+		_node.AppID = value
+	}
+	if value, ok := pdc.mutation.AppName(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: procdef.FieldAppName,
+		})
+		_node.AppName = value
 	}
 	if value, ok := pdc.mutation.RemainHours(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

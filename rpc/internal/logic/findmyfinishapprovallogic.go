@@ -9,21 +9,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type FindOverTimeLogic struct {
+type FindMyFinishApprovalLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewFindOverTimeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindOverTimeLogic {
-	return &FindOverTimeLogic{
+func NewFindMyFinishApprovalLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindMyFinishApprovalLogic {
+	return &FindMyFinishApprovalLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *FindOverTimeLogic) FindOverTime(in *act.OverTimeReq) (*act.ProcInstReply, error) {
+func (l *FindMyFinishApprovalLogic) FindMyFinishApproval(in *act.MyProcInstReq) (*act.ProcInstReply, error) {
 	// todo: add your logic here and delete this line
 
 	return &act.ProcInstReply{}, nil

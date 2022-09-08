@@ -1,12 +1,10 @@
 package act
 
 import (
-	"act/rpc/actclient"
-	"context"
-	"log"
-
 	"act/api/internal/svc"
 	"act/api/internal/types"
+	"act/rpc/actclient"
+	"context"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -30,14 +28,12 @@ func NewWithdrawLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Withdraw
 2、撤回将流程实例表state=4,isFinish=1,endTime=now,updateTime=now
 */
 func (l *WithdrawLogic) Withdraw(req *types.DataIdReq) (resp *types.CommonResponse, err error) {
-	log.Println("req 1111111", req.DataId)
 	// 1.通过token中解析用户id
 	// userID := 101
 	// 2.1根据dataID在proc_inst数据库表中查询procdefID
 	_, err = l.svcCtx.Rpc.Withdraw(l.ctx, &actclient.DataIdReq{DataId: req.DataId})
-	log.Println("err 3333333", err)
 	if err != nil {
-		return types.GetErrorCommonResponse("撤回失败！")
+		return types.GetErrorCommonResponse("撤回失败" + err.Error())
 	}
 	// 2.2根据procdefID在proc_def数据库表中查询到create_user_id
 

@@ -7,8 +7,6 @@ import (
 	"act/rpc/types/act"
 	"context"
 	"encoding/json"
-	"log"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -27,7 +25,7 @@ func NewAddProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPro
 }
 
 func (l *AddProcDefLogic) AddProcDef(req *types.SaveProcDef) (resp *types.CommonResponse, err error) {
-	if len(req.FormId) == 0 {
+	if req.FormId == 0 {
 		return types.GetErrorCommonResponse("业务表单数据未获取到！")
 	}
 	if req.Resource == nil || len(req.Resource.Name) == 0 {
@@ -40,17 +38,15 @@ func (l *AddProcDefLogic) AddProcDef(req *types.SaveProcDef) (resp *types.Common
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
-	log.Println(111111)
-	reply, err := l.svcCtx.Rpc.SaveProcDef(l.ctx, &act.SaveProcDefReq{
-		//UserId:      101,
-		//UserName:    "赵本山",
+	reply, err := l.svcCtx.Rpc.AddProcDef(l.ctx, &act.AddProcDefReq{
 		Name:        req.Name,
 		Code:        req.Code,
 		FormId:      req.FormId,
 		FormName:    req.FormName,
+		AppId:       req.AppId,
+		AppName:     req.AppName,
 		Resource:    string(resource),
 		RemainHours: req.RemainHours,
 	})
-	log.Println(222222)
 	return types.GetCommonResponse(err, reply)
 }

@@ -58,15 +58,39 @@ func (cnc *ConcurrentNodeCreate) SetPrevID(s string) *ConcurrentNodeCreate {
 	return cnc
 }
 
+// SetNillablePrevID sets the "prev_id" field if the given value is not nil.
+func (cnc *ConcurrentNodeCreate) SetNillablePrevID(s *string) *ConcurrentNodeCreate {
+	if s != nil {
+		cnc.SetPrevID(*s)
+	}
+	return cnc
+}
+
 // SetNextID sets the "next_id" field.
 func (cnc *ConcurrentNodeCreate) SetNextID(s string) *ConcurrentNodeCreate {
 	cnc.mutation.SetNextID(s)
 	return cnc
 }
 
+// SetNillableNextID sets the "next_id" field if the given value is not nil.
+func (cnc *ConcurrentNodeCreate) SetNillableNextID(s *string) *ConcurrentNodeCreate {
+	if s != nil {
+		cnc.SetNextID(*s)
+	}
+	return cnc
+}
+
 // SetState sets the "state" field.
 func (cnc *ConcurrentNodeCreate) SetState(i int32) *ConcurrentNodeCreate {
 	cnc.mutation.SetState(i)
+	return cnc
+}
+
+// SetNillableState sets the "state" field if the given value is not nil.
+func (cnc *ConcurrentNodeCreate) SetNillableState(i *int32) *ConcurrentNodeCreate {
+	if i != nil {
+		cnc.SetState(*i)
+	}
 	return cnc
 }
 
@@ -230,24 +254,15 @@ func (cnc *ConcurrentNodeCreate) check() error {
 			return &ValidationError{Name: "node_info", err: fmt.Errorf(`act: validator failed for field "ConcurrentNode.node_info": %w`, err)}
 		}
 	}
-	if _, ok := cnc.mutation.PrevID(); !ok {
-		return &ValidationError{Name: "prev_id", err: errors.New(`act: missing required field "ConcurrentNode.prev_id"`)}
-	}
 	if v, ok := cnc.mutation.PrevID(); ok {
 		if err := concurrentnode.PrevIDValidator(v); err != nil {
 			return &ValidationError{Name: "prev_id", err: fmt.Errorf(`act: validator failed for field "ConcurrentNode.prev_id": %w`, err)}
 		}
 	}
-	if _, ok := cnc.mutation.NextID(); !ok {
-		return &ValidationError{Name: "next_id", err: errors.New(`act: missing required field "ConcurrentNode.next_id"`)}
-	}
 	if v, ok := cnc.mutation.NextID(); ok {
 		if err := concurrentnode.NextIDValidator(v); err != nil {
 			return &ValidationError{Name: "next_id", err: fmt.Errorf(`act: validator failed for field "ConcurrentNode.next_id": %w`, err)}
 		}
-	}
-	if _, ok := cnc.mutation.State(); !ok {
-		return &ValidationError{Name: "state", err: errors.New(`act: missing required field "ConcurrentNode.state"`)}
 	}
 	return nil
 }
