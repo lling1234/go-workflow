@@ -51,7 +51,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodPost,
 				Path:    "/act/procinst/complete",
-				Handler: act.CompleteTaskHandler(serverCtx),
+				Handler: act.CompleteHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
@@ -67,11 +67,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodPost,
 				Path:    "/act/procinst/del",
 				Handler: act.DelProcInstHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
-				Path:    "/act/process/findall",
-				Handler: act.FindAllProcessHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
@@ -97,11 +92,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodPost,
 				Path:    "/act/process/findmyapproved",
 				Handler: act.FindMyApprovedHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
-				Path:    "/act/process/findelapsedtime",
-				Handler: act.FindElapsedTimeHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,

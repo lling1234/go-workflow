@@ -1,7 +1,7 @@
 package test
 
 import (
-	"act/api/flow"
+	"act/common/flow"
 	"fmt"
 	"github.com/mumushuiding/util"
 	"strings"

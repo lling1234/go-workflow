@@ -31,6 +31,10 @@ const (
 	FieldFormID = "form_id"
 	// FieldFormName holds the string denoting the form_name field in the database.
 	FieldFormName = "form_name"
+	// FieldAppID holds the string denoting the app_id field in the database.
+	FieldAppID = "app_id"
+	// FieldAppName holds the string denoting the app_name field in the database.
+	FieldAppName = "app_name"
 	// FieldRemainHours holds the string denoting the remain_hours field in the database.
 	FieldRemainHours = "remain_hours"
 	// FieldIsDel holds the string denoting the is_del field in the database.
@@ -62,6 +66,8 @@ var Columns = []string{
 	FieldTargetID,
 	FieldFormID,
 	FieldFormName,
+	FieldAppID,
+	FieldAppName,
 	FieldRemainHours,
 	FieldIsDel,
 	FieldIsActive,
@@ -92,10 +98,10 @@ var (
 	CreateUserNameValidator func(string) error
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime time.Time
-	// FormIDValidator is a validator for the "form_id" field. It is called by the builders before save.
-	FormIDValidator func(string) error
 	// FormNameValidator is a validator for the "form_name" field. It is called by the builders before save.
 	FormNameValidator func(string) error
+	// AppNameValidator is a validator for the "app_name" field. It is called by the builders before save.
+	AppNameValidator func(string) error
 	// DefaultRemainHours holds the default value on creation for the "remain_hours" field.
 	DefaultRemainHours int32
 	// DefaultIsDel holds the default value on creation for the "is_del" field.

@@ -29,12 +29,7 @@ func NewFindDefByFormIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *F
 }
 
 func (l *FindDefByFormIdLogic) FindDefByFormId(in *act.FindProcDefReq) (*act.ProcDefReply, error) {
-	formId := in.GetFormId()
-	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
-	if err != nil {
-		return nil, err
-	}
-	defs, err := tx.ProcDef.Query().Where(procdef.FormIDEQ(formId), procdef.TargetIDEQ(general.TargetId), procdef.IsActiveEQ(1)).All(l.ctx)
+	defs, err := l.svcCtx.CommonStore.ProcDef.Query().Where(procdef.FormIDEQ(in.GetFormId()), procdef.AppIDEQ(in.AppId), procdef.TargetIDEQ(general.TargetId), procdef.IsActiveEQ(1)).All(l.ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -56,6 +51,8 @@ func (l *FindDefByFormIdLogic) convert(actpd *act2.ProcDef) *act.ProcDefReply {
 		TargetId:       actpd.TargetID,
 		FormId:         actpd.FormID,
 		FormName:       actpd.FormName,
+		AppId:          actpd.AppID,
+		AppName:        actpd.AppName,
 		Resource:       actpd.Resource,
 		RemainHours:    actpd.RemainHours,
 		IsActive:       actpd.IsActive,

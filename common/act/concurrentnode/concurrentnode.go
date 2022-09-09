@@ -13,8 +13,6 @@ const (
 	FieldID = "id"
 	// FieldProcInstID holds the string denoting the proc_inst_id field in the database.
 	FieldProcInstID = "proc_inst_id"
-	// FieldProcDefID holds the string denoting the proc_def_id field in the database.
-	FieldProcDefID = "proc_def_id"
 	// FieldNodeID holds the string denoting the node_id field in the database.
 	FieldNodeID = "node_id"
 	// FieldNodeInfo holds the string denoting the node_info field in the database.
@@ -39,7 +37,6 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldProcInstID,
-	FieldProcDefID,
 	FieldNodeID,
 	FieldNodeInfo,
 	FieldPrevID,

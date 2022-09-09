@@ -41,22 +41,23 @@ func (cnu *ConcurrentNodeUpdate) AddProcInstID(i int64) *ConcurrentNodeUpdate {
 	return cnu
 }
 
-// SetProcDefID sets the "proc_def_id" field.
-func (cnu *ConcurrentNodeUpdate) SetProcDefID(i int64) *ConcurrentNodeUpdate {
-	cnu.mutation.ResetProcDefID()
-	cnu.mutation.SetProcDefID(i)
-	return cnu
-}
-
-// AddProcDefID adds i to the "proc_def_id" field.
-func (cnu *ConcurrentNodeUpdate) AddProcDefID(i int64) *ConcurrentNodeUpdate {
-	cnu.mutation.AddProcDefID(i)
-	return cnu
-}
-
 // SetNodeID sets the "node_id" field.
 func (cnu *ConcurrentNodeUpdate) SetNodeID(s string) *ConcurrentNodeUpdate {
 	cnu.mutation.SetNodeID(s)
+	return cnu
+}
+
+// SetNillableNodeID sets the "node_id" field if the given value is not nil.
+func (cnu *ConcurrentNodeUpdate) SetNillableNodeID(s *string) *ConcurrentNodeUpdate {
+	if s != nil {
+		cnu.SetNodeID(*s)
+	}
+	return cnu
+}
+
+// ClearNodeID clears the value of the "node_id" field.
+func (cnu *ConcurrentNodeUpdate) ClearNodeID() *ConcurrentNodeUpdate {
+	cnu.mutation.ClearNodeID()
 	return cnu
 }
 
@@ -86,9 +87,37 @@ func (cnu *ConcurrentNodeUpdate) SetPrevID(s string) *ConcurrentNodeUpdate {
 	return cnu
 }
 
+// SetNillablePrevID sets the "prev_id" field if the given value is not nil.
+func (cnu *ConcurrentNodeUpdate) SetNillablePrevID(s *string) *ConcurrentNodeUpdate {
+	if s != nil {
+		cnu.SetPrevID(*s)
+	}
+	return cnu
+}
+
+// ClearPrevID clears the value of the "prev_id" field.
+func (cnu *ConcurrentNodeUpdate) ClearPrevID() *ConcurrentNodeUpdate {
+	cnu.mutation.ClearPrevID()
+	return cnu
+}
+
 // SetNextID sets the "next_id" field.
 func (cnu *ConcurrentNodeUpdate) SetNextID(s string) *ConcurrentNodeUpdate {
 	cnu.mutation.SetNextID(s)
+	return cnu
+}
+
+// SetNillableNextID sets the "next_id" field if the given value is not nil.
+func (cnu *ConcurrentNodeUpdate) SetNillableNextID(s *string) *ConcurrentNodeUpdate {
+	if s != nil {
+		cnu.SetNextID(*s)
+	}
+	return cnu
+}
+
+// ClearNextID clears the value of the "next_id" field.
+func (cnu *ConcurrentNodeUpdate) ClearNextID() *ConcurrentNodeUpdate {
+	cnu.mutation.ClearNextID()
 	return cnu
 }
 
@@ -99,9 +128,23 @@ func (cnu *ConcurrentNodeUpdate) SetState(i int32) *ConcurrentNodeUpdate {
 	return cnu
 }
 
+// SetNillableState sets the "state" field if the given value is not nil.
+func (cnu *ConcurrentNodeUpdate) SetNillableState(i *int32) *ConcurrentNodeUpdate {
+	if i != nil {
+		cnu.SetState(*i)
+	}
+	return cnu
+}
+
 // AddState adds i to the "state" field.
 func (cnu *ConcurrentNodeUpdate) AddState(i int32) *ConcurrentNodeUpdate {
 	cnu.mutation.AddState(i)
+	return cnu
+}
+
+// ClearState clears the value of the "state" field.
+func (cnu *ConcurrentNodeUpdate) ClearState() *ConcurrentNodeUpdate {
+	cnu.mutation.ClearState()
 	return cnu
 }
 
@@ -294,24 +337,16 @@ func (cnu *ConcurrentNodeUpdate) sqlSave(ctx context.Context) (n int, err error)
 			Column: concurrentnode.FieldProcInstID,
 		})
 	}
-	if value, ok := cnu.mutation.ProcDefID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: concurrentnode.FieldProcDefID,
-		})
-	}
-	if value, ok := cnu.mutation.AddedProcDefID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: concurrentnode.FieldProcDefID,
-		})
-	}
 	if value, ok := cnu.mutation.NodeID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: concurrentnode.FieldNodeID,
+		})
+	}
+	if cnu.mutation.NodeIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: concurrentnode.FieldNodeID,
 		})
 	}
@@ -335,10 +370,22 @@ func (cnu *ConcurrentNodeUpdate) sqlSave(ctx context.Context) (n int, err error)
 			Column: concurrentnode.FieldPrevID,
 		})
 	}
+	if cnu.mutation.PrevIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: concurrentnode.FieldPrevID,
+		})
+	}
 	if value, ok := cnu.mutation.NextID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: concurrentnode.FieldNextID,
+		})
+	}
+	if cnu.mutation.NextIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: concurrentnode.FieldNextID,
 		})
 	}
@@ -353,6 +400,12 @@ func (cnu *ConcurrentNodeUpdate) sqlSave(ctx context.Context) (n int, err error)
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt32,
 			Value:  value,
+			Column: concurrentnode.FieldState,
+		})
+	}
+	if cnu.mutation.StateCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
 			Column: concurrentnode.FieldState,
 		})
 	}
@@ -434,22 +487,23 @@ func (cnuo *ConcurrentNodeUpdateOne) AddProcInstID(i int64) *ConcurrentNodeUpdat
 	return cnuo
 }
 
-// SetProcDefID sets the "proc_def_id" field.
-func (cnuo *ConcurrentNodeUpdateOne) SetProcDefID(i int64) *ConcurrentNodeUpdateOne {
-	cnuo.mutation.ResetProcDefID()
-	cnuo.mutation.SetProcDefID(i)
-	return cnuo
-}
-
-// AddProcDefID adds i to the "proc_def_id" field.
-func (cnuo *ConcurrentNodeUpdateOne) AddProcDefID(i int64) *ConcurrentNodeUpdateOne {
-	cnuo.mutation.AddProcDefID(i)
-	return cnuo
-}
-
 // SetNodeID sets the "node_id" field.
 func (cnuo *ConcurrentNodeUpdateOne) SetNodeID(s string) *ConcurrentNodeUpdateOne {
 	cnuo.mutation.SetNodeID(s)
+	return cnuo
+}
+
+// SetNillableNodeID sets the "node_id" field if the given value is not nil.
+func (cnuo *ConcurrentNodeUpdateOne) SetNillableNodeID(s *string) *ConcurrentNodeUpdateOne {
+	if s != nil {
+		cnuo.SetNodeID(*s)
+	}
+	return cnuo
+}
+
+// ClearNodeID clears the value of the "node_id" field.
+func (cnuo *ConcurrentNodeUpdateOne) ClearNodeID() *ConcurrentNodeUpdateOne {
+	cnuo.mutation.ClearNodeID()
 	return cnuo
 }
 
@@ -479,9 +533,37 @@ func (cnuo *ConcurrentNodeUpdateOne) SetPrevID(s string) *ConcurrentNodeUpdateOn
 	return cnuo
 }
 
+// SetNillablePrevID sets the "prev_id" field if the given value is not nil.
+func (cnuo *ConcurrentNodeUpdateOne) SetNillablePrevID(s *string) *ConcurrentNodeUpdateOne {
+	if s != nil {
+		cnuo.SetPrevID(*s)
+	}
+	return cnuo
+}
+
+// ClearPrevID clears the value of the "prev_id" field.
+func (cnuo *ConcurrentNodeUpdateOne) ClearPrevID() *ConcurrentNodeUpdateOne {
+	cnuo.mutation.ClearPrevID()
+	return cnuo
+}
+
 // SetNextID sets the "next_id" field.
 func (cnuo *ConcurrentNodeUpdateOne) SetNextID(s string) *ConcurrentNodeUpdateOne {
 	cnuo.mutation.SetNextID(s)
+	return cnuo
+}
+
+// SetNillableNextID sets the "next_id" field if the given value is not nil.
+func (cnuo *ConcurrentNodeUpdateOne) SetNillableNextID(s *string) *ConcurrentNodeUpdateOne {
+	if s != nil {
+		cnuo.SetNextID(*s)
+	}
+	return cnuo
+}
+
+// ClearNextID clears the value of the "next_id" field.
+func (cnuo *ConcurrentNodeUpdateOne) ClearNextID() *ConcurrentNodeUpdateOne {
+	cnuo.mutation.ClearNextID()
 	return cnuo
 }
 
@@ -492,9 +574,23 @@ func (cnuo *ConcurrentNodeUpdateOne) SetState(i int32) *ConcurrentNodeUpdateOne 
 	return cnuo
 }
 
+// SetNillableState sets the "state" field if the given value is not nil.
+func (cnuo *ConcurrentNodeUpdateOne) SetNillableState(i *int32) *ConcurrentNodeUpdateOne {
+	if i != nil {
+		cnuo.SetState(*i)
+	}
+	return cnuo
+}
+
 // AddState adds i to the "state" field.
 func (cnuo *ConcurrentNodeUpdateOne) AddState(i int32) *ConcurrentNodeUpdateOne {
 	cnuo.mutation.AddState(i)
+	return cnuo
+}
+
+// ClearState clears the value of the "state" field.
+func (cnuo *ConcurrentNodeUpdateOne) ClearState() *ConcurrentNodeUpdateOne {
+	cnuo.mutation.ClearState()
 	return cnuo
 }
 
@@ -717,24 +813,16 @@ func (cnuo *ConcurrentNodeUpdateOne) sqlSave(ctx context.Context) (_node *Concur
 			Column: concurrentnode.FieldProcInstID,
 		})
 	}
-	if value, ok := cnuo.mutation.ProcDefID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: concurrentnode.FieldProcDefID,
-		})
-	}
-	if value, ok := cnuo.mutation.AddedProcDefID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: concurrentnode.FieldProcDefID,
-		})
-	}
 	if value, ok := cnuo.mutation.NodeID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: concurrentnode.FieldNodeID,
+		})
+	}
+	if cnuo.mutation.NodeIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: concurrentnode.FieldNodeID,
 		})
 	}
@@ -758,10 +846,22 @@ func (cnuo *ConcurrentNodeUpdateOne) sqlSave(ctx context.Context) (_node *Concur
 			Column: concurrentnode.FieldPrevID,
 		})
 	}
+	if cnuo.mutation.PrevIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: concurrentnode.FieldPrevID,
+		})
+	}
 	if value, ok := cnuo.mutation.NextID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: concurrentnode.FieldNextID,
+		})
+	}
+	if cnuo.mutation.NextIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: concurrentnode.FieldNextID,
 		})
 	}
@@ -776,6 +876,12 @@ func (cnuo *ConcurrentNodeUpdateOne) sqlSave(ctx context.Context) (_node *Concur
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt32,
 			Value:  value,
+			Column: concurrentnode.FieldState,
+		})
+	}
+	if cnuo.mutation.StateCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
 			Column: concurrentnode.FieldState,
 		})
 	}

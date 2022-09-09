@@ -26,11 +26,7 @@ func NewFindProcInstByDataIdLogic(ctx context.Context, svcCtx *svc.ServiceContex
 }
 
 func (l *FindProcInstByDataIdLogic) FindProcInstByDataId(in *act.DataIdReq) (*act.ProcInstReply, error) {
-	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
-	if err != nil {
-		return nil, err
-	}
-	insts, err := tx.ProcInst.Query().Where(procinst.DataIDEQ(in.DataId), procinst.IsDelEQ(0)).All(l.ctx)
+	insts, err := l.svcCtx.CommonStore.ProcInst.Query().Where(procinst.DataIDEQ(in.DataId), procinst.IsDelEQ(0)).All(l.ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -39,6 +35,7 @@ func (l *FindProcInstByDataIdLogic) FindProcInstByDataId(in *act.DataIdReq) (*ac
 	}
 	inst := insts[0]
 	return &act.ProcInstReply{
-		Id: inst.ID,
+		Id:       inst.ID,
+		FlowType: inst.FlowType,
 	}, nil
 }

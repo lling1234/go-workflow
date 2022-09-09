@@ -5,7 +5,6 @@ go 1.18
 require (
 	entgo.io/ent v0.11.2
 	github.com/ahmetb/go-linq/v3 v3.2.0
-	github.com/gitstliu/go-id-worker v0.0.0-20190725025543-5a5fe074e612
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang/glog v1.0.0

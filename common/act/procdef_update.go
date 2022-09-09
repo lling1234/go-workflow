@@ -196,16 +196,23 @@ func (pdu *ProcDefUpdate) ClearTargetID() *ProcDefUpdate {
 }
 
 // SetFormID sets the "form_id" field.
-func (pdu *ProcDefUpdate) SetFormID(s string) *ProcDefUpdate {
-	pdu.mutation.SetFormID(s)
+func (pdu *ProcDefUpdate) SetFormID(i int64) *ProcDefUpdate {
+	pdu.mutation.ResetFormID()
+	pdu.mutation.SetFormID(i)
 	return pdu
 }
 
 // SetNillableFormID sets the "form_id" field if the given value is not nil.
-func (pdu *ProcDefUpdate) SetNillableFormID(s *string) *ProcDefUpdate {
-	if s != nil {
-		pdu.SetFormID(*s)
+func (pdu *ProcDefUpdate) SetNillableFormID(i *int64) *ProcDefUpdate {
+	if i != nil {
+		pdu.SetFormID(*i)
 	}
+	return pdu
+}
+
+// AddFormID adds i to the "form_id" field.
+func (pdu *ProcDefUpdate) AddFormID(i int64) *ProcDefUpdate {
+	pdu.mutation.AddFormID(i)
 	return pdu
 }
 
@@ -232,6 +239,53 @@ func (pdu *ProcDefUpdate) SetNillableFormName(s *string) *ProcDefUpdate {
 // ClearFormName clears the value of the "form_name" field.
 func (pdu *ProcDefUpdate) ClearFormName() *ProcDefUpdate {
 	pdu.mutation.ClearFormName()
+	return pdu
+}
+
+// SetAppID sets the "app_id" field.
+func (pdu *ProcDefUpdate) SetAppID(i int64) *ProcDefUpdate {
+	pdu.mutation.ResetAppID()
+	pdu.mutation.SetAppID(i)
+	return pdu
+}
+
+// SetNillableAppID sets the "app_id" field if the given value is not nil.
+func (pdu *ProcDefUpdate) SetNillableAppID(i *int64) *ProcDefUpdate {
+	if i != nil {
+		pdu.SetAppID(*i)
+	}
+	return pdu
+}
+
+// AddAppID adds i to the "app_id" field.
+func (pdu *ProcDefUpdate) AddAppID(i int64) *ProcDefUpdate {
+	pdu.mutation.AddAppID(i)
+	return pdu
+}
+
+// ClearAppID clears the value of the "app_id" field.
+func (pdu *ProcDefUpdate) ClearAppID() *ProcDefUpdate {
+	pdu.mutation.ClearAppID()
+	return pdu
+}
+
+// SetAppName sets the "app_name" field.
+func (pdu *ProcDefUpdate) SetAppName(s string) *ProcDefUpdate {
+	pdu.mutation.SetAppName(s)
+	return pdu
+}
+
+// SetNillableAppName sets the "app_name" field if the given value is not nil.
+func (pdu *ProcDefUpdate) SetNillableAppName(s *string) *ProcDefUpdate {
+	if s != nil {
+		pdu.SetAppName(*s)
+	}
+	return pdu
+}
+
+// ClearAppName clears the value of the "app_name" field.
+func (pdu *ProcDefUpdate) ClearAppName() *ProcDefUpdate {
+	pdu.mutation.ClearAppName()
 	return pdu
 }
 
@@ -497,14 +551,14 @@ func (pdu *ProcDefUpdate) check() error {
 			return &ValidationError{Name: "create_user_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.create_user_name": %w`, err)}
 		}
 	}
-	if v, ok := pdu.mutation.FormID(); ok {
-		if err := procdef.FormIDValidator(v); err != nil {
-			return &ValidationError{Name: "form_id", err: fmt.Errorf(`act: validator failed for field "ProcDef.form_id": %w`, err)}
-		}
-	}
 	if v, ok := pdu.mutation.FormName(); ok {
 		if err := procdef.FormNameValidator(v); err != nil {
 			return &ValidationError{Name: "form_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.form_name": %w`, err)}
+		}
+	}
+	if v, ok := pdu.mutation.AppName(); ok {
+		if err := procdef.AppNameValidator(v); err != nil {
+			return &ValidationError{Name: "app_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.app_name": %w`, err)}
 		}
 	}
 	return nil
@@ -649,14 +703,21 @@ func (pdu *ProcDefUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pdu.mutation.FormID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldFormID,
+		})
+	}
+	if value, ok := pdu.mutation.AddedFormID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
 			Value:  value,
 			Column: procdef.FieldFormID,
 		})
 	}
 	if pdu.mutation.FormIDCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeInt64,
 			Column: procdef.FieldFormID,
 		})
 	}
@@ -671,6 +732,39 @@ func (pdu *ProcDefUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Column: procdef.FieldFormName,
+		})
+	}
+	if value, ok := pdu.mutation.AppID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldAppID,
+		})
+	}
+	if value, ok := pdu.mutation.AddedAppID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldAppID,
+		})
+	}
+	if pdu.mutation.AppIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Column: procdef.FieldAppID,
+		})
+	}
+	if value, ok := pdu.mutation.AppName(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: procdef.FieldAppName,
+		})
+	}
+	if pdu.mutation.AppNameCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: procdef.FieldAppName,
 		})
 	}
 	if value, ok := pdu.mutation.RemainHours(); ok {
@@ -986,16 +1080,23 @@ func (pduo *ProcDefUpdateOne) ClearTargetID() *ProcDefUpdateOne {
 }
 
 // SetFormID sets the "form_id" field.
-func (pduo *ProcDefUpdateOne) SetFormID(s string) *ProcDefUpdateOne {
-	pduo.mutation.SetFormID(s)
+func (pduo *ProcDefUpdateOne) SetFormID(i int64) *ProcDefUpdateOne {
+	pduo.mutation.ResetFormID()
+	pduo.mutation.SetFormID(i)
 	return pduo
 }
 
 // SetNillableFormID sets the "form_id" field if the given value is not nil.
-func (pduo *ProcDefUpdateOne) SetNillableFormID(s *string) *ProcDefUpdateOne {
-	if s != nil {
-		pduo.SetFormID(*s)
+func (pduo *ProcDefUpdateOne) SetNillableFormID(i *int64) *ProcDefUpdateOne {
+	if i != nil {
+		pduo.SetFormID(*i)
 	}
+	return pduo
+}
+
+// AddFormID adds i to the "form_id" field.
+func (pduo *ProcDefUpdateOne) AddFormID(i int64) *ProcDefUpdateOne {
+	pduo.mutation.AddFormID(i)
 	return pduo
 }
 
@@ -1022,6 +1123,53 @@ func (pduo *ProcDefUpdateOne) SetNillableFormName(s *string) *ProcDefUpdateOne {
 // ClearFormName clears the value of the "form_name" field.
 func (pduo *ProcDefUpdateOne) ClearFormName() *ProcDefUpdateOne {
 	pduo.mutation.ClearFormName()
+	return pduo
+}
+
+// SetAppID sets the "app_id" field.
+func (pduo *ProcDefUpdateOne) SetAppID(i int64) *ProcDefUpdateOne {
+	pduo.mutation.ResetAppID()
+	pduo.mutation.SetAppID(i)
+	return pduo
+}
+
+// SetNillableAppID sets the "app_id" field if the given value is not nil.
+func (pduo *ProcDefUpdateOne) SetNillableAppID(i *int64) *ProcDefUpdateOne {
+	if i != nil {
+		pduo.SetAppID(*i)
+	}
+	return pduo
+}
+
+// AddAppID adds i to the "app_id" field.
+func (pduo *ProcDefUpdateOne) AddAppID(i int64) *ProcDefUpdateOne {
+	pduo.mutation.AddAppID(i)
+	return pduo
+}
+
+// ClearAppID clears the value of the "app_id" field.
+func (pduo *ProcDefUpdateOne) ClearAppID() *ProcDefUpdateOne {
+	pduo.mutation.ClearAppID()
+	return pduo
+}
+
+// SetAppName sets the "app_name" field.
+func (pduo *ProcDefUpdateOne) SetAppName(s string) *ProcDefUpdateOne {
+	pduo.mutation.SetAppName(s)
+	return pduo
+}
+
+// SetNillableAppName sets the "app_name" field if the given value is not nil.
+func (pduo *ProcDefUpdateOne) SetNillableAppName(s *string) *ProcDefUpdateOne {
+	if s != nil {
+		pduo.SetAppName(*s)
+	}
+	return pduo
+}
+
+// ClearAppName clears the value of the "app_name" field.
+func (pduo *ProcDefUpdateOne) ClearAppName() *ProcDefUpdateOne {
+	pduo.mutation.ClearAppName()
 	return pduo
 }
 
@@ -1300,14 +1448,14 @@ func (pduo *ProcDefUpdateOne) check() error {
 			return &ValidationError{Name: "create_user_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.create_user_name": %w`, err)}
 		}
 	}
-	if v, ok := pduo.mutation.FormID(); ok {
-		if err := procdef.FormIDValidator(v); err != nil {
-			return &ValidationError{Name: "form_id", err: fmt.Errorf(`act: validator failed for field "ProcDef.form_id": %w`, err)}
-		}
-	}
 	if v, ok := pduo.mutation.FormName(); ok {
 		if err := procdef.FormNameValidator(v); err != nil {
 			return &ValidationError{Name: "form_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.form_name": %w`, err)}
+		}
+	}
+	if v, ok := pduo.mutation.AppName(); ok {
+		if err := procdef.AppNameValidator(v); err != nil {
+			return &ValidationError{Name: "app_name", err: fmt.Errorf(`act: validator failed for field "ProcDef.app_name": %w`, err)}
 		}
 	}
 	return nil
@@ -1469,14 +1617,21 @@ func (pduo *ProcDefUpdateOne) sqlSave(ctx context.Context) (_node *ProcDef, err 
 	}
 	if value, ok := pduo.mutation.FormID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldFormID,
+		})
+	}
+	if value, ok := pduo.mutation.AddedFormID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
 			Value:  value,
 			Column: procdef.FieldFormID,
 		})
 	}
 	if pduo.mutation.FormIDCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeInt64,
 			Column: procdef.FieldFormID,
 		})
 	}
@@ -1491,6 +1646,39 @@ func (pduo *ProcDefUpdateOne) sqlSave(ctx context.Context) (_node *ProcDef, err 
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Column: procdef.FieldFormName,
+		})
+	}
+	if value, ok := pduo.mutation.AppID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldAppID,
+		})
+	}
+	if value, ok := pduo.mutation.AddedAppID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: procdef.FieldAppID,
+		})
+	}
+	if pduo.mutation.AppIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Column: procdef.FieldAppID,
+		})
+	}
+	if value, ok := pduo.mutation.AppName(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: procdef.FieldAppName,
+		})
+	}
+	if pduo.mutation.AppNameCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: procdef.FieldAppName,
 		})
 	}
 	if value, ok := pduo.mutation.RemainHours(); ok {

@@ -9,16 +9,16 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func FindElapsedTimeHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func CompleteHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.UserReq
+		var req types.CompleteProcinst
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
-		l := act.NewFindElapsedTimeLogic(r.Context(), svcCtx)
-		resp, err := l.FindElapsedTime(&req)
+		l := act.NewCompleteLogic(r.Context(), svcCtx)
+		resp, err := l.Complete(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

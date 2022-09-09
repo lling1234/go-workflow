@@ -9,22 +9,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type FindElapsedTimeLogic struct {
+type FindMyStartLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewFindElapsedTimeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindElapsedTimeLogic {
-	return &FindElapsedTimeLogic{
+func NewFindMyStartLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindMyStartLogic {
+	return &FindMyStartLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *FindElapsedTimeLogic) FindElapsedTime(in *act.UserReq) (*act.ElapsedTimeReply, error) {
+func (l *FindMyStartLogic) FindMyStart(in *act.MyProcInstReq) (*act.ProcInstReply, error) {
 	// todo: add your logic here and delete this line
 
-	return &act.ElapsedTimeReply{}, nil
+	return &act.ProcInstReply{}, nil
 }

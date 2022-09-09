@@ -23,7 +23,7 @@ func NewFindOverTimeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Find
 	}
 }
 
-func (l *FindOverTimeLogic) FindOverTime(req *types.UserReq) (resp *types.CommonResponse, err error) {
+func (l *FindOverTimeLogic) FindOverTime(req *types.OverTimeReq) (resp *types.CommonResponse, err error) {
 	// todo: add your logic here and delete this line
 
 	return
