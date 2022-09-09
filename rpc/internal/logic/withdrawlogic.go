@@ -5,7 +5,6 @@ import (
 	"act/common/flow"
 	"context"
 	"errors"
-	"log"
 	"time"
 
 	"act/rpc/internal/svc"
@@ -29,13 +28,8 @@ func NewWithdrawLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Withdraw
 }
 
 func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
-	log.Println("in 2222222", in.DataId)
-	tx, err := l.svcCtx.CommonStore.Tx(l.ctx)
-	if err != nil {
-		return nil, err
-	}
 	// 2.2根据procdefID在proc_def数据库表中查询到create_user_id
-	procinstInfo, err := tx.ProcInst.Query().Where(procinst.DataIDEQ(in.DataId)).First(l.ctx)
+	procinstInfo, err := l.svcCtx.CommonStore.ProcInst.Query().Where(procinst.DataIDEQ(in.DataId)).First(l.ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -49,10 +43,10 @@ func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
 	if procinstInfo.State >= flow.WITHDRAW {
 		return nil, errors.New("只有审批中的流程才能撤回！")
 	}
-	_, err = tx.ProcInst.Update().
+	_, err = l.svcCtx.CommonStore.ProcInst.Update().
 		Where(procinst.ProcDefID(procinstInfo.ProcDefID)).
 		SetState(flow.WITHDRAW).SetIsFinished(1).SetEndTime(time.Now()).SetUpdateTime(time.Now()).Save(l.ctx)
-	err = tx.Commit()
+
 	// 3.UserID和create_user_id比较不相等返回，无权限撤回
 
 	// 4.UserID和create_user_id比较相等,将流程实例表state=4,isFinish=1,endTime=now,updateTime=now

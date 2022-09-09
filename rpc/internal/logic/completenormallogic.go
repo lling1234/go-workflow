@@ -46,16 +46,16 @@ func (l *CompleteNormalLogic) CompleteNormal(in *act.CompleteNormalProcInstReq) 
 	if err != nil {
 		return nil, err
 	}
-	log.Println(1111111)
+	log.Printf("taskId %d", taskId)
 	var isTaskFinished int32 = 1
 	identityLink, err := l.findIdentityLinkByTaskId(taskId)
 	//2、根据最新节点ID和用户ID找到对应的审批人
 	if err != nil {
 		return nil, err
 	}
-	if identityLink == nil {
-		return nil, errors.New("该用户没有审批权限！")
-	}
+	//if identityLink == nil {
+	//	return nil, errors.New("该用户没有审批权限！")
+	//}
 	log.Println(3333333)
 	err = UpdateIdentityLink(UpdateIdentityLinkReq{
 		UserId:  identityLink.UserID,
@@ -108,7 +108,9 @@ func (l *CompleteNormalLogic) CompleteNormal(in *act.CompleteNormalProcInstReq) 
 			}
 		} else if strings.ToLower(t.Mode) == "and" {
 			//1.判断是否该节点的所有人都已经审批
-			log.Println("andand")
+			//finished := l.isTaskFinished(t.MemberApprover, t.AgreeApprover, identityLink.UserID)
+
+			//log.Println("andand", finished)
 			//2.是否为末级节点
 			if l.isTaskFinished(t.MemberApprover, t.AgreeApprover, identityLink.UserID) {
 				if t.Level == int32(len(nodeInfos)-1) {
@@ -173,7 +175,6 @@ func (l *CompleteNormalLogic) CompleteNormal(in *act.CompleteNormalProcInstReq) 
 		return nil, err
 	}
 	tx.Commit()
-	//err = UpdateProcInst("", in.GetDataId(), taskId, approvalState, isInstFinish, flowCode, tx)
 	return &act.Nil{}, nil
 }
 
@@ -215,23 +216,17 @@ func (l *CompleteNormalLogic) generateCode() string {
 func (l *CompleteNormalLogic) isTaskFinished(memberStr string, agreerStr string, userId int64) bool {
 	userIdStr := strconv.FormatInt(userId, 10)
 	members := strings.Split(memberStr, ",")
-	if agreerStr == "" {
-		if len(members) == 1 {
-			return members[0] == userIdStr
-		}
-	}
-	agreers := strings.Split(agreerStr+","+userIdStr, ",")
+
+	agreerStr = agreerStr + "," + userIdStr
 	flag := true
-	if len(members) == len(agreers) {
-		for _, v := range agreers {
-			flag = strings.Contains(memberStr, v)
-			if !flag {
-				break
-			}
+	for _, v := range members {
+		flag = strings.Contains(agreerStr, v)
+		log.Printf("flag:%v,v:%s,memberStr:%s,agreerStr:%s", flag, v, memberStr, agreerStr)
+		if !flag {
+			break
 		}
-	} else {
-		flag = false
 	}
+	log.Printf("flag:%v", flag)
 	return flag
 }
 

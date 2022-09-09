@@ -30,7 +30,7 @@ func NewAddProcDefLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPro
 }
 
 func (l *AddProcDefLogic) AddProcDef(in *act.AddProcDefReq) (*act.ProcDefReply, error) {
-	version, err := l.GetNewVersion(in.FormId)
+	version, err := l.GetNewVersion(in.FormId, in.AppId)
 	if err != nil {
 		return nil, err
 	}
@@ -67,13 +67,16 @@ func (l *AddProcDefLogic) convert(in *act.AddProcDefReq, version int32) *act.Pro
 	}
 }
 
-func (l *AddProcDefLogic) GetNewVersion(formId int64) (int32, error) {
-	defs, err := l.svcCtx.CommonStore.ProcDef.Query().Where(procdef.FormIDEQ(formId)).Select(procdef.FieldVersion).All(l.ctx)
+func (l *AddProcDefLogic) GetNewVersion(formId int64, appId int64) (int32, error) {
+	defs, err := l.svcCtx.CommonStore.ProcDef.Query().Where(procdef.FormIDEQ(formId), procdef.AppIDEQ(appId)).Select(procdef.FieldVersion).All(l.ctx)
 	if err != nil {
 		return 1, err
 	}
 	maxVersion := linq.From(defs).SelectT(func(a *act2.ProcDef) int32 {
 		return a.Version
 	}).Max()
+	if maxVersion == nil {
+		return 1, nil
+	}
 	return maxVersion.(int32) + 1, nil
 }
