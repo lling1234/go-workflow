@@ -1,9 +1,9 @@
 package act
 
 import (
-	"act/api/flow"
 	"act/api/internal/svc"
 	"act/api/internal/types"
+	"act/common/flow"
 	"act/rpc/types/act"
 	"context"
 	"encoding/json"

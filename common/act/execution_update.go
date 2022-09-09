@@ -41,19 +41,6 @@ func (eu *ExecutionUpdate) AddProcInstID(i int64) *ExecutionUpdate {
 	return eu
 }
 
-// SetProcDefID sets the "proc_def_id" field.
-func (eu *ExecutionUpdate) SetProcDefID(i int64) *ExecutionUpdate {
-	eu.mutation.ResetProcDefID()
-	eu.mutation.SetProcDefID(i)
-	return eu
-}
-
-// AddProcDefID adds i to the "proc_def_id" field.
-func (eu *ExecutionUpdate) AddProcDefID(i int64) *ExecutionUpdate {
-	eu.mutation.AddProcDefID(i)
-	return eu
-}
-
 // SetNodeInfos sets the "node_infos" field.
 func (eu *ExecutionUpdate) SetNodeInfos(s string) *ExecutionUpdate {
 	eu.mutation.SetNodeInfos(s)
@@ -268,20 +255,6 @@ func (eu *ExecutionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: execution.FieldProcInstID,
 		})
 	}
-	if value, ok := eu.mutation.ProcDefID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: execution.FieldProcDefID,
-		})
-	}
-	if value, ok := eu.mutation.AddedProcDefID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: execution.FieldProcDefID,
-		})
-	}
 	if value, ok := eu.mutation.NodeInfos(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -383,19 +356,6 @@ func (euo *ExecutionUpdateOne) SetProcInstID(i int64) *ExecutionUpdateOne {
 // AddProcInstID adds i to the "proc_inst_id" field.
 func (euo *ExecutionUpdateOne) AddProcInstID(i int64) *ExecutionUpdateOne {
 	euo.mutation.AddProcInstID(i)
-	return euo
-}
-
-// SetProcDefID sets the "proc_def_id" field.
-func (euo *ExecutionUpdateOne) SetProcDefID(i int64) *ExecutionUpdateOne {
-	euo.mutation.ResetProcDefID()
-	euo.mutation.SetProcDefID(i)
-	return euo
-}
-
-// AddProcDefID adds i to the "proc_def_id" field.
-func (euo *ExecutionUpdateOne) AddProcDefID(i int64) *ExecutionUpdateOne {
-	euo.mutation.AddProcDefID(i)
 	return euo
 }
 
@@ -641,20 +601,6 @@ func (euo *ExecutionUpdateOne) sqlSave(ctx context.Context) (_node *Execution, e
 			Type:   field.TypeInt64,
 			Value:  value,
 			Column: execution.FieldProcInstID,
-		})
-	}
-	if value, ok := euo.mutation.ProcDefID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: execution.FieldProcDefID,
-		})
-	}
-	if value, ok := euo.mutation.AddedProcDefID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: execution.FieldProcDefID,
 		})
 	}
 	if value, ok := euo.mutation.NodeInfos(); ok {

@@ -44,8 +44,6 @@ type ConcurrentNodeMutation struct {
 	id              *int64
 	proc_inst_id    *int64
 	addproc_inst_id *int64
-	proc_def_id     *int64
-	addproc_def_id  *int64
 	node_id         *string
 	node_info       *string
 	prev_id         *string
@@ -222,62 +220,6 @@ func (m *ConcurrentNodeMutation) ResetProcInstID() {
 	m.addproc_inst_id = nil
 }
 
-// SetProcDefID sets the "proc_def_id" field.
-func (m *ConcurrentNodeMutation) SetProcDefID(i int64) {
-	m.proc_def_id = &i
-	m.addproc_def_id = nil
-}
-
-// ProcDefID returns the value of the "proc_def_id" field in the mutation.
-func (m *ConcurrentNodeMutation) ProcDefID() (r int64, exists bool) {
-	v := m.proc_def_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldProcDefID returns the old "proc_def_id" field's value of the ConcurrentNode entity.
-// If the ConcurrentNode object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ConcurrentNodeMutation) OldProcDefID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldProcDefID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldProcDefID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldProcDefID: %w", err)
-	}
-	return oldValue.ProcDefID, nil
-}
-
-// AddProcDefID adds i to the "proc_def_id" field.
-func (m *ConcurrentNodeMutation) AddProcDefID(i int64) {
-	if m.addproc_def_id != nil {
-		*m.addproc_def_id += i
-	} else {
-		m.addproc_def_id = &i
-	}
-}
-
-// AddedProcDefID returns the value that was added to the "proc_def_id" field in this mutation.
-func (m *ConcurrentNodeMutation) AddedProcDefID() (r int64, exists bool) {
-	v := m.addproc_def_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetProcDefID resets all changes to the "proc_def_id" field.
-func (m *ConcurrentNodeMutation) ResetProcDefID() {
-	m.proc_def_id = nil
-	m.addproc_def_id = nil
-}
-
 // SetNodeID sets the "node_id" field.
 func (m *ConcurrentNodeMutation) SetNodeID(s string) {
 	m.node_id = &s
@@ -309,9 +251,22 @@ func (m *ConcurrentNodeMutation) OldNodeID(ctx context.Context) (v string, err e
 	return oldValue.NodeID, nil
 }
 
+// ClearNodeID clears the value of the "node_id" field.
+func (m *ConcurrentNodeMutation) ClearNodeID() {
+	m.node_id = nil
+	m.clearedFields[concurrentnode.FieldNodeID] = struct{}{}
+}
+
+// NodeIDCleared returns if the "node_id" field was cleared in this mutation.
+func (m *ConcurrentNodeMutation) NodeIDCleared() bool {
+	_, ok := m.clearedFields[concurrentnode.FieldNodeID]
+	return ok
+}
+
 // ResetNodeID resets all changes to the "node_id" field.
 func (m *ConcurrentNodeMutation) ResetNodeID() {
 	m.node_id = nil
+	delete(m.clearedFields, concurrentnode.FieldNodeID)
 }
 
 // SetNodeInfo sets the "node_info" field.
@@ -718,12 +673,9 @@ func (m *ConcurrentNodeMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ConcurrentNodeMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 9)
 	if m.proc_inst_id != nil {
 		fields = append(fields, concurrentnode.FieldProcInstID)
-	}
-	if m.proc_def_id != nil {
-		fields = append(fields, concurrentnode.FieldProcDefID)
 	}
 	if m.node_id != nil {
 		fields = append(fields, concurrentnode.FieldNodeID)
@@ -759,8 +711,6 @@ func (m *ConcurrentNodeMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case concurrentnode.FieldProcInstID:
 		return m.ProcInstID()
-	case concurrentnode.FieldProcDefID:
-		return m.ProcDefID()
 	case concurrentnode.FieldNodeID:
 		return m.NodeID()
 	case concurrentnode.FieldNodeInfo:
@@ -788,8 +738,6 @@ func (m *ConcurrentNodeMutation) OldField(ctx context.Context, name string) (ent
 	switch name {
 	case concurrentnode.FieldProcInstID:
 		return m.OldProcInstID(ctx)
-	case concurrentnode.FieldProcDefID:
-		return m.OldProcDefID(ctx)
 	case concurrentnode.FieldNodeID:
 		return m.OldNodeID(ctx)
 	case concurrentnode.FieldNodeInfo:
@@ -821,13 +769,6 @@ func (m *ConcurrentNodeMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetProcInstID(v)
-		return nil
-	case concurrentnode.FieldProcDefID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetProcDefID(v)
 		return nil
 	case concurrentnode.FieldNodeID:
 		v, ok := value.(string)
@@ -896,9 +837,6 @@ func (m *ConcurrentNodeMutation) AddedFields() []string {
 	if m.addproc_inst_id != nil {
 		fields = append(fields, concurrentnode.FieldProcInstID)
 	}
-	if m.addproc_def_id != nil {
-		fields = append(fields, concurrentnode.FieldProcDefID)
-	}
 	if m.addstate != nil {
 		fields = append(fields, concurrentnode.FieldState)
 	}
@@ -915,8 +853,6 @@ func (m *ConcurrentNodeMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case concurrentnode.FieldProcInstID:
 		return m.AddedProcInstID()
-	case concurrentnode.FieldProcDefID:
-		return m.AddedProcDefID()
 	case concurrentnode.FieldState:
 		return m.AddedState()
 	case concurrentnode.FieldIsDel:
@@ -936,13 +872,6 @@ func (m *ConcurrentNodeMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddProcInstID(v)
-		return nil
-	case concurrentnode.FieldProcDefID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddProcDefID(v)
 		return nil
 	case concurrentnode.FieldState:
 		v, ok := value.(int32)
@@ -966,6 +895,9 @@ func (m *ConcurrentNodeMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *ConcurrentNodeMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(concurrentnode.FieldNodeID) {
+		fields = append(fields, concurrentnode.FieldNodeID)
+	}
 	if m.FieldCleared(concurrentnode.FieldNodeInfo) {
 		fields = append(fields, concurrentnode.FieldNodeInfo)
 	}
@@ -1001,6 +933,9 @@ func (m *ConcurrentNodeMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *ConcurrentNodeMutation) ClearField(name string) error {
 	switch name {
+	case concurrentnode.FieldNodeID:
+		m.ClearNodeID()
+		return nil
 	case concurrentnode.FieldNodeInfo:
 		m.ClearNodeInfo()
 		return nil
@@ -1032,9 +967,6 @@ func (m *ConcurrentNodeMutation) ResetField(name string) error {
 	switch name {
 	case concurrentnode.FieldProcInstID:
 		m.ResetProcInstID()
-		return nil
-	case concurrentnode.FieldProcDefID:
-		m.ResetProcDefID()
 		return nil
 	case concurrentnode.FieldNodeID:
 		m.ResetNodeID()
@@ -1120,8 +1052,6 @@ type ExecutionMutation struct {
 	id              *int64
 	proc_inst_id    *int64
 	addproc_inst_id *int64
-	proc_def_id     *int64
-	addproc_def_id  *int64
 	node_infos      *string
 	start_time      *time.Time
 	is_del          *int32
@@ -1292,62 +1222,6 @@ func (m *ExecutionMutation) AddedProcInstID() (r int64, exists bool) {
 func (m *ExecutionMutation) ResetProcInstID() {
 	m.proc_inst_id = nil
 	m.addproc_inst_id = nil
-}
-
-// SetProcDefID sets the "proc_def_id" field.
-func (m *ExecutionMutation) SetProcDefID(i int64) {
-	m.proc_def_id = &i
-	m.addproc_def_id = nil
-}
-
-// ProcDefID returns the value of the "proc_def_id" field in the mutation.
-func (m *ExecutionMutation) ProcDefID() (r int64, exists bool) {
-	v := m.proc_def_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldProcDefID returns the old "proc_def_id" field's value of the Execution entity.
-// If the Execution object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ExecutionMutation) OldProcDefID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldProcDefID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldProcDefID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldProcDefID: %w", err)
-	}
-	return oldValue.ProcDefID, nil
-}
-
-// AddProcDefID adds i to the "proc_def_id" field.
-func (m *ExecutionMutation) AddProcDefID(i int64) {
-	if m.addproc_def_id != nil {
-		*m.addproc_def_id += i
-	} else {
-		m.addproc_def_id = &i
-	}
-}
-
-// AddedProcDefID returns the value that was added to the "proc_def_id" field in this mutation.
-func (m *ExecutionMutation) AddedProcDefID() (r int64, exists bool) {
-	v := m.addproc_def_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetProcDefID resets all changes to the "proc_def_id" field.
-func (m *ExecutionMutation) ResetProcDefID() {
-	m.proc_def_id = nil
-	m.addproc_def_id = nil
 }
 
 // SetNodeInfos sets the "node_infos" field.
@@ -1635,12 +1509,9 @@ func (m *ExecutionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ExecutionMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 6)
 	if m.proc_inst_id != nil {
 		fields = append(fields, execution.FieldProcInstID)
-	}
-	if m.proc_def_id != nil {
-		fields = append(fields, execution.FieldProcDefID)
 	}
 	if m.node_infos != nil {
 		fields = append(fields, execution.FieldNodeInfos)
@@ -1667,8 +1538,6 @@ func (m *ExecutionMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case execution.FieldProcInstID:
 		return m.ProcInstID()
-	case execution.FieldProcDefID:
-		return m.ProcDefID()
 	case execution.FieldNodeInfos:
 		return m.NodeInfos()
 	case execution.FieldStartTime:
@@ -1690,8 +1559,6 @@ func (m *ExecutionMutation) OldField(ctx context.Context, name string) (ent.Valu
 	switch name {
 	case execution.FieldProcInstID:
 		return m.OldProcInstID(ctx)
-	case execution.FieldProcDefID:
-		return m.OldProcDefID(ctx)
 	case execution.FieldNodeInfos:
 		return m.OldNodeInfos(ctx)
 	case execution.FieldStartTime:
@@ -1717,13 +1584,6 @@ func (m *ExecutionMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetProcInstID(v)
-		return nil
-	case execution.FieldProcDefID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetProcDefID(v)
 		return nil
 	case execution.FieldNodeInfos:
 		v, ok := value.(string)
@@ -1771,9 +1631,6 @@ func (m *ExecutionMutation) AddedFields() []string {
 	if m.addproc_inst_id != nil {
 		fields = append(fields, execution.FieldProcInstID)
 	}
-	if m.addproc_def_id != nil {
-		fields = append(fields, execution.FieldProcDefID)
-	}
 	if m.addis_del != nil {
 		fields = append(fields, execution.FieldIsDel)
 	}
@@ -1787,8 +1644,6 @@ func (m *ExecutionMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case execution.FieldProcInstID:
 		return m.AddedProcInstID()
-	case execution.FieldProcDefID:
-		return m.AddedProcDefID()
 	case execution.FieldIsDel:
 		return m.AddedIsDel()
 	}
@@ -1806,13 +1661,6 @@ func (m *ExecutionMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddProcInstID(v)
-		return nil
-	case execution.FieldProcDefID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddProcDefID(v)
 		return nil
 	case execution.FieldIsDel:
 		v, ok := value.(int32)
@@ -1883,9 +1731,6 @@ func (m *ExecutionMutation) ResetField(name string) error {
 	switch name {
 	case execution.FieldProcInstID:
 		m.ResetProcInstID()
-		return nil
-	case execution.FieldProcDefID:
-		m.ResetProcDefID()
 		return nil
 	case execution.FieldNodeInfos:
 		m.ResetNodeInfos()

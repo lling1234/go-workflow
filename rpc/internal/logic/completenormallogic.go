@@ -1,13 +1,11 @@
 package logic
 
 import (
-	"act/api/flow"
 	act2 "act/common/act"
 	"act/common/act/execution"
 	"act/common/act/identitylink"
-	"act/common/act/procinst"
 	"act/common/act/task"
-	"act/rpc/constant"
+	"act/common/flow"
 	"act/rpc/general"
 	"context"
 	"errors"
@@ -52,9 +50,6 @@ func (l *CompleteNormalLogic) CompleteNormal(in *act.CompleteNormalProcInstReq) 
 	var isTaskFinished int32 = 1
 	identityLink, err := l.findIdentityLinkByTaskId(taskId)
 	//2、根据最新节点ID和用户ID找到对应的审批人
-	//identityLink, err := RPC.FindIdentityLinkByTaskId(l.ctx, &actclient.TaskIdArg{
-	//	Id: taskId,
-	//})
 	if err != nil {
 		return nil, err
 	}
@@ -62,15 +57,14 @@ func (l *CompleteNormalLogic) CompleteNormal(in *act.CompleteNormalProcInstReq) 
 		return nil, errors.New("该用户没有审批权限！")
 	}
 	log.Println(3333333)
-	err = l.updateIdentityLink(taskId, in, tx)
+	err = UpdateIdentityLink(UpdateIdentityLinkReq{
+		UserId:  identityLink.UserID,
+		TaskId:  taskId,
+		Comment: in.Comment,
+		Result:  in.Result,
+		IsDeal:  1,
+	}, tx, l.ctx)
 	//3、更新审批人信息
-	//_, err = RPC.UpdateIdentityLink(l.ctx, &actclient.IdentityLinkReq{
-	//	UserId:  identityLink.UserId,
-	//	TaskId:  taskId,
-	//	Comment: req.Comment,
-	//	Result:  int32(req.Result),
-	//	IsDeal:  1,
-	//})
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +85,15 @@ func (l *CompleteNormalLogic) CompleteNormal(in *act.CompleteNormalProcInstReq) 
 			if t.Level == int32(len(nodeInfos)-1) {
 				isInstFinish = 1
 				approvalState = flow.HAVEPASS
-				_, err = l.saveTask(t.NodeID, in.GetInstId(), isInstFinish, t.Level, t.Level, t.MemberApprover, t.Mode, tx)
+				_, err = SaveTask(SaveTaskReq{
+					NodeID:         t.NodeID,
+					InstId:         in.InstId,
+					IsFinished:     isInstFinish,
+					Level:          t.Level,
+					Step:           t.Step,
+					MemberApprover: t.MemberApprover,
+					Mode:           t.Mode,
+				}, tx, l.ctx)
 				if err != nil {
 					return nil, err
 				}
@@ -110,7 +112,15 @@ func (l *CompleteNormalLogic) CompleteNormal(in *act.CompleteNormalProcInstReq) 
 				if t.Level == int32(len(nodeInfos)-1) {
 					isInstFinish = 1
 					approvalState = flow.HAVEPASS
-					_, err = l.saveTask(t.NodeID, in.GetInstId(), isInstFinish, t.Level, t.Level, t.MemberApprover, t.Mode, tx)
+					_, err = SaveTask(SaveTaskReq{
+						NodeID:         t.NodeID,
+						InstId:         in.InstId,
+						IsFinished:     isInstFinish,
+						Level:          t.Level,
+						Step:           t.Step,
+						MemberApprover: t.MemberApprover,
+						Mode:           t.Mode,
+					}, tx, l.ctx)
 					if err != nil {
 						return nil, err
 					}
@@ -138,26 +148,24 @@ func (l *CompleteNormalLogic) CompleteNormal(in *act.CompleteNormalProcInstReq) 
 	case flow.REJECT:
 		approvalState = flow.REJECT
 	}
-
-	err = l.updateTask(taskId, isTaskFinished, tx)
-	//_, err = RPC.UpdateTask(l.ctx, &actclient.TaskReq{
-	//	Id:         taskId,
-	//	IsFinished: isTaskFinished,
-	//})
-	//log.Println("approvalState", approvalState)
+	err = UpdateTask(UpdateTaskReq{
+		TaskId:     taskId,
+		IsFinished: isTaskFinished,
+	}, tx, l.ctx)
 	var flowCode string
 	if approvalState == flow.HAVEPASS {
 		flowCode = l.generateCode()
 	}
 	//8.反向更新流程实例表
-	//_, err = RPC.UpdateProcInst(l.ctx, &actclient.UpdateProcInstReq{
-	//	DataId:   req.DataId,
-	//	State:    approvalState,
-	//	IsFinish: isInstFinish,
-	//	Code:     flowCode,
-	//	TaskId:   taskId,
-	//})
-	err = l.UpdateProcInst("", in.GetDataId(), taskId, approvalState, isInstFinish, flowCode, tx)
+	err = UpdateProcInst(UpdateProcInstReq{
+		TaskId:     taskId,
+		DataId:     in.DataId,
+		NodeId:     "",
+		State:      approvalState,
+		IsFinished: isInstFinish,
+		Code:       flowCode,
+	}, tx, l.ctx)
+	//err = UpdateProcInst("", in.GetDataId(), taskId, approvalState, isInstFinish, flowCode, tx)
 	return &act.Nil{}, err
 }
 
@@ -181,13 +189,6 @@ func (l *CompleteNormalLogic) findIdentityLinkByTaskId(taskId int64) (*act2.Iden
 	return ils[0], nil
 }
 
-func (l *CompleteNormalLogic) updateIdentityLink(taskId int64, in *act.CompleteNormalProcInstReq, tx *act2.Tx) error {
-	err := tx.IdentityLink.Update().Where(identitylink.TaskIDEQ(taskId), identitylink.UserIDEQ(general.MyUserId), identitylink.IsDelEQ(0), identitylink.IsDealEQ(0)).
-		SetUpdateTime(time.Now()).SetComment(in.Comment).SetResult(in.Result).SetIsDeal(1).Exec(l.ctx)
-
-	return err
-}
-
 func (l *CompleteNormalLogic) findNodeInfosByInstId(instId int64) ([]*flow.NodeInfo, error) {
 	exec, err := l.svcCtx.CommonStore.Execution.Query().Where(execution.ProcInstID(instId), execution.IsDelEQ(0)).First(l.ctx)
 	if err != nil {
@@ -197,23 +198,6 @@ func (l *CompleteNormalLogic) findNodeInfosByInstId(instId int64) ([]*flow.NodeI
 	var nodeInfos []*flow.NodeInfo
 	util.Str2Struct(exec.NodeInfos, &nodeInfos)
 	return nodeInfos, err
-}
-
-func (l *CompleteNormalLogic) saveTask(nodeId string, instId int64, isFinish int32, level int32, step int32, memberApprover string, mode string, tx *act2.Tx) (int64, error) {
-	taskCreate := tx.Task.Create().SetNodeID(nodeId).SetProcInstID(instId).
-		SetIsFinished(isFinish).SetLevel(level).SetStep(step).SetMemberApprover(memberApprover)
-	if mode != "" {
-		taskCreate.SetMode(mode)
-	}
-	t, err := taskCreate.Save(l.ctx)
-	return t.ID, err
-}
-
-func (l *CompleteNormalLogic) saveIdentityLink(instId int64, taskId int64, step int32, userId int64, userName string, tx *act2.Tx) error {
-	_, err := tx.IdentityLink.Create().SetProcInstID(instId).SetTaskID(taskId).SetTargetID(general.TargetId).
-		SetIsDeal(0).SetStep(step).SetUserID(userId).SetUserName(userName).Save(l.ctx)
-
-	return err
 }
 
 func (l *CompleteNormalLogic) generateCode() string {
@@ -246,7 +230,15 @@ func (l *CompleteNormalLogic) isTaskFinished(memberStr string, agreerStr string,
 func (l *CompleteNormalLogic) moveNextStage(instId int64, level int32, nodeInfos []*flow.NodeInfo, tx *act2.Tx) error {
 	nodeInfo := nodeInfos[level-1] //计数是从0开始，因此需要-1
 	//4.保存流程任务
-	taskId, err := l.saveTask(nodeInfo.NodeID, instId, 0, level, level, nodeInfo.ApproverIds, nodeInfo.Mode, tx)
+	taskId, err := SaveTask(SaveTaskReq{
+		NodeID:         nodeInfo.NodeID,
+		InstId:         instId,
+		IsFinished:     0,
+		Level:          level,
+		Step:           level,
+		MemberApprover: nodeInfo.ApproverIds,
+		Mode:           nodeInfo.Mode,
+	}, tx, l.ctx)
 	if err != nil {
 		return err
 	}
@@ -256,47 +248,17 @@ func (l *CompleteNormalLogic) moveNextStage(instId int64, level int32, nodeInfos
 	userNames := strings.Split(nodeInfo.ApproverNames, ",")
 	for k, v := range userIds {
 		userId, _ := strconv.ParseInt(v, 10, 64)
-		err = l.saveIdentityLink(instId, taskId, level, userId, userNames[k], tx)
+		err = SaveIdentityLink(SaveIdentityLinkReq{
+			InstId:   instId,
+			TaskId:   taskId,
+			Step:     level,
+			UserId:   userId,
+			UserName: userNames[k],
+		}, tx, l.ctx)
 		if err != nil {
 			return err
 		}
 	}
 
 	return nil
-}
-
-func (l *CompleteNormalLogic) updateTask(taskId int64, isFinished int32, tx *act2.Tx) error {
-	oldTask, err := tx.Task.Query().Where(task.IDEQ(taskId)).First(l.ctx)
-	if err != nil {
-		return err
-	}
-	agreers := ""
-	if oldTask.AgreeApprover == "" {
-		agreers = strconv.FormatInt(general.MyUserId, 10)
-	} else {
-		agreers = oldTask.AgreeApprover + "," + strconv.FormatInt(general.MyUserId, 10)
-	}
-	err = tx.Task.Update().Where(task.IDEQ(taskId)).SetUpdateTime(time.Now()).SetIsFinished(isFinished).SetAgreeApprover(agreers).SetClaimTime(time.Now()).Exec(l.ctx)
-
-	return err
-}
-
-func (l *CompleteNormalLogic) UpdateProcInst(nodeId string, dataId int64, taskId int64, state int32, isFinished int32, code string, tx *act2.Tx) error {
-	procInstUpdate := tx.ProcInst.Update().Where(procinst.DataIDEQ(dataId), procinst.StateNotIn(constant.WITHDRAW, constant.DISCARD), procinst.IsDelEQ(0))
-
-	if taskId != 0 {
-		procInstUpdate.SetNodeID(nodeId).SetTaskID(taskId)
-	}
-	if state != 0 {
-		procInstUpdate.SetState(state)
-	}
-	if state == constant.HAVEPASS {
-		procInstUpdate.SetCode(code)
-	}
-	if isFinished == 1 {
-		procInstUpdate.SetIsFinished(1).SetEndTime(time.Now())
-	}
-	err := procInstUpdate.SetUpdateTime(time.Now()).SetUpdateUserID(general.MyUserId).Exec(l.ctx)
-
-	return err
 }

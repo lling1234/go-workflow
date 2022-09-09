@@ -18,8 +18,6 @@ type Execution struct {
 	ID int64 `json:"id,omitempty"`
 	// 流程实例id
 	ProcInstID int64 `json:"proc_inst_id,omitempty"`
-	// 流程定义id
-	ProcDefID int64 `json:"proc_def_id,omitempty"`
 	// 节点审批执行顺序
 	NodeInfos string `json:"node_infos,omitempty"`
 	// 开始时间
@@ -37,7 +35,7 @@ func (*Execution) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case execution.FieldID, execution.FieldProcInstID, execution.FieldProcDefID, execution.FieldIsDel:
+		case execution.FieldID, execution.FieldProcInstID, execution.FieldIsDel:
 			values[i] = new(sql.NullInt64)
 		case execution.FieldNodeInfos:
 			values[i] = new(sql.NullString)
@@ -69,12 +67,6 @@ func (e *Execution) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field proc_inst_id", values[i])
 			} else if value.Valid {
 				e.ProcInstID = value.Int64
-			}
-		case execution.FieldProcDefID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field proc_def_id", values[i])
-			} else if value.Valid {
-				e.ProcDefID = value.Int64
 			}
 		case execution.FieldNodeInfos:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -136,9 +128,6 @@ func (e *Execution) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", e.ID))
 	builder.WriteString("proc_inst_id=")
 	builder.WriteString(fmt.Sprintf("%v", e.ProcInstID))
-	builder.WriteString(", ")
-	builder.WriteString("proc_def_id=")
-	builder.WriteString(fmt.Sprintf("%v", e.ProcDefID))
 	builder.WriteString(", ")
 	builder.WriteString("node_infos=")
 	builder.WriteString(e.NodeInfos)

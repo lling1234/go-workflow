@@ -26,15 +26,17 @@ func (cnc *ConcurrentNodeCreate) SetProcInstID(i int64) *ConcurrentNodeCreate {
 	return cnc
 }
 
-// SetProcDefID sets the "proc_def_id" field.
-func (cnc *ConcurrentNodeCreate) SetProcDefID(i int64) *ConcurrentNodeCreate {
-	cnc.mutation.SetProcDefID(i)
-	return cnc
-}
-
 // SetNodeID sets the "node_id" field.
 func (cnc *ConcurrentNodeCreate) SetNodeID(s string) *ConcurrentNodeCreate {
 	cnc.mutation.SetNodeID(s)
+	return cnc
+}
+
+// SetNillableNodeID sets the "node_id" field if the given value is not nil.
+func (cnc *ConcurrentNodeCreate) SetNillableNodeID(s *string) *ConcurrentNodeCreate {
+	if s != nil {
+		cnc.SetNodeID(*s)
+	}
 	return cnc
 }
 
@@ -238,12 +240,6 @@ func (cnc *ConcurrentNodeCreate) check() error {
 	if _, ok := cnc.mutation.ProcInstID(); !ok {
 		return &ValidationError{Name: "proc_inst_id", err: errors.New(`act: missing required field "ConcurrentNode.proc_inst_id"`)}
 	}
-	if _, ok := cnc.mutation.ProcDefID(); !ok {
-		return &ValidationError{Name: "proc_def_id", err: errors.New(`act: missing required field "ConcurrentNode.proc_def_id"`)}
-	}
-	if _, ok := cnc.mutation.NodeID(); !ok {
-		return &ValidationError{Name: "node_id", err: errors.New(`act: missing required field "ConcurrentNode.node_id"`)}
-	}
 	if v, ok := cnc.mutation.NodeID(); ok {
 		if err := concurrentnode.NodeIDValidator(v); err != nil {
 			return &ValidationError{Name: "node_id", err: fmt.Errorf(`act: validator failed for field "ConcurrentNode.node_id": %w`, err)}
@@ -304,14 +300,6 @@ func (cnc *ConcurrentNodeCreate) createSpec() (*ConcurrentNode, *sqlgraph.Create
 			Column: concurrentnode.FieldProcInstID,
 		})
 		_node.ProcInstID = value
-	}
-	if value, ok := cnc.mutation.ProcDefID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: concurrentnode.FieldProcDefID,
-		})
-		_node.ProcDefID = value
 	}
 	if value, ok := cnc.mutation.NodeID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

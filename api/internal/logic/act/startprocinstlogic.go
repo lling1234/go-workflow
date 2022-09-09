@@ -27,6 +27,7 @@ func NewStartProcInstLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Sta
 func (l *StartProcInstLogic) StartProcInst(req *types.StartProcInst) (resp *types.CommonResponse, err error) {
 	def, err := l.svcCtx.Rpc.FindDefByFormId(l.ctx, &actclient.FindProcDefReq{
 		FormId: req.FormId,
+		AppId:  req.AppId,
 	})
 	if err != nil {
 		return types.GetErrorCommonResponse(err.Error())

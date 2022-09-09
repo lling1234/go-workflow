@@ -87,13 +87,6 @@ func ProcInstID(v int64) predicate.ConcurrentNode {
 	})
 }
 
-// ProcDefID applies equality check predicate on the "proc_def_id" field. It's identical to ProcDefIDEQ.
-func ProcDefID(v int64) predicate.ConcurrentNode {
-	return predicate.ConcurrentNode(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldProcDefID), v))
-	})
-}
-
 // NodeID applies equality check predicate on the "node_id" field. It's identical to NodeIDEQ.
 func NodeID(v string) predicate.ConcurrentNode {
 	return predicate.ConcurrentNode(func(s *sql.Selector) {
@@ -214,70 +207,6 @@ func ProcInstIDLTE(v int64) predicate.ConcurrentNode {
 	})
 }
 
-// ProcDefIDEQ applies the EQ predicate on the "proc_def_id" field.
-func ProcDefIDEQ(v int64) predicate.ConcurrentNode {
-	return predicate.ConcurrentNode(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldProcDefID), v))
-	})
-}
-
-// ProcDefIDNEQ applies the NEQ predicate on the "proc_def_id" field.
-func ProcDefIDNEQ(v int64) predicate.ConcurrentNode {
-	return predicate.ConcurrentNode(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldProcDefID), v))
-	})
-}
-
-// ProcDefIDIn applies the In predicate on the "proc_def_id" field.
-func ProcDefIDIn(vs ...int64) predicate.ConcurrentNode {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.ConcurrentNode(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldProcDefID), v...))
-	})
-}
-
-// ProcDefIDNotIn applies the NotIn predicate on the "proc_def_id" field.
-func ProcDefIDNotIn(vs ...int64) predicate.ConcurrentNode {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.ConcurrentNode(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldProcDefID), v...))
-	})
-}
-
-// ProcDefIDGT applies the GT predicate on the "proc_def_id" field.
-func ProcDefIDGT(v int64) predicate.ConcurrentNode {
-	return predicate.ConcurrentNode(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldProcDefID), v))
-	})
-}
-
-// ProcDefIDGTE applies the GTE predicate on the "proc_def_id" field.
-func ProcDefIDGTE(v int64) predicate.ConcurrentNode {
-	return predicate.ConcurrentNode(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldProcDefID), v))
-	})
-}
-
-// ProcDefIDLT applies the LT predicate on the "proc_def_id" field.
-func ProcDefIDLT(v int64) predicate.ConcurrentNode {
-	return predicate.ConcurrentNode(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldProcDefID), v))
-	})
-}
-
-// ProcDefIDLTE applies the LTE predicate on the "proc_def_id" field.
-func ProcDefIDLTE(v int64) predicate.ConcurrentNode {
-	return predicate.ConcurrentNode(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldProcDefID), v))
-	})
-}
-
 // NodeIDEQ applies the EQ predicate on the "node_id" field.
 func NodeIDEQ(v string) predicate.ConcurrentNode {
 	return predicate.ConcurrentNode(func(s *sql.Selector) {
@@ -360,6 +289,20 @@ func NodeIDHasPrefix(v string) predicate.ConcurrentNode {
 func NodeIDHasSuffix(v string) predicate.ConcurrentNode {
 	return predicate.ConcurrentNode(func(s *sql.Selector) {
 		s.Where(sql.HasSuffix(s.C(FieldNodeID), v))
+	})
+}
+
+// NodeIDIsNil applies the IsNil predicate on the "node_id" field.
+func NodeIDIsNil() predicate.ConcurrentNode {
+	return predicate.ConcurrentNode(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldNodeID)))
+	})
+}
+
+// NodeIDNotNil applies the NotNil predicate on the "node_id" field.
+func NodeIDNotNil() predicate.ConcurrentNode {
+	return predicate.ConcurrentNode(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldNodeID)))
 	})
 }
 

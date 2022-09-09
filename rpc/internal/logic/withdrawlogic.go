@@ -2,7 +2,7 @@ package logic
 
 import (
 	"act/common/act/procinst"
-	"act/rpc/constant"
+	"act/common/flow"
 	"context"
 	"errors"
 	"log"
@@ -46,12 +46,12 @@ func (l *WithdrawLogic) Withdraw(in *act.DataIdReq) (*act.Nil, error) {
 	if userid != procinstInfo.StartUserID {
 		return nil, errors.New("该用户没有审批资格！")
 	}
-	if procinstInfo.State >= constant.WITHDRAW {
+	if procinstInfo.State >= flow.WITHDRAW {
 		return nil, errors.New("只有审批中的流程才能撤回！")
 	}
 	_, err = tx.ProcInst.Update().
 		Where(procinst.ProcDefID(procinstInfo.ProcDefID)).
-		SetState(constant.WITHDRAW).SetIsFinished(1).SetEndTime(time.Now()).SetUpdateTime(time.Now()).Save(l.ctx)
+		SetState(flow.WITHDRAW).SetIsFinished(1).SetEndTime(time.Now()).SetUpdateTime(time.Now()).Save(l.ctx)
 	err = tx.Commit()
 	// 3.UserID和create_user_id比较不相等返回，无权限撤回
 

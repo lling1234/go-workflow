@@ -87,13 +87,6 @@ func ProcInstID(v int64) predicate.Execution {
 	})
 }
 
-// ProcDefID applies equality check predicate on the "proc_def_id" field. It's identical to ProcDefIDEQ.
-func ProcDefID(v int64) predicate.Execution {
-	return predicate.Execution(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldProcDefID), v))
-	})
-}
-
 // NodeInfos applies equality check predicate on the "node_infos" field. It's identical to NodeInfosEQ.
 func NodeInfos(v string) predicate.Execution {
 	return predicate.Execution(func(s *sql.Selector) {
@@ -190,70 +183,6 @@ func ProcInstIDLT(v int64) predicate.Execution {
 func ProcInstIDLTE(v int64) predicate.Execution {
 	return predicate.Execution(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldProcInstID), v))
-	})
-}
-
-// ProcDefIDEQ applies the EQ predicate on the "proc_def_id" field.
-func ProcDefIDEQ(v int64) predicate.Execution {
-	return predicate.Execution(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldProcDefID), v))
-	})
-}
-
-// ProcDefIDNEQ applies the NEQ predicate on the "proc_def_id" field.
-func ProcDefIDNEQ(v int64) predicate.Execution {
-	return predicate.Execution(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldProcDefID), v))
-	})
-}
-
-// ProcDefIDIn applies the In predicate on the "proc_def_id" field.
-func ProcDefIDIn(vs ...int64) predicate.Execution {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Execution(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldProcDefID), v...))
-	})
-}
-
-// ProcDefIDNotIn applies the NotIn predicate on the "proc_def_id" field.
-func ProcDefIDNotIn(vs ...int64) predicate.Execution {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Execution(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldProcDefID), v...))
-	})
-}
-
-// ProcDefIDGT applies the GT predicate on the "proc_def_id" field.
-func ProcDefIDGT(v int64) predicate.Execution {
-	return predicate.Execution(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldProcDefID), v))
-	})
-}
-
-// ProcDefIDGTE applies the GTE predicate on the "proc_def_id" field.
-func ProcDefIDGTE(v int64) predicate.Execution {
-	return predicate.Execution(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldProcDefID), v))
-	})
-}
-
-// ProcDefIDLT applies the LT predicate on the "proc_def_id" field.
-func ProcDefIDLT(v int64) predicate.Execution {
-	return predicate.Execution(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldProcDefID), v))
-	})
-}
-
-// ProcDefIDLTE applies the LTE predicate on the "proc_def_id" field.
-func ProcDefIDLTE(v int64) predicate.Execution {
-	return predicate.Execution(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldProcDefID), v))
 	})
 }
 

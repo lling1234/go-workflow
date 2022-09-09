@@ -13,8 +13,7 @@ var (
 	ActConcurrentNodeColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "proc_inst_id", Type: field.TypeInt64},
-		{Name: "proc_def_id", Type: field.TypeInt64},
-		{Name: "node_id", Type: field.TypeString, Size: 50},
+		{Name: "node_id", Type: field.TypeString, Nullable: true, Size: 50},
 		{Name: "node_info", Type: field.TypeString, Nullable: true, Size: 500},
 		{Name: "prev_id", Type: field.TypeString, Nullable: true, Size: 500},
 		{Name: "next_id", Type: field.TypeString, Nullable: true, Size: 500},
@@ -33,7 +32,6 @@ var (
 	ActExecutionColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "proc_inst_id", Type: field.TypeInt64},
-		{Name: "proc_def_id", Type: field.TypeInt64},
 		{Name: "node_infos", Type: field.TypeString, Nullable: true, Size: 5000},
 		{Name: "start_time", Type: field.TypeTime, Nullable: true},
 		{Name: "is_del", Type: field.TypeInt32, Nullable: true, Default: 0},

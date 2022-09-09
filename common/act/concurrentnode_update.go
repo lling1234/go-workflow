@@ -41,22 +41,23 @@ func (cnu *ConcurrentNodeUpdate) AddProcInstID(i int64) *ConcurrentNodeUpdate {
 	return cnu
 }
 
-// SetProcDefID sets the "proc_def_id" field.
-func (cnu *ConcurrentNodeUpdate) SetProcDefID(i int64) *ConcurrentNodeUpdate {
-	cnu.mutation.ResetProcDefID()
-	cnu.mutation.SetProcDefID(i)
-	return cnu
-}
-
-// AddProcDefID adds i to the "proc_def_id" field.
-func (cnu *ConcurrentNodeUpdate) AddProcDefID(i int64) *ConcurrentNodeUpdate {
-	cnu.mutation.AddProcDefID(i)
-	return cnu
-}
-
 // SetNodeID sets the "node_id" field.
 func (cnu *ConcurrentNodeUpdate) SetNodeID(s string) *ConcurrentNodeUpdate {
 	cnu.mutation.SetNodeID(s)
+	return cnu
+}
+
+// SetNillableNodeID sets the "node_id" field if the given value is not nil.
+func (cnu *ConcurrentNodeUpdate) SetNillableNodeID(s *string) *ConcurrentNodeUpdate {
+	if s != nil {
+		cnu.SetNodeID(*s)
+	}
+	return cnu
+}
+
+// ClearNodeID clears the value of the "node_id" field.
+func (cnu *ConcurrentNodeUpdate) ClearNodeID() *ConcurrentNodeUpdate {
+	cnu.mutation.ClearNodeID()
 	return cnu
 }
 
@@ -336,24 +337,16 @@ func (cnu *ConcurrentNodeUpdate) sqlSave(ctx context.Context) (n int, err error)
 			Column: concurrentnode.FieldProcInstID,
 		})
 	}
-	if value, ok := cnu.mutation.ProcDefID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: concurrentnode.FieldProcDefID,
-		})
-	}
-	if value, ok := cnu.mutation.AddedProcDefID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: concurrentnode.FieldProcDefID,
-		})
-	}
 	if value, ok := cnu.mutation.NodeID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: concurrentnode.FieldNodeID,
+		})
+	}
+	if cnu.mutation.NodeIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: concurrentnode.FieldNodeID,
 		})
 	}
@@ -494,22 +487,23 @@ func (cnuo *ConcurrentNodeUpdateOne) AddProcInstID(i int64) *ConcurrentNodeUpdat
 	return cnuo
 }
 
-// SetProcDefID sets the "proc_def_id" field.
-func (cnuo *ConcurrentNodeUpdateOne) SetProcDefID(i int64) *ConcurrentNodeUpdateOne {
-	cnuo.mutation.ResetProcDefID()
-	cnuo.mutation.SetProcDefID(i)
-	return cnuo
-}
-
-// AddProcDefID adds i to the "proc_def_id" field.
-func (cnuo *ConcurrentNodeUpdateOne) AddProcDefID(i int64) *ConcurrentNodeUpdateOne {
-	cnuo.mutation.AddProcDefID(i)
-	return cnuo
-}
-
 // SetNodeID sets the "node_id" field.
 func (cnuo *ConcurrentNodeUpdateOne) SetNodeID(s string) *ConcurrentNodeUpdateOne {
 	cnuo.mutation.SetNodeID(s)
+	return cnuo
+}
+
+// SetNillableNodeID sets the "node_id" field if the given value is not nil.
+func (cnuo *ConcurrentNodeUpdateOne) SetNillableNodeID(s *string) *ConcurrentNodeUpdateOne {
+	if s != nil {
+		cnuo.SetNodeID(*s)
+	}
+	return cnuo
+}
+
+// ClearNodeID clears the value of the "node_id" field.
+func (cnuo *ConcurrentNodeUpdateOne) ClearNodeID() *ConcurrentNodeUpdateOne {
+	cnuo.mutation.ClearNodeID()
 	return cnuo
 }
 
@@ -819,24 +813,16 @@ func (cnuo *ConcurrentNodeUpdateOne) sqlSave(ctx context.Context) (_node *Concur
 			Column: concurrentnode.FieldProcInstID,
 		})
 	}
-	if value, ok := cnuo.mutation.ProcDefID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: concurrentnode.FieldProcDefID,
-		})
-	}
-	if value, ok := cnuo.mutation.AddedProcDefID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: concurrentnode.FieldProcDefID,
-		})
-	}
 	if value, ok := cnuo.mutation.NodeID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: concurrentnode.FieldNodeID,
+		})
+	}
+	if cnuo.mutation.NodeIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: concurrentnode.FieldNodeID,
 		})
 	}

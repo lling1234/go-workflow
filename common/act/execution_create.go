@@ -26,12 +26,6 @@ func (ec *ExecutionCreate) SetProcInstID(i int64) *ExecutionCreate {
 	return ec
 }
 
-// SetProcDefID sets the "proc_def_id" field.
-func (ec *ExecutionCreate) SetProcDefID(i int64) *ExecutionCreate {
-	ec.mutation.SetProcDefID(i)
-	return ec
-}
-
 // SetNodeInfos sets the "node_infos" field.
 func (ec *ExecutionCreate) SetNodeInfos(s string) *ExecutionCreate {
 	ec.mutation.SetNodeInfos(s)
@@ -208,9 +202,6 @@ func (ec *ExecutionCreate) check() error {
 	if _, ok := ec.mutation.ProcInstID(); !ok {
 		return &ValidationError{Name: "proc_inst_id", err: errors.New(`act: missing required field "Execution.proc_inst_id"`)}
 	}
-	if _, ok := ec.mutation.ProcDefID(); !ok {
-		return &ValidationError{Name: "proc_def_id", err: errors.New(`act: missing required field "Execution.proc_def_id"`)}
-	}
 	if v, ok := ec.mutation.NodeInfos(); ok {
 		if err := execution.NodeInfosValidator(v); err != nil {
 			return &ValidationError{Name: "node_infos", err: fmt.Errorf(`act: validator failed for field "Execution.node_infos": %w`, err)}
@@ -256,14 +247,6 @@ func (ec *ExecutionCreate) createSpec() (*Execution, *sqlgraph.CreateSpec) {
 			Column: execution.FieldProcInstID,
 		})
 		_node.ProcInstID = value
-	}
-	if value, ok := ec.mutation.ProcDefID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: execution.FieldProcDefID,
-		})
-		_node.ProcDefID = value
 	}
 	if value, ok := ec.mutation.NodeInfos(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

@@ -18,8 +18,6 @@ type ConcurrentNode struct {
 	ID int64 `json:"id,omitempty"`
 	// 流程实例id
 	ProcInstID int64 `json:"proc_inst_id,omitempty"`
-	// 流程定义id
-	ProcDefID int64 `json:"proc_def_id,omitempty"`
 	// 节点id
 	NodeID string `json:"node_id,omitempty"`
 	// 节点信息
@@ -43,7 +41,7 @@ func (*ConcurrentNode) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case concurrentnode.FieldID, concurrentnode.FieldProcInstID, concurrentnode.FieldProcDefID, concurrentnode.FieldState, concurrentnode.FieldIsDel:
+		case concurrentnode.FieldID, concurrentnode.FieldProcInstID, concurrentnode.FieldState, concurrentnode.FieldIsDel:
 			values[i] = new(sql.NullInt64)
 		case concurrentnode.FieldNodeID, concurrentnode.FieldNodeInfo, concurrentnode.FieldPrevID, concurrentnode.FieldNextID:
 			values[i] = new(sql.NullString)
@@ -75,12 +73,6 @@ func (cn *ConcurrentNode) assignValues(columns []string, values []interface{}) e
 				return fmt.Errorf("unexpected type %T for field proc_inst_id", values[i])
 			} else if value.Valid {
 				cn.ProcInstID = value.Int64
-			}
-		case concurrentnode.FieldProcDefID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field proc_def_id", values[i])
-			} else if value.Valid {
-				cn.ProcDefID = value.Int64
 			}
 		case concurrentnode.FieldNodeID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -160,9 +152,6 @@ func (cn *ConcurrentNode) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", cn.ID))
 	builder.WriteString("proc_inst_id=")
 	builder.WriteString(fmt.Sprintf("%v", cn.ProcInstID))
-	builder.WriteString(", ")
-	builder.WriteString("proc_def_id=")
-	builder.WriteString(fmt.Sprintf("%v", cn.ProcDefID))
 	builder.WriteString(", ")
 	builder.WriteString("node_id=")
 	builder.WriteString(cn.NodeID)
