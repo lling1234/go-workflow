@@ -64,6 +64,10 @@ func (l *CompleteNormalLogic) CompleteNormal(in *act.CompleteNormalProcInstReq) 
 		Result:  in.Result,
 		IsDeal:  1,
 	}, tx, l.ctx)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
 	//3、更新审批人信息
 	if err != nil {
 		return nil, err
@@ -89,20 +93,18 @@ func (l *CompleteNormalLogic) CompleteNormal(in *act.CompleteNormalProcInstReq) 
 					NodeID:         t.NodeID,
 					InstId:         in.InstId,
 					IsFinished:     isInstFinish,
-					Level:          t.Level,
-					Step:           t.Step,
+					Level:          t.Level + 1,
+					Step:           t.Step + 1,
 					MemberApprover: t.MemberApprover,
 					Mode:           t.Mode,
 				}, tx, l.ctx)
 				if err != nil {
+					tx.Rollback()
 					return nil, err
 				}
 			} else {
 				approvalState = flow.DEALING
-				err = l.moveNextStage(in.GetInstId(), t.Level, nodeInfos, tx)
-				if err != nil {
-					return nil, err
-				}
+				l.moveNextStage(in.GetInstId(), t.Level+1, nodeInfos, tx)
 			}
 		} else if strings.ToLower(t.Mode) == "and" {
 			//1.判断是否该节点的所有人都已经审批
@@ -113,24 +115,21 @@ func (l *CompleteNormalLogic) CompleteNormal(in *act.CompleteNormalProcInstReq) 
 					isInstFinish = 1
 					approvalState = flow.HAVEPASS
 					_, err = SaveTask(SaveTaskReq{
-						NodeID:         t.NodeID,
-						InstId:         in.InstId,
-						IsFinished:     isInstFinish,
-						Level:          t.Level,
-						Step:           t.Step,
-						MemberApprover: t.MemberApprover,
-						Mode:           t.Mode,
+						NodeID:     "结束",
+						InstId:     in.InstId,
+						IsFinished: 1,
+						Level:      t.Level + 1,
+						Step:       t.Step + 1,
+						Mode:       "or",
 					}, tx, l.ctx)
 					if err != nil {
+						tx.Rollback()
 						return nil, err
 					}
 				} else {
 					log.Println("andmoveNextStage")
 					approvalState = flow.DEALING
-					err = l.moveNextStage(in.GetInstId(), t.Level, nodeInfos, tx)
-					if err != nil {
-						return nil, err
-					}
+					l.moveNextStage(in.GetInstId(), t.Level+1, nodeInfos, tx)
 				}
 			} else {
 				log.Println("andDEALING")
@@ -152,6 +151,10 @@ func (l *CompleteNormalLogic) CompleteNormal(in *act.CompleteNormalProcInstReq) 
 		TaskId:     taskId,
 		IsFinished: isTaskFinished,
 	}, tx, l.ctx)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
 	var flowCode string
 	if approvalState == flow.HAVEPASS {
 		flowCode = l.generateCode()
@@ -165,8 +168,13 @@ func (l *CompleteNormalLogic) CompleteNormal(in *act.CompleteNormalProcInstReq) 
 		IsFinished: isInstFinish,
 		Code:       flowCode,
 	}, tx, l.ctx)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	tx.Commit()
 	//err = UpdateProcInst("", in.GetDataId(), taskId, approvalState, isInstFinish, flowCode, tx)
-	return &act.Nil{}, err
+	return &act.Nil{}, nil
 }
 
 func (l *CompleteNormalLogic) findLatestTask(instId int64) (*act2.Task, error) {
@@ -227,7 +235,7 @@ func (l *CompleteNormalLogic) isTaskFinished(memberStr string, agreerStr string,
 	return flag
 }
 
-func (l *CompleteNormalLogic) moveNextStage(instId int64, level int32, nodeInfos []*flow.NodeInfo, tx *act2.Tx) error {
+func (l *CompleteNormalLogic) moveNextStage(instId int64, level int32, nodeInfos []*flow.NodeInfo, tx *act2.Tx) {
 	nodeInfo := nodeInfos[level-1] //计数是从0开始，因此需要-1
 	//4.保存流程任务
 	taskId, err := SaveTask(SaveTaskReq{
@@ -240,7 +248,9 @@ func (l *CompleteNormalLogic) moveNextStage(instId int64, level int32, nodeInfos
 		Mode:           nodeInfo.Mode,
 	}, tx, l.ctx)
 	if err != nil {
-		return err
+		log.Fatalf(err.Error())
+		tx.Rollback()
+		return
 	}
 
 	//保存审批人
@@ -256,9 +266,10 @@ func (l *CompleteNormalLogic) moveNextStage(instId int64, level int32, nodeInfos
 			UserName: userNames[k],
 		}, tx, l.ctx)
 		if err != nil {
-			return err
+			log.Fatalf(err.Error())
+			tx.Rollback()
+			return
 		}
 	}
 
-	return nil
 }

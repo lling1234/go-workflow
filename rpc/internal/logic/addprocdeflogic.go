@@ -1,8 +1,10 @@
 package logic
 
 import (
+	act2 "act/common/act"
 	"act/common/act/procdef"
 	"act/common/tools/date"
+	"act/common/tools/linq"
 	"act/rpc/general"
 	"context"
 	"time"
@@ -70,11 +72,8 @@ func (l *AddProcDefLogic) GetNewVersion(formId int64) (int32, error) {
 	if err != nil {
 		return 1, err
 	}
-	var maxVersion int32 = 0
-	for _, v := range defs {
-		if maxVersion < v.Version {
-			maxVersion = v.Version
-		}
-	}
-	return maxVersion + 1, nil
+	maxVersion := linq.From(defs).SelectT(func(a *act2.ProcDef) int32 {
+		return a.Version
+	}).Max()
+	return maxVersion.(int32) + 1, nil
 }

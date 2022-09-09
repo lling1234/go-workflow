@@ -188,7 +188,7 @@ func CheckConditionNode(nodes []*Node) error {
 		if len(node.Branches) == 0 {
 			return errors.New("节点【" + node.NodeID + "】的Conditions对象为空值！！")
 		}
-		err := IfProcessConifgIsValid(node)
+		err := IfProcessConfigIsValid(node)
 		if err != nil {
 			return err
 		}
@@ -212,19 +212,16 @@ func parseProcessConfig(node *Node, list *list.List) (err error) {
 }
 
 // IfProcessConifgIsValid 检查流程配置是否有效
-func IfProcessConifgIsValid(node *Node) error {
-	log.Println(111)
+func IfProcessConfigIsValid(node *Node) error {
 	// 节点名称是否有效
 	if len(node.NodeID) == 0 {
 		log.Println("NodeID", node.NodeID)
 		return errors.New("节点的【nodeId】不能为空！！")
 	}
-	log.Println(222)
 	// 检查类型是否有效
 	if len(node.Type) == 0 {
 		return errors.New("节点【" + node.NodeID + "】的类型【type】不能为空")
 	}
-	log.Println(333)
 	var flag = false
 	for _, val := range NodeTypes {
 		if val == node.Type {
@@ -236,14 +233,12 @@ func IfProcessConifgIsValid(node *Node) error {
 		str, _ := util.ToJSONStr(NodeTypes)
 		return errors.New("节点【" + node.NodeID + "】的类型为【" + node.Type + "】，为无效类型,有效类型为" + str)
 	}
-	log.Println(4444)
 	// 当前节点是否设置有审批人
 	if node.Type == NodeTypes[APPROVAL] || node.Type == NodeTypes[NOTIFIER] {
 		if node.Props == nil || (node.Props.AssignedUser == nil && node.Props.Station == "") {
 			return errors.New("节点【" + node.NodeID + "】的Properties属性不能为空，如：`\"properties\": {\"actionerRules\": [{\"type\": \"target_label\",\"labelNames\": \"人事\",\"memberCount\": 1,\"actType\": \"and\"}],}`")
 		}
 	}
-	log.Println(5555)
 	// 条件节点是否存在
 	if node.Branches != nil && node.Branches[0].CondProps != nil { // 存在条件节点
 		if len(node.Branches) == 1 {
@@ -255,10 +250,28 @@ func IfProcessConifgIsValid(node *Node) error {
 			return err
 		}
 	}
-	log.Println(666)
 	// 子节点是否存在
 	if node.Children != nil && node.Children.NodeID != "" {
-		return IfProcessConifgIsValid(node.Children)
+		return IfProcessConfigIsValid(node.Children)
 	}
 	return nil
+}
+
+func CheckConCurrentFlow(node *Node) bool {
+	if node != nil && node.Name != "" {
+		if node.Type == "CONCURRENT" {
+			return true
+		} else {
+			if node.Branches != nil && len(node.Branches) > 1 {
+				for _, v := range node.Branches {
+					if v.Type == "CONCURRENT" {
+						return true
+					}
+				}
+			}
+			CheckConCurrentFlow(node.Children)
+		}
+
+	}
+	return false
 }

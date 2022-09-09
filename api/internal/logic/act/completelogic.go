@@ -1,12 +1,11 @@
 package act
 
 import (
+	"act/api/internal/svc"
+	"act/api/internal/types"
 	"act/rpc/actclient"
 	"act/rpc/types/act"
 	"context"
-
-	"act/api/internal/svc"
-	"act/api/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,8 +25,7 @@ func NewCompleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Complete
 }
 
 func (l *CompleteLogic) Complete(req *types.CompleteProcinst) (resp *types.CommonResponse, err error) {
-	RPC := l.svcCtx.Rpc
-	inst, err := RPC.FindProcInstByDataId(l.ctx, &actclient.DataIdReq{
+	inst, err := l.svcCtx.Rpc.FindProcInstByDataId(l.ctx, &actclient.DataIdReq{
 		DataId: req.DataId,
 	})
 	if err != nil {

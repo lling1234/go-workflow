@@ -31,7 +31,7 @@ func (l *AddProcDefLogic) AddProcDef(req *types.SaveProcDef) (resp *types.Common
 	if req.Resource == nil || len(req.Resource.Name) == 0 {
 		return types.GetErrorCommonResponse("节点数据未获取到！")
 	}
-	if flow.IfProcessConifgIsValid(req.Resource) != nil {
+	if flow.IfProcessConfigIsValid(req.Resource) != nil {
 		return types.GetErrorCommonResponse(err.Error())
 	}
 	resource, err := json.Marshal(req.Resource)

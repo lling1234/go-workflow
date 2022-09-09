@@ -35,6 +35,7 @@ func (l *FindProcInstByDataIdLogic) FindProcInstByDataId(in *act.DataIdReq) (*ac
 	}
 	inst := insts[0]
 	return &act.ProcInstReply{
-		Id: inst.ID,
+		Id:       inst.ID,
+		FlowType: inst.FlowType,
 	}, nil
 }
