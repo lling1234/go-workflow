@@ -1,0 +1,159 @@
+syntax = "proto3";
+package kernel;
+option go_package = "./kernel";
+
+import "source/rpc/message.proto";
+
+message Nil{
+}
+
+message SaveProcDefReq {
+  uint64 Id = 1;
+  string name = 2;
+  string code = 3;
+  uint64 formId = 4;
+  string formName = 5;
+  uint64 appId = 6;
+  string appName = 7;
+  uint64 remainHours = 8;
+  string resource = 9;
+  uint64 version = 10;
+}
+
+message QueryProcDefReq{
+  uint64 formId = 1;
+  uint64 appId = 2;
+  uint64 version = 3;
+}
+
+message StartViewReq{
+  uint64 formId = 1;
+  uint64 appId = 2;
+  uint64 dataId = 3;
+}
+
+message StartProcInstReq{
+  string title = 1;
+  uint64 formId = 2;
+  uint64 appId = 3;
+  uint64 dataId = 4;
+  uint64 defId = 5;
+  string resource = 6;
+  string notifiers = 7;
+  uint64 remainHours = 8;
+  uint64 flowType = 9;
+}
+
+message CompleteProcInstReq{
+  uint64 dataId = 1;
+  uint64 result = 2;
+  string comment = 3;
+}
+
+message DataIdReq{
+  uint64 dataId = 1;
+}
+
+message IdReq{
+  uint64 Id = 1;
+}
+
+message IdPageReq {
+  uint64 id = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+  string filter = 4;
+}
+
+message PageReq {
+  int32 limit = 1;
+  int32 offset = 2;
+  string filter = 3;
+}
+
+message OverTimeReq {
+  string StartDate  = 1;
+  string EndDate   =2;
+  int32  Offset =3;
+  int32  Limit  =4;
+  string Filter =5;
+}
+
+message ProcDefResp {
+  uint64 id = 1;
+  string name = 2;
+  string code = 3;
+  uint64 version = 4;
+  string resource = 5;
+  uint64 createUser = 6;
+  string createUserName = 7;
+  string createTime = 8;
+  uint64 targetId = 9;
+  uint64 formId = 10;
+  string formName = 11;
+  uint64 appId = 12;
+  string appName = 13;
+  uint64 remainHours = 14;
+  uint64 isActive = 15;
+}
+
+message StartViewResp {
+  uint64 formId = 1;
+  uint64 appId = 2;
+  uint64 defId = 3;
+  uint64 dataId = 4;
+  string resource = 5;
+  string notifiers = 6;
+  uint64 remainHours = 7;
+  uint64 flowType = 8;
+}
+
+message ProcInstResp {
+  uint64 id = 1;
+  uint64 procDefId = 2;
+  string title = 3;
+  string code = 4;
+  uint64 targetId = 5;
+  string nodeId = 6;
+  uint64 taskId = 7;
+  string createTime = 8;
+  string endTime = 9;
+  uint64 createUser = 10;
+  string createUserName = 11;
+  uint64 isFinished = 12;
+  uint64 state = 13;
+  uint64 dataId = 14;
+  string updateTime = 15;
+  uint64 remainHours = 16;
+  uint64 flowType = 17;
+}
+
+message CommonRpcRes{
+  //返回数据JSON
+  string json = 1;
+}
+
+message CommonDelete{
+  uint64 id = 1;
+  repeated uint64 ids = 2;
+}
+
+service wflow {
+
+  rpc addProcDef(SaveProcDefReq) returns(Procdef);
+  rpc delProcDef(IdReq) returns(Nil);
+  rpc updateProcDef(SaveProcDefReq) returns(Procdef);
+  rpc findAllProcDef(PageReq) returns(ProcdefArray);
+  rpc findOneProcDef(IdReq) returns(Procdef);
+  rpc setActive(QueryProcDefReq) returns(Nil);
+
+  rpc startView(StartViewReq) returns(StartViewResp);
+  rpc startProcInst(StartProcInstReq) returns(Nil);
+  rpc complete(CompleteProcInstReq) returns(Nil);
+  rpc view(CompleteProcInstReq) returns(Procinst);
+
+  rpc findByDataId(DataIdReq) returns(Procinst);
+  rpc withdraw(DataIdReq) returns(Nil);
+  rpc delProcInst(DataIdReq) returns(Nil);
+
+}

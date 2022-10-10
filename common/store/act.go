@@ -1,8 +1,8 @@
 package store
 
 import (
-	"act/common"
-	"act/common/models"
+	"go-wflow/common"
+	"go-wflow/common/models"
 )
 
 type CommonStore struct {

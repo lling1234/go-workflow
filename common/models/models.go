@@ -1,7 +1,7 @@
 package models
 
 import (
-	"act/common/cache"
+	"go-wflow/common/cache"
 )
 
 const (
@@ -9,6 +9,9 @@ const (
 	DevMode = "dev"
 	// ProMode means production mode.
 	ProMode = "pro"
+	// DBMode means production mode.
+	// ent创建数据库表
+	DBMode = "db"
 )
 
 //数据存储配置

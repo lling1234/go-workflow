@@ -1,8 +1,0 @@
-Name: act-api
-Host: 0.0.0.0
-Port: 8080
-Rpc:
-  Etcd:
-    Hosts:
-      - 127.0.0.1:2379
-    Key: act.rpc

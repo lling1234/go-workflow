@@ -1,13 +1,14 @@
 package common
 
 import (
-	schema "act/common/act"
-	"act/common/cache"
-	"act/common/models"
-	"act/common/tools/snowflake"
+	"go-wflow/common/cache"
+	"go-wflow/common/models"
+	"go-wflow/common/utils/snowflake"
+	schema "go-wflow/kernel/ent"
+
 	_ "github.com/go-sql-driver/mysql"
 
-	"entgo.io/ent/dialect/sql"
+	"github.com/qkbyte/ent/dialect/sql"
 )
 
 type DbStore struct {
@@ -24,15 +25,21 @@ func NewDbStore(c models.DbStoreConfig) *DbStore {
 	if err != nil {
 		panic("connect database error")
 	}
+	// TODO cache redis
 	// init cache driver
-	drv, redis := cache.NewDriver(db, c.Cache)
+	// drv, redis := cache.NewDriver(dialect.Driver{}, c.Cache)
 
-	entClient := schema.NewClient(schema.Driver(drv))
-	if c.Mode == models.DevMode {
+	entClient := schema.NewClient(schema.Driver(db))
+	if c.Mode == models.DBMode {
 		entClient = entClient.Debug()
+	}
+	if c.Mode == models.DevMode {
+		// TODO开启软删除
+		entClient = entClient.Debug().SoftDelete()
+		// entClient = entClient.Debug()
 	}
 	return &DbStore{
 		Client: entClient,
-		Cache:  redis,
+		// Cache:  redis,
 	}
 }

@@ -1,0 +1,347 @@
+syntax = "proto3";
+package kernel;
+option go_package = "./kernel";
+
+//identitylinks
+message Identitylink{
+    // 雪花id
+    // @gotags: json:"id,string,omitempty"
+    uint64    id = 1;
+    // 审批人id
+    // @gotags: json:"userID,string,omitempty"
+    uint64    userID = 2;
+    // 审批人姓名
+    string    userName = 3;
+    // 流程实例id
+    // @gotags: json:"procInstID,string,omitempty"
+    uint64    procInstID = 4;
+    // 组织id
+    // @gotags: json:"targetID,string,omitempty"
+    uint64    targetID = 5;
+    // 岗位id
+    // @gotags: json:"station,string,omitempty"
+    uint64    station = 6;
+    // 评论
+    string    comment = 7;
+    // 节点任务
+    // @gotags: json:"taskID,string,omitempty"
+    uint64    taskID = 8;
+    // 审批结果 3驳回、5未通过、6已通过
+    // @gotags: json:"result,string,omitempty"
+    uint64    result = 9;
+    // 创建时间
+    string    createTime = 10;
+    // 是否已审批 ,0:未审批,1:已审批
+    // @gotags: json:"isDeal,string,omitempty"
+    uint64    isDeal = 11;
+    // 流程修改时间
+    string    updateTime = 12;
+    // 创建人id
+    // @gotags: json:"createUser,string,omitempty"
+    uint64    createUser = 13;
+    // 修改人id
+    // @gotags: json:"updateUser,string,omitempty"
+    uint64    updateUser = 14;
+    // 附件id
+    // @gotags: json:"attachmentID,string,omitempty"
+    uint64    attachmentID = 15;
+    // 版本
+    // @gotags: json:"version,string,omitempty"
+    uint64    version = 16;
+}
+
+//identitylinks查询返回集合
+message IdentitylinkArray{
+    // 便宜量
+    int32 offset = 1;
+    // 最大数量
+    int32 limit = 2;
+    // 总数
+    int32 total = 3;
+    // 结果
+    repeated Identitylink result = 4;
+}
+
+//node_details
+message NodeDetails{
+    // 雪花id
+    // @gotags: json:"id,string,omitempty"
+    uint64    id = 1;
+    // 流程实例id
+    // @gotags: json:"procInstID,string,omitempty"
+    uint64    procInstID = 2;
+    // 节点id
+    string    nodeID = 3;
+    // 节点信息
+    string    nodeInfo = 4;
+    // 拒绝策略 直接结束、驳回至上一级、驳回至指定人
+    string    refuse = 5;
+    // 上一节点ID
+    string    prevID = 6;
+    // 下一节点ID
+    string    nextID = 7;
+    // 会签or或签
+    string    mode = 8;
+    // 流程创建时间
+    string    createTime = 9;
+    // 流程修改时间
+    string    updateTime = 10;
+    // 创建人id
+    // @gotags: json:"createUser,string,omitempty"
+    uint64    createUser = 11;
+    // 修改人id
+    // @gotags: json:"updateUser,string,omitempty"
+    uint64    updateUser = 12;
+    // 版本
+    // @gotags: json:"version,string,omitempty"
+    uint64    version = 13;
+}
+
+//node_details查询返回集合
+message NodeDetailsArray{
+    // 便宜量
+    int32 offset = 1;
+    // 最大数量
+    int32 limit = 2;
+    // 总数
+    int32 total = 3;
+    // 结果
+    repeated NodeDetails result = 4;
+}
+
+//nodenotifiers
+message Nodenotifiers{
+    // 雪花id
+    // @gotags: json:"id,string,omitempty"
+    uint64    id = 1;
+    // 抄送人id
+    // @gotags: json:"userID,string,omitempty"
+    uint64    userID = 2;
+    // 流程实例id
+    // @gotags: json:"procInstID,string,omitempty"
+    uint64    procInstID = 3;
+    // 组织id
+    // @gotags: json:"targetID,string,omitempty"
+    uint64    targetID = 4;
+    // 评论
+    string    comment = 5;
+    // 创建时间
+    string    createTime = 6;
+    // 是否允许查看 ,0:不允许，1：允许
+    // @gotags: json:"isPermit,string,omitempty"
+    uint64    isPermit = 7;
+    // 是否已审批 ,0:未审批,1:已审批
+    // @gotags: json:"isDeal,string,omitempty"
+    uint64    isDeal = 8;
+    // 流程修改时间
+    string    updateTime = 9;
+    // 创建人id
+    // @gotags: json:"createUser,string,omitempty"
+    uint64    createUser = 10;
+    // 修改人id
+    // @gotags: json:"updateUser,string,omitempty"
+    uint64    updateUser = 11;
+    // 版本
+    // @gotags: json:"version,string,omitempty"
+    uint64    version = 12;
+}
+
+//nodenotifiers查询返回集合
+message NodenotifiersArray{
+    // 便宜量
+    int32 offset = 1;
+    // 最大数量
+    int32 limit = 2;
+    // 总数
+    int32 total = 3;
+    // 结果
+    repeated Nodenotifiers result = 4;
+}
+
+//procdefs
+message Procdef{
+    // 雪花ID
+    // @gotags: json:"id,string,omitempty"
+    uint64    id = 1;
+    // 流程名称
+    string    name = 2;
+    // 流程编码
+    string    code = 3;
+    // 版本
+    // @gotags: json:"version,string,omitempty"
+    uint64    version = 4;
+    // 流程图数据
+    string    resource = 5;
+    // 创建人ID
+    // @gotags: json:"createUser,string,omitempty"
+    uint64    createUser = 6;
+    // 创建人名称
+    string    createUserName = 7;
+    // 流程创建时间
+    string    createTime = 8;
+    // 组织ID
+    // @gotags: json:"targetID,string,omitempty"
+    uint64    targetID = 9;
+    // 业务表单ID
+    // @gotags: json:"formID,string,omitempty"
+    uint64    formID = 10;
+    // 业务表单名称
+    string    formName = 11;
+    // 应用ID
+    // @gotags: json:"appID,string,omitempty"
+    uint64    appID = 12;
+    // 应用名称
+    string    appName = 13;
+    // 审批限定时间
+    // @gotags: json:"remainHours,string,omitempty"
+    uint64    remainHours = 14;
+    // 流程是否生效,0:否,1:是
+    // @gotags: json:"isActive,string,omitempty"
+    uint64    isActive = 15;
+    // 流程修改时间
+    string    updateTime = 16;
+    // 流程删除时间
+    string    delTime = 17;
+    // 删除人ID
+    // @gotags: json:"delUser,string,omitempty"
+    uint64    delUser = 18;
+    // 修改人ID
+    // @gotags: json:"updateUser,string,omitempty"
+    uint64    updateUser = 19;
+}
+
+//procdefs查询返回集合
+message ProcdefArray{
+    // 便宜量
+    int32 offset = 1;
+    // 最大数量
+    int32 limit = 2;
+    // 总数
+    int32 total = 3;
+    // 结果
+    repeated Procdef result = 4;
+}
+
+//procinsts
+message Procinst{
+    // 雪花id
+    // @gotags: json:"id,string,omitempty"
+    uint64    id = 1;
+    // 流程定义id
+    // @gotags: json:"procDefID,string,omitempty"
+    uint64    procDefID = 2;
+    // 关联id
+    // @gotags: json:"refID,string,omitempty"
+    uint64    refID = 3;
+    // 发起流程标题
+    string    title = 4;
+    // 流程编号
+    string    code = 5;
+    // 组织id
+    // @gotags: json:"targetID,string,omitempty"
+    uint64    targetID = 6;
+    // 流程图数据
+    string    resource = 7;
+    // 当前审批节点id
+    string    nodeID = 8;
+    // 当前审批任务id
+    // @gotags: json:"taskID,string,omitempty"
+    uint64    taskID = 9;
+    // 当前审批节点id（并行流程）
+    string    conNodeIDs = 10;
+    // 当前审批任务id（并行流程）
+    string    conTaskIDs = 11;
+    // 流程是否结束,0:未结束,1:已结束
+    // @gotags: json:"isFinished,string,omitempty"
+    uint64    isFinished = 12;
+    // 流程状态,类型为:1待处理、2处理中、3驳回、4已撤回、5未通过、6已通过、7废弃
+    // @gotags: json:"state,string,omitempty"
+    uint64    state = 13;
+    // 流程绑定数据id
+    // @gotags: json:"dataID,string,omitempty"
+    uint64    dataID = 14;
+    // 修改人id
+    // @gotags: json:"updateUser,string,omitempty"
+    uint64    updateUser = 15;
+    // 创建时间
+    string    createTime = 16;
+    // 流程结束时间
+    string    finishTime = 17;
+    // 创建人id
+    // @gotags: json:"createUser,string,omitempty"
+    uint64    createUser = 18;
+    // 发起人姓名
+    string    createUsername = 19;
+    // 审批限定时间
+    // @gotags: json:"remainHours,string,omitempty"
+    uint64    remainHours = 20;
+    // 流程修改时间
+    string    updateTime = 21;
+    // 流程类型 1、普通流程  2、并行流程
+    // @gotags: json:"flowType,string,omitempty"
+    uint64    flowType = 22;
+    // 备注
+    string    remark = 23;
+    // 流程删除时间
+    string    delTime = 24;
+    // 删除人id
+    // @gotags: json:"delUser,string,omitempty"
+    uint64    delUser = 25;
+    // 版本
+    // @gotags: json:"version,string,omitempty"
+    uint64    version = 26;
+}
+
+//procinsts查询返回集合
+message ProcinstArray{
+    // 便宜量
+    int32 offset = 1;
+    // 最大数量
+    int32 limit = 2;
+    // 总数
+    int32 total = 3;
+    // 结果
+    repeated Procinst result = 4;
+}
+
+//tasks
+message Task{
+    // 雪花id
+    // @gotags: json:"id,string,omitempty"
+    uint64    id = 1;
+    // 节点id
+    string    nodeId = 2;
+    // 流程实例id
+    // @gotags: json:"procInstID,string,omitempty"
+    uint64    procInstID = 3;
+    // 任务创建时间
+    string    createTime = 4;
+    // 节点最新审批时间
+    string    claimTime = 5;
+    // 任务是否完成 0:未结束 1:已完成
+    // @gotags: json:"isFinished,string,omitempty"
+    uint64    isFinished = 6;
+    // 流程修改时间
+    string    updateTime = 7;
+    // 创建人id
+    // @gotags: json:"createUser,string,omitempty"
+    uint64    createUser = 8;
+    // 修改人id
+    // @gotags: json:"updateUser,string,omitempty"
+    uint64    updateUser = 9;
+    // 版本
+    // @gotags: json:"version,string,omitempty"
+    uint64    version = 10;
+}
+
+//tasks查询返回集合
+message TaskArray{
+    // 便宜量
+    int32 offset = 1;
+    // 最大数量
+    int32 limit = 2;
+    // 总数
+    int32 total = 3;
+    // 结果
+    repeated Task result = 4;
+}

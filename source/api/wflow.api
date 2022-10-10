@@ -1,0 +1,213 @@
+syntax = "v1"
+
+type (
+	SaveProcDefReq {
+		Id          uint64 `json:"id"`
+		Name        string `json:"name,optional"`
+		Code        string `json:"code,optional"`
+		FormId      uint64 `json:"formId,optional"`
+		FormName    string `json:"formName,optional"`
+		AppId       uint64 `json:"appId,optional"`
+		AppName     string `json:"appName,optional"`
+		RemainHours uint64 `json:"remainHours,optional"`
+		Resource    string `json:"resource"`
+		Version     uint64 `json:"version,optional"`
+	}
+
+	QueryProcDefReq {
+		FormId  uint64 `json:"formId,optional"`
+		AppId   uint64 `json:"appId,optional"`
+		Version uint64 `json:"version"`
+	}
+
+	StartViewReq {
+		FormId uint64 `json:"formId,optional"`
+		AppId  uint64 `json:"appId,optional"`
+		DataId uint64 `json:"dataId"`
+	}
+
+	StartProcInstReq {
+		Title       string `json:"title,optional"`
+		FormId      uint64 `json:"formId,optional"`
+		AppId       uint64 `json:"appId,optional"`
+		DataId      uint64 `json:"dataId"`
+		DefId       uint64 `json:"defId"`
+		Resource    string `json:"resource"`
+		Notifiers   string `json:"notifiers,optional"`
+		RemainHours uint64  `json:"remainHours,optional"`
+		FlowType    uint64  `json:"flowType,optional"`
+	}
+
+	CompleteProcInstReq {
+		DataId  uint64 `json:"dataId"`
+		Result  uint64 `json:"result"`
+		Comment string `json:"comment,optional"`
+	}
+
+	DataIdReq {
+		DataId uint64 `json:"dataId"`
+	}
+
+	IdReq {
+		Id uint64 `json:"id"`
+	}
+
+	IdPageReq {
+		Id     uint64  `json:"id"`
+		Offset uint64  `json:"offset"`
+		Limit  uint64  `json:"limit"`
+		Filter string `json:"filter"`
+	}
+
+	OverTimeReq {
+		StartDate string `json:"startDate"`
+		EndDate   string `json:"endDate"`
+		Offset    int64  `json:"offset"`
+		Limit     int64  `json:"limit"`
+		Filter    string `json:"filter"`
+	}
+)
+
+type (
+	CommonResponse {
+		Code    uint64      `json:"code"`
+		Data    interface{} `json:"data"`
+		Msg     string      `json:"msg"`
+		Success bool        `json:"success"`
+	}
+)
+service wflow-api {
+	
+	@doc "流程定义保存"
+	@server(
+		group: wflow
+		handler: addProcDef
+	)
+	post /orginone/wflow/procdef/create (SaveProcDefReq) returns (CommonResponse)
+	
+	@doc "删除流程定义"
+	@server(
+		group: wflow
+		handler: delProcDef
+	)
+	post /orginone/wflow/procdef/delete (IdReq) returns (CommonResponse)
+	
+	@doc "流程定义修改"
+	@server(
+		group: wflow
+		handler: updateProcDef
+	)
+	post /orginone/wflow/procdef/update (SaveProcDefReq) returns (CommonResponse)
+	
+	@doc "查找表单所有的流程"
+	@server(
+		group: wflow
+		handler: findAllProcDef
+	)
+	post /orginone/wflow/procdef/findall (IdPageReq) returns (CommonResponse)
+	
+	@doc "查找正在使用的流程"
+	@server(
+		group: wflow
+		handler: findOneProcDef
+	)
+	post /orginone/wflow/procdef/findone (IdReq) returns (CommonResponse)
+	
+	@doc "启用对应的流程定义"
+	@server(
+		group: wflow
+		handler: setActive
+	)
+	post /orginone/wflow/procdef/setactive (QueryProcDefReq) returns (CommonResponse)
+	
+	@doc "流程预处理"
+	@server(
+		group: wflow
+		handler: startView
+	)
+	post /orginone/wflow/procinst/startview (StartViewReq) returns (CommonResponse)
+	
+	@doc "发起流程"
+	@server(
+		group: wflow
+		handler: startProcInst
+	)
+	post /orginone/wflow/procinst/start (StartProcInstReq) returns (CommonResponse)
+	
+	@doc "流程审批"
+	@server(
+		group: wflow
+		handler: complete
+	)
+	post /orginone/wflow/procinst/complete (CompleteProcInstReq) returns (CommonResponse)
+	
+	@doc "流程查阅"
+	@server(
+		group: wflow
+		handler: view
+	)
+	post /orginone/wflow/procinst/view (CompleteProcInstReq) returns (CommonResponse)
+	
+	@doc "查看流程图"
+	@server(
+		group: wflow
+		handler: findByDataId
+	)
+	post /orginone/wflow/procinst/findbydataid (DataIdReq) returns (CommonResponse)
+	
+	@doc "撤回/直接结束 "
+	@server(
+		group: wflow
+		handler: withdraw
+	)
+	post /orginone/wflow/procinst/withdraw (DataIdReq) returns (CommonResponse)
+	
+	@doc "删除流程实例"
+	@server(
+		group: wflow
+		handler: delProcInst
+	)
+	post /orginone/wflow/procinst/delete (DataIdReq) returns (CommonResponse)
+	
+	@doc "我发起的流程"
+	@server(
+		group: wflow
+		handler: findMyStart
+	)
+	post /orginone/wflow/process/findmystart (IdPageReq) returns (CommonResponse)
+	
+	@doc "我发起（未完成）的流程"
+	@server(
+		group: wflow
+		handler: findMyUnFinish
+	)
+	post /orginone/wflow/process/findmyunfinish (IdPageReq) returns (CommonResponse)
+	
+	@doc "我发起（已完成）的流程"
+	@server(
+		group: wflow
+		handler: findMyFinish
+	)
+	post /orginone/wflow/process/findmyfinish (IdPageReq) returns (CommonResponse)
+	
+	@doc "待我审批的流程"
+	@server(
+		group: wflow
+		handler: findMyPending
+	)
+	post /orginone/wflow/process/findmypending (IdPageReq) returns (CommonResponse)
+	
+	@doc "我已审批的流程"
+	@server(
+		group: wflow
+		handler: findMyApproved
+	)
+	post /orginone/wflow/process/findmyapproved (IdPageReq) returns (CommonResponse)
+	
+	@doc "查询审批超时流程"
+	@server(
+		group: wflow
+		handler: findOverTime
+	)
+	post /orginone/wflow/process/findovertime (OverTimeReq) returns (CommonResponse)
+}

@@ -1,0 +1,19 @@
+Name: wflow.rpc
+ListenOn: 127.0.0.1:8081
+Etcd:
+  Hosts:
+  - qkbyte.orginone.cn:6005
+  Key: wflow.rpc
+Store:
+  Mode: dev
+  Driver: mysql
+  DataSource: root:123456@(127.0.0.1:3306)/wflow?charset=utf8&parseTime=true&loc=Local
+  Cache:
+    Network: tcp
+    Addr: 127.0.0.1:6379
+    Db: 1
+    TTL: 1
+    Username:
+    Password:
+    PoolSize: 10
+    MaxEntries: -1
