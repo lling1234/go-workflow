@@ -1,7 +1,7 @@
 # go-wflow
 
 <div align=center>
-<img src="https://www.helloimg.com/images/2022/10/09/ZgCHqY.png" width="200" height="200"/>
+<img src="./QQ截图20221009124602.png" width="200" height="200"/>
 
 <br/>
 
