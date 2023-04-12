@@ -1,12 +1,12 @@
 # go-wflow
 
 <div align=center>
-<img src="./QQ截图20221009124602.png" width="200" height="200"/>
+<img width="1060" alt="image"  src="./QQ截图20221009124602.png" />
 
 <br/>
 
-![Go version](https://img.shields.io/badge/go-v1.18-9cf)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/qkbyte/go-workflow/blob/ling/LICENSE)
+![Go version](http://img.shields.io/badge/go-v1.18-9cf)
+[![License](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/qkbyte/go-workflow/blob/ling/LICENSE)
 
 </div>
 
