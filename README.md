@@ -1,7 +1,7 @@
 # go-wflow
 
 <div align=center>
-<img src="./QQ截图20221009124602.png" width="400" height="200"/>
+<img src="./QQ截图20221009124602.png" width="300" height="200"/>
 
 <br/>
 
